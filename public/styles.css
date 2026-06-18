@@ -1,0 +1,116 @@
+:root {
+  --bg: #faf8f5;
+  --card: #ffffff;
+  --ink: #1d2433;
+  --muted: #6b7280;
+  --line: #e6e1d8;
+  --accent: #2E5EAA;
+  --radius: 12px;
+  --shadow: 0 1px 3px rgba(0, 0, 0, .08), 0 6px 20px rgba(0, 0, 0, .06);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  line-height: 1.45;
+}
+
+.wrap { max-width: 1100px; margin: 0 auto; padding: 18px 16px 60px; }
+
+header h1 { font-size: 1.5rem; margin: 0 0 4px; }
+header .subtitle { margin: 0; color: var(--muted); font-size: .95rem; }
+header .updated { margin: 6px 0 0; color: var(--muted); font-size: .8rem; }
+
+.controls {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 14px;
+  margin: 16px 0;
+}
+
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+.chip {
+  display: inline-flex; align-items: center; gap: 7px;
+  border: 1.5px solid var(--line); border-radius: 999px;
+  padding: 6px 13px; cursor: pointer; user-select: none;
+  font-size: .9rem; background: #fff; transition: all .15s;
+}
+.chip .dot { width: 11px; height: 11px; border-radius: 50%; }
+.chip.off { opacity: .4; }
+.chip .count { color: var(--muted); font-size: .8rem; }
+
+.film-bar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 10px; }
+.film-bar input[type="search"] {
+  flex: 1 1 220px; min-width: 0; padding: 8px 12px;
+  border: 1.5px solid var(--line); border-radius: 8px; font-size: .92rem;
+}
+.btn {
+  border: 1.5px solid var(--line); background: #fff; border-radius: 8px;
+  padding: 8px 12px; cursor: pointer; font-size: .85rem; color: var(--ink);
+}
+.btn:hover { border-color: var(--accent); color: var(--accent); }
+
+.film-list {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 4px 14px; max-height: 220px; overflow: auto;
+  border-top: 1px solid var(--line); padding-top: 10px;
+}
+.film-list label {
+  display: flex; gap: 8px; align-items: center; font-size: .88rem;
+  padding: 3px 0; cursor: pointer;
+}
+.film-list label.hidden { display: none; }
+.film-list .empty { color: var(--muted); font-size: .85rem; padding: 6px 0; }
+
+#calendar {
+  background: var(--card); border: 1px solid var(--line);
+  border-radius: var(--radius); box-shadow: var(--shadow); padding: 14px;
+}
+.fc .fc-toolbar-title { font-size: 1.1rem; }
+.fc .fc-button { text-transform: capitalize; }
+.fc-event { cursor: pointer; }
+.fc-event.amc-allday-na { opacity: .9; }
+
+/* Modal */
+.modal-backdrop {
+  position: fixed; inset: 0; background: rgba(15, 20, 30, .55);
+  display: none; align-items: center; justify-content: center; padding: 16px; z-index: 50;
+}
+.modal-backdrop.open { display: flex; }
+.modal {
+  background: #fff; border-radius: var(--radius); box-shadow: var(--shadow);
+  max-width: 480px; width: 100%; max-height: 90vh; overflow: auto;
+}
+.modal .head { display: flex; gap: 14px; padding: 18px 18px 0; }
+.modal .poster { width: 78px; height: 116px; object-fit: cover; border-radius: 8px; flex: none; background: #eee; }
+.modal h2 { font-size: 1.15rem; margin: 0 0 4px; }
+.modal .theater-badge {
+  display: inline-block; color: #fff; font-size: .72rem; font-weight: 600;
+  padding: 2px 9px; border-radius: 999px;
+}
+.modal .when { font-weight: 600; margin: 10px 0 2px; }
+.modal .meta { color: var(--muted); font-size: .85rem; margin: 2px 0; }
+.modal .note { font-size: .85rem; background: #fff7ed; border: 1px solid #fed7aa; color: #9a3412; padding: 8px 10px; border-radius: 8px; margin-top: 10px; }
+.modal .body { padding: 14px 18px 20px; }
+.modal .actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+.modal .actions a {
+  text-decoration: none; font-size: .85rem; font-weight: 600;
+  border-radius: 8px; padding: 9px 13px; border: 1.5px solid var(--line); color: var(--ink);
+}
+.modal .actions a.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+.modal .addcal-label { font-size: .78rem; color: var(--muted); margin: 14px 0 4px; text-transform: uppercase; letter-spacing: .04em; }
+.modal .close { margin-left: auto; border: none; background: none; font-size: 1.5rem; line-height: 1; cursor: pointer; color: var(--muted); }
+
+footer { color: var(--muted); font-size: .8rem; margin-top: 22px; text-align: center; }
+footer a { color: var(--accent); }
+
+@media (max-width: 640px) {
+  header h1 { font-size: 1.25rem; }
+  .film-list { max-height: 170px; }
+}

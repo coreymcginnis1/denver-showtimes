@@ -1,0 +1,1 @@
+"""Per-theater scraper adapters."""

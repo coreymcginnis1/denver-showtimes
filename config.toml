@@ -1,0 +1,31 @@
+# Configuration for the Denver showtimes scraper.
+# Edit and re-run `python -m movie_scraper` (or let the daily GitHub Action run it).
+
+timezone = "America/Denver"
+days_ahead = 14                  # rolling window: today .. today + days_ahead
+output = "public/data.json"      # where the frontend reads from
+default_runtime_minutes = 120    # fallback event length when a film's runtime is unknown
+
+[theaters.sie]
+enabled = true
+name = "Sie FilmCenter"
+color = "#E4572E"                # used to color events in the calendar
+
+[theaters.landmark]
+enabled = true
+name = "Landmark Mayan"
+color = "#17BEBB"
+
+[theaters.amc]
+enabled = true
+name = "AMC 9+CO 10"
+color = "#2E5EAA"
+
+# Optional filters. Omit/comment out a key to disable that filter.
+# Leaving the whole section empty includes every showtime.
+[filters]
+# title_include = ["Dune", "Oppenheimer"]   # keep only titles matching any (case-insensitive) regex
+# title_exclude = ["Sing-Along"]            # drop titles matching any regex
+# weekdays = ["Fri", "Sat", "Sun"]          # keep only these weekdays
+# earliest = "17:00"                         # keep only showtimes at/after this local time
+# latest = "23:59"                           # keep only showtimes at/before this local time

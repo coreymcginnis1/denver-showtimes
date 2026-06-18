@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Denver Indie &amp; Repertory Showtimes</title>
+  <meta name="description" content="Showtimes for Sie FilmCenter, Landmark Mayan, and AMC 9+CO 10 — filter by film and add screenings to your calendar." />
+
+  <!-- Open Graph / preview card (used when this URL is pasted into Substack, etc.).
+       __SITE_URL__ is replaced with the deployed Pages URL by the GitHub Action. -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Denver Indie & Repertory Showtimes" />
+  <meta property="og:description" content="Sie FilmCenter · Landmark Mayan · AMC 9+CO 10 — filter by film and add screenings to your calendar." />
+  <meta property="og:url" content="__SITE_URL__" />
+  <meta property="og:image" content="__SITE_URL__preview.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>Denver Indie &amp; Repertory Showtimes</h1>
+      <p class="subtitle">Sie FilmCenter · Landmark Mayan · AMC 9+CO 10</p>
+      <p class="updated" id="updated"></p>
+    </header>
+
+    <section class="controls" aria-label="Filters">
+      <div class="chips" id="theaterChips"></div>
+      <div class="film-bar">
+        <input type="search" id="filmSearch" placeholder="Search films…" autocomplete="off" />
+        <button class="btn" id="selectAll" type="button">All films</button>
+        <button class="btn" id="clearAll" type="button">None</button>
+      </div>
+      <div class="film-list" id="filmList"></div>
+    </section>
+
+    <div id="calendar"></div>
+
+    <footer>
+      <p>Showtimes scraped from each theater for convenience — always confirm on the
+        theater's site. Sie &amp; AMC list exact times; Landmark shows the day (times vary).</p>
+      <p id="srcLinks"></p>
+    </footer>
+  </div>
+
+  <div class="modal-backdrop" id="modalBackdrop">
+    <div class="modal" role="dialog" aria-modal="true" id="modal"></div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

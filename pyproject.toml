@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "movie-scraper"
+version = "0.1.0"
+description = "Scrape Denver movie showtimes (Sie FilmCenter, Landmark Mayan, AMC 9+CO 10) into an interactive calendar data feed."
+requires-python = ">=3.11"
+dependencies = [
+    "httpx>=0.27",
+    "playwright>=1.44",
+    "pydantic>=2.7",
+    "beautifulsoup4>=4.12",
+    "tenacity>=8.3",
+    "python-dateutil>=2.9",
+    "icalendar>=5.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0"]
+
+[project.scripts]
+movie-scraper = "movie_scraper.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]

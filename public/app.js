@@ -47,12 +47,14 @@
   }
 
   function forCalendar(e) {
+    // No display `end` on purpose: a real end that crosses midnight (e.g. a 10:15pm show
+    // + 2h) makes FullCalendar spill the event onto the NEXT day at 12:00am. We keep the
+    // true start/end in extendedProps for add-to-calendar instead.
     return {
       id: e.id,
       title: e.title,
       allDay: e.allDay,
       start: stripTZ(e.start),
-      end: e.end ? stripTZ(e.end) : undefined,
       backgroundColor: e.backgroundColor,
       borderColor: e.borderColor,
       extendedProps: Object.assign({}, e.extendedProps, { _start: e.start, _end: e.end || null }),

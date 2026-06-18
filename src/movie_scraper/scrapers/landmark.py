@@ -1,16 +1,21 @@
-"""Landmark Mayan via the boxofficeapi (days-only).
+"""Landmark Mayan via the boxofficeapi `schedule` endpoint — real per-screening times.
 
-Landmark gates exact showtimes behind bot/JS protection that headless scraping
-can't reliably reach, so we use the two clean, directly-fetchable endpoints:
-  - scheduledMovies?theaterId=X02AK -> which movies play on which days
-  - movies?ids=...                  -> title/poster/runtime/rating/director/year
-Each (movie, day) becomes an all-day entry linking out to Landmark to buy.
+The Mayan's showtimes load from a live endpoint the site calls only after a theater is
+chosen:
+
+    GET /api/gatsby-source-boxofficeapi/schedule
+        ?from=<DATE>T03:00:00&to=<DATE+1>T03:00:00
+        &theaters={"id":"X02AK","timeZone":"America/Denver"}
+
+It returns {theaterId: {schedule: {movieId: {date: [ {id, startsAt, tags, screen,
+data.ticketing}, ... ]}}}}. We query one cinema-day (3am-3am) at a time and join film
+titles/metadata from the `movies` endpoint. Plain httpx works — no browser needed.
 """
 from __future__ import annotations
 
 import logging
 import re
-from datetime import date, datetime, time
+from datetime import date, datetime, timedelta
 
 from .base import BaseScraper, http_client, to_int
 from ..models import Showtime
@@ -27,54 +32,99 @@ class LandmarkScraper(BaseScraper):
     key = "landmark"
 
     def fetch(self, start: date, end: date) -> list[Showtime]:
+        theaters_param = '{"id":"%s","timeZone":"%s"}' % (THEATER_ID, self.cfg.timezone)
+        raw: dict[str, list[dict]] = {}
         with http_client() as client:
-            sched = client.get(f"{BASE}/scheduledMovies", params={"theaterId": THEATER_ID})
-            sched.raise_for_status()
-            scheduled_days: dict[str, list[str]] = sched.json().get("scheduledDays", {}) or {}
+            client.headers["Referer"] = "https://www.landmarktheatres.com/showtimes/"
+            day = start
+            while day <= end:
+                nxt = day + timedelta(days=1)
+                try:
+                    resp = client.get(f"{BASE}/schedule", params={
+                        "from": f"{day.isoformat()}T03:00:00",
+                        "to": f"{nxt.isoformat()}T03:00:00",
+                        "theaters": theaters_param,
+                    })
+                    resp.raise_for_status()
+                    schedule = (resp.json().get(THEATER_ID) or {}).get("schedule") or {}
+                except Exception as exc:
+                    log.warning("landmark: schedule for %s failed: %s", day, exc)
+                    day = nxt
+                    continue
+                for mid, by_date in schedule.items():
+                    for shows in by_date.values():
+                        raw.setdefault(mid, []).extend(shows)
+                day = nxt
 
             movies: dict[str, dict] = {}
-            ids = list(scheduled_days.keys())
+            ids = sorted(raw.keys())
             if ids:
                 params = [("basic", "false"), ("castingLimit", "3")] + [("ids", i) for i in ids]
                 mr = client.get(f"{BASE}/movies", params=params)
-                mr.raise_for_status()
-                for m in mr.json():
-                    movies[str(m["id"])] = m
+                if mr.status_code == 200:
+                    for m in mr.json():
+                        movies[str(m["id"])] = m
 
-        showtimes = self.build(scheduled_days, movies, start, end)
-        log.info("landmark: %d day-entries", len(showtimes))
+        showtimes = self.build(raw, movies, start, end)
+        log.info("landmark: %d showtimes", len(showtimes))
         return showtimes
 
-    def build(self, scheduled_days: dict, movies: dict, start: date, end: date) -> list[Showtime]:
-        """Pure transform of scheduledMovies + movies payloads into day-entries (no I/O)."""
+    def build(self, raw: dict, movies: dict, start: date, end: date) -> list[Showtime]:
+        """Pure transform of `schedule` + `movies` payloads into timed Showtimes."""
         results: list[Showtime] = []
-        for mid, days in scheduled_days.items():
+        seen: set[str] = set()
+        for mid, shows in raw.items():
             movie = movies.get(str(mid), {})
             title = movie.get("title") or (movie.get("locale") or {}).get("title") or f"Movie {mid}"
             url = self._movie_url(mid, title)
-            for day_str in days:
-                try:
-                    day = date.fromisoformat(day_str[:10])
-                except ValueError:
+            for sh in shows:
+                sid = sh.get("id")
+                if sid in seen:
                     continue
-                if not (start <= day <= end):
+                seen.add(sid)
+                start_dt = self._parse_start(sh.get("startsAt"))
+                if start_dt is None or not (start <= start_dt.date() <= end):
                     continue
                 results.append(Showtime(
                     theater=self.key,
                     theater_name=self.theater_cfg.name,
                     film_title=title,
-                    start=datetime.combine(day, time(0, 0), tzinfo=self.tz),
-                    all_day=True,
-                    ticket_url=url,
+                    start=start_dt,
+                    screen=(sh.get("screen") or {}).get("name"),
+                    fmt=self._fmt(sh.get("tags") or []),
+                    ticket_url=self._ticket_url(sh) or url,
                     film_url=url,
                     poster=movie.get("poster"),
                     rating=movie.get("certificate"),
                     runtime_minutes=self._runtime_min(movie.get("runtime")),
                     director=self._director(movie),
                     year=self._year(movie),
-                    note="Times vary — showtimes & tickets at Landmark",
                 ))
         return results
+
+    def _parse_start(self, value: str | None) -> datetime | None:
+        if not value:
+            return None
+        try:
+            return datetime.fromisoformat(value).replace(tzinfo=self.tz)
+        except ValueError:
+            return None
+
+    @staticmethod
+    def _fmt(tags: list[str]) -> str | None:
+        for tag in tags:
+            if tag.startswith("Format.Projection."):
+                fmt = tag.rsplit(".", 1)[-1]
+                return None if fmt.lower() == "digital" else fmt  # "Digital" is the default, hide it
+        return None
+
+    @staticmethod
+    def _ticket_url(sh: dict) -> str | None:
+        ticketing = (sh.get("data") or {}).get("ticketing") or []
+        chosen = next((t for t in ticketing if t.get("provider") == "default"), None)
+        chosen = chosen or (ticketing[0] if ticketing else None)
+        urls = (chosen or {}).get("urls") or []
+        return urls[0] if urls else None
 
     @staticmethod
     def _movie_url(mid: str, title: str) -> str:
@@ -86,7 +136,7 @@ class LandmarkScraper(BaseScraper):
         n = to_int(runtime)
         if n is None:
             return None
-        return round(n / 60) if n > 300 else n  # API gives seconds for real films
+        return round(n / 60) if n > 300 else n   # API gives seconds for real films
 
     @staticmethod
     def _director(movie: dict) -> str | None:

@@ -17,17 +17,22 @@ def test_sie_build(cfg, sie_payload):
     assert any("Bleak Week" in s.film_title for s in out)
 
 
-def test_landmark_build(cfg, landmark_scheduled, landmark_movies):
-    scheduled = landmark_scheduled["scheduledDays"]
+def test_landmark_build(cfg, landmark_schedule, landmark_movies):
+    sched = landmark_schedule["X02AK"]["schedule"]
+    raw = {}
+    for mid, by_date in sched.items():
+        for shows in by_date.values():
+            raw.setdefault(mid, []).extend(shows)
     movies = {str(m["id"]): m for m in landmark_movies}
     scraper = LandmarkScraper(cfg, cfg.theaters["landmark"])
-    out = scraper.build(scheduled, movies, date(2026, 6, 1), date(2026, 12, 31))
+    out = scraper.build(raw, movies, date(2026, 6, 18), date(2026, 6, 30))
 
-    assert out, "expected Landmark day-entries from fixture"
-    assert all(s.theater == "landmark" and s.all_day for s in out)
-    assert all("landmarktheatres.com/movies/" in (s.ticket_url or "") for s in out)
-    assert any(not s.film_title.startswith("Movie ") for s in out)  # titles resolved from movies
-    assert any("Lebowski" in s.film_title for s in out)
+    assert out, "expected Landmark showtimes from fixture"
+    assert all(s.theater == "landmark" and not s.all_day for s in out)   # now timed, not days-only
+    assert all(s.start.tzinfo is not None for s in out)
+    assert any(s.screen for s in out)                                     # screen/auditorium names
+    assert all("landmarktheatres.com" in (s.ticket_url or "") for s in out)
+    assert any(not s.film_title.startswith("Movie ") for s in out)       # titles resolved
 
 
 def test_amc_parse(cfg, amc_html):

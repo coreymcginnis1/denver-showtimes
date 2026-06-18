@@ -25,7 +25,7 @@ scraper (Python)  ──►  public/data.json  ──►  static site (FullCalen
 |---|---|---|
 | Sie FilmCenter | Eventive public API (`api.eventive.org`) | Exact showtimes |
 | AMC 9+CO 10 | Rendered showtimes page (Playwright) | Exact showtimes, ~2 weeks |
-| Landmark Mayan | `boxofficeapi` scheduled-movies endpoint | **Days only** — exact times are bot/JS-gated, so each film shows as an all-day entry linking out to Landmark |
+| Landmark Mayan | `boxofficeapi` `schedule` endpoint | Exact showtimes, screen + format, direct booking links |
 
 ## Quick start (local)
 
@@ -83,7 +83,9 @@ pytest                    # runs offline against saved fixtures in tests/fixture
 
 ## Notes & limitations
 
-- **Landmark** is days-only by design (see above); Sie and AMC carry exact times.
+- All three theaters carry exact showtimes. Landmark's come from a live `schedule` endpoint
+  the site calls only after a theater is selected (`from`/`to` cinema-day window +
+  `theaters={"id":"X02AK",...}`) — see `src/movie_scraper/scrapers/landmark.py`.
 - **AMC** is bot-protected; rendering usually succeeds, but a run from GitHub's datacenter IPs may
   occasionally be challenged. The pipeline isolates each theater, so one failing still deploys the
   others (and a failed Action emails you).

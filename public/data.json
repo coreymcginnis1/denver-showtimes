@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-18T14:13:29.299362-06:00",
+  "generated_at": "2026-06-18T15:27:07.020866-06:00",
   "timezone": "America/Denver",
   "theaters": [
     {
@@ -64,186 +64,6 @@
     "The Big Lebowski"
   ],
   "events": [
-    {
-      "id": "ms_739a1751beaea10a",
-      "title": "Backrooms",
-      "start": "2026-06-18T00:00:00-06:00",
-      "allDay": true,
-      "backgroundColor": "#17BEBB",
-      "borderColor": "#17BEBB",
-      "extendedProps": {
-        "theater": "landmark",
-        "theaterName": "Landmark Mayan",
-        "screen": null,
-        "fmt": null,
-        "ticketUrl": "https://www.landmarktheatres.com/movies/313220-backrooms",
-        "filmUrl": "https://www.landmarktheatres.com/movies/313220-backrooms",
-        "poster": "https://all.web.img.acsta.net/img/4e/34/4e34162d7489c977da291d752efb2b68.jpg",
-        "rating": "R",
-        "runtime": 111,
-        "director": "Kane Parsons",
-        "year": 2026,
-        "note": "Times vary — showtimes & tickets at Landmark"
-      }
-    },
-    {
-      "id": "ms_6220a7c015d985a6",
-      "title": "Disclosure Day",
-      "start": "2026-06-18T00:00:00-06:00",
-      "allDay": true,
-      "backgroundColor": "#17BEBB",
-      "borderColor": "#17BEBB",
-      "extendedProps": {
-        "theater": "landmark",
-        "theaterName": "Landmark Mayan",
-        "screen": null,
-        "fmt": null,
-        "ticketUrl": "https://www.landmarktheatres.com/movies/1000001453-disclosure-day",
-        "filmUrl": "https://www.landmarktheatres.com/movies/1000001453-disclosure-day",
-        "poster": "https://cms-assets.webediamovies.pro/production/217/ef518abdbe356139347d2d82ff800fce.jpg",
-        "rating": "PG-13",
-        "runtime": 145,
-        "director": "Steven Spielberg",
-        "year": 2026,
-        "note": "Times vary — showtimes & tickets at Landmark"
-      }
-    },
-    {
-      "id": "ms_71d102e59dfcd05c",
-      "title": "Leviticus",
-      "start": "2026-06-18T00:00:00-06:00",
-      "allDay": true,
-      "backgroundColor": "#17BEBB",
-      "borderColor": "#17BEBB",
-      "extendedProps": {
-        "theater": "landmark",
-        "theaterName": "Landmark Mayan",
-        "screen": null,
-        "fmt": null,
-        "ticketUrl": "https://www.landmarktheatres.com/movies/1000037443-leviticus",
-        "filmUrl": "https://www.landmarktheatres.com/movies/1000037443-leviticus",
-        "poster": "https://cms-assets.webediamovies.pro/production/217/1d3a460f8a7f816f4f66ec6cea7870d7.jpg",
-        "rating": "R",
-        "runtime": 87,
-        "director": "Adrian Chiarella",
-        "year": 2026,
-        "note": "Times vary — showtimes & tickets at Landmark"
-      }
-    },
-    {
-      "id": "ms_400bf7e3f001947b",
-      "title": "Obsession",
-      "start": "2026-06-18T00:00:00-06:00",
-      "allDay": true,
-      "backgroundColor": "#17BEBB",
-      "borderColor": "#17BEBB",
-      "extendedProps": {
-        "theater": "landmark",
-        "theaterName": "Landmark Mayan",
-        "screen": null,
-        "fmt": null,
-        "ticketUrl": "https://www.landmarktheatres.com/movies/1000028234-obsession",
-        "filmUrl": "https://www.landmarktheatres.com/movies/1000028234-obsession",
-        "poster": "https://all.web.img.acsta.net/img/6e/fc/6efc85105b03c2f6ccfaec05a81cf9ff.jpg",
-        "rating": "R",
-        "runtime": 109,
-        "director": "Curry Barker",
-        "year": 2026,
-        "note": "Times vary — showtimes & tickets at Landmark"
-      }
-    },
-    {
-      "id": "ms_75785d96f61ebb6a",
-      "title": "Girls Like Girls",
-      "start": "2026-06-18T14:00:00-06:00",
-      "allDay": false,
-      "backgroundColor": "#2E5EAA",
-      "borderColor": "#2E5EAA",
-      "extendedProps": {
-        "theater": "amc",
-        "theaterName": "AMC 9+CO 10",
-        "screen": null,
-        "fmt": "Laser at AMC",
-        "ticketUrl": "https://www.amctheatres.com/showtimes/144386584",
-        "filmUrl": null,
-        "poster": null,
-        "rating": null,
-        "runtime": null,
-        "director": null,
-        "year": null,
-        "note": null
-      },
-      "end": "2026-06-18T16:00:00-06:00"
-    },
-    {
-      "id": "ms_02b47f9e0cf2891e",
-      "title": "Toy Story 5",
-      "start": "2026-06-18T14:00:00-06:00",
-      "allDay": false,
-      "backgroundColor": "#2E5EAA",
-      "borderColor": "#2E5EAA",
-      "extendedProps": {
-        "theater": "amc",
-        "theaterName": "AMC 9+CO 10",
-        "screen": null,
-        "fmt": "Dolby Cinema at AMC",
-        "ticketUrl": "https://www.amctheatres.com/showtimes/143524477",
-        "filmUrl": null,
-        "poster": null,
-        "rating": null,
-        "runtime": null,
-        "director": null,
-        "year": null,
-        "note": null
-      },
-      "end": "2026-06-18T16:00:00-06:00"
-    },
-    {
-      "id": "ms_bc564a6ec6a59012",
-      "title": "Backrooms",
-      "start": "2026-06-18T14:45:00-06:00",
-      "allDay": false,
-      "backgroundColor": "#2E5EAA",
-      "borderColor": "#2E5EAA",
-      "extendedProps": {
-        "theater": "amc",
-        "theaterName": "AMC 9+CO 10",
-        "screen": null,
-        "fmt": "Laser at AMC",
-        "ticketUrl": "https://www.amctheatres.com/showtimes/144386643",
-        "filmUrl": null,
-        "poster": null,
-        "rating": null,
-        "runtime": null,
-        "director": null,
-        "year": null,
-        "note": null
-      },
-      "end": "2026-06-18T16:45:00-06:00"
-    },
-    {
-      "id": "ms_a302e933cfba2123",
-      "title": "Toy Story 5",
-      "start": "2026-06-18T14:45:00-06:00",
-      "allDay": false,
-      "backgroundColor": "#2E5EAA",
-      "borderColor": "#2E5EAA",
-      "extendedProps": {
-        "theater": "amc",
-        "theaterName": "AMC 9+CO 10",
-        "screen": null,
-        "fmt": "Laser at AMC",
-        "ticketUrl": "https://www.amctheatres.com/showtimes/144386522",
-        "filmUrl": null,
-        "poster": null,
-        "rating": null,
-        "runtime": null,
-        "director": null,
-        "year": null,
-        "note": null
-      },
-      "end": "2026-06-18T16:45:00-06:00"
-    },
     {
       "id": "ms_afaae73ba08b61d0",
       "title": "Tuner",
@@ -429,6 +249,52 @@
       "end": "2026-06-18T18:00:00-06:00"
     },
     {
+      "id": "ms_f4d5c4b32eba69e7",
+      "title": "Disclosure Day",
+      "start": "2026-06-18T16:00:00-06:00",
+      "allDay": false,
+      "backgroundColor": "#17BEBB",
+      "borderColor": "#17BEBB",
+      "extendedProps": {
+        "theater": "landmark",
+        "theaterName": "Landmark Mayan",
+        "screen": "Screen 2",
+        "fmt": "Scope",
+        "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/882d5248-53b1-5608-88a0-d1ef7fc7e2f1",
+        "filmUrl": "https://www.landmarktheatres.com/movies/1000001453-disclosure-day",
+        "poster": "https://cms-assets.webediamovies.pro/production/217/ef518abdbe356139347d2d82ff800fce.jpg",
+        "rating": "PG-13",
+        "runtime": 145,
+        "director": "Steven Spielberg",
+        "year": 2026,
+        "note": null
+      },
+      "end": "2026-06-18T18:25:00-06:00"
+    },
+    {
+      "id": "ms_9dbdcc1baa7aa320",
+      "title": "Backrooms",
+      "start": "2026-06-18T16:15:00-06:00",
+      "allDay": false,
+      "backgroundColor": "#17BEBB",
+      "borderColor": "#17BEBB",
+      "extendedProps": {
+        "theater": "landmark",
+        "theaterName": "Landmark Mayan",
+        "screen": "Screen 1",
+        "fmt": null,
+        "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/42f43ca3-50d9-55ff-8df3-6b6cf4365e6f",
+        "filmUrl": "https://www.landmarktheatres.com/movies/313220-backrooms",
+        "poster": "https://all.web.img.acsta.net/img/4e/34/4e34162d7489c977da291d752efb2b68.jpg",
+        "rating": "R",
+        "runtime": 111,
+        "director": "Kane Parsons",
+        "year": 2026,
+        "note": null
+      },
+      "end": "2026-06-18T18:06:00-06:00"
+    },
+    {
       "id": "ms_c01a68f018b6db5f",
       "title": "Disclosure Day",
       "start": "2026-06-18T16:30:00-06:00",
@@ -473,6 +339,29 @@
         "note": null
       },
       "end": "2026-06-18T18:30:00-06:00"
+    },
+    {
+      "id": "ms_b7c7d081c8bd771c",
+      "title": "Obsession",
+      "start": "2026-06-18T16:30:00-06:00",
+      "allDay": false,
+      "backgroundColor": "#17BEBB",
+      "borderColor": "#17BEBB",
+      "extendedProps": {
+        "theater": "landmark",
+        "theaterName": "Landmark Mayan",
+        "screen": "3",
+        "fmt": null,
+        "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/e31342df-81ef-5496-a75d-285f205a4046",
+        "filmUrl": "https://www.landmarktheatres.com/movies/1000028234-obsession",
+        "poster": "https://all.web.img.acsta.net/img/6e/fc/6efc85105b03c2f6ccfaec05a81cf9ff.jpg",
+        "rating": "R",
+        "runtime": 109,
+        "director": "Curry Barker",
+        "year": 2026,
+        "note": null
+      },
+      "end": "2026-06-18T18:19:00-06:00"
     },
     {
       "id": "ms_ca5d4dcfab29e231",
@@ -728,6 +617,29 @@
       "end": "2026-06-18T21:00:00-06:00"
     },
     {
+      "id": "ms_f814dbe16744c857",
+      "title": "Disclosure Day",
+      "start": "2026-06-18T19:00:00-06:00",
+      "allDay": false,
+      "backgroundColor": "#17BEBB",
+      "borderColor": "#17BEBB",
+      "extendedProps": {
+        "theater": "landmark",
+        "theaterName": "Landmark Mayan",
+        "screen": "2",
+        "fmt": "Scope",
+        "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/c29948eb-3ad2-52d6-9a2f-ee36f7a770e3",
+        "filmUrl": "https://www.landmarktheatres.com/movies/1000001453-disclosure-day",
+        "poster": "https://cms-assets.webediamovies.pro/production/217/ef518abdbe356139347d2d82ff800fce.jpg",
+        "rating": "PG-13",
+        "runtime": 145,
+        "director": "Steven Spielberg",
+        "year": 2026,
+        "note": null
+      },
+      "end": "2026-06-18T21:25:00-06:00"
+    },
+    {
       "id": "ms_f3c2d725ff533e7f",
       "title": "Gummo",
       "start": "2026-06-18T19:00:00-06:00",
@@ -749,6 +661,52 @@
         "note": null
       },
       "end": "2026-06-18T20:29:00-06:00"
+    },
+    {
+      "id": "ms_5631af61da89fd83",
+      "title": "Leviticus",
+      "start": "2026-06-18T19:10:00-06:00",
+      "allDay": false,
+      "backgroundColor": "#17BEBB",
+      "borderColor": "#17BEBB",
+      "extendedProps": {
+        "theater": "landmark",
+        "theaterName": "Landmark Mayan",
+        "screen": "1",
+        "fmt": null,
+        "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/b3cae00d-9766-50d1-b0e3-500326ce166a",
+        "filmUrl": "https://www.landmarktheatres.com/movies/1000037443-leviticus",
+        "poster": "https://cms-assets.webediamovies.pro/production/217/1d3a460f8a7f816f4f66ec6cea7870d7.jpg",
+        "rating": "R",
+        "runtime": 87,
+        "director": "Adrian Chiarella",
+        "year": 2026,
+        "note": null
+      },
+      "end": "2026-06-18T20:37:00-06:00"
+    },
+    {
+      "id": "ms_a2a882807cc8b04b",
+      "title": "Obsession",
+      "start": "2026-06-18T19:20:00-06:00",
+      "allDay": false,
+      "backgroundColor": "#17BEBB",
+      "borderColor": "#17BEBB",
+      "extendedProps": {
+        "theater": "landmark",
+        "theaterName": "Landmark Mayan",
+        "screen": "3",
+        "fmt": null,
+        "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/a305c83f-ffa9-535a-99bb-cb4cd9008c48",
+        "filmUrl": "https://www.landmarktheatres.com/movies/1000028234-obsession",
+        "poster": "https://all.web.img.acsta.net/img/6e/fc/6efc85105b03c2f6ccfaec05a81cf9ff.jpg",
+        "rating": "R",
+        "runtime": 109,
+        "director": "Curry Barker",
+        "year": 2026,
+        "note": null
+      },
+      "end": "2026-06-18T21:09:00-06:00"
     },
     {
       "id": "ms_ec32ba035aacf55b",
@@ -1002,94 +960,6 @@
         "note": null
       },
       "end": "2026-06-19T00:15:00-06:00"
-    },
-    {
-      "id": "ms_222af7c83a9d2dad",
-      "title": "Disclosure Day",
-      "start": "2026-06-19T00:00:00-06:00",
-      "allDay": true,
-      "backgroundColor": "#17BEBB",
-      "borderColor": "#17BEBB",
-      "extendedProps": {
-        "theater": "landmark",
-        "theaterName": "Landmark Mayan",
-        "screen": null,
-        "fmt": null,
-        "ticketUrl": "https://www.landmarktheatres.com/movies/1000001453-disclosure-day",
-        "filmUrl": "https://www.landmarktheatres.com/movies/1000001453-disclosure-day",
-        "poster": "https://cms-assets.webediamovies.pro/production/217/ef518abdbe356139347d2d82ff800fce.jpg",
-        "rating": "PG-13",
-        "runtime": 145,
-        "director": "Steven Spielberg",
-        "year": 2026,
-        "note": "Times vary — showtimes & tickets at Landmark"
-      }
-    },
-    {
-      "id": "ms_124babfdc22141dc",
-      "title": "Leviticus",
-      "start": "2026-06-19T00:00:00-06:00",
-      "allDay": true,
-      "backgroundColor": "#17BEBB",
-      "borderColor": "#17BEBB",
-      "extendedProps": {
-        "theater": "landmark",
-        "theaterName": "Landmark Mayan",
-        "screen": null,
-        "fmt": null,
-        "ticketUrl": "https://www.landmarktheatres.com/movies/1000037443-leviticus",
-        "filmUrl": "https://www.landmarktheatres.com/movies/1000037443-leviticus",
-        "poster": "https://cms-assets.webediamovies.pro/production/217/1d3a460f8a7f816f4f66ec6cea7870d7.jpg",
-        "rating": "R",
-        "runtime": 87,
-        "director": "Adrian Chiarella",
-        "year": 2026,
-        "note": "Times vary — showtimes & tickets at Landmark"
-      }
-    },
-    {
-      "id": "ms_a058e4b7d3001217",
-      "title": "Obsession",
-      "start": "2026-06-19T00:00:00-06:00",
-      "allDay": true,
-      "backgroundColor": "#17BEBB",
-      "borderColor": "#17BEBB",
-      "extendedProps": {
-        "theater": "landmark",
-        "theaterName": "Landmark Mayan",
-        "screen": null,
-        "fmt": null,
-        "ticketUrl": "https://www.landmarktheatres.com/movies/1000028234-obsession",
-        "filmUrl": "https://www.landmarktheatres.com/movies/1000028234-obsession",
-        "poster": "https://all.web.img.acsta.net/img/6e/fc/6efc85105b03c2f6ccfaec05a81cf9ff.jpg",
-        "rating": "R",
-        "runtime": 109,
-        "director": "Curry Barker",
-        "year": 2026,
-        "note": "Times vary — showtimes & tickets at Landmark"
-      }
-    },
-    {
-      "id": "ms_2ed5ea8fc32816bd",
-      "title": "The Big Lebowski",
-      "start": "2026-06-19T00:00:00-06:00",
-      "allDay": true,
-      "backgroundColor": "#17BEBB",
-      "borderColor": "#17BEBB",
-      "extendedProps": {
-        "theater": "landmark",
-        "theaterName": "Landmark Mayan",
-        "screen": null,
-        "fmt": null,
-        "ticketUrl": "https://www.landmarktheatres.com/movies/16463-the-big-lebowski",
-        "filmUrl": "https://www.landmarktheatres.com/movies/16463-the-big-lebowski",
-        "poster": "https://cms-assets.webediamovies.pro/production/217/b0ae1047556a091a8f52a8dac5105084.jpg",
-        "rating": "R",
-        "runtime": 117,
-        "director": "Joel Coen",
-        "year": 1998,
-        "note": "Times vary — showtimes & tickets at Landmark"
-      }
     },
     {
       "id": "ms_3f8adcb26d0b4e46",
@@ -1506,6 +1376,29 @@
       "end": "2026-06-19T15:30:00-06:00"
     },
     {
+      "id": "ms_c6f15e410558f5e0",
+      "title": "Disclosure Day",
+      "start": "2026-06-19T13:30:00-06:00",
+      "allDay": false,
+      "backgroundColor": "#17BEBB",
+      "borderColor": "#17BEBB",
+      "extendedProps": {
+        "theater": "landmark",
+        "theaterName": "Landmark Mayan",
+        "screen": "Screen 2",
+        "fmt": "Scope",
+        "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/e6c021af-400a-5510-b8b2-0b88f1600940",
+        "filmUrl": "https://www.landmarktheatres.com/movies/1000001453-disclosure-day",
+        "poster": "https://cms-assets.webediamovies.pro/production/217/ef518abdbe356139347d2d82ff800fce.jpg",
+        "rating": "PG-13",
+        "runtime": 145,
+        "director": "Steven Spielberg",
+        "year": 2026,
+        "note": null
+      },
+      "end": "2026-06-19T15:55:00-06:00"
+    },
+    {
       "id": "ms_a56e898470542f4d",
       "title": "Girls Like Girls",
       "start": "2026-06-19T13:45:00-06:00",
@@ -1550,6 +1443,52 @@
         "note": null
       },
       "end": "2026-06-19T15:45:00-06:00"
+    },
+    {
+      "id": "ms_f7ac28d134fb6deb",
+      "title": "Obsession",
+      "start": "2026-06-19T13:45:00-06:00",
+      "allDay": false,
+      "backgroundColor": "#17BEBB",
+      "borderColor": "#17BEBB",
+      "extendedProps": {
+        "theater": "landmark",
+        "theaterName": "Landmark Mayan",
+        "screen": "3",
+        "fmt": null,
+        "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/3f14746c-ad77-5cdd-801f-8b58f198a3a9",
+        "filmUrl": "https://www.landmarktheatres.com/movies/1000028234-obsession",
+        "poster": "https://all.web.img.acsta.net/img/6e/fc/6efc85105b03c2f6ccfaec05a81cf9ff.jpg",
+        "rating": "R",
+        "runtime": 109,
+        "director": "Curry Barker",
+        "year": 2026,
+        "note": null
+      },
+      "end": "2026-06-19T15:34:00-06:00"
+    },
+    {
+      "id": "ms_3db6176dcd5fcaa2",
+      "title": "Leviticus",
+      "start": "2026-06-19T14:00:00-06:00",
+      "allDay": false,
+      "backgroundColor": "#17BEBB",
+      "borderColor": "#17BEBB",
+      "extendedProps": {
+        "theater": "landmark",
+        "theaterName": "Landmark Mayan",
+        "screen": "Screen 1",
+        "fmt": null,
+        "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/f45ea9c8-9de7-5e2e-ad19-9042527c4545",
+        "filmUrl": "https://www.landmarktheatres.com/movies/1000037443-leviticus",
+        "poster": "https://cms-assets.webediamovies.pro/production/217/1d3a460f8a7f816f4f66ec6cea7870d7.jpg",
+        "rating": "R",
+        "runtime": 87,
+        "director": "Adrian Chiarella",
+        "year": 2026,
+        "note": null
+      },
+      "end": "2026-06-19T15:27:00-06:00"
     },
     {
       "id": "ms_c9a06184dda028af",
@@ -1736,6 +1675,29 @@
       "end": "2026-06-19T17:35:00-06:00"
     },
     {
+      "id": "ms_bae9bdc7f929495d",
+      "title": "Disclosure Day",
+      "start": "2026-06-19T16:10:00-06:00",
+      "allDay": false,
+      "backgroundColor": "#17BEBB",
+      "borderColor": "#17BEBB",
+      "extendedProps": {
+        "theater": "landmark",
+        "theaterName": "Landmark Mayan",
+        "screen": "Screen 3",
+        "fmt": "Scope",
+        "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/749e2faf-c68f-5de5-8424-2745118408eb",
+        "filmUrl": "https://www.landmarktheatres.com/movies/1000001453-disclosure-day",
+        "poster": "https://cms-assets.webediamovies.pro/production/217/ef518abdbe356139347d2d82ff800fce.jpg",
+        "rating": "PG-13",
+        "runtime": 145,
+        "director": "Steven Spielberg",
+        "year": 2026,
+        "note": null
+      },
+      "end": "2026-06-19T18:35:00-06:00"
+    },
+    {
       "id": "ms_2afeedbbf5306892",
       "title": "Backrooms",
       "start": "2026-06-19T16:15:00-06:00",
@@ -1805,6 +1767,29 @@
       "end": "2026-06-19T18:15:00-06:00"
     },
     {
+      "id": "ms_20e80a2d9e0ec71a",
+      "title": "Leviticus",
+      "start": "2026-06-19T16:20:00-06:00",
+      "allDay": false,
+      "backgroundColor": "#17BEBB",
+      "borderColor": "#17BEBB",
+      "extendedProps": {
+        "theater": "landmark",
+        "theaterName": "Landmark Mayan",
+        "screen": "1",
+        "fmt": null,
+        "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/28320801-a3fe-54e4-aeaa-9a7376c7bed3",
+        "filmUrl": "https://www.landmarktheatres.com/movies/1000037443-leviticus",
+        "poster": "https://cms-assets.webediamovies.pro/production/217/1d3a460f8a7f816f4f66ec6cea7870d7.jpg",
+        "rating": "R",
+        "runtime": 87,
+        "director": "Adrian Chiarella",
+        "year": 2026,
+        "note": null
+      },
+      "end": "2026-06-19T17:47:00-06:00"
+    },
+    {
       "id": "ms_02df52999d33b6ce",
       "title": "Toy Story 5",
       "start": "2026-06-19T16:30:00-06:00",
@@ -1826,6 +1811,29 @@
         "note": null
       },
       "end": "2026-06-19T18:30:00-06:00"
+    },
+    {
+      "id": "ms_549c12fb940597f4",
+      "title": "Obsession",
+      "start": "2026-06-19T16:30:00-06:00",
+      "allDay": false,
+      "backgroundColor": "#17BEBB",
+      "borderColor": "#17BEBB",
+      "extendedProps": {
+        "theater": "landmark",
+        "theaterName": "Landmark Mayan",
+        "screen": "Screen 2",
+        "fmt": null,
+        "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/b8ddc6fc-c43d-5d59-9886-fa474bd551b5",
+        "filmUrl": "https://www.landmarktheatres.com/movies/1000028234-obsession",
+        "poster": "https://all.web.img.acsta.net/img/6e/fc/6efc85105b03c2f6ccfaec05a81cf9ff.jpg",
+        "rating": "R",
+        "runtime": 109,
+        "director": "Curry Barker",
+        "year": 2026,
+        "note": null
+      },
+      "end": "2026-06-19T18:19:00-06:00"
     },
     {
       "id": "ms_1e5bf4f615f32948",
@@ -2081,6 +2089,52 @@
       "end": "2026-06-19T21:00:00-06:00"
     },
     {
+      "id": "ms_e143b2b462fb0f3d",
+      "title": "Disclosure Day",
+      "start": "2026-06-19T19:00:00-06:00",
+      "allDay": false,
+      "backgroundColor": "#17BEBB",
+      "borderColor": "#17BEBB",
+      "extendedProps": {
+        "theater": "landmark",
+        "theaterName": "Landmark Mayan",
+        "screen": "2",
+        "fmt": "Scope",
+        "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/f7a6eb07-8a2b-59d4-bb3b-fcb5592ed7a3",
+        "filmUrl": "https://www.landmarktheatres.com/movies/1000001453-disclosure-day",
+        "poster": "https://cms-assets.webediamovies.pro/production/217/ef518abdbe356139347d2d82ff800fce.jpg",
+        "rating": "PG-13",
+        "runtime": 145,
+        "director": "Steven Spielberg",
+        "year": 2026,
+        "note": null
+      },
+      "end": "2026-06-19T21:25:00-06:00"
+    },
+    {
+      "id": "ms_cb7d7ab9c9dc6055",
+      "title": "Leviticus",
+      "start": "2026-06-19T19:10:00-06:00",
+      "allDay": false,
+      "backgroundColor": "#17BEBB",
+      "borderColor": "#17BEBB",
+      "extendedProps": {
+        "theater": "landmark",
+        "theaterName": "Landmark Mayan",
+        "screen": "Screen 1",
+        "fmt": null,
+        "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/25b39768-4023-5a67-aa7b-e6bd137faa5e",
+        "filmUrl": "https://www.landmarktheatres.com/movies/1000037443-leviticus",
+        "poster": "https://cms-assets.webediamovies.pro/production/217/1d3a460f8a7f816f4f66ec6cea7870d7.jpg",
+        "rating": "R",
+        "runtime": 87,
+        "director": "Adrian Chiarella",
+        "year": 2026,
+        "note": null
+      },
+      "end": "2026-06-19T20:37:00-06:00"
+    },
+    {
       "id": "ms_9f80905a95a0bcf7",
       "title": "Toy Story 5",
       "start": "2026-06-19T19:15:00-06:00",
@@ -2102,6 +2156,29 @@
         "note": null
       },
       "end": "2026-06-19T21:15:00-06:00"
+    },
+    {
+      "id": "ms_abfaa094e8b771d7",
+      "title": "Obsession",
+      "start": "2026-06-19T19:20:00-06:00",
+      "allDay": false,
+      "backgroundColor": "#17BEBB",
+      "borderColor": "#17BEBB",
+      "extendedProps": {
+        "theater": "landmark",
+        "theaterName": "Landmark Mayan",
+        "screen": "Screen 3",
+        "fmt": null,
+        "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/9dbdcdaa-8c25-5fd0-ac3f-b6891e785751",
+        "filmUrl": "https://www.landmarktheatres.com/movies/1000028234-obsession",
+        "poster": "https://all.web.img.acsta.net/img/6e/fc/6efc85105b03c2f6ccfaec05a81cf9ff.jpg",
+        "rating": "R",
+        "runtime": 109,
+        "director": "Curry Barker",
+        "year": 2026,
+        "note": null
+      },
+      "end": "2026-06-19T21:09:00-06:00"
     },
     {
       "id": "ms_94ed009612ea2c8d",
@@ -2449,114 +2526,27 @@
       "end": "2026-06-20T00:00:00-06:00"
     },
     {
-      "id": "ms_2283a5f2f9fc6d3c",
-      "title": "Brokeback Mountain",
-      "start": "2026-06-20T00:00:00-06:00",
-      "allDay": true,
+      "id": "ms_6e3a291e4045e4d7",
+      "title": "The Big Lebowski",
+      "start": "2026-06-19T22:00:00-06:00",
+      "allDay": false,
       "backgroundColor": "#17BEBB",
       "borderColor": "#17BEBB",
       "extendedProps": {
         "theater": "landmark",
         "theaterName": "Landmark Mayan",
-        "screen": null,
+        "screen": "1",
         "fmt": null,
-        "ticketUrl": "https://www.landmarktheatres.com/movies/54989-brokeback-mountain",
-        "filmUrl": "https://www.landmarktheatres.com/movies/54989-brokeback-mountain",
-        "poster": "https://all.web.img.acsta.net/img/97/c8/97c8188670f0b4a4316876ad295ee903.jpg",
+        "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/a583a89c-b2e8-5cf4-bfde-2184bba29bff",
+        "filmUrl": "https://www.landmarktheatres.com/movies/16463-the-big-lebowski",
+        "poster": "https://cms-assets.webediamovies.pro/production/217/b0ae1047556a091a8f52a8dac5105084.jpg",
         "rating": "R",
-        "runtime": 134,
-        "director": "Ang Lee",
-        "year": 2005,
-        "note": "Times vary — showtimes & tickets at Landmark"
-      }
-    },
-    {
-      "id": "ms_1284df2248265b81",
-      "title": "Disclosure Day",
-      "start": "2026-06-20T00:00:00-06:00",
-      "allDay": true,
-      "backgroundColor": "#17BEBB",
-      "borderColor": "#17BEBB",
-      "extendedProps": {
-        "theater": "landmark",
-        "theaterName": "Landmark Mayan",
-        "screen": null,
-        "fmt": null,
-        "ticketUrl": "https://www.landmarktheatres.com/movies/1000001453-disclosure-day",
-        "filmUrl": "https://www.landmarktheatres.com/movies/1000001453-disclosure-day",
-        "poster": "https://cms-assets.webediamovies.pro/production/217/ef518abdbe356139347d2d82ff800fce.jpg",
-        "rating": "PG-13",
-        "runtime": 145,
-        "director": "Steven Spielberg",
-        "year": 2026,
-        "note": "Times vary — showtimes & tickets at Landmark"
-      }
-    },
-    {
-      "id": "ms_0fd9bd3b91dfc0dd",
-      "title": "Leviticus",
-      "start": "2026-06-20T00:00:00-06:00",
-      "allDay": true,
-      "backgroundColor": "#17BEBB",
-      "borderColor": "#17BEBB",
-      "extendedProps": {
-        "theater": "landmark",
-        "theaterName": "Landmark Mayan",
-        "screen": null,
-        "fmt": null,
-        "ticketUrl": "https://www.landmarktheatres.com/movies/1000037443-leviticus",
-        "filmUrl": "https://www.landmarktheatres.com/movies/1000037443-leviticus",
-        "poster": "https://cms-assets.webediamovies.pro/production/217/1d3a460f8a7f816f4f66ec6cea7870d7.jpg",
-        "rating": "R",
-        "runtime": 87,
-        "director": "Adrian Chiarella",
-        "year": 2026,
-        "note": "Times vary — showtimes & tickets at Landmark"
-      }
-    },
-    {
-      "id": "ms_5acc2739de26fb82",
-      "title": "Obsession",
-      "start": "2026-06-20T00:00:00-06:00",
-      "allDay": true,
-      "backgroundColor": "#17BEBB",
-      "borderColor": "#17BEBB",
-      "extendedProps": {
-        "theater": "landmark",
-        "theaterName": "Landmark Mayan",
-        "screen": null,
-        "fmt": null,
-        "ticketUrl": "https://www.landmarktheatres.com/movies/1000028234-obsession",
-        "filmUrl": "https://www.landmarktheatres.com/movies/1000028234-obsession",
-        "poster": "https://all.web.img.acsta.net/img/6e/fc/6efc85105b03c2f6ccfaec05a81cf9ff.jpg",
-        "rating": "R",
-        "runtime": 109,
-        "director": "Curry Barker",
-        "year": 2026,
-        "note": "Times vary — showtimes & tickets at Landmark"
-      }
-    },
-    {
-      "id": "ms_0d4da11b21566ed7",
-      "title": "The Bad Guys",
-      "start": "2026-06-20T00:00:00-06:00",
-      "allDay": true,
-      "backgroundColor": "#17BEBB",
-      "borderColor": "#17BEBB",
-      "extendedProps": {
-        "theater": "landmark",
-        "theaterName": "Landmark Mayan",
-        "screen": null,
-        "fmt": null,
-        "ticketUrl": "https://www.landmarktheatres.com/movies/263272-the-bad-guys",
-        "filmUrl": "https://www.landmarktheatres.com/movies/263272-the-bad-guys",
-        "poster": "https://all.web.img.acsta.net/img/b6/f2/b6f2d2b8fb1b696116a214b3669813b7.jpg",
-        "rating": "PG",
-        "runtime": 100,
-        "director": "Pierre Perifel",
-        "year": 2022,
-        "note": "Times vary — showtimes & tickets at Landmark"
-      }
+        "runtime": 117,
+        "director": "Joel Coen",
+        "year": 1998,
+        "note": null
+      },
+      "end": "2026-06-19T23:57:00-06:00"
     },
     {
       "id": "ms_29f359eed50cdcf1",
@@ -2674,6 +2664,29 @@
       "end": "2026-06-20T12:30:00-06:00"
     },
     {
+      "id": "ms_b7fdbb100f3d5453",
+      "title": "Brokeback Mountain",
+      "start": "2026-06-20T10:30:00-06:00",
+      "allDay": false,
+      "backgroundColor": "#17BEBB",
+      "borderColor": "#17BEBB",
+      "extendedProps": {
+        "theater": "landmark",
+        "theaterName": "Landmark Mayan",
+        "screen": "Screen 3",
+        "fmt": null,
+        "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/0ec526ed-0cc5-5074-bc83-3a98d68d0151",
+        "filmUrl": "https://www.landmarktheatres.com/movies/54989-brokeback-mountain",
+        "poster": "https://all.web.img.acsta.net/img/97/c8/97c8188670f0b4a4316876ad295ee903.jpg",
+        "rating": "R",
+        "runtime": 134,
+        "director": "Ang Lee",
+        "year": 2005,
+        "note": null
+      },
+      "end": "2026-06-20T12:44:00-06:00"
+    },
+    {
       "id": "ms_479a19b1dfe95605",
       "title": "Scary Movie",
       "start": "2026-06-20T10:45:00-06:00",
@@ -2718,6 +2731,29 @@
         "note": null
       },
       "end": "2026-06-20T13:00:00-06:00"
+    },
+    {
+      "id": "ms_dc0281552b9208c4",
+      "title": "The Bad Guys",
+      "start": "2026-06-20T11:00:00-06:00",
+      "allDay": false,
+      "backgroundColor": "#17BEBB",
+      "borderColor": "#17BEBB",
+      "extendedProps": {
+        "theater": "landmark",
+        "theaterName": "Landmark Mayan",
+        "screen": "Screen 1",
+        "fmt": null,
+        "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/a0d55285-2180-5a67-a62f-ba42fe647871",
+        "filmUrl": "https://www.landmarktheatres.com/movies/263272-the-bad-guys",
+        "poster": "https://all.web.img.acsta.net/img/b6/f2/b6f2d2b8fb1b696116a214b3669813b7.jpg",
+        "rating": "PG",
+        "runtime": 100,
+        "director": "Pierre Perifel",
+        "year": 2022,
+        "note": null
+      },
+      "end": "2026-06-20T12:40:00-06:00"
     },
     {
       "id": "ms_a208c1d0dededaee",
@@ -2950,6 +2986,29 @@
       "end": "2026-06-20T15:00:00-06:00"
     },
     {
+      "id": "ms_731a073e6d0c0b45",
+      "title": "Disclosure Day",
+      "start": "2026-06-20T13:00:00-06:00",
+      "allDay": false,
+      "backgroundColor": "#17BEBB",
+      "borderColor": "#17BEBB",
+      "extendedProps": {
+        "theater": "landmark",
+        "theaterName": "Landmark Mayan",
+        "screen": "2",
+        "fmt": "Scope",
+        "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/8bbfe5c9-efb3-5344-b461-c769630f0494",
+        "filmUrl": "https://www.landmarktheatres.com/movies/1000001453-disclosure-day",
+        "poster": "https://cms-assets.webediamovies.pro/production/217/ef518abdbe356139347d2d82ff800fce.jpg",
+        "rating": "PG-13",
+        "runtime": 145,
+        "director": "Steven Spielberg",
+        "year": 2026,
+        "note": null
+      },
+      "end": "2026-06-20T15:25:00-06:00"
+    },
+    {
       "id": "ms_0f1fecf23007ba39",
       "title": "Star Wars: The Mandalorian and Grogu",
       "start": "2026-06-20T13:10:00-06:00",
@@ -3017,6 +3076,52 @@
         "note": null
       },
       "end": "2026-06-20T15:45:00-06:00"
+    },
+    {
+      "id": "ms_6af947bdbe2c1fa4",
+      "title": "Obsession",
+      "start": "2026-06-20T13:45:00-06:00",
+      "allDay": false,
+      "backgroundColor": "#17BEBB",
+      "borderColor": "#17BEBB",
+      "extendedProps": {
+        "theater": "landmark",
+        "theaterName": "Landmark Mayan",
+        "screen": "3",
+        "fmt": null,
+        "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/7915e4db-48a2-5eae-8b9b-a77bfc9b80af",
+        "filmUrl": "https://www.landmarktheatres.com/movies/1000028234-obsession",
+        "poster": "https://all.web.img.acsta.net/img/6e/fc/6efc85105b03c2f6ccfaec05a81cf9ff.jpg",
+        "rating": "R",
+        "runtime": 109,
+        "director": "Curry Barker",
+        "year": 2026,
+        "note": null
+      },
+      "end": "2026-06-20T15:34:00-06:00"
+    },
+    {
+      "id": "ms_ffbed7055e597d13",
+      "title": "Leviticus",
+      "start": "2026-06-20T14:00:00-06:00",
+      "allDay": false,
+      "backgroundColor": "#17BEBB",
+      "borderColor": "#17BEBB",
+      "extendedProps": {
+        "theater": "landmark",
+        "theaterName": "Landmark Mayan",
+        "screen": "Screen 1",
+        "fmt": null,
+        "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/eb205ae4-339b-5b70-8f4f-da950da68fa9",
+        "filmUrl": "https://www.landmarktheatres.com/movies/1000037443-leviticus",
+        "poster": "https://cms-assets.webediamovies.pro/production/217/1d3a460f8a7f816f4f66ec6cea7870d7.jpg",
+        "rating": "R",
+        "runtime": 87,
+        "director": "Adrian Chiarella",
+        "year": 2026,
+        "note": null
+      },
+      "end": "2026-06-20T15:27:00-06:00"
     },
     {
       "id": "ms_e6c3088ea3bfe4fa",
@@ -3249,6 +3354,29 @@
       "end": "2026-06-20T18:00:00-06:00"
     },
     {
+      "id": "ms_4882e5da8e73df28",
+      "title": "Disclosure Day",
+      "start": "2026-06-20T16:10:00-06:00",
+      "allDay": false,
+      "backgroundColor": "#17BEBB",
+      "borderColor": "#17BEBB",
+      "extendedProps": {
+        "theater": "landmark",
+        "theaterName": "Landmark Mayan",
+        "screen": "Screen 3",
+        "fmt": "Scope",
+        "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/1558999b-90d0-57ac-b8bb-f001119e0aa7",
+        "filmUrl": "https://www.landmarktheatres.com/movies/1000001453-disclosure-day",
+        "poster": "https://cms-assets.webediamovies.pro/production/217/ef518abdbe356139347d2d82ff800fce.jpg",
+        "rating": "PG-13",
+        "runtime": 145,
+        "director": "Steven Spielberg",
+        "year": 2026,
+        "note": null
+      },
+      "end": "2026-06-20T18:35:00-06:00"
+    },
+    {
       "id": "ms_3e9c11dc020e9597",
       "title": "Scary Movie",
       "start": "2026-06-20T16:20:00-06:00",
@@ -3295,6 +3423,29 @@
       "end": "2026-06-20T18:20:00-06:00"
     },
     {
+      "id": "ms_59a440a7c1af85ef",
+      "title": "Leviticus",
+      "start": "2026-06-20T16:20:00-06:00",
+      "allDay": false,
+      "backgroundColor": "#17BEBB",
+      "borderColor": "#17BEBB",
+      "extendedProps": {
+        "theater": "landmark",
+        "theaterName": "Landmark Mayan",
+        "screen": "Screen 1",
+        "fmt": null,
+        "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/6aad1146-4276-517b-a313-87e73fb302a7",
+        "filmUrl": "https://www.landmarktheatres.com/movies/1000037443-leviticus",
+        "poster": "https://cms-assets.webediamovies.pro/production/217/1d3a460f8a7f816f4f66ec6cea7870d7.jpg",
+        "rating": "R",
+        "runtime": 87,
+        "director": "Adrian Chiarella",
+        "year": 2026,
+        "note": null
+      },
+      "end": "2026-06-20T17:47:00-06:00"
+    },
+    {
       "id": "ms_2756f970af5d3b4c",
       "title": "Toy Story 5",
       "start": "2026-06-20T16:30:00-06:00",
@@ -3316,6 +3467,29 @@
         "note": null
       },
       "end": "2026-06-20T18:30:00-06:00"
+    },
+    {
+      "id": "ms_5d112f32b8766545",
+      "title": "Obsession",
+      "start": "2026-06-20T16:30:00-06:00",
+      "allDay": false,
+      "backgroundColor": "#17BEBB",
+      "borderColor": "#17BEBB",
+      "extendedProps": {
+        "theater": "landmark",
+        "theaterName": "Landmark Mayan",
+        "screen": "Screen 2",
+        "fmt": null,
+        "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/c0632417-7531-5bed-a831-b5c5ea4f6e86",
+        "filmUrl": "https://www.landmarktheatres.com/movies/1000028234-obsession",
+        "poster": "https://all.web.img.acsta.net/img/6e/fc/6efc85105b03c2f6ccfaec05a81cf9ff.jpg",
+        "rating": "R",
+        "runtime": 109,
+        "director": "Curry Barker",
+        "year": 2026,
+        "note": null
+      },
+      "end": "2026-06-20T18:19:00-06:00"
     },
     {
       "id": "ms_745175ddcf2ffb56",
@@ -3571,6 +3745,52 @@
       "end": "2026-06-20T21:00:00-06:00"
     },
     {
+      "id": "ms_7130bae1cd95ad6d",
+      "title": "Disclosure Day",
+      "start": "2026-06-20T19:00:00-06:00",
+      "allDay": false,
+      "backgroundColor": "#17BEBB",
+      "borderColor": "#17BEBB",
+      "extendedProps": {
+        "theater": "landmark",
+        "theaterName": "Landmark Mayan",
+        "screen": "2",
+        "fmt": "Scope",
+        "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/5b5ba5e0-38d7-5636-8be2-1efdfeba0bdc",
+        "filmUrl": "https://www.landmarktheatres.com/movies/1000001453-disclosure-day",
+        "poster": "https://cms-assets.webediamovies.pro/production/217/ef518abdbe356139347d2d82ff800fce.jpg",
+        "rating": "PG-13",
+        "runtime": 145,
+        "director": "Steven Spielberg",
+        "year": 2026,
+        "note": null
+      },
+      "end": "2026-06-20T21:25:00-06:00"
+    },
+    {
+      "id": "ms_2861a424cf7eae67",
+      "title": "Leviticus",
+      "start": "2026-06-20T19:10:00-06:00",
+      "allDay": false,
+      "backgroundColor": "#17BEBB",
+      "borderColor": "#17BEBB",
+      "extendedProps": {
+        "theater": "landmark",
+        "theaterName": "Landmark Mayan",
+        "screen": "Screen 1",
+        "fmt": null,
+        "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/dd2b8162-6528-5025-87c6-930469fd46d3",
+        "filmUrl": "https://www.landmarktheatres.com/movies/1000037443-leviticus",
+        "poster": "https://cms-assets.webediamovies.pro/production/217/1d3a460f8a7f816f4f66ec6cea7870d7.jpg",
+        "rating": "R",
+        "runtime": 87,
+        "director": "Adrian Chiarella",
+        "year": 2026,
+        "note": null
+      },
+      "end": "2026-06-20T20:37:00-06:00"
+    },
+    {
       "id": "ms_a5aee390023a7cfe",
       "title": "Toy Story 5",
       "start": "2026-06-20T19:15:00-06:00",
@@ -3592,6 +3812,29 @@
         "note": null
       },
       "end": "2026-06-20T21:15:00-06:00"
+    },
+    {
+      "id": "ms_09614e08e60575a4",
+      "title": "Obsession",
+      "start": "2026-06-20T19:20:00-06:00",
+      "allDay": false,
+      "backgroundColor": "#17BEBB",
+      "borderColor": "#17BEBB",
+      "extendedProps": {
+        "theater": "landmark",
+        "theaterName": "Landmark Mayan",
+        "screen": "3",
+        "fmt": null,
+        "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/f97027d6-00c5-5c3d-9eb4-eea7c7c90553",
+        "filmUrl": "https://www.landmarktheatres.com/movies/1000028234-obsession",
+        "poster": "https://all.web.img.acsta.net/img/6e/fc/6efc85105b03c2f6ccfaec05a81cf9ff.jpg",
+        "rating": "R",
+        "runtime": 109,
+        "director": "Curry Barker",
+        "year": 2026,
+        "note": null
+      },
+      "end": "2026-06-20T21:09:00-06:00"
     },
     {
       "id": "ms_b8b13bbfaceeb593",
@@ -3939,116 +4182,6 @@
       "end": "2026-06-21T00:00:00-06:00"
     },
     {
-      "id": "ms_cd783bba5b85dea7",
-      "title": "Disclosure Day",
-      "start": "2026-06-21T00:00:00-06:00",
-      "allDay": true,
-      "backgroundColor": "#17BEBB",
-      "borderColor": "#17BEBB",
-      "extendedProps": {
-        "theater": "landmark",
-        "theaterName": "Landmark Mayan",
-        "screen": null,
-        "fmt": null,
-        "ticketUrl": "https://www.landmarktheatres.com/movies/1000001453-disclosure-day",
-        "filmUrl": "https://www.landmarktheatres.com/movies/1000001453-disclosure-day",
-        "poster": "https://cms-assets.webediamovies.pro/production/217/ef518abdbe356139347d2d82ff800fce.jpg",
-        "rating": "PG-13",
-        "runtime": 145,
-        "director": "Steven Spielberg",
-        "year": 2026,
-        "note": "Times vary — showtimes & tickets at Landmark"
-      }
-    },
-    {
-      "id": "ms_cdb676835487daa3",
-      "title": "Interstellar",
-      "start": "2026-06-21T00:00:00-06:00",
-      "allDay": true,
-      "backgroundColor": "#17BEBB",
-      "borderColor": "#17BEBB",
-      "extendedProps": {
-        "theater": "landmark",
-        "theaterName": "Landmark Mayan",
-        "screen": null,
-        "fmt": null,
-        "ticketUrl": "https://www.landmarktheatres.com/movies/114782-interstellar",
-        "filmUrl": "https://www.landmarktheatres.com/movies/114782-interstellar",
-        "poster": "https://cms-assets.webediamovies.pro/production/217/81840a9beca8787013271c578dbbaf6b.jpg",
-        "rating": "PG-13",
-        "runtime": 169,
-        "director": "Christopher Nolan",
-        "year": 2020,
-        "note": "Times vary — showtimes & tickets at Landmark"
-      }
-    },
-    {
-      "id": "ms_ba7feaa6264a2088",
-      "title": "Leviticus",
-      "start": "2026-06-21T00:00:00-06:00",
-      "allDay": true,
-      "backgroundColor": "#17BEBB",
-      "borderColor": "#17BEBB",
-      "extendedProps": {
-        "theater": "landmark",
-        "theaterName": "Landmark Mayan",
-        "screen": null,
-        "fmt": null,
-        "ticketUrl": "https://www.landmarktheatres.com/movies/1000037443-leviticus",
-        "filmUrl": "https://www.landmarktheatres.com/movies/1000037443-leviticus",
-        "poster": "https://cms-assets.webediamovies.pro/production/217/1d3a460f8a7f816f4f66ec6cea7870d7.jpg",
-        "rating": "R",
-        "runtime": 87,
-        "director": "Adrian Chiarella",
-        "year": 2026,
-        "note": "Times vary — showtimes & tickets at Landmark"
-      }
-    },
-    {
-      "id": "ms_6245f1bb89a04677",
-      "title": "Obsession",
-      "start": "2026-06-21T00:00:00-06:00",
-      "allDay": true,
-      "backgroundColor": "#17BEBB",
-      "borderColor": "#17BEBB",
-      "extendedProps": {
-        "theater": "landmark",
-        "theaterName": "Landmark Mayan",
-        "screen": null,
-        "fmt": null,
-        "ticketUrl": "https://www.landmarktheatres.com/movies/1000028234-obsession",
-        "filmUrl": "https://www.landmarktheatres.com/movies/1000028234-obsession",
-        "poster": "https://all.web.img.acsta.net/img/6e/fc/6efc85105b03c2f6ccfaec05a81cf9ff.jpg",
-        "rating": "R",
-        "runtime": 109,
-        "director": "Curry Barker",
-        "year": 2026,
-        "note": "Times vary — showtimes & tickets at Landmark"
-      }
-    },
-    {
-      "id": "ms_d1fe616736ff606d",
-      "title": "The Bad Guys",
-      "start": "2026-06-21T00:00:00-06:00",
-      "allDay": true,
-      "backgroundColor": "#17BEBB",
-      "borderColor": "#17BEBB",
-      "extendedProps": {
-        "theater": "landmark",
-        "theaterName": "Landmark Mayan",
-        "screen": null,
-        "fmt": null,
-        "ticketUrl": "https://www.landmarktheatres.com/movies/263272-the-bad-guys",
-        "filmUrl": "https://www.landmarktheatres.com/movies/263272-the-bad-guys",
-        "poster": "https://all.web.img.acsta.net/img/b6/f2/b6f2d2b8fb1b696116a214b3669813b7.jpg",
-        "rating": "PG",
-        "runtime": 100,
-        "director": "Pierre Perifel",
-        "year": 2022,
-        "note": "Times vary — showtimes & tickets at Landmark"
-      }
-    },
-    {
       "id": "ms_ca0ea94db9dc4020",
       "title": "Obsession",
       "start": "2026-06-21T10:00:00-06:00",
@@ -4116,6 +4249,29 @@
         "note": null
       },
       "end": "2026-06-21T12:00:00-06:00"
+    },
+    {
+      "id": "ms_9438ec91046d75a6",
+      "title": "Interstellar",
+      "start": "2026-06-21T10:00:00-06:00",
+      "allDay": false,
+      "backgroundColor": "#17BEBB",
+      "borderColor": "#17BEBB",
+      "extendedProps": {
+        "theater": "landmark",
+        "theaterName": "Landmark Mayan",
+        "screen": "1",
+        "fmt": "Scope",
+        "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/f99a3a1c-e454-5b31-ad8a-4589f58ffb48",
+        "filmUrl": "https://www.landmarktheatres.com/movies/114782-interstellar",
+        "poster": "https://cms-assets.webediamovies.pro/production/217/81840a9beca8787013271c578dbbaf6b.jpg",
+        "rating": "PG-13",
+        "runtime": 169,
+        "director": "Christopher Nolan",
+        "year": 2020,
+        "note": null
+      },
+      "end": "2026-06-21T12:49:00-06:00"
     },
     {
       "id": "ms_d0047ac467e95898",
@@ -4208,6 +4364,29 @@
         "note": null
       },
       "end": "2026-06-21T13:00:00-06:00"
+    },
+    {
+      "id": "ms_12914c33f39a71ca",
+      "title": "The Bad Guys",
+      "start": "2026-06-21T11:00:00-06:00",
+      "allDay": false,
+      "backgroundColor": "#17BEBB",
+      "borderColor": "#17BEBB",
+      "extendedProps": {
+        "theater": "landmark",
+        "theaterName": "Landmark Mayan",
+        "screen": "3",
+        "fmt": null,
+        "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/9b261ba7-fa10-51dd-921c-4543d3b7d788",
+        "filmUrl": "https://www.landmarktheatres.com/movies/263272-the-bad-guys",
+        "poster": "https://all.web.img.acsta.net/img/b6/f2/b6f2d2b8fb1b696116a214b3669813b7.jpg",
+        "rating": "PG",
+        "runtime": 100,
+        "director": "Pierre Perifel",
+        "year": 2022,
+        "note": null
+      },
+      "end": "2026-06-21T12:40:00-06:00"
     },
     {
       "id": "ms_cd9d7adcf107eed4",
@@ -4486,6 +4665,29 @@
       "end": "2026-06-21T15:30:00-06:00"
     },
     {
+      "id": "ms_564dd1f90dd3386c",
+      "title": "Disclosure Day",
+      "start": "2026-06-21T13:30:00-06:00",
+      "allDay": false,
+      "backgroundColor": "#17BEBB",
+      "borderColor": "#17BEBB",
+      "extendedProps": {
+        "theater": "landmark",
+        "theaterName": "Landmark Mayan",
+        "screen": "Screen 2",
+        "fmt": "Scope",
+        "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/164bb990-1523-5da7-a988-86785885ede7",
+        "filmUrl": "https://www.landmarktheatres.com/movies/1000001453-disclosure-day",
+        "poster": "https://cms-assets.webediamovies.pro/production/217/ef518abdbe356139347d2d82ff800fce.jpg",
+        "rating": "PG-13",
+        "runtime": 145,
+        "director": "Steven Spielberg",
+        "year": 2026,
+        "note": null
+      },
+      "end": "2026-06-21T15:55:00-06:00"
+    },
+    {
       "id": "ms_6be09b500874593f",
       "title": "Toy Story 5",
       "start": "2026-06-21T13:45:00-06:00",
@@ -4507,6 +4709,52 @@
         "note": null
       },
       "end": "2026-06-21T15:45:00-06:00"
+    },
+    {
+      "id": "ms_aca2bf633e128825",
+      "title": "Obsession",
+      "start": "2026-06-21T13:45:00-06:00",
+      "allDay": false,
+      "backgroundColor": "#17BEBB",
+      "borderColor": "#17BEBB",
+      "extendedProps": {
+        "theater": "landmark",
+        "theaterName": "Landmark Mayan",
+        "screen": "Screen 3",
+        "fmt": null,
+        "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/fdb2ec47-1723-5984-af63-9cd5ae26d558",
+        "filmUrl": "https://www.landmarktheatres.com/movies/1000028234-obsession",
+        "poster": "https://all.web.img.acsta.net/img/6e/fc/6efc85105b03c2f6ccfaec05a81cf9ff.jpg",
+        "rating": "R",
+        "runtime": 109,
+        "director": "Curry Barker",
+        "year": 2026,
+        "note": null
+      },
+      "end": "2026-06-21T15:34:00-06:00"
+    },
+    {
+      "id": "ms_84eca85ad2d87fe5",
+      "title": "Leviticus",
+      "start": "2026-06-21T14:00:00-06:00",
+      "allDay": false,
+      "backgroundColor": "#17BEBB",
+      "borderColor": "#17BEBB",
+      "extendedProps": {
+        "theater": "landmark",
+        "theaterName": "Landmark Mayan",
+        "screen": "Screen 1",
+        "fmt": null,
+        "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/822efeeb-6d70-524c-851d-757b351d6ba0",
+        "filmUrl": "https://www.landmarktheatres.com/movies/1000037443-leviticus",
+        "poster": "https://cms-assets.webediamovies.pro/production/217/1d3a460f8a7f816f4f66ec6cea7870d7.jpg",
+        "rating": "R",
+        "runtime": 87,
+        "director": "Adrian Chiarella",
+        "year": 2026,
+        "note": null
+      },
+      "end": "2026-06-21T15:27:00-06:00"
     },
     {
       "id": "ms_8a0c79b989221f81",
@@ -4716,6 +4964,29 @@
       "end": "2026-06-21T18:00:00-06:00"
     },
     {
+      "id": "ms_53e282845b9df190",
+      "title": "Disclosure Day",
+      "start": "2026-06-21T16:10:00-06:00",
+      "allDay": false,
+      "backgroundColor": "#17BEBB",
+      "borderColor": "#17BEBB",
+      "extendedProps": {
+        "theater": "landmark",
+        "theaterName": "Landmark Mayan",
+        "screen": "3",
+        "fmt": "Scope",
+        "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/25dbfd09-c45e-52ba-a0cf-9ef105b1b04d",
+        "filmUrl": "https://www.landmarktheatres.com/movies/1000001453-disclosure-day",
+        "poster": "https://cms-assets.webediamovies.pro/production/217/ef518abdbe356139347d2d82ff800fce.jpg",
+        "rating": "PG-13",
+        "runtime": 145,
+        "director": "Steven Spielberg",
+        "year": 2026,
+        "note": null
+      },
+      "end": "2026-06-21T18:35:00-06:00"
+    },
+    {
       "id": "ms_37c25f765bcc3e08",
       "title": "Scary Movie",
       "start": "2026-06-21T16:20:00-06:00",
@@ -4762,6 +5033,29 @@
       "end": "2026-06-21T18:20:00-06:00"
     },
     {
+      "id": "ms_20ea49dc0951700a",
+      "title": "Leviticus",
+      "start": "2026-06-21T16:20:00-06:00",
+      "allDay": false,
+      "backgroundColor": "#17BEBB",
+      "borderColor": "#17BEBB",
+      "extendedProps": {
+        "theater": "landmark",
+        "theaterName": "Landmark Mayan",
+        "screen": "1",
+        "fmt": null,
+        "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/2a3b7e34-3a8a-5476-9eb6-95366719e8f1",
+        "filmUrl": "https://www.landmarktheatres.com/movies/1000037443-leviticus",
+        "poster": "https://cms-assets.webediamovies.pro/production/217/1d3a460f8a7f816f4f66ec6cea7870d7.jpg",
+        "rating": "R",
+        "runtime": 87,
+        "director": "Adrian Chiarella",
+        "year": 2026,
+        "note": null
+      },
+      "end": "2026-06-21T17:47:00-06:00"
+    },
+    {
       "id": "ms_8a16c188622557c9",
       "title": "Toy Story 5",
       "start": "2026-06-21T16:30:00-06:00",
@@ -4783,6 +5077,29 @@
         "note": null
       },
       "end": "2026-06-21T18:30:00-06:00"
+    },
+    {
+      "id": "ms_b21b883237f0651a",
+      "title": "Obsession",
+      "start": "2026-06-21T16:30:00-06:00",
+      "allDay": false,
+      "backgroundColor": "#17BEBB",
+      "borderColor": "#17BEBB",
+      "extendedProps": {
+        "theater": "landmark",
+        "theaterName": "Landmark Mayan",
+        "screen": "2",
+        "fmt": null,
+        "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/e08feecc-3ed8-58c6-a321-68fb5a92d046",
+        "filmUrl": "https://www.landmarktheatres.com/movies/1000028234-obsession",
+        "poster": "https://all.web.img.acsta.net/img/6e/fc/6efc85105b03c2f6ccfaec05a81cf9ff.jpg",
+        "rating": "R",
+        "runtime": 109,
+        "director": "Curry Barker",
+        "year": 2026,
+        "note": null
+      },
+      "end": "2026-06-21T18:19:00-06:00"
     },
     {
       "id": "ms_1e562177703d3a5e",
@@ -5038,6 +5355,52 @@
       "end": "2026-06-21T21:00:00-06:00"
     },
     {
+      "id": "ms_f5330000da6992a2",
+      "title": "Disclosure Day",
+      "start": "2026-06-21T19:00:00-06:00",
+      "allDay": false,
+      "backgroundColor": "#17BEBB",
+      "borderColor": "#17BEBB",
+      "extendedProps": {
+        "theater": "landmark",
+        "theaterName": "Landmark Mayan",
+        "screen": "2",
+        "fmt": "Scope",
+        "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/9be767dd-7a2a-5456-80fb-466a2d386a8a",
+        "filmUrl": "https://www.landmarktheatres.com/movies/1000001453-disclosure-day",
+        "poster": "https://cms-assets.webediamovies.pro/production/217/ef518abdbe356139347d2d82ff800fce.jpg",
+        "rating": "PG-13",
+        "runtime": 145,
+        "director": "Steven Spielberg",
+        "year": 2026,
+        "note": null
+      },
+      "end": "2026-06-21T21:25:00-06:00"
+    },
+    {
+      "id": "ms_04bfab6eaf4456fa",
+      "title": "Leviticus",
+      "start": "2026-06-21T19:10:00-06:00",
+      "allDay": false,
+      "backgroundColor": "#17BEBB",
+      "borderColor": "#17BEBB",
+      "extendedProps": {
+        "theater": "landmark",
+        "theaterName": "Landmark Mayan",
+        "screen": "1",
+        "fmt": null,
+        "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/a9442eae-3a32-5268-be48-4e0eac2b075e",
+        "filmUrl": "https://www.landmarktheatres.com/movies/1000037443-leviticus",
+        "poster": "https://cms-assets.webediamovies.pro/production/217/1d3a460f8a7f816f4f66ec6cea7870d7.jpg",
+        "rating": "R",
+        "runtime": 87,
+        "director": "Adrian Chiarella",
+        "year": 2026,
+        "note": null
+      },
+      "end": "2026-06-21T20:37:00-06:00"
+    },
+    {
       "id": "ms_4eca4b6c8c8e230f",
       "title": "Toy Story 5",
       "start": "2026-06-21T19:15:00-06:00",
@@ -5059,6 +5422,29 @@
         "note": null
       },
       "end": "2026-06-21T21:15:00-06:00"
+    },
+    {
+      "id": "ms_6da56fdc233b5c1e",
+      "title": "Obsession",
+      "start": "2026-06-21T19:20:00-06:00",
+      "allDay": false,
+      "backgroundColor": "#17BEBB",
+      "borderColor": "#17BEBB",
+      "extendedProps": {
+        "theater": "landmark",
+        "theaterName": "Landmark Mayan",
+        "screen": "3",
+        "fmt": null,
+        "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/e0acf146-a581-5f15-9863-fb2079786854",
+        "filmUrl": "https://www.landmarktheatres.com/movies/1000028234-obsession",
+        "poster": "https://all.web.img.acsta.net/img/6e/fc/6efc85105b03c2f6ccfaec05a81cf9ff.jpg",
+        "rating": "R",
+        "runtime": 109,
+        "director": "Curry Barker",
+        "year": 2026,
+        "note": null
+      },
+      "end": "2026-06-21T21:09:00-06:00"
     },
     {
       "id": "ms_2c9ec4581039f150",
@@ -5335,72 +5721,6 @@
         "note": null
       },
       "end": "2026-06-22T00:00:00-06:00"
-    },
-    {
-      "id": "ms_72d97327f93f3b64",
-      "title": "Disclosure Day",
-      "start": "2026-06-22T00:00:00-06:00",
-      "allDay": true,
-      "backgroundColor": "#17BEBB",
-      "borderColor": "#17BEBB",
-      "extendedProps": {
-        "theater": "landmark",
-        "theaterName": "Landmark Mayan",
-        "screen": null,
-        "fmt": null,
-        "ticketUrl": "https://www.landmarktheatres.com/movies/1000001453-disclosure-day",
-        "filmUrl": "https://www.landmarktheatres.com/movies/1000001453-disclosure-day",
-        "poster": "https://cms-assets.webediamovies.pro/production/217/ef518abdbe356139347d2d82ff800fce.jpg",
-        "rating": "PG-13",
-        "runtime": 145,
-        "director": "Steven Spielberg",
-        "year": 2026,
-        "note": "Times vary — showtimes & tickets at Landmark"
-      }
-    },
-    {
-      "id": "ms_297097b3e880d9fa",
-      "title": "Leviticus",
-      "start": "2026-06-22T00:00:00-06:00",
-      "allDay": true,
-      "backgroundColor": "#17BEBB",
-      "borderColor": "#17BEBB",
-      "extendedProps": {
-        "theater": "landmark",
-        "theaterName": "Landmark Mayan",
-        "screen": null,
-        "fmt": null,
-        "ticketUrl": "https://www.landmarktheatres.com/movies/1000037443-leviticus",
-        "filmUrl": "https://www.landmarktheatres.com/movies/1000037443-leviticus",
-        "poster": "https://cms-assets.webediamovies.pro/production/217/1d3a460f8a7f816f4f66ec6cea7870d7.jpg",
-        "rating": "R",
-        "runtime": 87,
-        "director": "Adrian Chiarella",
-        "year": 2026,
-        "note": "Times vary — showtimes & tickets at Landmark"
-      }
-    },
-    {
-      "id": "ms_052005b89c499cbd",
-      "title": "Obsession",
-      "start": "2026-06-22T00:00:00-06:00",
-      "allDay": true,
-      "backgroundColor": "#17BEBB",
-      "borderColor": "#17BEBB",
-      "extendedProps": {
-        "theater": "landmark",
-        "theaterName": "Landmark Mayan",
-        "screen": null,
-        "fmt": null,
-        "ticketUrl": "https://www.landmarktheatres.com/movies/1000028234-obsession",
-        "filmUrl": "https://www.landmarktheatres.com/movies/1000028234-obsession",
-        "poster": "https://all.web.img.acsta.net/img/6e/fc/6efc85105b03c2f6ccfaec05a81cf9ff.jpg",
-        "rating": "R",
-        "runtime": 109,
-        "director": "Curry Barker",
-        "year": 2026,
-        "note": "Times vary — showtimes & tickets at Landmark"
-      }
     },
     {
       "id": "ms_b9256cced54b69d3",
@@ -5886,6 +6206,29 @@
       "end": "2026-06-22T17:35:00-06:00"
     },
     {
+      "id": "ms_8e960d950c9aca80",
+      "title": "Disclosure Day",
+      "start": "2026-06-22T16:10:00-06:00",
+      "allDay": false,
+      "backgroundColor": "#17BEBB",
+      "borderColor": "#17BEBB",
+      "extendedProps": {
+        "theater": "landmark",
+        "theaterName": "Landmark Mayan",
+        "screen": "3",
+        "fmt": "Scope",
+        "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/8b9fa459-533d-59bb-84ea-4383ad9bd17a",
+        "filmUrl": "https://www.landmarktheatres.com/movies/1000001453-disclosure-day",
+        "poster": "https://cms-assets.webediamovies.pro/production/217/ef518abdbe356139347d2d82ff800fce.jpg",
+        "rating": "PG-13",
+        "runtime": 145,
+        "director": "Steven Spielberg",
+        "year": 2026,
+        "note": null
+      },
+      "end": "2026-06-22T18:35:00-06:00"
+    },
+    {
       "id": "ms_8ad4b59658300da0",
       "title": "Backrooms",
       "start": "2026-06-22T16:15:00-06:00",
@@ -5932,6 +6275,29 @@
       "end": "2026-06-22T18:20:00-06:00"
     },
     {
+      "id": "ms_3866cbec7fb8c1f1",
+      "title": "Leviticus",
+      "start": "2026-06-22T16:20:00-06:00",
+      "allDay": false,
+      "backgroundColor": "#17BEBB",
+      "borderColor": "#17BEBB",
+      "extendedProps": {
+        "theater": "landmark",
+        "theaterName": "Landmark Mayan",
+        "screen": "1",
+        "fmt": null,
+        "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/dd63291e-242c-515d-9661-8ac124b0cea4",
+        "filmUrl": "https://www.landmarktheatres.com/movies/1000037443-leviticus",
+        "poster": "https://cms-assets.webediamovies.pro/production/217/1d3a460f8a7f816f4f66ec6cea7870d7.jpg",
+        "rating": "R",
+        "runtime": 87,
+        "director": "Adrian Chiarella",
+        "year": 2026,
+        "note": null
+      },
+      "end": "2026-06-22T17:47:00-06:00"
+    },
+    {
       "id": "ms_51c29b16f3f753d7",
       "title": "Girls Like Girls",
       "start": "2026-06-22T16:30:00-06:00",
@@ -5976,6 +6342,29 @@
         "note": null
       },
       "end": "2026-06-22T18:30:00-06:00"
+    },
+    {
+      "id": "ms_7a1e75e3491bf1b0",
+      "title": "Obsession",
+      "start": "2026-06-22T16:30:00-06:00",
+      "allDay": false,
+      "backgroundColor": "#17BEBB",
+      "borderColor": "#17BEBB",
+      "extendedProps": {
+        "theater": "landmark",
+        "theaterName": "Landmark Mayan",
+        "screen": "Screen 2",
+        "fmt": null,
+        "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/e1254498-f407-50d8-bea8-b39a49ddb897",
+        "filmUrl": "https://www.landmarktheatres.com/movies/1000028234-obsession",
+        "poster": "https://all.web.img.acsta.net/img/6e/fc/6efc85105b03c2f6ccfaec05a81cf9ff.jpg",
+        "rating": "R",
+        "runtime": 109,
+        "director": "Curry Barker",
+        "year": 2026,
+        "note": null
+      },
+      "end": "2026-06-22T18:19:00-06:00"
     },
     {
       "id": "ms_82175e3fb5eaa1ac",
@@ -6185,6 +6574,29 @@
       "end": "2026-06-22T21:00:00-06:00"
     },
     {
+      "id": "ms_c8ced50f1ccf9ed0",
+      "title": "Disclosure Day",
+      "start": "2026-06-22T19:00:00-06:00",
+      "allDay": false,
+      "backgroundColor": "#17BEBB",
+      "borderColor": "#17BEBB",
+      "extendedProps": {
+        "theater": "landmark",
+        "theaterName": "Landmark Mayan",
+        "screen": "2",
+        "fmt": "Scope",
+        "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/8979d6c3-165e-5a83-9e53-92ace65db7ed",
+        "filmUrl": "https://www.landmarktheatres.com/movies/1000001453-disclosure-day",
+        "poster": "https://cms-assets.webediamovies.pro/production/217/ef518abdbe356139347d2d82ff800fce.jpg",
+        "rating": "PG-13",
+        "runtime": 145,
+        "director": "Steven Spielberg",
+        "year": 2026,
+        "note": null
+      },
+      "end": "2026-06-22T21:25:00-06:00"
+    },
+    {
       "id": "ms_071e2cb07f9ee6da",
       "title": "The Invite",
       "start": "2026-06-22T19:00:00-06:00",
@@ -6208,6 +6620,29 @@
       "end": "2026-06-22T20:47:00-06:00"
     },
     {
+      "id": "ms_3c69c77295711341",
+      "title": "Leviticus",
+      "start": "2026-06-22T19:10:00-06:00",
+      "allDay": false,
+      "backgroundColor": "#17BEBB",
+      "borderColor": "#17BEBB",
+      "extendedProps": {
+        "theater": "landmark",
+        "theaterName": "Landmark Mayan",
+        "screen": "1",
+        "fmt": null,
+        "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/8eb4c2a7-7731-5812-a6b2-8a3301afde41",
+        "filmUrl": "https://www.landmarktheatres.com/movies/1000037443-leviticus",
+        "poster": "https://cms-assets.webediamovies.pro/production/217/1d3a460f8a7f816f4f66ec6cea7870d7.jpg",
+        "rating": "R",
+        "runtime": 87,
+        "director": "Adrian Chiarella",
+        "year": 2026,
+        "note": null
+      },
+      "end": "2026-06-22T20:37:00-06:00"
+    },
+    {
       "id": "ms_775513c45487d681",
       "title": "Toy Story 5",
       "start": "2026-06-22T19:15:00-06:00",
@@ -6229,6 +6664,29 @@
         "note": null
       },
       "end": "2026-06-22T21:15:00-06:00"
+    },
+    {
+      "id": "ms_742493c58d636b6c",
+      "title": "Obsession",
+      "start": "2026-06-22T19:20:00-06:00",
+      "allDay": false,
+      "backgroundColor": "#17BEBB",
+      "borderColor": "#17BEBB",
+      "extendedProps": {
+        "theater": "landmark",
+        "theaterName": "Landmark Mayan",
+        "screen": "3",
+        "fmt": null,
+        "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/b8c147fb-9a99-59d0-97c2-adf8b34c513e",
+        "filmUrl": "https://www.landmarktheatres.com/movies/1000028234-obsession",
+        "poster": "https://all.web.img.acsta.net/img/6e/fc/6efc85105b03c2f6ccfaec05a81cf9ff.jpg",
+        "rating": "R",
+        "runtime": 109,
+        "director": "Curry Barker",
+        "year": 2026,
+        "note": null
+      },
+      "end": "2026-06-22T21:09:00-06:00"
     },
     {
       "id": "ms_2b32680ebc78e132",
@@ -6484,94 +6942,6 @@
       "end": "2026-06-23T00:00:00-06:00"
     },
     {
-      "id": "ms_f57424b3cb842ccc",
-      "title": "Brokeback Mountain",
-      "start": "2026-06-23T00:00:00-06:00",
-      "allDay": true,
-      "backgroundColor": "#17BEBB",
-      "borderColor": "#17BEBB",
-      "extendedProps": {
-        "theater": "landmark",
-        "theaterName": "Landmark Mayan",
-        "screen": null,
-        "fmt": null,
-        "ticketUrl": "https://www.landmarktheatres.com/movies/54989-brokeback-mountain",
-        "filmUrl": "https://www.landmarktheatres.com/movies/54989-brokeback-mountain",
-        "poster": "https://all.web.img.acsta.net/img/97/c8/97c8188670f0b4a4316876ad295ee903.jpg",
-        "rating": "R",
-        "runtime": 134,
-        "director": "Ang Lee",
-        "year": 2005,
-        "note": "Times vary — showtimes & tickets at Landmark"
-      }
-    },
-    {
-      "id": "ms_d772d594e3a4ad4c",
-      "title": "Disclosure Day",
-      "start": "2026-06-23T00:00:00-06:00",
-      "allDay": true,
-      "backgroundColor": "#17BEBB",
-      "borderColor": "#17BEBB",
-      "extendedProps": {
-        "theater": "landmark",
-        "theaterName": "Landmark Mayan",
-        "screen": null,
-        "fmt": null,
-        "ticketUrl": "https://www.landmarktheatres.com/movies/1000001453-disclosure-day",
-        "filmUrl": "https://www.landmarktheatres.com/movies/1000001453-disclosure-day",
-        "poster": "https://cms-assets.webediamovies.pro/production/217/ef518abdbe356139347d2d82ff800fce.jpg",
-        "rating": "PG-13",
-        "runtime": 145,
-        "director": "Steven Spielberg",
-        "year": 2026,
-        "note": "Times vary — showtimes & tickets at Landmark"
-      }
-    },
-    {
-      "id": "ms_c60cfcdece164928",
-      "title": "Leviticus",
-      "start": "2026-06-23T00:00:00-06:00",
-      "allDay": true,
-      "backgroundColor": "#17BEBB",
-      "borderColor": "#17BEBB",
-      "extendedProps": {
-        "theater": "landmark",
-        "theaterName": "Landmark Mayan",
-        "screen": null,
-        "fmt": null,
-        "ticketUrl": "https://www.landmarktheatres.com/movies/1000037443-leviticus",
-        "filmUrl": "https://www.landmarktheatres.com/movies/1000037443-leviticus",
-        "poster": "https://cms-assets.webediamovies.pro/production/217/1d3a460f8a7f816f4f66ec6cea7870d7.jpg",
-        "rating": "R",
-        "runtime": 87,
-        "director": "Adrian Chiarella",
-        "year": 2026,
-        "note": "Times vary — showtimes & tickets at Landmark"
-      }
-    },
-    {
-      "id": "ms_12a85f36986c074b",
-      "title": "Obsession",
-      "start": "2026-06-23T00:00:00-06:00",
-      "allDay": true,
-      "backgroundColor": "#17BEBB",
-      "borderColor": "#17BEBB",
-      "extendedProps": {
-        "theater": "landmark",
-        "theaterName": "Landmark Mayan",
-        "screen": null,
-        "fmt": null,
-        "ticketUrl": "https://www.landmarktheatres.com/movies/1000028234-obsession",
-        "filmUrl": "https://www.landmarktheatres.com/movies/1000028234-obsession",
-        "poster": "https://all.web.img.acsta.net/img/6e/fc/6efc85105b03c2f6ccfaec05a81cf9ff.jpg",
-        "rating": "R",
-        "runtime": 109,
-        "director": "Curry Barker",
-        "year": 2026,
-        "note": "Times vary — showtimes & tickets at Landmark"
-      }
-    },
-    {
       "id": "ms_0150ded4aece0824",
       "title": "Toy Story 5",
       "start": "2026-06-23T11:00:00-06:00",
@@ -6779,6 +7149,29 @@
       "end": "2026-06-23T15:15:00-06:00"
     },
     {
+      "id": "ms_8dcd9de619692c56",
+      "title": "Disclosure Day",
+      "start": "2026-06-23T13:15:00-06:00",
+      "allDay": false,
+      "backgroundColor": "#17BEBB",
+      "borderColor": "#17BEBB",
+      "extendedProps": {
+        "theater": "landmark",
+        "theaterName": "Landmark Mayan",
+        "screen": "2",
+        "fmt": "Scope",
+        "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/ee244a12-724d-59d6-8649-8587ac4c65a2",
+        "filmUrl": "https://www.landmarktheatres.com/movies/1000001453-disclosure-day",
+        "poster": "https://cms-assets.webediamovies.pro/production/217/ef518abdbe356139347d2d82ff800fce.jpg",
+        "rating": "PG-13",
+        "runtime": 145,
+        "director": "Steven Spielberg",
+        "year": 2026,
+        "note": null
+      },
+      "end": "2026-06-23T15:40:00-06:00"
+    },
+    {
       "id": "ms_912dc93b55f097e3",
       "title": "Backrooms",
       "start": "2026-06-23T13:30:00-06:00",
@@ -6802,6 +7195,29 @@
       "end": "2026-06-23T15:30:00-06:00"
     },
     {
+      "id": "ms_bc770364265946bd",
+      "title": "Brokeback Mountain",
+      "start": "2026-06-23T13:30:00-06:00",
+      "allDay": false,
+      "backgroundColor": "#17BEBB",
+      "borderColor": "#17BEBB",
+      "extendedProps": {
+        "theater": "landmark",
+        "theaterName": "Landmark Mayan",
+        "screen": "Screen 1",
+        "fmt": null,
+        "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/8f9197b4-270a-5e27-8f19-1ccfe60d5639",
+        "filmUrl": "https://www.landmarktheatres.com/movies/54989-brokeback-mountain",
+        "poster": "https://all.web.img.acsta.net/img/97/c8/97c8188670f0b4a4316876ad295ee903.jpg",
+        "rating": "R",
+        "runtime": 134,
+        "director": "Ang Lee",
+        "year": 2005,
+        "note": null
+      },
+      "end": "2026-06-23T15:44:00-06:00"
+    },
+    {
       "id": "ms_d20618d0a32b4d2a",
       "title": "Toy Story 5",
       "start": "2026-06-23T13:45:00-06:00",
@@ -6823,6 +7239,29 @@
         "note": null
       },
       "end": "2026-06-23T15:45:00-06:00"
+    },
+    {
+      "id": "ms_98524cdc8249da65",
+      "title": "Obsession",
+      "start": "2026-06-23T13:45:00-06:00",
+      "allDay": false,
+      "backgroundColor": "#17BEBB",
+      "borderColor": "#17BEBB",
+      "extendedProps": {
+        "theater": "landmark",
+        "theaterName": "Landmark Mayan",
+        "screen": "Screen 3",
+        "fmt": null,
+        "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/90beff78-3c23-5be3-baf8-ed4ddd55aa68",
+        "filmUrl": "https://www.landmarktheatres.com/movies/1000028234-obsession",
+        "poster": "https://all.web.img.acsta.net/img/6e/fc/6efc85105b03c2f6ccfaec05a81cf9ff.jpg",
+        "rating": "R",
+        "runtime": 109,
+        "director": "Curry Barker",
+        "year": 2026,
+        "note": null
+      },
+      "end": "2026-06-23T15:34:00-06:00"
     },
     {
       "id": "ms_7b41ff1c773b119c",
@@ -7055,6 +7494,29 @@
       "end": "2026-06-23T17:35:00-06:00"
     },
     {
+      "id": "ms_81009a85e19a4211",
+      "title": "Disclosure Day",
+      "start": "2026-06-23T16:00:00-06:00",
+      "allDay": false,
+      "backgroundColor": "#17BEBB",
+      "borderColor": "#17BEBB",
+      "extendedProps": {
+        "theater": "landmark",
+        "theaterName": "Landmark Mayan",
+        "screen": "Screen 3",
+        "fmt": "Scope",
+        "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/df457eb5-6b61-5ab5-a927-d54d6a1fd46e",
+        "filmUrl": "https://www.landmarktheatres.com/movies/1000001453-disclosure-day",
+        "poster": "https://cms-assets.webediamovies.pro/production/217/ef518abdbe356139347d2d82ff800fce.jpg",
+        "rating": "PG-13",
+        "runtime": 145,
+        "director": "Steven Spielberg",
+        "year": 2026,
+        "note": null
+      },
+      "end": "2026-06-23T18:25:00-06:00"
+    },
+    {
       "id": "ms_21b0d5ff68a1eb2c",
       "title": "Backrooms",
       "start": "2026-06-23T16:15:00-06:00",
@@ -7076,6 +7538,29 @@
         "note": null
       },
       "end": "2026-06-23T18:15:00-06:00"
+    },
+    {
+      "id": "ms_a600df0eb7c7a75d",
+      "title": "Leviticus",
+      "start": "2026-06-23T16:15:00-06:00",
+      "allDay": false,
+      "backgroundColor": "#17BEBB",
+      "borderColor": "#17BEBB",
+      "extendedProps": {
+        "theater": "landmark",
+        "theaterName": "Landmark Mayan",
+        "screen": "2",
+        "fmt": null,
+        "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/70923712-44a7-5401-bf6b-7a9551673292",
+        "filmUrl": "https://www.landmarktheatres.com/movies/1000037443-leviticus",
+        "poster": "https://cms-assets.webediamovies.pro/production/217/1d3a460f8a7f816f4f66ec6cea7870d7.jpg",
+        "rating": "R",
+        "runtime": 87,
+        "director": "Adrian Chiarella",
+        "year": 2026,
+        "note": null
+      },
+      "end": "2026-06-23T17:42:00-06:00"
     },
     {
       "id": "ms_b7e5a3fda45edd47",
@@ -7145,6 +7630,29 @@
         "note": null
       },
       "end": "2026-06-23T18:30:00-06:00"
+    },
+    {
+      "id": "ms_6cbe6c6f61074f43",
+      "title": "Obsession",
+      "start": "2026-06-23T16:30:00-06:00",
+      "allDay": false,
+      "backgroundColor": "#17BEBB",
+      "borderColor": "#17BEBB",
+      "extendedProps": {
+        "theater": "landmark",
+        "theaterName": "Landmark Mayan",
+        "screen": "Screen 1",
+        "fmt": null,
+        "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/eb27ab3e-33d9-5dc3-95b6-380373d01785",
+        "filmUrl": "https://www.landmarktheatres.com/movies/1000028234-obsession",
+        "poster": "https://all.web.img.acsta.net/img/6e/fc/6efc85105b03c2f6ccfaec05a81cf9ff.jpg",
+        "rating": "R",
+        "runtime": 109,
+        "director": "Curry Barker",
+        "year": 2026,
+        "note": null
+      },
+      "end": "2026-06-23T18:19:00-06:00"
     },
     {
       "id": "ms_0dbe82e5ba388cdf",
@@ -7308,6 +7816,29 @@
       "end": "2026-06-23T20:20:00-06:00"
     },
     {
+      "id": "ms_33ad7b5dc7cb3e5d",
+      "title": "Disclosure Day",
+      "start": "2026-06-23T18:45:00-06:00",
+      "allDay": false,
+      "backgroundColor": "#17BEBB",
+      "borderColor": "#17BEBB",
+      "extendedProps": {
+        "theater": "landmark",
+        "theaterName": "Landmark Mayan",
+        "screen": "2",
+        "fmt": "Scope",
+        "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/c2a1e852-61ce-5b5c-9d29-10be989a0a25",
+        "filmUrl": "https://www.landmarktheatres.com/movies/1000001453-disclosure-day",
+        "poster": "https://cms-assets.webediamovies.pro/production/217/ef518abdbe356139347d2d82ff800fce.jpg",
+        "rating": "PG-13",
+        "runtime": 145,
+        "director": "Steven Spielberg",
+        "year": 2026,
+        "note": null
+      },
+      "end": "2026-06-23T21:10:00-06:00"
+    },
+    {
       "id": "ms_f4ed1a51d03a4998",
       "title": "Leviticus",
       "start": "2026-06-23T18:45:00-06:00",
@@ -7377,6 +7908,29 @@
       "end": "2026-06-23T21:00:00-06:00"
     },
     {
+      "id": "ms_a7f0f0d62b562942",
+      "title": "Brokeback Mountain",
+      "start": "2026-06-23T19:00:00-06:00",
+      "allDay": false,
+      "backgroundColor": "#17BEBB",
+      "borderColor": "#17BEBB",
+      "extendedProps": {
+        "theater": "landmark",
+        "theaterName": "Landmark Mayan",
+        "screen": "1",
+        "fmt": null,
+        "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/91f2dfc2-e8d2-538f-b190-cf3f6b45eeb9",
+        "filmUrl": "https://www.landmarktheatres.com/movies/54989-brokeback-mountain",
+        "poster": "https://all.web.img.acsta.net/img/97/c8/97c8188670f0b4a4316876ad295ee903.jpg",
+        "rating": "R",
+        "runtime": 134,
+        "director": "Ang Lee",
+        "year": 2005,
+        "note": null
+      },
+      "end": "2026-06-23T21:14:00-06:00"
+    },
+    {
       "id": "ms_dea953e298fdee42",
       "title": "The Celluloid Closet",
       "start": "2026-06-23T19:00:00-06:00",
@@ -7421,6 +7975,29 @@
         "note": null
       },
       "end": "2026-06-23T21:15:00-06:00"
+    },
+    {
+      "id": "ms_9fb4bfdc7a46e206",
+      "title": "Leviticus",
+      "start": "2026-06-23T19:15:00-06:00",
+      "allDay": false,
+      "backgroundColor": "#17BEBB",
+      "borderColor": "#17BEBB",
+      "extendedProps": {
+        "theater": "landmark",
+        "theaterName": "Landmark Mayan",
+        "screen": "Screen 3",
+        "fmt": null,
+        "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/981a7722-557e-5c39-96c8-6c828e61a472",
+        "filmUrl": "https://www.landmarktheatres.com/movies/1000037443-leviticus",
+        "poster": "https://cms-assets.webediamovies.pro/production/217/1d3a460f8a7f816f4f66ec6cea7870d7.jpg",
+        "rating": "R",
+        "runtime": 87,
+        "director": "Adrian Chiarella",
+        "year": 2026,
+        "note": null
+      },
+      "end": "2026-06-23T20:42:00-06:00"
     },
     {
       "id": "ms_4e465dcf65c2f0eb",
@@ -7676,116 +8253,6 @@
       "end": "2026-06-24T00:00:00-06:00"
     },
     {
-      "id": "ms_40340c3fcdfa2790",
-      "title": "Disclosure Day",
-      "start": "2026-06-24T00:00:00-06:00",
-      "allDay": true,
-      "backgroundColor": "#17BEBB",
-      "borderColor": "#17BEBB",
-      "extendedProps": {
-        "theater": "landmark",
-        "theaterName": "Landmark Mayan",
-        "screen": null,
-        "fmt": null,
-        "ticketUrl": "https://www.landmarktheatres.com/movies/1000001453-disclosure-day",
-        "filmUrl": "https://www.landmarktheatres.com/movies/1000001453-disclosure-day",
-        "poster": "https://cms-assets.webediamovies.pro/production/217/ef518abdbe356139347d2d82ff800fce.jpg",
-        "rating": "PG-13",
-        "runtime": 145,
-        "director": "Steven Spielberg",
-        "year": 2026,
-        "note": "Times vary — showtimes & tickets at Landmark"
-      }
-    },
-    {
-      "id": "ms_2ca012ec37007c90",
-      "title": "Interstellar",
-      "start": "2026-06-24T00:00:00-06:00",
-      "allDay": true,
-      "backgroundColor": "#17BEBB",
-      "borderColor": "#17BEBB",
-      "extendedProps": {
-        "theater": "landmark",
-        "theaterName": "Landmark Mayan",
-        "screen": null,
-        "fmt": null,
-        "ticketUrl": "https://www.landmarktheatres.com/movies/114782-interstellar",
-        "filmUrl": "https://www.landmarktheatres.com/movies/114782-interstellar",
-        "poster": "https://cms-assets.webediamovies.pro/production/217/81840a9beca8787013271c578dbbaf6b.jpg",
-        "rating": "PG-13",
-        "runtime": 169,
-        "director": "Christopher Nolan",
-        "year": 2020,
-        "note": "Times vary — showtimes & tickets at Landmark"
-      }
-    },
-    {
-      "id": "ms_79a5d1abf6504362",
-      "title": "Leviticus",
-      "start": "2026-06-24T00:00:00-06:00",
-      "allDay": true,
-      "backgroundColor": "#17BEBB",
-      "borderColor": "#17BEBB",
-      "extendedProps": {
-        "theater": "landmark",
-        "theaterName": "Landmark Mayan",
-        "screen": null,
-        "fmt": null,
-        "ticketUrl": "https://www.landmarktheatres.com/movies/1000037443-leviticus",
-        "filmUrl": "https://www.landmarktheatres.com/movies/1000037443-leviticus",
-        "poster": "https://cms-assets.webediamovies.pro/production/217/1d3a460f8a7f816f4f66ec6cea7870d7.jpg",
-        "rating": "R",
-        "runtime": 87,
-        "director": "Adrian Chiarella",
-        "year": 2026,
-        "note": "Times vary — showtimes & tickets at Landmark"
-      }
-    },
-    {
-      "id": "ms_941e4bcc845c6a5f",
-      "title": "Obsession",
-      "start": "2026-06-24T00:00:00-06:00",
-      "allDay": true,
-      "backgroundColor": "#17BEBB",
-      "borderColor": "#17BEBB",
-      "extendedProps": {
-        "theater": "landmark",
-        "theaterName": "Landmark Mayan",
-        "screen": null,
-        "fmt": null,
-        "ticketUrl": "https://www.landmarktheatres.com/movies/1000028234-obsession",
-        "filmUrl": "https://www.landmarktheatres.com/movies/1000028234-obsession",
-        "poster": "https://all.web.img.acsta.net/img/6e/fc/6efc85105b03c2f6ccfaec05a81cf9ff.jpg",
-        "rating": "R",
-        "runtime": 109,
-        "director": "Curry Barker",
-        "year": 2026,
-        "note": "Times vary — showtimes & tickets at Landmark"
-      }
-    },
-    {
-      "id": "ms_d33c0865cdb45bb5",
-      "title": "The Bad Guys",
-      "start": "2026-06-24T00:00:00-06:00",
-      "allDay": true,
-      "backgroundColor": "#17BEBB",
-      "borderColor": "#17BEBB",
-      "extendedProps": {
-        "theater": "landmark",
-        "theaterName": "Landmark Mayan",
-        "screen": null,
-        "fmt": null,
-        "ticketUrl": "https://www.landmarktheatres.com/movies/263272-the-bad-guys",
-        "filmUrl": "https://www.landmarktheatres.com/movies/263272-the-bad-guys",
-        "poster": "https://all.web.img.acsta.net/img/b6/f2/b6f2d2b8fb1b696116a214b3669813b7.jpg",
-        "rating": "PG",
-        "runtime": 100,
-        "director": "Pierre Perifel",
-        "year": 2022,
-        "note": "Times vary — showtimes & tickets at Landmark"
-      }
-    },
-    {
       "id": "ms_19abb6c570920d91",
       "title": "I Love Boosters",
       "start": "2026-06-24T00:00:00-06:00",
@@ -7830,6 +8297,29 @@
         "note": null
       },
       "end": "2026-06-24T13:00:00-06:00"
+    },
+    {
+      "id": "ms_fbb68ed4b9dbf1e5",
+      "title": "The Bad Guys",
+      "start": "2026-06-24T11:00:00-06:00",
+      "allDay": false,
+      "backgroundColor": "#17BEBB",
+      "borderColor": "#17BEBB",
+      "extendedProps": {
+        "theater": "landmark",
+        "theaterName": "Landmark Mayan",
+        "screen": "Screen 3",
+        "fmt": null,
+        "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/3ff6cde1-aed0-536e-b64d-35e8333b2543",
+        "filmUrl": "https://www.landmarktheatres.com/movies/263272-the-bad-guys",
+        "poster": "https://all.web.img.acsta.net/img/b6/f2/b6f2d2b8fb1b696116a214b3669813b7.jpg",
+        "rating": "PG",
+        "runtime": 100,
+        "director": "Pierre Perifel",
+        "year": 2022,
+        "note": null
+      },
+      "end": "2026-06-24T12:40:00-06:00"
     },
     {
       "id": "ms_fcdb14bc4b52f1ef",
@@ -8014,6 +8504,75 @@
         "note": null
       },
       "end": "2026-06-24T14:35:00-06:00"
+    },
+    {
+      "id": "ms_44fc7a85ae27d28c",
+      "title": "Interstellar",
+      "start": "2026-06-24T13:00:00-06:00",
+      "allDay": false,
+      "backgroundColor": "#17BEBB",
+      "borderColor": "#17BEBB",
+      "extendedProps": {
+        "theater": "landmark",
+        "theaterName": "Landmark Mayan",
+        "screen": "1",
+        "fmt": "Scope",
+        "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/3894b548-2d08-5016-9fe1-bffb6d49bcb9",
+        "filmUrl": "https://www.landmarktheatres.com/movies/114782-interstellar",
+        "poster": "https://cms-assets.webediamovies.pro/production/217/81840a9beca8787013271c578dbbaf6b.jpg",
+        "rating": "PG-13",
+        "runtime": 169,
+        "director": "Christopher Nolan",
+        "year": 2020,
+        "note": null
+      },
+      "end": "2026-06-24T15:49:00-06:00"
+    },
+    {
+      "id": "ms_edcd1d99fc4a65ab",
+      "title": "Obsession",
+      "start": "2026-06-24T13:00:00-06:00",
+      "allDay": false,
+      "backgroundColor": "#17BEBB",
+      "borderColor": "#17BEBB",
+      "extendedProps": {
+        "theater": "landmark",
+        "theaterName": "Landmark Mayan",
+        "screen": "Screen 3",
+        "fmt": null,
+        "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/5e5ab610-e9ab-559d-8cf5-5d17eb76c34a",
+        "filmUrl": "https://www.landmarktheatres.com/movies/1000028234-obsession",
+        "poster": "https://all.web.img.acsta.net/img/6e/fc/6efc85105b03c2f6ccfaec05a81cf9ff.jpg",
+        "rating": "R",
+        "runtime": 109,
+        "director": "Curry Barker",
+        "year": 2026,
+        "note": null
+      },
+      "end": "2026-06-24T14:49:00-06:00"
+    },
+    {
+      "id": "ms_272c6f086c926540",
+      "title": "Disclosure Day",
+      "start": "2026-06-24T13:10:00-06:00",
+      "allDay": false,
+      "backgroundColor": "#17BEBB",
+      "borderColor": "#17BEBB",
+      "extendedProps": {
+        "theater": "landmark",
+        "theaterName": "Landmark Mayan",
+        "screen": "2",
+        "fmt": "Scope",
+        "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/474d2683-850e-58ac-916a-079fe6e5405e",
+        "filmUrl": "https://www.landmarktheatres.com/movies/1000001453-disclosure-day",
+        "poster": "https://cms-assets.webediamovies.pro/production/217/ef518abdbe356139347d2d82ff800fce.jpg",
+        "rating": "PG-13",
+        "runtime": 145,
+        "director": "Steven Spielberg",
+        "year": 2026,
+        "note": null
+      },
+      "end": "2026-06-24T15:35:00-06:00"
     },
     {
       "id": "ms_3a6ec776a244aef8",
@@ -8338,6 +8897,29 @@
       "end": "2026-06-24T18:00:00-06:00"
     },
     {
+      "id": "ms_ccdef0244c4f1d9e",
+      "title": "Disclosure Day",
+      "start": "2026-06-24T16:00:00-06:00",
+      "allDay": false,
+      "backgroundColor": "#17BEBB",
+      "borderColor": "#17BEBB",
+      "extendedProps": {
+        "theater": "landmark",
+        "theaterName": "Landmark Mayan",
+        "screen": "3",
+        "fmt": "Scope",
+        "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/c0675af2-27ea-5a14-9bad-29a58fe09c87",
+        "filmUrl": "https://www.landmarktheatres.com/movies/1000001453-disclosure-day",
+        "poster": "https://cms-assets.webediamovies.pro/production/217/ef518abdbe356139347d2d82ff800fce.jpg",
+        "rating": "PG-13",
+        "runtime": 145,
+        "director": "Steven Spielberg",
+        "year": 2026,
+        "note": null
+      },
+      "end": "2026-06-24T18:25:00-06:00"
+    },
+    {
       "id": "ms_0d99d11047e5e5bc",
       "title": "Backrooms",
       "start": "2026-06-24T16:15:00-06:00",
@@ -8359,6 +8941,29 @@
         "note": null
       },
       "end": "2026-06-24T18:15:00-06:00"
+    },
+    {
+      "id": "ms_c38fc4267e232f36",
+      "title": "Leviticus",
+      "start": "2026-06-24T16:15:00-06:00",
+      "allDay": false,
+      "backgroundColor": "#17BEBB",
+      "borderColor": "#17BEBB",
+      "extendedProps": {
+        "theater": "landmark",
+        "theaterName": "Landmark Mayan",
+        "screen": "2",
+        "fmt": null,
+        "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/dbdd4be0-7e96-5ee9-926d-05b32bbdd13c",
+        "filmUrl": "https://www.landmarktheatres.com/movies/1000037443-leviticus",
+        "poster": "https://cms-assets.webediamovies.pro/production/217/1d3a460f8a7f816f4f66ec6cea7870d7.jpg",
+        "rating": "R",
+        "runtime": 87,
+        "director": "Adrian Chiarella",
+        "year": 2026,
+        "note": null
+      },
+      "end": "2026-06-24T17:42:00-06:00"
     },
     {
       "id": "ms_f13d22d8e5944e0d",
@@ -8428,6 +9033,29 @@
         "note": null
       },
       "end": "2026-06-24T18:30:00-06:00"
+    },
+    {
+      "id": "ms_796ba83b0c243fd6",
+      "title": "Obsession",
+      "start": "2026-06-24T16:30:00-06:00",
+      "allDay": false,
+      "backgroundColor": "#17BEBB",
+      "borderColor": "#17BEBB",
+      "extendedProps": {
+        "theater": "landmark",
+        "theaterName": "Landmark Mayan",
+        "screen": "1",
+        "fmt": null,
+        "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/dad760d0-6fc7-5f27-9673-48199c6cc32d",
+        "filmUrl": "https://www.landmarktheatres.com/movies/1000028234-obsession",
+        "poster": "https://all.web.img.acsta.net/img/6e/fc/6efc85105b03c2f6ccfaec05a81cf9ff.jpg",
+        "rating": "R",
+        "runtime": 109,
+        "director": "Curry Barker",
+        "year": 2026,
+        "note": null
+      },
+      "end": "2026-06-24T18:19:00-06:00"
     },
     {
       "id": "ms_5d6abaafaf19d6f1",
@@ -8591,6 +9219,29 @@
       "end": "2026-06-24T20:20:00-06:00"
     },
     {
+      "id": "ms_41c4e05ed0e3bc85",
+      "title": "Disclosure Day",
+      "start": "2026-06-24T18:45:00-06:00",
+      "allDay": false,
+      "backgroundColor": "#17BEBB",
+      "borderColor": "#17BEBB",
+      "extendedProps": {
+        "theater": "landmark",
+        "theaterName": "Landmark Mayan",
+        "screen": "2",
+        "fmt": "Scope",
+        "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/8a012fde-6242-5c66-9d57-99ee59828fca",
+        "filmUrl": "https://www.landmarktheatres.com/movies/1000001453-disclosure-day",
+        "poster": "https://cms-assets.webediamovies.pro/production/217/ef518abdbe356139347d2d82ff800fce.jpg",
+        "rating": "PG-13",
+        "runtime": 145,
+        "director": "Steven Spielberg",
+        "year": 2026,
+        "note": null
+      },
+      "end": "2026-06-24T21:10:00-06:00"
+    },
+    {
       "id": "ms_8ef3b72e51bfa9f8",
       "title": "Girls Like Girls",
       "start": "2026-06-24T19:00:00-06:00",
@@ -8660,6 +9311,29 @@
       "end": "2026-06-24T21:00:00-06:00"
     },
     {
+      "id": "ms_64360a511cde45b6",
+      "title": "Interstellar",
+      "start": "2026-06-24T19:00:00-06:00",
+      "allDay": false,
+      "backgroundColor": "#17BEBB",
+      "borderColor": "#17BEBB",
+      "extendedProps": {
+        "theater": "landmark",
+        "theaterName": "Landmark Mayan",
+        "screen": "1",
+        "fmt": "Scope",
+        "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/be6e42c6-0169-56b5-b0b6-02e1bcf7e077",
+        "filmUrl": "https://www.landmarktheatres.com/movies/114782-interstellar",
+        "poster": "https://cms-assets.webediamovies.pro/production/217/81840a9beca8787013271c578dbbaf6b.jpg",
+        "rating": "PG-13",
+        "runtime": 169,
+        "director": "Christopher Nolan",
+        "year": 2020,
+        "note": null
+      },
+      "end": "2026-06-24T21:49:00-06:00"
+    },
+    {
       "id": "ms_969e5c13d0024627",
       "title": "Toy Story 5",
       "start": "2026-06-24T19:15:00-06:00",
@@ -8681,6 +9355,29 @@
         "note": null
       },
       "end": "2026-06-24T21:15:00-06:00"
+    },
+    {
+      "id": "ms_bf9636c4f6179fbb",
+      "title": "Leviticus",
+      "start": "2026-06-24T19:15:00-06:00",
+      "allDay": false,
+      "backgroundColor": "#17BEBB",
+      "borderColor": "#17BEBB",
+      "extendedProps": {
+        "theater": "landmark",
+        "theaterName": "Landmark Mayan",
+        "screen": "3",
+        "fmt": null,
+        "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/ccb5d583-c39d-55b5-89c0-789271d25719",
+        "filmUrl": "https://www.landmarktheatres.com/movies/1000037443-leviticus",
+        "poster": "https://cms-assets.webediamovies.pro/production/217/1d3a460f8a7f816f4f66ec6cea7870d7.jpg",
+        "rating": "R",
+        "runtime": 87,
+        "director": "Adrian Chiarella",
+        "year": 2026,
+        "note": null
+      },
+      "end": "2026-06-24T20:42:00-06:00"
     },
     {
       "id": "ms_2f3980545de54797",
@@ -8936,72 +9633,6 @@
       "end": "2026-06-25T00:00:00-06:00"
     },
     {
-      "id": "ms_b19c746d80f82bff",
-      "title": "Disclosure Day",
-      "start": "2026-06-25T00:00:00-06:00",
-      "allDay": true,
-      "backgroundColor": "#17BEBB",
-      "borderColor": "#17BEBB",
-      "extendedProps": {
-        "theater": "landmark",
-        "theaterName": "Landmark Mayan",
-        "screen": null,
-        "fmt": null,
-        "ticketUrl": "https://www.landmarktheatres.com/movies/1000001453-disclosure-day",
-        "filmUrl": "https://www.landmarktheatres.com/movies/1000001453-disclosure-day",
-        "poster": "https://cms-assets.webediamovies.pro/production/217/ef518abdbe356139347d2d82ff800fce.jpg",
-        "rating": "PG-13",
-        "runtime": 145,
-        "director": "Steven Spielberg",
-        "year": 2026,
-        "note": "Times vary — showtimes & tickets at Landmark"
-      }
-    },
-    {
-      "id": "ms_d9746c5b805eefd8",
-      "title": "Leviticus",
-      "start": "2026-06-25T00:00:00-06:00",
-      "allDay": true,
-      "backgroundColor": "#17BEBB",
-      "borderColor": "#17BEBB",
-      "extendedProps": {
-        "theater": "landmark",
-        "theaterName": "Landmark Mayan",
-        "screen": null,
-        "fmt": null,
-        "ticketUrl": "https://www.landmarktheatres.com/movies/1000037443-leviticus",
-        "filmUrl": "https://www.landmarktheatres.com/movies/1000037443-leviticus",
-        "poster": "https://cms-assets.webediamovies.pro/production/217/1d3a460f8a7f816f4f66ec6cea7870d7.jpg",
-        "rating": "R",
-        "runtime": 87,
-        "director": "Adrian Chiarella",
-        "year": 2026,
-        "note": "Times vary — showtimes & tickets at Landmark"
-      }
-    },
-    {
-      "id": "ms_5d0bb814dcf6b182",
-      "title": "Obsession",
-      "start": "2026-06-25T00:00:00-06:00",
-      "allDay": true,
-      "backgroundColor": "#17BEBB",
-      "borderColor": "#17BEBB",
-      "extendedProps": {
-        "theater": "landmark",
-        "theaterName": "Landmark Mayan",
-        "screen": null,
-        "fmt": null,
-        "ticketUrl": "https://www.landmarktheatres.com/movies/1000028234-obsession",
-        "filmUrl": "https://www.landmarktheatres.com/movies/1000028234-obsession",
-        "poster": "https://all.web.img.acsta.net/img/6e/fc/6efc85105b03c2f6ccfaec05a81cf9ff.jpg",
-        "rating": "R",
-        "runtime": 109,
-        "director": "Curry Barker",
-        "year": 2026,
-        "note": "Times vary — showtimes & tickets at Landmark"
-      }
-    },
-    {
       "id": "ms_434b69ff60f6e7dc",
       "title": "I Love Boosters",
       "start": "2026-06-25T00:00:00-06:00",
@@ -9186,6 +9817,29 @@
       "end": "2026-06-25T17:35:00-06:00"
     },
     {
+      "id": "ms_3581a7c6625f4de6",
+      "title": "Disclosure Day",
+      "start": "2026-06-25T16:10:00-06:00",
+      "allDay": false,
+      "backgroundColor": "#17BEBB",
+      "borderColor": "#17BEBB",
+      "extendedProps": {
+        "theater": "landmark",
+        "theaterName": "Landmark Mayan",
+        "screen": "2",
+        "fmt": "Scope",
+        "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/fce8e695-e11b-58fa-b520-b0c083c99490",
+        "filmUrl": "https://www.landmarktheatres.com/movies/1000001453-disclosure-day",
+        "poster": "https://cms-assets.webediamovies.pro/production/217/ef518abdbe356139347d2d82ff800fce.jpg",
+        "rating": "PG-13",
+        "runtime": 145,
+        "director": "Steven Spielberg",
+        "year": 2026,
+        "note": null
+      },
+      "end": "2026-06-25T18:35:00-06:00"
+    },
+    {
       "id": "ms_3c8f548275844b65",
       "title": "Toy Story 5",
       "start": "2026-06-25T16:30:00-06:00",
@@ -9207,6 +9861,52 @@
         "note": null
       },
       "end": "2026-06-25T18:30:00-06:00"
+    },
+    {
+      "id": "ms_3b17bbe9f764a044",
+      "title": "Leviticus",
+      "start": "2026-06-25T16:30:00-06:00",
+      "allDay": false,
+      "backgroundColor": "#17BEBB",
+      "borderColor": "#17BEBB",
+      "extendedProps": {
+        "theater": "landmark",
+        "theaterName": "Landmark Mayan",
+        "screen": "Screen 1",
+        "fmt": null,
+        "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/cb56d4b3-5495-5884-96e8-93c0af786f64",
+        "filmUrl": "https://www.landmarktheatres.com/movies/1000037443-leviticus",
+        "poster": "https://cms-assets.webediamovies.pro/production/217/1d3a460f8a7f816f4f66ec6cea7870d7.jpg",
+        "rating": "R",
+        "runtime": 87,
+        "director": "Adrian Chiarella",
+        "year": 2026,
+        "note": null
+      },
+      "end": "2026-06-25T17:57:00-06:00"
+    },
+    {
+      "id": "ms_264d58045cc032b2",
+      "title": "Obsession",
+      "start": "2026-06-25T16:40:00-06:00",
+      "allDay": false,
+      "backgroundColor": "#17BEBB",
+      "borderColor": "#17BEBB",
+      "extendedProps": {
+        "theater": "landmark",
+        "theaterName": "Landmark Mayan",
+        "screen": "3",
+        "fmt": null,
+        "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/4ba1d9dd-776d-5e42-88e1-aba21295b912",
+        "filmUrl": "https://www.landmarktheatres.com/movies/1000028234-obsession",
+        "poster": "https://all.web.img.acsta.net/img/6e/fc/6efc85105b03c2f6ccfaec05a81cf9ff.jpg",
+        "rating": "R",
+        "runtime": 109,
+        "director": "Curry Barker",
+        "year": 2026,
+        "note": null
+      },
+      "end": "2026-06-25T18:29:00-06:00"
     },
     {
       "id": "ms_cce5989f84cf3095",
@@ -9301,6 +10001,29 @@
       "end": "2026-06-25T20:28:00-06:00"
     },
     {
+      "id": "ms_784ef629344df0e7",
+      "title": "Leviticus",
+      "start": "2026-06-25T19:10:00-06:00",
+      "allDay": false,
+      "backgroundColor": "#17BEBB",
+      "borderColor": "#17BEBB",
+      "extendedProps": {
+        "theater": "landmark",
+        "theaterName": "Landmark Mayan",
+        "screen": "3",
+        "fmt": null,
+        "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/3a20ad7a-91ec-5581-abf0-ecc2ae8fc4fc",
+        "filmUrl": "https://www.landmarktheatres.com/movies/1000037443-leviticus",
+        "poster": "https://cms-assets.webediamovies.pro/production/217/1d3a460f8a7f816f4f66ec6cea7870d7.jpg",
+        "rating": "R",
+        "runtime": 87,
+        "director": "Adrian Chiarella",
+        "year": 2026,
+        "note": null
+      },
+      "end": "2026-06-25T20:37:00-06:00"
+    },
+    {
       "id": "ms_6b54ac2d2e75c48a",
       "title": "Toy Story 5",
       "start": "2026-06-25T19:15:00-06:00",
@@ -9322,6 +10045,29 @@
         "note": null
       },
       "end": "2026-06-25T21:15:00-06:00"
+    },
+    {
+      "id": "ms_1c37597e700aa613",
+      "title": "Disclosure Day",
+      "start": "2026-06-25T19:15:00-06:00",
+      "allDay": false,
+      "backgroundColor": "#17BEBB",
+      "borderColor": "#17BEBB",
+      "extendedProps": {
+        "theater": "landmark",
+        "theaterName": "Landmark Mayan",
+        "screen": "2",
+        "fmt": "Scope",
+        "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/5f0fd731-3db4-5332-b692-69d5186580e2",
+        "filmUrl": "https://www.landmarktheatres.com/movies/1000001453-disclosure-day",
+        "poster": "https://cms-assets.webediamovies.pro/production/217/ef518abdbe356139347d2d82ff800fce.jpg",
+        "rating": "PG-13",
+        "runtime": 145,
+        "director": "Steven Spielberg",
+        "year": 2026,
+        "note": null
+      },
+      "end": "2026-06-25T21:40:00-06:00"
     },
     {
       "id": "ms_cbbeeea1e4d7c342",
@@ -9577,48 +10323,50 @@
       "end": "2026-06-27T00:00:00-06:00"
     },
     {
-      "id": "ms_2329142377ef81c4",
-      "title": "Kung Fu Panda",
-      "start": "2026-06-27T00:00:00-06:00",
-      "allDay": true,
-      "backgroundColor": "#17BEBB",
-      "borderColor": "#17BEBB",
-      "extendedProps": {
-        "theater": "landmark",
-        "theaterName": "Landmark Mayan",
-        "screen": null,
-        "fmt": null,
-        "ticketUrl": "https://www.landmarktheatres.com/movies/45889-kung-fu-panda",
-        "filmUrl": "https://www.landmarktheatres.com/movies/45889-kung-fu-panda",
-        "poster": "https://cms-assets.webediamovies.pro/production/217/06bac9a14f6f1e5824e9fb878c8ddf60.jpg",
-        "rating": "PG",
-        "runtime": 90,
-        "director": "Mark Osborne",
-        "year": 2008,
-        "note": "Times vary — showtimes & tickets at Landmark"
-      }
-    },
-    {
-      "id": "ms_4b91b8eb90b4d463",
+      "id": "ms_a885ba592d3e2f26",
       "title": "Moonlight",
-      "start": "2026-06-27T00:00:00-06:00",
-      "allDay": true,
+      "start": "2026-06-27T10:50:00-06:00",
+      "allDay": false,
       "backgroundColor": "#17BEBB",
       "borderColor": "#17BEBB",
       "extendedProps": {
         "theater": "landmark",
         "theaterName": "Landmark Mayan",
-        "screen": null,
-        "fmt": null,
-        "ticketUrl": "https://www.landmarktheatres.com/movies/242054-moonlight",
+        "screen": "Screen 3",
+        "fmt": "Scope",
+        "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/6d5b3bef-7e90-51ec-bd57-531072f692f0",
         "filmUrl": "https://www.landmarktheatres.com/movies/242054-moonlight",
         "poster": "https://all.web.img.acsta.net/img/50/ad/50ad8d544b0f8b7c7c71f18370091560.jpg",
         "rating": "R",
         "runtime": 111,
         "director": "Barry Jenkins",
         "year": 2016,
-        "note": "Times vary — showtimes & tickets at Landmark"
-      }
+        "note": null
+      },
+      "end": "2026-06-27T12:41:00-06:00"
+    },
+    {
+      "id": "ms_dc331ca670e34e73",
+      "title": "Kung Fu Panda",
+      "start": "2026-06-27T11:00:00-06:00",
+      "allDay": false,
+      "backgroundColor": "#17BEBB",
+      "borderColor": "#17BEBB",
+      "extendedProps": {
+        "theater": "landmark",
+        "theaterName": "Landmark Mayan",
+        "screen": "Screen 1",
+        "fmt": "Scope",
+        "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/0ad1b329-fe5a-5be0-be7f-76f404a2f0a4",
+        "filmUrl": "https://www.landmarktheatres.com/movies/45889-kung-fu-panda",
+        "poster": "https://cms-assets.webediamovies.pro/production/217/06bac9a14f6f1e5824e9fb878c8ddf60.jpg",
+        "rating": "PG",
+        "runtime": 90,
+        "director": "Mark Osborne",
+        "year": 2008,
+        "note": null
+      },
+      "end": "2026-06-27T12:30:00-06:00"
     },
     {
       "id": "ms_8612c671a40acb60",
@@ -9874,26 +10622,27 @@
       "end": "2026-06-28T00:30:00-06:00"
     },
     {
-      "id": "ms_23b046e5def93f32",
+      "id": "ms_75e78da4574da919",
       "title": "Kung Fu Panda",
-      "start": "2026-06-28T00:00:00-06:00",
-      "allDay": true,
+      "start": "2026-06-28T11:00:00-06:00",
+      "allDay": false,
       "backgroundColor": "#17BEBB",
       "borderColor": "#17BEBB",
       "extendedProps": {
         "theater": "landmark",
         "theaterName": "Landmark Mayan",
-        "screen": null,
-        "fmt": null,
-        "ticketUrl": "https://www.landmarktheatres.com/movies/45889-kung-fu-panda",
+        "screen": "1",
+        "fmt": "Scope",
+        "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/8b2313b7-211a-5a8b-9dec-a6f072ccda18",
         "filmUrl": "https://www.landmarktheatres.com/movies/45889-kung-fu-panda",
         "poster": "https://cms-assets.webediamovies.pro/production/217/06bac9a14f6f1e5824e9fb878c8ddf60.jpg",
         "rating": "PG",
         "runtime": 90,
         "director": "Mark Osborne",
         "year": 2008,
-        "note": "Times vary — showtimes & tickets at Landmark"
-      }
+        "note": null
+      },
+      "end": "2026-06-28T12:30:00-06:00"
     },
     {
       "id": "ms_02090600467ddf13",
@@ -10310,28 +11059,6 @@
       "end": "2026-06-29T23:00:00-06:00"
     },
     {
-      "id": "ms_4895920113a91820",
-      "title": "Moonlight",
-      "start": "2026-06-30T00:00:00-06:00",
-      "allDay": true,
-      "backgroundColor": "#17BEBB",
-      "borderColor": "#17BEBB",
-      "extendedProps": {
-        "theater": "landmark",
-        "theaterName": "Landmark Mayan",
-        "screen": null,
-        "fmt": null,
-        "ticketUrl": "https://www.landmarktheatres.com/movies/242054-moonlight",
-        "filmUrl": "https://www.landmarktheatres.com/movies/242054-moonlight",
-        "poster": "https://all.web.img.acsta.net/img/50/ad/50ad8d544b0f8b7c7c71f18370091560.jpg",
-        "rating": "R",
-        "runtime": 111,
-        "director": "Barry Jenkins",
-        "year": 2016,
-        "note": "Times vary — showtimes & tickets at Landmark"
-      }
-    },
-    {
       "id": "ms_c26066753d74852e",
       "title": "Toy Story 5",
       "start": "2026-06-30T12:45:00-06:00",
@@ -10376,6 +11103,29 @@
         "note": null
       },
       "end": "2026-06-30T16:00:00-06:00"
+    },
+    {
+      "id": "ms_1378d1d386cd8e83",
+      "title": "Moonlight",
+      "start": "2026-06-30T14:00:00-06:00",
+      "allDay": false,
+      "backgroundColor": "#17BEBB",
+      "borderColor": "#17BEBB",
+      "extendedProps": {
+        "theater": "landmark",
+        "theaterName": "Landmark Mayan",
+        "screen": "Screen 1",
+        "fmt": "Scope",
+        "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/3381b5fb-84aa-50b0-a0ec-51599b4b1042",
+        "filmUrl": "https://www.landmarktheatres.com/movies/242054-moonlight",
+        "poster": "https://all.web.img.acsta.net/img/50/ad/50ad8d544b0f8b7c7c71f18370091560.jpg",
+        "rating": "R",
+        "runtime": 111,
+        "director": "Barry Jenkins",
+        "year": 2016,
+        "note": null
+      },
+      "end": "2026-06-30T15:51:00-06:00"
     },
     {
       "id": "ms_17caf0d0026ad5d6",
@@ -10447,6 +11197,29 @@
       "end": "2026-06-30T20:30:00-06:00"
     },
     {
+      "id": "ms_e6e1f1f70636a26d",
+      "title": "Moonlight",
+      "start": "2026-06-30T19:00:00-06:00",
+      "allDay": false,
+      "backgroundColor": "#17BEBB",
+      "borderColor": "#17BEBB",
+      "extendedProps": {
+        "theater": "landmark",
+        "theaterName": "Landmark Mayan",
+        "screen": "1",
+        "fmt": "Scope",
+        "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/eeba0b3f-f29b-5cc0-adfd-2588b73c5080",
+        "filmUrl": "https://www.landmarktheatres.com/movies/242054-moonlight",
+        "poster": "https://all.web.img.acsta.net/img/50/ad/50ad8d544b0f8b7c7c71f18370091560.jpg",
+        "rating": "R",
+        "runtime": 111,
+        "director": "Barry Jenkins",
+        "year": 2016,
+        "note": null
+      },
+      "end": "2026-06-30T20:51:00-06:00"
+    },
+    {
       "id": "ms_1309f4a9326871c0",
       "title": "Mikey and Nicky",
       "start": "2026-06-30T19:00:00-06:00",
@@ -10516,26 +11289,27 @@
       "end": "2026-06-30T23:30:00-06:00"
     },
     {
-      "id": "ms_db69bdf2dcb7550a",
+      "id": "ms_d319ccc948c83133",
       "title": "Kung Fu Panda",
-      "start": "2026-07-01T00:00:00-06:00",
-      "allDay": true,
+      "start": "2026-07-01T11:00:00-06:00",
+      "allDay": false,
       "backgroundColor": "#17BEBB",
       "borderColor": "#17BEBB",
       "extendedProps": {
         "theater": "landmark",
         "theaterName": "Landmark Mayan",
-        "screen": null,
-        "fmt": null,
-        "ticketUrl": "https://www.landmarktheatres.com/movies/45889-kung-fu-panda",
+        "screen": "Screen 1",
+        "fmt": "Scope",
+        "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/03eff6a2-12d4-57c2-b42d-0316d754cf00",
         "filmUrl": "https://www.landmarktheatres.com/movies/45889-kung-fu-panda",
         "poster": "https://cms-assets.webediamovies.pro/production/217/06bac9a14f6f1e5824e9fb878c8ddf60.jpg",
         "rating": "PG",
         "runtime": 90,
         "director": "Mark Osborne",
         "year": 2008,
-        "note": "Times vary — showtimes & tickets at Landmark"
-      }
+        "note": null
+      },
+      "end": "2026-07-01T12:30:00-06:00"
     },
     {
       "id": "ms_e0f67749e7f655c6",

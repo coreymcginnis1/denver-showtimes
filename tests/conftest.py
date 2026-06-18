@@ -29,6 +29,11 @@ def landmark_scheduled():
 
 
 @pytest.fixture
+def landmark_schedule():
+    return _load("landmark_schedule.json")
+
+
+@pytest.fixture
 def landmark_movies():
     return _load("landmark_movies.json")
 

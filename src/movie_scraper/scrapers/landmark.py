@@ -85,13 +85,14 @@ class LandmarkScraper(BaseScraper):
                 start_dt = self._parse_start(sh.get("startsAt"))
                 if start_dt is None or not (start <= start_dt.date() <= end):
                     continue
+                tags = sh.get("tags") or []
                 results.append(Showtime(
                     theater=self.key,
                     theater_name=self.theater_cfg.name,
                     film_title=title,
                     start=start_dt,
-                    screen=(sh.get("screen") or {}).get("name"),
-                    fmt=self._fmt(sh.get("tags") or []),
+                    screen=self._screen(sh, tags),
+                    fmt=self._fmt(tags),
                     ticket_url=self._ticket_url(sh) or url,
                     film_url=url,
                     poster=movie.get("poster"),
@@ -117,6 +118,23 @@ class LandmarkScraper(BaseScraper):
                 fmt = tag.rsplit(".", 1)[-1]
                 return None if fmt.lower() == "digital" else fmt  # "Digital" is the default, hide it
         return None
+
+    @staticmethod
+    def _screen(sh: dict, tags: list[str]) -> str | None:
+        """Auditorium label, e.g. 'Screen 1 · Downstairs' (the Mayan has up/downstairs houses)."""
+        name = ((sh.get("screen") or {}).get("name") or "").strip()
+        if name.isdigit():
+            name = "Screen " + name                 # normalize bare "3" -> "Screen 3"
+        location = None
+        for tag in tags:
+            if tag.startswith("Auditorium.Experience."):
+                value = tag.rsplit(".", 1)[-1]
+                if value.lower() in ("upstairs", "downstairs"):
+                    location = value
+                    break
+        if name and location:
+            return f"{name} · {location}"
+        return name or location or None
 
     @staticmethod
     def _ticket_url(sh: dict) -> str | None:

@@ -31,6 +31,7 @@ def test_landmark_build(cfg, landmark_schedule, landmark_movies):
     assert all(s.theater == "landmark" and not s.all_day for s in out)   # now timed, not days-only
     assert all(s.start.tzinfo is not None for s in out)
     assert any(s.screen for s in out)                                     # screen/auditorium names
+    assert any(s.screen and ("Downstairs" in s.screen or "Upstairs" in s.screen) for s in out)
     assert all("landmarktheatres.com" in (s.ticket_url or "") for s in out)
     assert any(not s.film_title.startswith("Movie ") for s in out)       # titles resolved
 

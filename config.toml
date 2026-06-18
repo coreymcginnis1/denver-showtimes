@@ -56,11 +56,11 @@ drop = [
 # Leave the list empty to pre-select ALL films (the long default). Edit to taste.
 [defaults]
 films = [
-  'Jaws',
-  'The Big Lebowski',
-  'Brokeback Mountain',
-  'Moonlight',
-  'Interstellar',
+  'Backrooms',
+  'I Love Boosters',
+  'Tuner',
+  'The Invite',
+  'Disclosure Day',
 ]
 
 # Optional filters. Omit/comment out a key to disable that filter.

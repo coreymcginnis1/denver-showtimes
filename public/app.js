@@ -10,6 +10,7 @@
   var enabledTheaters = new Set();
   var enabledFilms = new Set();
   var query = "";
+  var lastViewType = "listDay";   // tracks view changes so we can force a clean refetch
 
   function $(id) { return document.getElementById(id); }
   function stripTZ(iso) { return iso.replace(/([+-]\d{2}:\d{2}|Z)$/, ""); }
@@ -122,10 +123,24 @@
     });
   }
 
+  function ymd(d) {
+    return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") +
+      "-" + String(d.getDate()).padStart(2, "0");
+  }
+
+  // Films selectable in the current view = those playing at an enabled theater within the
+  // calendar's visible date range (today for Daily, this week for Week, this month for Month).
   function availableFilms() {
+    var lo = null, hi = null;
+    if (CAL && CAL.view) { lo = ymd(CAL.view.activeStart); hi = ymd(CAL.view.activeEnd); }
     var seen = {};
     DATA.events.forEach(function (e) {
-      if (enabledTheaters.has(e.extendedProps.theater)) seen[e.title] = true;
+      if (!enabledTheaters.has(e.extendedProps.theater)) return;
+      if (lo !== null) {
+        var d = e.start.slice(0, 10);
+        if (d < lo || d >= hi) return;
+      }
+      seen[e.title] = true;
     });
     return Object.keys(seen).sort(function (a, b) {
       return a.toLowerCase() < b.toLowerCase() ? -1 : 1;
@@ -175,6 +190,11 @@
       applySearch();
       refresh();
     });
+    $("picksBtn").addEventListener("click", function () {   // reset to Corey's picks (the default allowlist)
+      enabledFilms = DATA.default_films ? new Set(DATA.default_films) : new Set(DATA.films);
+      syncFilmChecks();
+      refresh();
+    });
     $("selectAll").addEventListener("click", function () {
       availableFilms().forEach(function (f) { enabledFilms.add(f); });
       syncFilmChecks();
@@ -207,14 +227,16 @@
     wireControls();
     CAL = new FullCalendar.Calendar($("calendar"), {
       initialView: "listDay",
+      firstDay: 5,                               // weeks start Friday — new-release/turnover day
       headerToolbar: {
         left: "prev,next today",
         center: "title",
-        right: "listDay,timeGridWeek,dayGridMonth",
+        right: "listDay,dayGridWeek,dayGridMonth",
       },
       views: {
         listDay: { buttonText: "Daily" },
-        dayGridMonth: { dayMaxEvents: true },   // collapse busy days to a "+N more" list
+        dayGridWeek: { buttonText: "Week", dayMaxEvents: false },  // 7 day-columns, showtimes stacked
+        dayGridMonth: { dayMaxEvents: true },    // collapse busy days to a "+N more" list
       },
       height: "auto",
       nowIndicator: true,
@@ -228,6 +250,32 @@
         success(spanDays > 8 ? filmDayEvents() : filteredEvents());
       },
       eventClick: function (arg) { arg.jsEvent.preventDefault(); openModal(arg.event); },
+      datesSet: function (arg) {
+        renderFilmList();   // re-scope the film list to the visible range
+        // Daily/Week show individual showtimes; Month aggregates to one entry per film.
+        // FullCalendar caches events across the widest fetched range, so on a view-type
+        // change we must force a refetch or a narrower view reuses the wrong shape.
+        if (arg.view.type !== lastViewType) {
+          lastViewType = arg.view.type;
+          setTimeout(function () { if (CAL) CAL.refetchEvents(); }, 0);
+        }
+      },
+      eventDidMount: function (arg) {
+        // Daily (list) view has room — append theater + auditorium + format.
+        if (arg.view.type !== "listDay" || arg.event.extendedProps.aggregate) return;
+        var p = arg.event.extendedProps;
+        var titleEl = arg.el.querySelector(".fc-list-event-title");
+        if (!titleEl) return;
+        var bits = [];
+        if (p.theaterName) bits.push(p.theaterName);
+        if (p.screen) bits.push(p.screen);
+        if (p.fmt) bits.push(p.fmt);
+        if (!bits.length) return;
+        var span = document.createElement("span");
+        span.className = "list-meta";
+        span.textContent = bits.join(" · ");
+        titleEl.appendChild(span);
+      },
     });
     CAL.render();
   }

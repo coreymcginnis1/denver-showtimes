@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-18T15:27:07.020866-06:00",
+  "generated_at": "2026-06-18T16:12:16.568931-06:00",
   "timezone": "America/Denver",
   "theaters": [
     {
@@ -57,11 +57,11 @@
     "Tuner"
   ],
   "default_films": [
-    "Brokeback Mountain",
-    "Interstellar",
-    "Jaws",
-    "Moonlight",
-    "The Big Lebowski"
+    "Backrooms",
+    "Disclosure Day",
+    "I Love Boosters",
+    "The Invite",
+    "Tuner"
   ],
   "events": [
     {
@@ -88,75 +88,6 @@
       "end": "2026-06-18T17:04:00-06:00"
     },
     {
-      "id": "ms_c048ffc5be16e77e",
-      "title": "Masters of the Universe",
-      "start": "2026-06-18T15:15:00-06:00",
-      "allDay": false,
-      "backgroundColor": "#2E5EAA",
-      "borderColor": "#2E5EAA",
-      "extendedProps": {
-        "theater": "amc",
-        "theaterName": "AMC 9+CO 10",
-        "screen": null,
-        "fmt": "Laser at AMC",
-        "ticketUrl": "https://www.amctheatres.com/showtimes/144386580",
-        "filmUrl": null,
-        "poster": null,
-        "rating": null,
-        "runtime": null,
-        "director": null,
-        "year": null,
-        "note": null
-      },
-      "end": "2026-06-18T17:15:00-06:00"
-    },
-    {
-      "id": "ms_ba798b4aa1bec34b",
-      "title": "Star Wars: The Mandalorian and Grogu",
-      "start": "2026-06-18T15:30:00-06:00",
-      "allDay": false,
-      "backgroundColor": "#2E5EAA",
-      "borderColor": "#2E5EAA",
-      "extendedProps": {
-        "theater": "amc",
-        "theaterName": "AMC 9+CO 10",
-        "screen": null,
-        "fmt": "Laser at AMC",
-        "ticketUrl": "https://www.amctheatres.com/showtimes/144386678",
-        "filmUrl": null,
-        "poster": null,
-        "rating": null,
-        "runtime": null,
-        "director": null,
-        "year": null,
-        "note": null
-      },
-      "end": "2026-06-18T17:30:00-06:00"
-    },
-    {
-      "id": "ms_a03caa6ab40ff64a",
-      "title": "Toy Story 5",
-      "start": "2026-06-18T15:30:00-06:00",
-      "allDay": false,
-      "backgroundColor": "#2E5EAA",
-      "borderColor": "#2E5EAA",
-      "extendedProps": {
-        "theater": "amc",
-        "theaterName": "AMC 9+CO 10",
-        "screen": null,
-        "fmt": "RealD 3D",
-        "ticketUrl": "https://www.amctheatres.com/showtimes/143524504",
-        "filmUrl": null,
-        "poster": null,
-        "rating": null,
-        "runtime": null,
-        "director": null,
-        "year": null,
-        "note": null
-      },
-      "end": "2026-06-18T17:30:00-06:00"
-    },
-    {
       "id": "ms_54b7dcd889eb9db1",
       "title": "The Sweet Hereafter",
       "start": "2026-06-18T15:30:00-06:00",
@@ -178,29 +109,6 @@
         "note": null
       },
       "end": "2026-06-18T17:32:00-06:00"
-    },
-    {
-      "id": "ms_b99c1e9073c4630e",
-      "title": "Scary Movie",
-      "start": "2026-06-18T15:40:00-06:00",
-      "allDay": false,
-      "backgroundColor": "#2E5EAA",
-      "borderColor": "#2E5EAA",
-      "extendedProps": {
-        "theater": "amc",
-        "theaterName": "AMC 9+CO 10",
-        "screen": null,
-        "fmt": "Laser at AMC",
-        "ticketUrl": "https://www.amctheatres.com/showtimes/143313916",
-        "filmUrl": null,
-        "poster": null,
-        "rating": null,
-        "runtime": null,
-        "director": null,
-        "year": null,
-        "note": null
-      },
-      "end": "2026-06-18T17:40:00-06:00"
     },
     {
       "id": "ms_4f4bcca8d9d39682",
@@ -258,7 +166,7 @@
       "extendedProps": {
         "theater": "landmark",
         "theaterName": "Landmark Mayan",
-        "screen": "Screen 2",
+        "screen": "Screen 2 · Upstairs",
         "fmt": "Scope",
         "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/882d5248-53b1-5608-88a0-d1ef7fc7e2f1",
         "filmUrl": "https://www.landmarktheatres.com/movies/1000001453-disclosure-day",
@@ -281,7 +189,7 @@
       "extendedProps": {
         "theater": "landmark",
         "theaterName": "Landmark Mayan",
-        "screen": "Screen 1",
+        "screen": "Screen 1 · Downstairs",
         "fmt": null,
         "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/42f43ca3-50d9-55ff-8df3-6b6cf4365e6f",
         "filmUrl": "https://www.landmarktheatres.com/movies/313220-backrooms",
@@ -350,7 +258,7 @@
       "extendedProps": {
         "theater": "landmark",
         "theaterName": "Landmark Mayan",
-        "screen": "3",
+        "screen": "Screen 3 · Upstairs",
         "fmt": null,
         "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/e31342df-81ef-5496-a75d-285f205a4046",
         "filmUrl": "https://www.landmarktheatres.com/movies/1000028234-obsession",
@@ -626,7 +534,7 @@
       "extendedProps": {
         "theater": "landmark",
         "theaterName": "Landmark Mayan",
-        "screen": "2",
+        "screen": "Screen 2 · Upstairs",
         "fmt": "Scope",
         "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/c29948eb-3ad2-52d6-9a2f-ee36f7a770e3",
         "filmUrl": "https://www.landmarktheatres.com/movies/1000001453-disclosure-day",
@@ -672,7 +580,7 @@
       "extendedProps": {
         "theater": "landmark",
         "theaterName": "Landmark Mayan",
-        "screen": "1",
+        "screen": "Screen 1 · Downstairs",
         "fmt": null,
         "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/b3cae00d-9766-50d1-b0e3-500326ce166a",
         "filmUrl": "https://www.landmarktheatres.com/movies/1000037443-leviticus",
@@ -695,7 +603,7 @@
       "extendedProps": {
         "theater": "landmark",
         "theaterName": "Landmark Mayan",
-        "screen": "3",
+        "screen": "Screen 3 · Upstairs",
         "fmt": null,
         "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/a305c83f-ffa9-535a-99bb-cb4cd9008c48",
         "filmUrl": "https://www.landmarktheatres.com/movies/1000028234-obsession",
@@ -1385,7 +1293,7 @@
       "extendedProps": {
         "theater": "landmark",
         "theaterName": "Landmark Mayan",
-        "screen": "Screen 2",
+        "screen": "Screen 2 · Upstairs",
         "fmt": "Scope",
         "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/e6c021af-400a-5510-b8b2-0b88f1600940",
         "filmUrl": "https://www.landmarktheatres.com/movies/1000001453-disclosure-day",
@@ -1454,7 +1362,7 @@
       "extendedProps": {
         "theater": "landmark",
         "theaterName": "Landmark Mayan",
-        "screen": "3",
+        "screen": "Screen 3 · Upstairs",
         "fmt": null,
         "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/3f14746c-ad77-5cdd-801f-8b58f198a3a9",
         "filmUrl": "https://www.landmarktheatres.com/movies/1000028234-obsession",
@@ -1477,7 +1385,7 @@
       "extendedProps": {
         "theater": "landmark",
         "theaterName": "Landmark Mayan",
-        "screen": "Screen 1",
+        "screen": "Screen 1 · Downstairs",
         "fmt": null,
         "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/f45ea9c8-9de7-5e2e-ad19-9042527c4545",
         "filmUrl": "https://www.landmarktheatres.com/movies/1000037443-leviticus",
@@ -1684,7 +1592,7 @@
       "extendedProps": {
         "theater": "landmark",
         "theaterName": "Landmark Mayan",
-        "screen": "Screen 3",
+        "screen": "Screen 3 · Upstairs",
         "fmt": "Scope",
         "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/749e2faf-c68f-5de5-8424-2745118408eb",
         "filmUrl": "https://www.landmarktheatres.com/movies/1000001453-disclosure-day",
@@ -1776,7 +1684,7 @@
       "extendedProps": {
         "theater": "landmark",
         "theaterName": "Landmark Mayan",
-        "screen": "1",
+        "screen": "Screen 1 · Downstairs",
         "fmt": null,
         "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/28320801-a3fe-54e4-aeaa-9a7376c7bed3",
         "filmUrl": "https://www.landmarktheatres.com/movies/1000037443-leviticus",
@@ -1822,7 +1730,7 @@
       "extendedProps": {
         "theater": "landmark",
         "theaterName": "Landmark Mayan",
-        "screen": "Screen 2",
+        "screen": "Screen 2 · Upstairs",
         "fmt": null,
         "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/b8ddc6fc-c43d-5d59-9886-fa474bd551b5",
         "filmUrl": "https://www.landmarktheatres.com/movies/1000028234-obsession",
@@ -2098,7 +2006,7 @@
       "extendedProps": {
         "theater": "landmark",
         "theaterName": "Landmark Mayan",
-        "screen": "2",
+        "screen": "Screen 2 · Upstairs",
         "fmt": "Scope",
         "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/f7a6eb07-8a2b-59d4-bb3b-fcb5592ed7a3",
         "filmUrl": "https://www.landmarktheatres.com/movies/1000001453-disclosure-day",
@@ -2121,7 +2029,7 @@
       "extendedProps": {
         "theater": "landmark",
         "theaterName": "Landmark Mayan",
-        "screen": "Screen 1",
+        "screen": "Screen 1 · Downstairs",
         "fmt": null,
         "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/25b39768-4023-5a67-aa7b-e6bd137faa5e",
         "filmUrl": "https://www.landmarktheatres.com/movies/1000037443-leviticus",
@@ -2167,7 +2075,7 @@
       "extendedProps": {
         "theater": "landmark",
         "theaterName": "Landmark Mayan",
-        "screen": "Screen 3",
+        "screen": "Screen 3 · Upstairs",
         "fmt": null,
         "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/9dbdcdaa-8c25-5fd0-ac3f-b6891e785751",
         "filmUrl": "https://www.landmarktheatres.com/movies/1000028234-obsession",
@@ -2535,7 +2443,7 @@
       "extendedProps": {
         "theater": "landmark",
         "theaterName": "Landmark Mayan",
-        "screen": "1",
+        "screen": "Screen 1 · Downstairs",
         "fmt": null,
         "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/a583a89c-b2e8-5cf4-bfde-2184bba29bff",
         "filmUrl": "https://www.landmarktheatres.com/movies/16463-the-big-lebowski",
@@ -2673,7 +2581,7 @@
       "extendedProps": {
         "theater": "landmark",
         "theaterName": "Landmark Mayan",
-        "screen": "Screen 3",
+        "screen": "Screen 3 · Upstairs",
         "fmt": null,
         "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/0ec526ed-0cc5-5074-bc83-3a98d68d0151",
         "filmUrl": "https://www.landmarktheatres.com/movies/54989-brokeback-mountain",
@@ -2742,7 +2650,7 @@
       "extendedProps": {
         "theater": "landmark",
         "theaterName": "Landmark Mayan",
-        "screen": "Screen 1",
+        "screen": "Screen 1 · Downstairs",
         "fmt": null,
         "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/a0d55285-2180-5a67-a62f-ba42fe647871",
         "filmUrl": "https://www.landmarktheatres.com/movies/263272-the-bad-guys",
@@ -2995,7 +2903,7 @@
       "extendedProps": {
         "theater": "landmark",
         "theaterName": "Landmark Mayan",
-        "screen": "2",
+        "screen": "Screen 2 · Upstairs",
         "fmt": "Scope",
         "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/8bbfe5c9-efb3-5344-b461-c769630f0494",
         "filmUrl": "https://www.landmarktheatres.com/movies/1000001453-disclosure-day",
@@ -3087,7 +2995,7 @@
       "extendedProps": {
         "theater": "landmark",
         "theaterName": "Landmark Mayan",
-        "screen": "3",
+        "screen": "Screen 3 · Upstairs",
         "fmt": null,
         "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/7915e4db-48a2-5eae-8b9b-a77bfc9b80af",
         "filmUrl": "https://www.landmarktheatres.com/movies/1000028234-obsession",
@@ -3110,7 +3018,7 @@
       "extendedProps": {
         "theater": "landmark",
         "theaterName": "Landmark Mayan",
-        "screen": "Screen 1",
+        "screen": "Screen 1 · Downstairs",
         "fmt": null,
         "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/eb205ae4-339b-5b70-8f4f-da950da68fa9",
         "filmUrl": "https://www.landmarktheatres.com/movies/1000037443-leviticus",
@@ -3363,7 +3271,7 @@
       "extendedProps": {
         "theater": "landmark",
         "theaterName": "Landmark Mayan",
-        "screen": "Screen 3",
+        "screen": "Screen 3 · Upstairs",
         "fmt": "Scope",
         "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/1558999b-90d0-57ac-b8bb-f001119e0aa7",
         "filmUrl": "https://www.landmarktheatres.com/movies/1000001453-disclosure-day",
@@ -3432,7 +3340,7 @@
       "extendedProps": {
         "theater": "landmark",
         "theaterName": "Landmark Mayan",
-        "screen": "Screen 1",
+        "screen": "Screen 1 · Downstairs",
         "fmt": null,
         "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/6aad1146-4276-517b-a313-87e73fb302a7",
         "filmUrl": "https://www.landmarktheatres.com/movies/1000037443-leviticus",
@@ -3478,7 +3386,7 @@
       "extendedProps": {
         "theater": "landmark",
         "theaterName": "Landmark Mayan",
-        "screen": "Screen 2",
+        "screen": "Screen 2 · Upstairs",
         "fmt": null,
         "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/c0632417-7531-5bed-a831-b5c5ea4f6e86",
         "filmUrl": "https://www.landmarktheatres.com/movies/1000028234-obsession",
@@ -3754,7 +3662,7 @@
       "extendedProps": {
         "theater": "landmark",
         "theaterName": "Landmark Mayan",
-        "screen": "2",
+        "screen": "Screen 2 · Upstairs",
         "fmt": "Scope",
         "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/5b5ba5e0-38d7-5636-8be2-1efdfeba0bdc",
         "filmUrl": "https://www.landmarktheatres.com/movies/1000001453-disclosure-day",
@@ -3777,7 +3685,7 @@
       "extendedProps": {
         "theater": "landmark",
         "theaterName": "Landmark Mayan",
-        "screen": "Screen 1",
+        "screen": "Screen 1 · Downstairs",
         "fmt": null,
         "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/dd2b8162-6528-5025-87c6-930469fd46d3",
         "filmUrl": "https://www.landmarktheatres.com/movies/1000037443-leviticus",
@@ -3823,7 +3731,7 @@
       "extendedProps": {
         "theater": "landmark",
         "theaterName": "Landmark Mayan",
-        "screen": "3",
+        "screen": "Screen 3 · Upstairs",
         "fmt": null,
         "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/f97027d6-00c5-5c3d-9eb4-eea7c7c90553",
         "filmUrl": "https://www.landmarktheatres.com/movies/1000028234-obsession",
@@ -4260,7 +4168,7 @@
       "extendedProps": {
         "theater": "landmark",
         "theaterName": "Landmark Mayan",
-        "screen": "1",
+        "screen": "Screen 1 · Downstairs",
         "fmt": "Scope",
         "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/f99a3a1c-e454-5b31-ad8a-4589f58ffb48",
         "filmUrl": "https://www.landmarktheatres.com/movies/114782-interstellar",
@@ -4375,9 +4283,9 @@
       "extendedProps": {
         "theater": "landmark",
         "theaterName": "Landmark Mayan",
-        "screen": "3",
+        "screen": "Screen 3 · Upstairs",
         "fmt": null,
-        "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/9b261ba7-fa10-51dd-921c-4543d3b7d788",
+        "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/04aa9074-51f7-5ac2-9123-3f779d743774",
         "filmUrl": "https://www.landmarktheatres.com/movies/263272-the-bad-guys",
         "poster": "https://all.web.img.acsta.net/img/b6/f2/b6f2d2b8fb1b696116a214b3669813b7.jpg",
         "rating": "PG",
@@ -4674,7 +4582,7 @@
       "extendedProps": {
         "theater": "landmark",
         "theaterName": "Landmark Mayan",
-        "screen": "Screen 2",
+        "screen": "Screen 2 · Upstairs",
         "fmt": "Scope",
         "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/164bb990-1523-5da7-a988-86785885ede7",
         "filmUrl": "https://www.landmarktheatres.com/movies/1000001453-disclosure-day",
@@ -4720,7 +4628,7 @@
       "extendedProps": {
         "theater": "landmark",
         "theaterName": "Landmark Mayan",
-        "screen": "Screen 3",
+        "screen": "Screen 3 · Upstairs",
         "fmt": null,
         "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/fdb2ec47-1723-5984-af63-9cd5ae26d558",
         "filmUrl": "https://www.landmarktheatres.com/movies/1000028234-obsession",
@@ -4743,7 +4651,7 @@
       "extendedProps": {
         "theater": "landmark",
         "theaterName": "Landmark Mayan",
-        "screen": "Screen 1",
+        "screen": "Screen 1 · Downstairs",
         "fmt": null,
         "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/822efeeb-6d70-524c-851d-757b351d6ba0",
         "filmUrl": "https://www.landmarktheatres.com/movies/1000037443-leviticus",
@@ -4973,9 +4881,9 @@
       "extendedProps": {
         "theater": "landmark",
         "theaterName": "Landmark Mayan",
-        "screen": "3",
+        "screen": "Screen 3 · Upstairs",
         "fmt": "Scope",
-        "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/25dbfd09-c45e-52ba-a0cf-9ef105b1b04d",
+        "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/d048ceed-cde9-5e35-a743-a8f4ed9a885f",
         "filmUrl": "https://www.landmarktheatres.com/movies/1000001453-disclosure-day",
         "poster": "https://cms-assets.webediamovies.pro/production/217/ef518abdbe356139347d2d82ff800fce.jpg",
         "rating": "PG-13",
@@ -5042,7 +4950,7 @@
       "extendedProps": {
         "theater": "landmark",
         "theaterName": "Landmark Mayan",
-        "screen": "1",
+        "screen": "Screen 1 · Downstairs",
         "fmt": null,
         "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/2a3b7e34-3a8a-5476-9eb6-95366719e8f1",
         "filmUrl": "https://www.landmarktheatres.com/movies/1000037443-leviticus",
@@ -5088,7 +4996,7 @@
       "extendedProps": {
         "theater": "landmark",
         "theaterName": "Landmark Mayan",
-        "screen": "2",
+        "screen": "Screen 2 · Upstairs",
         "fmt": null,
         "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/e08feecc-3ed8-58c6-a321-68fb5a92d046",
         "filmUrl": "https://www.landmarktheatres.com/movies/1000028234-obsession",
@@ -5364,7 +5272,7 @@
       "extendedProps": {
         "theater": "landmark",
         "theaterName": "Landmark Mayan",
-        "screen": "2",
+        "screen": "Screen 2 · Upstairs",
         "fmt": "Scope",
         "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/9be767dd-7a2a-5456-80fb-466a2d386a8a",
         "filmUrl": "https://www.landmarktheatres.com/movies/1000001453-disclosure-day",
@@ -5387,7 +5295,7 @@
       "extendedProps": {
         "theater": "landmark",
         "theaterName": "Landmark Mayan",
-        "screen": "1",
+        "screen": "Screen 1 · Downstairs",
         "fmt": null,
         "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/a9442eae-3a32-5268-be48-4e0eac2b075e",
         "filmUrl": "https://www.landmarktheatres.com/movies/1000037443-leviticus",
@@ -5433,7 +5341,7 @@
       "extendedProps": {
         "theater": "landmark",
         "theaterName": "Landmark Mayan",
-        "screen": "3",
+        "screen": "Screen 3 · Upstairs",
         "fmt": null,
         "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/e0acf146-a581-5f15-9863-fb2079786854",
         "filmUrl": "https://www.landmarktheatres.com/movies/1000028234-obsession",
@@ -6215,7 +6123,7 @@
       "extendedProps": {
         "theater": "landmark",
         "theaterName": "Landmark Mayan",
-        "screen": "3",
+        "screen": "Screen 3 · Upstairs",
         "fmt": "Scope",
         "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/8b9fa459-533d-59bb-84ea-4383ad9bd17a",
         "filmUrl": "https://www.landmarktheatres.com/movies/1000001453-disclosure-day",
@@ -6284,7 +6192,7 @@
       "extendedProps": {
         "theater": "landmark",
         "theaterName": "Landmark Mayan",
-        "screen": "1",
+        "screen": "Screen 1 · Downstairs",
         "fmt": null,
         "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/dd63291e-242c-515d-9661-8ac124b0cea4",
         "filmUrl": "https://www.landmarktheatres.com/movies/1000037443-leviticus",
@@ -6353,7 +6261,7 @@
       "extendedProps": {
         "theater": "landmark",
         "theaterName": "Landmark Mayan",
-        "screen": "Screen 2",
+        "screen": "Screen 2 · Upstairs",
         "fmt": null,
         "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/e1254498-f407-50d8-bea8-b39a49ddb897",
         "filmUrl": "https://www.landmarktheatres.com/movies/1000028234-obsession",
@@ -6583,7 +6491,7 @@
       "extendedProps": {
         "theater": "landmark",
         "theaterName": "Landmark Mayan",
-        "screen": "2",
+        "screen": "Screen 2 · Upstairs",
         "fmt": "Scope",
         "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/8979d6c3-165e-5a83-9e53-92ace65db7ed",
         "filmUrl": "https://www.landmarktheatres.com/movies/1000001453-disclosure-day",
@@ -6629,7 +6537,7 @@
       "extendedProps": {
         "theater": "landmark",
         "theaterName": "Landmark Mayan",
-        "screen": "1",
+        "screen": "Screen 1 · Downstairs",
         "fmt": null,
         "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/8eb4c2a7-7731-5812-a6b2-8a3301afde41",
         "filmUrl": "https://www.landmarktheatres.com/movies/1000037443-leviticus",
@@ -6675,7 +6583,7 @@
       "extendedProps": {
         "theater": "landmark",
         "theaterName": "Landmark Mayan",
-        "screen": "3",
+        "screen": "Screen 3 · Upstairs",
         "fmt": null,
         "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/b8c147fb-9a99-59d0-97c2-adf8b34c513e",
         "filmUrl": "https://www.landmarktheatres.com/movies/1000028234-obsession",
@@ -7158,7 +7066,7 @@
       "extendedProps": {
         "theater": "landmark",
         "theaterName": "Landmark Mayan",
-        "screen": "2",
+        "screen": "Screen 2 · Upstairs",
         "fmt": "Scope",
         "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/ee244a12-724d-59d6-8649-8587ac4c65a2",
         "filmUrl": "https://www.landmarktheatres.com/movies/1000001453-disclosure-day",
@@ -7204,7 +7112,7 @@
       "extendedProps": {
         "theater": "landmark",
         "theaterName": "Landmark Mayan",
-        "screen": "Screen 1",
+        "screen": "Screen 1 · Downstairs",
         "fmt": null,
         "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/8f9197b4-270a-5e27-8f19-1ccfe60d5639",
         "filmUrl": "https://www.landmarktheatres.com/movies/54989-brokeback-mountain",
@@ -7250,7 +7158,7 @@
       "extendedProps": {
         "theater": "landmark",
         "theaterName": "Landmark Mayan",
-        "screen": "Screen 3",
+        "screen": "Screen 3 · Upstairs",
         "fmt": null,
         "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/90beff78-3c23-5be3-baf8-ed4ddd55aa68",
         "filmUrl": "https://www.landmarktheatres.com/movies/1000028234-obsession",
@@ -7503,7 +7411,7 @@
       "extendedProps": {
         "theater": "landmark",
         "theaterName": "Landmark Mayan",
-        "screen": "Screen 3",
+        "screen": "Screen 3 · Upstairs",
         "fmt": "Scope",
         "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/df457eb5-6b61-5ab5-a927-d54d6a1fd46e",
         "filmUrl": "https://www.landmarktheatres.com/movies/1000001453-disclosure-day",
@@ -7549,7 +7457,7 @@
       "extendedProps": {
         "theater": "landmark",
         "theaterName": "Landmark Mayan",
-        "screen": "2",
+        "screen": "Screen 2 · Upstairs",
         "fmt": null,
         "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/70923712-44a7-5401-bf6b-7a9551673292",
         "filmUrl": "https://www.landmarktheatres.com/movies/1000037443-leviticus",
@@ -7641,7 +7549,7 @@
       "extendedProps": {
         "theater": "landmark",
         "theaterName": "Landmark Mayan",
-        "screen": "Screen 1",
+        "screen": "Screen 1 · Downstairs",
         "fmt": null,
         "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/eb27ab3e-33d9-5dc3-95b6-380373d01785",
         "filmUrl": "https://www.landmarktheatres.com/movies/1000028234-obsession",
@@ -7825,7 +7733,7 @@
       "extendedProps": {
         "theater": "landmark",
         "theaterName": "Landmark Mayan",
-        "screen": "2",
+        "screen": "Screen 2 · Upstairs",
         "fmt": "Scope",
         "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/c2a1e852-61ce-5b5c-9d29-10be989a0a25",
         "filmUrl": "https://www.landmarktheatres.com/movies/1000001453-disclosure-day",
@@ -7917,7 +7825,7 @@
       "extendedProps": {
         "theater": "landmark",
         "theaterName": "Landmark Mayan",
-        "screen": "1",
+        "screen": "Screen 1 · Downstairs",
         "fmt": null,
         "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/91f2dfc2-e8d2-538f-b190-cf3f6b45eeb9",
         "filmUrl": "https://www.landmarktheatres.com/movies/54989-brokeback-mountain",
@@ -7986,7 +7894,7 @@
       "extendedProps": {
         "theater": "landmark",
         "theaterName": "Landmark Mayan",
-        "screen": "Screen 3",
+        "screen": "Screen 3 · Upstairs",
         "fmt": null,
         "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/981a7722-557e-5c39-96c8-6c828e61a472",
         "filmUrl": "https://www.landmarktheatres.com/movies/1000037443-leviticus",
@@ -8308,7 +8216,7 @@
       "extendedProps": {
         "theater": "landmark",
         "theaterName": "Landmark Mayan",
-        "screen": "Screen 3",
+        "screen": "Screen 3 · Upstairs",
         "fmt": null,
         "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/3ff6cde1-aed0-536e-b64d-35e8333b2543",
         "filmUrl": "https://www.landmarktheatres.com/movies/263272-the-bad-guys",
@@ -8515,7 +8423,7 @@
       "extendedProps": {
         "theater": "landmark",
         "theaterName": "Landmark Mayan",
-        "screen": "1",
+        "screen": "Screen 1 · Downstairs",
         "fmt": "Scope",
         "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/3894b548-2d08-5016-9fe1-bffb6d49bcb9",
         "filmUrl": "https://www.landmarktheatres.com/movies/114782-interstellar",
@@ -8538,7 +8446,7 @@
       "extendedProps": {
         "theater": "landmark",
         "theaterName": "Landmark Mayan",
-        "screen": "Screen 3",
+        "screen": "Screen 3 · Upstairs",
         "fmt": null,
         "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/5e5ab610-e9ab-559d-8cf5-5d17eb76c34a",
         "filmUrl": "https://www.landmarktheatres.com/movies/1000028234-obsession",
@@ -8561,7 +8469,7 @@
       "extendedProps": {
         "theater": "landmark",
         "theaterName": "Landmark Mayan",
-        "screen": "2",
+        "screen": "Screen 2 · Upstairs",
         "fmt": "Scope",
         "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/474d2683-850e-58ac-916a-079fe6e5405e",
         "filmUrl": "https://www.landmarktheatres.com/movies/1000001453-disclosure-day",
@@ -8906,7 +8814,7 @@
       "extendedProps": {
         "theater": "landmark",
         "theaterName": "Landmark Mayan",
-        "screen": "3",
+        "screen": "Screen 3 · Upstairs",
         "fmt": "Scope",
         "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/c0675af2-27ea-5a14-9bad-29a58fe09c87",
         "filmUrl": "https://www.landmarktheatres.com/movies/1000001453-disclosure-day",
@@ -8952,7 +8860,7 @@
       "extendedProps": {
         "theater": "landmark",
         "theaterName": "Landmark Mayan",
-        "screen": "2",
+        "screen": "Screen 2 · Upstairs",
         "fmt": null,
         "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/dbdd4be0-7e96-5ee9-926d-05b32bbdd13c",
         "filmUrl": "https://www.landmarktheatres.com/movies/1000037443-leviticus",
@@ -9044,7 +8952,7 @@
       "extendedProps": {
         "theater": "landmark",
         "theaterName": "Landmark Mayan",
-        "screen": "1",
+        "screen": "Screen 1 · Downstairs",
         "fmt": null,
         "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/dad760d0-6fc7-5f27-9673-48199c6cc32d",
         "filmUrl": "https://www.landmarktheatres.com/movies/1000028234-obsession",
@@ -9228,7 +9136,7 @@
       "extendedProps": {
         "theater": "landmark",
         "theaterName": "Landmark Mayan",
-        "screen": "2",
+        "screen": "Screen 2 · Upstairs",
         "fmt": "Scope",
         "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/8a012fde-6242-5c66-9d57-99ee59828fca",
         "filmUrl": "https://www.landmarktheatres.com/movies/1000001453-disclosure-day",
@@ -9320,7 +9228,7 @@
       "extendedProps": {
         "theater": "landmark",
         "theaterName": "Landmark Mayan",
-        "screen": "1",
+        "screen": "Screen 1 · Downstairs",
         "fmt": "Scope",
         "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/be6e42c6-0169-56b5-b0b6-02e1bcf7e077",
         "filmUrl": "https://www.landmarktheatres.com/movies/114782-interstellar",
@@ -9366,7 +9274,7 @@
       "extendedProps": {
         "theater": "landmark",
         "theaterName": "Landmark Mayan",
-        "screen": "3",
+        "screen": "Screen 3 · Upstairs",
         "fmt": null,
         "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/ccb5d583-c39d-55b5-89c0-789271d25719",
         "filmUrl": "https://www.landmarktheatres.com/movies/1000037443-leviticus",
@@ -9826,7 +9734,7 @@
       "extendedProps": {
         "theater": "landmark",
         "theaterName": "Landmark Mayan",
-        "screen": "2",
+        "screen": "Screen 2 · Upstairs",
         "fmt": "Scope",
         "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/fce8e695-e11b-58fa-b520-b0c083c99490",
         "filmUrl": "https://www.landmarktheatres.com/movies/1000001453-disclosure-day",
@@ -9872,7 +9780,7 @@
       "extendedProps": {
         "theater": "landmark",
         "theaterName": "Landmark Mayan",
-        "screen": "Screen 1",
+        "screen": "Screen 1 · Downstairs",
         "fmt": null,
         "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/cb56d4b3-5495-5884-96e8-93c0af786f64",
         "filmUrl": "https://www.landmarktheatres.com/movies/1000037443-leviticus",
@@ -9895,7 +9803,7 @@
       "extendedProps": {
         "theater": "landmark",
         "theaterName": "Landmark Mayan",
-        "screen": "3",
+        "screen": "Screen 3 · Upstairs",
         "fmt": null,
         "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/4ba1d9dd-776d-5e42-88e1-aba21295b912",
         "filmUrl": "https://www.landmarktheatres.com/movies/1000028234-obsession",
@@ -10010,7 +9918,7 @@
       "extendedProps": {
         "theater": "landmark",
         "theaterName": "Landmark Mayan",
-        "screen": "3",
+        "screen": "Screen 3 · Upstairs",
         "fmt": null,
         "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/3a20ad7a-91ec-5581-abf0-ecc2ae8fc4fc",
         "filmUrl": "https://www.landmarktheatres.com/movies/1000037443-leviticus",
@@ -10056,7 +9964,7 @@
       "extendedProps": {
         "theater": "landmark",
         "theaterName": "Landmark Mayan",
-        "screen": "2",
+        "screen": "Screen 2 · Upstairs",
         "fmt": "Scope",
         "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/5f0fd731-3db4-5332-b692-69d5186580e2",
         "filmUrl": "https://www.landmarktheatres.com/movies/1000001453-disclosure-day",
@@ -10332,7 +10240,7 @@
       "extendedProps": {
         "theater": "landmark",
         "theaterName": "Landmark Mayan",
-        "screen": "Screen 3",
+        "screen": "Screen 3 · Upstairs",
         "fmt": "Scope",
         "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/6d5b3bef-7e90-51ec-bd57-531072f692f0",
         "filmUrl": "https://www.landmarktheatres.com/movies/242054-moonlight",
@@ -10355,7 +10263,7 @@
       "extendedProps": {
         "theater": "landmark",
         "theaterName": "Landmark Mayan",
-        "screen": "Screen 1",
+        "screen": "Screen 1 · Downstairs",
         "fmt": "Scope",
         "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/0ad1b329-fe5a-5be0-be7f-76f404a2f0a4",
         "filmUrl": "https://www.landmarktheatres.com/movies/45889-kung-fu-panda",
@@ -10631,7 +10539,7 @@
       "extendedProps": {
         "theater": "landmark",
         "theaterName": "Landmark Mayan",
-        "screen": "1",
+        "screen": "Screen 1 · Downstairs",
         "fmt": "Scope",
         "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/8b2313b7-211a-5a8b-9dec-a6f072ccda18",
         "filmUrl": "https://www.landmarktheatres.com/movies/45889-kung-fu-panda",
@@ -11114,7 +11022,7 @@
       "extendedProps": {
         "theater": "landmark",
         "theaterName": "Landmark Mayan",
-        "screen": "Screen 1",
+        "screen": "Screen 1 · Downstairs",
         "fmt": "Scope",
         "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/3381b5fb-84aa-50b0-a0ec-51599b4b1042",
         "filmUrl": "https://www.landmarktheatres.com/movies/242054-moonlight",
@@ -11206,7 +11114,7 @@
       "extendedProps": {
         "theater": "landmark",
         "theaterName": "Landmark Mayan",
-        "screen": "1",
+        "screen": "Screen 1 · Downstairs",
         "fmt": "Scope",
         "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/eeba0b3f-f29b-5cc0-adfd-2588b73c5080",
         "filmUrl": "https://www.landmarktheatres.com/movies/242054-moonlight",
@@ -11298,7 +11206,7 @@
       "extendedProps": {
         "theater": "landmark",
         "theaterName": "Landmark Mayan",
-        "screen": "Screen 1",
+        "screen": "Screen 1 · Downstairs",
         "fmt": "Scope",
         "ticketUrl": "https://booking.landmarktheatres.com/launch/ticketing/03eff6a2-12d4-57c2-b42d-0316d754cf00",
         "filmUrl": "https://www.landmarktheatres.com/movies/45889-kung-fu-panda",

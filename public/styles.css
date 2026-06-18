@@ -75,6 +75,7 @@ header .updated { margin: 6px 0 0; color: var(--muted); font-size: .8rem; }
 .fc .fc-toolbar-title { font-size: 1.1rem; }
 .fc .fc-button { text-transform: capitalize; }
 .fc-event { cursor: pointer; }
+.fc .list-meta { color: var(--muted); font-weight: 400; font-size: .88em; margin-left: 10px; }
 .fc-event.amc-allday-na { opacity: .9; }
 
 /* Modal */

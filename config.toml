@@ -21,6 +21,48 @@ enabled = true
 name = "AMC 9+CO 10"
 color = "#2E5EAA"
 
+# Title standardization: strip repertory/event series labels from the START of a
+# film title (the label plus its ":" / "–" / "-" separator), so e.g.
+# "Bleak Week: Gummo" -> "Gummo" and "Fan Faves: Michael" -> "Michael".
+# Real titles with colons (e.g. "Star Wars: The Mandalorian and Grogu") are kept.
+# Case-insensitive regex; TOML literal strings (single quotes) keep backslashes literal.
+[titles]
+strip_prefixes = [
+  'Bleak Week',
+  'Sie/?Saw',
+  'Sci-?Fi Film Series(?:\s*#\d+)?',
+  'Members?\s+Only[^:]*',
+  'Fan Faves',
+  'Staff Pick',
+]
+# Event descriptors stripped from the END of a title (label + separator).
+# e.g. "Sleepaway Camp: The Midnight Mass Experience" -> "Sleepaway Camp".
+strip_suffixes = [
+  '\s+w/\s+.*$',
+  ':\s+.*\bExperience$',
+  '\s+Fan First Screenings?$',
+]
+# Titles matching any of these are dropped entirely — events that aren't a specific
+# movie (mystery screenings, watch parties, etc.). Case-insensitive regex.
+drop = [
+  'Screen Unseen',
+  'GOLAZO',
+  'Watch Part(?:y|ies)',
+  'Tokusatsu',
+]
+
+# Which films are pre-checked when the page first loads (others start unchecked but
+# available to toggle on). Case-insensitive regex matched against the normalized title.
+# Leave the list empty to pre-select ALL films (the long default). Edit to taste.
+[defaults]
+films = [
+  'Jaws',
+  'The Big Lebowski',
+  'Brokeback Mountain',
+  'Moonlight',
+  'Interstellar',
+]
+
 # Optional filters. Omit/comment out a key to disable that filter.
 # Leaving the whole section empty includes every showtime.
 [filters]

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-18T12:45:29.755579-06:00",
+  "generated_at": "2026-06-18T14:13:29.299362-06:00",
   "timezone": "America/Denver",
   "theaters": [
     {
@@ -19,49 +19,49 @@
     }
   ],
   "films": [
-    "AMC Screen Unseen: June 22",
-    "AMC Screen Unseen: June 29",
     "Backrooms",
-    "Bleak Week: Gummo",
-    "Bleak Week: The Sweet Hereafter",
     "Brokeback Mountain",
+    "By Hook or by Crook",
+    "Castration Movie Anthology ii. The Best of Both Worlds",
     "Disclosure Day",
-    "Fan Faves: Michael",
+    "eXistenZ",
     "Girls Like Girls",
+    "Gummo",
+    "Holes",
     "I Love Boosters",
     "Interstellar",
+    "Jaws",
     "Kung Fu Panda",
     "Leviticus",
     "Masters of the Universe",
-    "Member Only Sneak Preview: The Invite",
-    "MEMBERS ONLY Staff Pick: Holes",
     "Michael",
+    "Mikey and Nicky",
     "Minions & Monsters",
     "Moonlight",
     "Obsession",
-    "Rocky Horror Picture Show w/ CO's Elusive Ingredient Shadowcast",
+    "Redline",
+    "Rocky Horror Picture Show",
     "Scary Movie",
-    "Sci-Fi Film Series #1: Jaws",
-    "Sie/Saw: By Hook or by Crook",
-    "Sie/Saw: Castration Movie Anthology ii. The Best of Both Worlds",
-    "Sie/Saw: eXistenZ",
-    "Sie/Saw: Mikey and Nicky",
-    "Sie/Saw: Redline",
-    "Sie/Saw: The Celluloid Closet",
-    "Sleepaway Camp: The Midnight Mass Experience",
+    "Sleepaway Camp",
     "Star Wars: The Mandalorian and Grogu",
     "Stop! That! Train!",
-    "STOP! THAT! TRAIN!",
     "Supergirl",
-    "Supergirl Fan First Screenings",
     "The Bad Guys",
     "The Big Lebowski",
+    "The Celluloid Closet",
     "The Death of Robin Hood",
     "The Furious",
-    "Tokusatsu Tuesdsay",
+    "The Invite",
+    "The Sweet Hereafter",
     "Toy Story 5",
-    "Tuner",
-    "¡GOLAZO!: 2026 Soccer Watch Parties"
+    "Tuner"
+  ],
+  "default_films": [
+    "Brokeback Mountain",
+    "Interstellar",
+    "Jaws",
+    "Moonlight",
+    "The Big Lebowski"
   ],
   "events": [
     {
@@ -151,121 +151,6 @@
         "year": 2026,
         "note": "Times vary — showtimes & tickets at Landmark"
       }
-    },
-    {
-      "id": "ms_340d373a44830aab",
-      "title": "Star Wars: The Mandalorian and Grogu",
-      "start": "2026-06-18T12:15:00-06:00",
-      "allDay": false,
-      "backgroundColor": "#2E5EAA",
-      "borderColor": "#2E5EAA",
-      "extendedProps": {
-        "theater": "amc",
-        "theaterName": "AMC 9+CO 10",
-        "screen": null,
-        "fmt": "Laser at AMC",
-        "ticketUrl": "https://www.amctheatres.com/showtimes/144386675",
-        "filmUrl": null,
-        "poster": null,
-        "rating": null,
-        "runtime": null,
-        "director": null,
-        "year": null,
-        "note": null
-      },
-      "end": "2026-06-18T14:15:00-06:00"
-    },
-    {
-      "id": "ms_cf29086eb65d8b46",
-      "title": "Michael",
-      "start": "2026-06-18T12:25:00-06:00",
-      "allDay": false,
-      "backgroundColor": "#2E5EAA",
-      "borderColor": "#2E5EAA",
-      "extendedProps": {
-        "theater": "amc",
-        "theaterName": "AMC 9+CO 10",
-        "screen": null,
-        "fmt": "Laser at AMC",
-        "ticketUrl": "https://www.amctheatres.com/showtimes/144386552",
-        "filmUrl": null,
-        "poster": null,
-        "rating": null,
-        "runtime": null,
-        "director": null,
-        "year": null,
-        "note": null
-      },
-      "end": "2026-06-18T14:25:00-06:00"
-    },
-    {
-      "id": "ms_e63fe11e746c618a",
-      "title": "Disclosure Day",
-      "start": "2026-06-18T13:00:00-06:00",
-      "allDay": false,
-      "backgroundColor": "#2E5EAA",
-      "borderColor": "#2E5EAA",
-      "extendedProps": {
-        "theater": "amc",
-        "theaterName": "AMC 9+CO 10",
-        "screen": null,
-        "fmt": "Laser at AMC",
-        "ticketUrl": "https://www.amctheatres.com/showtimes/143664442",
-        "filmUrl": null,
-        "poster": null,
-        "rating": null,
-        "runtime": null,
-        "director": null,
-        "year": null,
-        "note": null
-      },
-      "end": "2026-06-18T15:00:00-06:00"
-    },
-    {
-      "id": "ms_8ccc9109fc28a039",
-      "title": "Scary Movie",
-      "start": "2026-06-18T13:00:00-06:00",
-      "allDay": false,
-      "backgroundColor": "#2E5EAA",
-      "borderColor": "#2E5EAA",
-      "extendedProps": {
-        "theater": "amc",
-        "theaterName": "AMC 9+CO 10",
-        "screen": null,
-        "fmt": "Laser at AMC",
-        "ticketUrl": "https://www.amctheatres.com/showtimes/143313917",
-        "filmUrl": null,
-        "poster": null,
-        "rating": null,
-        "runtime": null,
-        "director": null,
-        "year": null,
-        "note": null
-      },
-      "end": "2026-06-18T15:00:00-06:00"
-    },
-    {
-      "id": "ms_120edbefccfc6574",
-      "title": "The Furious",
-      "start": "2026-06-18T13:00:00-06:00",
-      "allDay": false,
-      "backgroundColor": "#2E5EAA",
-      "borderColor": "#2E5EAA",
-      "extendedProps": {
-        "theater": "amc",
-        "theaterName": "AMC 9+CO 10",
-        "screen": null,
-        "fmt": "Laser at AMC",
-        "ticketUrl": "https://www.amctheatres.com/showtimes/144386733",
-        "filmUrl": null,
-        "poster": null,
-        "rating": null,
-        "runtime": null,
-        "director": null,
-        "year": null,
-        "note": null
-      },
-      "end": "2026-06-18T15:00:00-06:00"
     },
     {
       "id": "ms_75785d96f61ebb6a",
@@ -452,8 +337,8 @@
       "end": "2026-06-18T17:30:00-06:00"
     },
     {
-      "id": "ms_1e832f4d6c10f690",
-      "title": "Bleak Week: The Sweet Hereafter",
+      "id": "ms_54b7dcd889eb9db1",
+      "title": "The Sweet Hereafter",
       "start": "2026-06-18T15:30:00-06:00",
       "allDay": false,
       "backgroundColor": "#E4572E",
@@ -843,8 +728,8 @@
       "end": "2026-06-18T21:00:00-06:00"
     },
     {
-      "id": "ms_279f9c81ebb14a99",
-      "title": "Bleak Week: Gummo",
+      "id": "ms_f3c2d725ff533e7f",
+      "title": "Gummo",
       "start": "2026-06-18T19:00:00-06:00",
       "allDay": false,
       "backgroundColor": "#E4572E",
@@ -864,29 +749,6 @@
         "note": null
       },
       "end": "2026-06-18T20:29:00-06:00"
-    },
-    {
-      "id": "ms_cf32b634f9f31ef7",
-      "title": "¡GOLAZO!: 2026 Soccer Watch Parties",
-      "start": "2026-06-18T19:00:00-06:00",
-      "allDay": false,
-      "backgroundColor": "#E4572E",
-      "borderColor": "#E4572E",
-      "extendedProps": {
-        "theater": "sie",
-        "theaterName": "Sie FilmCenter",
-        "screen": "Henderson-Withey Lounge",
-        "fmt": null,
-        "ticketUrl": "https://denverfilm.eventive.org/films/69ced9db0f3c027b9e2694d1",
-        "filmUrl": "https://denverfilm.eventive.org/films/69ced9db0f3c027b9e2694d1",
-        "poster": "https://static-a.eventive.org/1778702744945temp-1778702744925-poster.jpg",
-        "rating": null,
-        "runtime": null,
-        "director": null,
-        "year": 2026,
-        "note": null
-      },
-      "end": "2026-06-18T22:00:00-06:00"
     },
     {
       "id": "ms_ec32ba035aacf55b",
@@ -1322,8 +1184,8 @@
       "end": "2026-06-19T12:30:00-06:00"
     },
     {
-      "id": "ms_96baab6671f82f91",
-      "title": "Fan Faves: Michael",
+      "id": "ms_1957305c9b3ba53e",
+      "title": "Michael",
       "start": "2026-06-19T10:40:00-06:00",
       "allDay": false,
       "backgroundColor": "#2E5EAA",
@@ -1596,29 +1458,6 @@
         "note": null
       },
       "end": "2026-06-19T15:00:00-06:00"
-    },
-    {
-      "id": "ms_78f2d807de0f22b5",
-      "title": "¡GOLAZO!: 2026 Soccer Watch Parties",
-      "start": "2026-06-19T13:00:00-06:00",
-      "allDay": false,
-      "backgroundColor": "#E4572E",
-      "borderColor": "#E4572E",
-      "extendedProps": {
-        "theater": "sie",
-        "theaterName": "Sie FilmCenter",
-        "screen": "Henderson-Withey Lounge",
-        "fmt": null,
-        "ticketUrl": "https://denverfilm.eventive.org/films/69ced9db0f3c027b9e2694d1",
-        "filmUrl": "https://denverfilm.eventive.org/films/69ced9db0f3c027b9e2694d1",
-        "poster": "https://static-a.eventive.org/1778702744945temp-1778702744925-poster.jpg",
-        "rating": null,
-        "runtime": null,
-        "director": null,
-        "year": 2026,
-        "note": null
-      },
-      "end": "2026-06-19T16:00:00-06:00"
     },
     {
       "id": "ms_bd92237efd13e123",
@@ -2150,29 +1989,6 @@
       "end": "2026-06-19T20:20:00-06:00"
     },
     {
-      "id": "ms_28f7e95a24f4474c",
-      "title": "¡GOLAZO!: 2026 Soccer Watch Parties",
-      "start": "2026-06-19T18:30:00-06:00",
-      "allDay": false,
-      "backgroundColor": "#E4572E",
-      "borderColor": "#E4572E",
-      "extendedProps": {
-        "theater": "sie",
-        "theaterName": "Sie FilmCenter",
-        "screen": "Henderson-Withey Lounge",
-        "fmt": null,
-        "ticketUrl": "https://denverfilm.eventive.org/films/69ced9db0f3c027b9e2694d1",
-        "filmUrl": "https://denverfilm.eventive.org/films/69ced9db0f3c027b9e2694d1",
-        "poster": "https://static-a.eventive.org/1778702744945temp-1778702744925-poster.jpg",
-        "rating": null,
-        "runtime": null,
-        "director": null,
-        "year": 2026,
-        "note": null
-      },
-      "end": "2026-06-19T21:30:00-06:00"
-    },
-    {
       "id": "ms_facfd655dbc7486f",
       "title": "Backrooms",
       "start": "2026-06-19T18:45:00-06:00",
@@ -2311,8 +2127,8 @@
       "end": "2026-06-19T21:30:00-06:00"
     },
     {
-      "id": "ms_28977d3d4df9b039",
-      "title": "STOP! THAT! TRAIN!",
+      "id": "ms_23b13ca1a372e147",
+      "title": "Stop! That! Train!",
       "start": "2026-06-19T19:30:00-06:00",
       "allDay": false,
       "backgroundColor": "#2E5EAA",
@@ -2449,8 +2265,8 @@
       "end": "2026-06-19T23:30:00-06:00"
     },
     {
-      "id": "ms_5301f6df7b1ff416",
-      "title": "Sie/Saw: eXistenZ",
+      "id": "ms_4c9b9c8e8b31fb7c",
+      "title": "eXistenZ",
       "start": "2026-06-19T21:30:00-06:00",
       "allDay": false,
       "backgroundColor": "#E4572E",
@@ -2587,8 +2403,8 @@
       "end": "2026-06-20T00:00:00-06:00"
     },
     {
-      "id": "ms_68925cfe6d789d8a",
-      "title": "STOP! THAT! TRAIN!",
+      "id": "ms_df9eb1bd63a1b67a",
+      "title": "Stop! That! Train!",
       "start": "2026-06-19T22:00:00-06:00",
       "allDay": false,
       "backgroundColor": "#2E5EAA",
@@ -2996,8 +2812,8 @@
       "end": "2026-06-20T14:06:00-06:00"
     },
     {
-      "id": "ms_c67c94e179557dd4",
-      "title": "Sie/Saw: By Hook or by Crook",
+      "id": "ms_566b1ec327733e0a",
+      "title": "By Hook or by Crook",
       "start": "2026-06-20T12:00:00-06:00",
       "allDay": false,
       "backgroundColor": "#E4572E",
@@ -3201,29 +3017,6 @@
         "note": null
       },
       "end": "2026-06-20T15:45:00-06:00"
-    },
-    {
-      "id": "ms_1ca427089fc39c73",
-      "title": "¡GOLAZO!: 2026 Soccer Watch Parties",
-      "start": "2026-06-20T14:00:00-06:00",
-      "allDay": false,
-      "backgroundColor": "#E4572E",
-      "borderColor": "#E4572E",
-      "extendedProps": {
-        "theater": "sie",
-        "theaterName": "Sie FilmCenter",
-        "screen": "Henderson-Withey Lounge",
-        "fmt": null,
-        "ticketUrl": "https://denverfilm.eventive.org/films/69ced9db0f3c027b9e2694d1",
-        "filmUrl": "https://denverfilm.eventive.org/films/69ced9db0f3c027b9e2694d1",
-        "poster": "https://static-a.eventive.org/1778702744945temp-1778702744925-poster.jpg",
-        "rating": null,
-        "runtime": null,
-        "director": null,
-        "year": 2026,
-        "note": null
-      },
-      "end": "2026-06-20T17:00:00-06:00"
     },
     {
       "id": "ms_e6c3088ea3bfe4fa",
@@ -3824,8 +3617,8 @@
       "end": "2026-06-20T21:30:00-06:00"
     },
     {
-      "id": "ms_fb2545393bd6a66c",
-      "title": "STOP! THAT! TRAIN!",
+      "id": "ms_e4aae9af2a61014f",
+      "title": "Stop! That! Train!",
       "start": "2026-06-20T19:30:00-06:00",
       "allDay": false,
       "backgroundColor": "#2E5EAA",
@@ -3939,8 +3732,8 @@
       "end": "2026-06-20T22:50:00-06:00"
     },
     {
-      "id": "ms_4749b7433969ae6c",
-      "title": "Sie/Saw: eXistenZ",
+      "id": "ms_80c0ee828a3e19d2",
+      "title": "eXistenZ",
       "start": "2026-06-20T21:30:00-06:00",
       "allDay": false,
       "backgroundColor": "#E4572E",
@@ -4100,8 +3893,8 @@
       "end": "2026-06-21T00:00:00-06:00"
     },
     {
-      "id": "ms_caba0e71d2ae14de",
-      "title": "STOP! THAT! TRAIN!",
+      "id": "ms_a7102e4805b01556",
+      "title": "Stop! That! Train!",
       "start": "2026-06-20T22:00:00-06:00",
       "allDay": false,
       "backgroundColor": "#2E5EAA",
@@ -4509,8 +4302,8 @@
       "end": "2026-06-21T14:06:00-06:00"
     },
     {
-      "id": "ms_05ad8352a03540ce",
-      "title": "Sie/Saw: Castration Movie Anthology ii. The Best of Both Worlds",
+      "id": "ms_cdb98840c355284a",
+      "title": "Castration Movie Anthology ii. The Best of Both Worlds",
       "start": "2026-06-21T12:00:00-06:00",
       "allDay": false,
       "backgroundColor": "#E4572E",
@@ -5291,8 +5084,8 @@
       "end": "2026-06-21T21:30:00-06:00"
     },
     {
-      "id": "ms_d9bd33ebc0359d81",
-      "title": "STOP! THAT! TRAIN!",
+      "id": "ms_be05874ec6bc6e5f",
+      "title": "Stop! That! Train!",
       "start": "2026-06-21T19:30:00-06:00",
       "allDay": false,
       "backgroundColor": "#2E5EAA",
@@ -5498,8 +5291,8 @@
       "end": "2026-06-22T00:00:00-06:00"
     },
     {
-      "id": "ms_08cfda6a7013a775",
-      "title": "STOP! THAT! TRAIN!",
+      "id": "ms_f0cc2a1830831c3d",
+      "title": "Stop! That! Train!",
       "start": "2026-06-21T22:00:00-06:00",
       "allDay": false,
       "backgroundColor": "#2E5EAA",
@@ -6346,29 +6139,6 @@
       "end": "2026-06-22T20:28:00-06:00"
     },
     {
-      "id": "ms_f859692b4b3d5370",
-      "title": "AMC Screen Unseen: June 22",
-      "start": "2026-06-22T19:00:00-06:00",
-      "allDay": false,
-      "backgroundColor": "#2E5EAA",
-      "borderColor": "#2E5EAA",
-      "extendedProps": {
-        "theater": "amc",
-        "theaterName": "AMC 9+CO 10",
-        "screen": null,
-        "fmt": "Laser at AMC",
-        "ticketUrl": "https://www.amctheatres.com/showtimes/144327819",
-        "filmUrl": null,
-        "poster": null,
-        "rating": null,
-        "runtime": null,
-        "director": null,
-        "year": null,
-        "note": null
-      },
-      "end": "2026-06-22T21:00:00-06:00"
-    },
-    {
       "id": "ms_265ae0cd9e85553c",
       "title": "Girls Like Girls",
       "start": "2026-06-22T19:00:00-06:00",
@@ -6415,8 +6185,8 @@
       "end": "2026-06-22T21:00:00-06:00"
     },
     {
-      "id": "ms_398ce49594a102b4",
-      "title": "Member Only Sneak Preview: The Invite",
+      "id": "ms_071e2cb07f9ee6da",
+      "title": "The Invite",
       "start": "2026-06-22T19:00:00-06:00",
       "allDay": false,
       "backgroundColor": "#E4572E",
@@ -6461,8 +6231,8 @@
       "end": "2026-06-22T21:15:00-06:00"
     },
     {
-      "id": "ms_1653a071204bb732",
-      "title": "STOP! THAT! TRAIN!",
+      "id": "ms_2b32680ebc78e132",
+      "title": "Stop! That! Train!",
       "start": "2026-06-22T19:30:00-06:00",
       "allDay": false,
       "backgroundColor": "#2E5EAA",
@@ -6645,8 +6415,8 @@
       "end": "2026-06-23T00:00:00-06:00"
     },
     {
-      "id": "ms_a8798d790f915e49",
-      "title": "STOP! THAT! TRAIN!",
+      "id": "ms_d1d37415135bab82",
+      "title": "Stop! That! Train!",
       "start": "2026-06-22T22:00:00-06:00",
       "allDay": false,
       "backgroundColor": "#2E5EAA",
@@ -7607,8 +7377,8 @@
       "end": "2026-06-23T21:00:00-06:00"
     },
     {
-      "id": "ms_55879064c4024e27",
-      "title": "Sie/Saw: The Celluloid Closet",
+      "id": "ms_dea953e298fdee42",
+      "title": "The Celluloid Closet",
       "start": "2026-06-23T19:00:00-06:00",
       "allDay": false,
       "backgroundColor": "#E4572E",
@@ -7653,8 +7423,8 @@
       "end": "2026-06-23T21:15:00-06:00"
     },
     {
-      "id": "ms_3ea8dc1d57c5acfc",
-      "title": "STOP! THAT! TRAIN!",
+      "id": "ms_4e465dcf65c2f0eb",
+      "title": "Stop! That! Train!",
       "start": "2026-06-23T19:30:00-06:00",
       "allDay": false,
       "backgroundColor": "#2E5EAA",
@@ -7837,8 +7607,8 @@
       "end": "2026-06-23T23:30:00-06:00"
     },
     {
-      "id": "ms_fb422cd10902413d",
-      "title": "STOP! THAT! TRAIN!",
+      "id": "ms_771c2f2467dfb5d5",
+      "title": "Stop! That! Train!",
       "start": "2026-06-23T22:00:00-06:00",
       "allDay": false,
       "backgroundColor": "#2E5EAA",
@@ -8844,8 +8614,8 @@
       "end": "2026-06-24T21:00:00-06:00"
     },
     {
-      "id": "ms_a3a251dbf7a1cddd",
-      "title": "Supergirl Fan First Screenings",
+      "id": "ms_edd26504935225df",
+      "title": "Supergirl",
       "start": "2026-06-24T19:00:00-06:00",
       "allDay": false,
       "backgroundColor": "#2E5EAA",
@@ -8913,8 +8683,8 @@
       "end": "2026-06-24T21:15:00-06:00"
     },
     {
-      "id": "ms_93d4b1bfa7f86d72",
-      "title": "STOP! THAT! TRAIN!",
+      "id": "ms_2f3980545de54797",
+      "title": "Stop! That! Train!",
       "start": "2026-06-24T19:30:00-06:00",
       "allDay": false,
       "backgroundColor": "#2E5EAA",
@@ -9097,8 +8867,8 @@
       "end": "2026-06-24T23:45:00-06:00"
     },
     {
-      "id": "ms_9725d02415204f75",
-      "title": "STOP! THAT! TRAIN!",
+      "id": "ms_cd3add9157fa9746",
+      "title": "Stop! That! Train!",
       "start": "2026-06-24T22:00:00-06:00",
       "allDay": false,
       "backgroundColor": "#2E5EAA",
@@ -9554,29 +9324,6 @@
       "end": "2026-06-25T21:15:00-06:00"
     },
     {
-      "id": "ms_a8c2c85064232013",
-      "title": "¡GOLAZO!: 2026 Soccer Watch Parties",
-      "start": "2026-06-25T20:00:00-06:00",
-      "allDay": false,
-      "backgroundColor": "#E4572E",
-      "borderColor": "#E4572E",
-      "extendedProps": {
-        "theater": "sie",
-        "theaterName": "Sie FilmCenter",
-        "screen": "Henderson-Withey Lounge",
-        "fmt": null,
-        "ticketUrl": "https://denverfilm.eventive.org/films/69ced9db0f3c027b9e2694d1",
-        "filmUrl": "https://denverfilm.eventive.org/films/69ced9db0f3c027b9e2694d1",
-        "poster": "https://static-a.eventive.org/1778702744945temp-1778702744925-poster.jpg",
-        "rating": null,
-        "runtime": null,
-        "director": null,
-        "year": 2026,
-        "note": null
-      },
-      "end": "2026-06-25T23:00:00-06:00"
-    },
-    {
       "id": "ms_cbbeeea1e4d7c342",
       "title": "Supergirl",
       "start": "2026-06-25T21:05:00-06:00",
@@ -9738,29 +9485,6 @@
       "end": "2026-06-26T20:00:00-06:00"
     },
     {
-      "id": "ms_17feb7645ad5506b",
-      "title": "¡GOLAZO!: 2026 Soccer Watch Parties",
-      "start": "2026-06-26T18:00:00-06:00",
-      "allDay": false,
-      "backgroundColor": "#E4572E",
-      "borderColor": "#E4572E",
-      "extendedProps": {
-        "theater": "sie",
-        "theaterName": "Sie FilmCenter",
-        "screen": "Henderson-Withey Lounge",
-        "fmt": null,
-        "ticketUrl": "https://denverfilm.eventive.org/films/69ced9db0f3c027b9e2694d1",
-        "filmUrl": "https://denverfilm.eventive.org/films/69ced9db0f3c027b9e2694d1",
-        "poster": "https://static-a.eventive.org/1778702744945temp-1778702744925-poster.jpg",
-        "rating": null,
-        "runtime": null,
-        "director": null,
-        "year": 2026,
-        "note": null
-      },
-      "end": "2026-06-26T21:00:00-06:00"
-    },
-    {
       "id": "ms_e28d02d868c38a5b",
       "title": "Toy Story 5",
       "start": "2026-06-26T19:15:00-06:00",
@@ -9807,8 +9531,8 @@
       "end": "2026-06-26T23:00:00-06:00"
     },
     {
-      "id": "ms_f75264d4d82c4632",
-      "title": "Sie/Saw: Redline",
+      "id": "ms_a7c5640c8f9eb608",
+      "title": "Redline",
       "start": "2026-06-26T21:30:00-06:00",
       "allDay": false,
       "backgroundColor": "#E4572E",
@@ -9920,8 +9644,8 @@
       "end": "2026-06-27T14:00:00-06:00"
     },
     {
-      "id": "ms_2ca8b03a42ce537b",
-      "title": "Sie/Saw: The Celluloid Closet",
+      "id": "ms_15e8ea62766b6e33",
+      "title": "The Celluloid Closet",
       "start": "2026-06-27T12:00:00-06:00",
       "allDay": false,
       "backgroundColor": "#E4572E",
@@ -9987,29 +9711,6 @@
         "note": null
       },
       "end": "2026-06-27T17:00:00-06:00"
-    },
-    {
-      "id": "ms_04cff649826f22c8",
-      "title": "¡GOLAZO!: 2026 Soccer Watch Parties",
-      "start": "2026-06-27T15:00:00-06:00",
-      "allDay": false,
-      "backgroundColor": "#E4572E",
-      "borderColor": "#E4572E",
-      "extendedProps": {
-        "theater": "sie",
-        "theaterName": "Sie FilmCenter",
-        "screen": "Henderson-Withey Lounge",
-        "fmt": null,
-        "ticketUrl": "https://denverfilm.eventive.org/films/69ced9db0f3c027b9e2694d1",
-        "filmUrl": "https://denverfilm.eventive.org/films/69ced9db0f3c027b9e2694d1",
-        "poster": "https://static-a.eventive.org/1778702744945temp-1778702744925-poster.jpg",
-        "rating": null,
-        "runtime": null,
-        "director": null,
-        "year": 2026,
-        "note": null
-      },
-      "end": "2026-06-27T18:00:00-06:00"
     },
     {
       "id": "ms_700bfd9496e384af",
@@ -10104,8 +9805,8 @@
       "end": "2026-06-27T23:00:00-06:00"
     },
     {
-      "id": "ms_81449c8481059742",
-      "title": "Sie/Saw: Redline",
+      "id": "ms_9be2a5c9df7535b2",
+      "title": "Redline",
       "start": "2026-06-27T21:30:00-06:00",
       "allDay": false,
       "backgroundColor": "#E4572E",
@@ -10150,8 +9851,8 @@
       "end": "2026-06-28T00:00:00-06:00"
     },
     {
-      "id": "ms_5e38f8ec39b0ff42",
-      "title": "Rocky Horror Picture Show w/ CO's Elusive Ingredient Shadowcast",
+      "id": "ms_88465d09f6595993",
+      "title": "Rocky Horror Picture Show",
       "start": "2026-06-27T22:30:00-06:00",
       "allDay": false,
       "backgroundColor": "#E4572E",
@@ -10310,8 +10011,8 @@
       "end": "2026-06-28T20:00:00-06:00"
     },
     {
-      "id": "ms_5e3bc9f0d8c9203b",
-      "title": "Sleepaway Camp: The Midnight Mass Experience",
+      "id": "ms_c0d5e751b57c509b",
+      "title": "Sleepaway Camp",
       "start": "2026-06-28T19:00:00-06:00",
       "allDay": false,
       "backgroundColor": "#E4572E",
@@ -10540,31 +10241,8 @@
       "end": "2026-06-29T20:15:00-06:00"
     },
     {
-      "id": "ms_be0d40296a5da05d",
-      "title": "AMC Screen Unseen: June 29",
-      "start": "2026-06-29T19:00:00-06:00",
-      "allDay": false,
-      "backgroundColor": "#2E5EAA",
-      "borderColor": "#2E5EAA",
-      "extendedProps": {
-        "theater": "amc",
-        "theaterName": "AMC 9+CO 10",
-        "screen": null,
-        "fmt": "Laser at AMC",
-        "ticketUrl": "https://www.amctheatres.com/showtimes/144331175",
-        "filmUrl": null,
-        "poster": null,
-        "rating": null,
-        "runtime": null,
-        "director": null,
-        "year": null,
-        "note": null
-      },
-      "end": "2026-06-29T21:00:00-06:00"
-    },
-    {
-      "id": "ms_a458a20586a64b74",
-      "title": "MEMBERS ONLY Staff Pick: Holes",
+      "id": "ms_144d8a3cc0c06c5e",
+      "title": "Holes",
       "start": "2026-06-29T19:00:00-06:00",
       "allDay": false,
       "backgroundColor": "#E4572E",
@@ -10769,8 +10447,8 @@
       "end": "2026-06-30T20:30:00-06:00"
     },
     {
-      "id": "ms_0346f77379415d16",
-      "title": "Sie/Saw: Mikey and Nicky",
+      "id": "ms_1309f4a9326871c0",
+      "title": "Mikey and Nicky",
       "start": "2026-06-30T19:00:00-06:00",
       "allDay": false,
       "backgroundColor": "#E4572E",
@@ -10790,29 +10468,6 @@
         "note": null
       },
       "end": "2026-06-30T20:43:00-06:00"
-    },
-    {
-      "id": "ms_93f68ac2fec78edb",
-      "title": "Tokusatsu Tuesdsay",
-      "start": "2026-06-30T19:00:00-06:00",
-      "allDay": false,
-      "backgroundColor": "#E4572E",
-      "borderColor": "#E4572E",
-      "extendedProps": {
-        "theater": "sie",
-        "theaterName": "Sie FilmCenter",
-        "screen": "Henderson-Withey Lounge",
-        "fmt": null,
-        "ticketUrl": "https://denverfilm.eventive.org/films/6a0f49edbcaf11a19669744f",
-        "filmUrl": "https://denverfilm.eventive.org/films/6a0f49edbcaf11a19669744f",
-        "poster": "https://static-a.eventive.org/1779387134775temp-1779387134767-poster.jpg",
-        "rating": null,
-        "runtime": 90,
-        "director": null,
-        "year": null,
-        "note": null
-      },
-      "end": "2026-06-30T21:00:00-06:00"
     },
     {
       "id": "ms_d9bdaafd74d386c8",
@@ -11159,8 +10814,8 @@
       "end": "2026-07-01T20:00:00-06:00"
     },
     {
-      "id": "ms_d851e047e8b31b48",
-      "title": "Sci-Fi Film Series #1: Jaws",
+      "id": "ms_12bb0f14cea2ddd3",
+      "title": "Jaws",
       "start": "2026-07-01T18:00:00-06:00",
       "allDay": false,
       "backgroundColor": "#E4572E",

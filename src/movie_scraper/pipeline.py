@@ -20,6 +20,31 @@ SCRAPERS = {"sie": SieScraper, "landmark": LandmarkScraper, "amc": AmcScraper}
 WEEKDAYS = {"mon": 0, "tue": 1, "wed": 2, "thu": 3, "fri": 4, "sat": 5, "sun": 6}
 
 
+def normalize_title(title: str, prefixes: list[str] = (), suffixes: list[str] = ()) -> str:
+    """Standardize a film title.
+
+    Strips a leading repertory/event series label (e.g. 'Bleak Week: ') and/or a trailing
+    event descriptor (e.g. ': The Midnight Mass Experience'), then title-cases fully
+    UPPERCASE titles so casing variants merge. Real titles with a colon (e.g.
+    'Star Wars: ...') are preserved because only configured labels are stripped.
+    """
+    t = (title or "").strip()
+    if prefixes:
+        m = re.match(r"^(?:%s)\s*[:–—-]\s*" % "|".join(prefixes), t, re.I)
+        if m:
+            t = t[m.end():].strip()
+    for suffix in suffixes or ():
+        t = re.sub(suffix, "", t, flags=re.I).strip()
+    if t and t.upper() == t and t.lower() != t:   # ALL CAPS -> Title Case
+        t = re.sub(r"[A-Za-z]+", lambda mm: mm.group(0).capitalize(), t)
+    return t or (title or "").strip()
+
+
+def is_non_film(title: str, drop: list[str]) -> bool:
+    """True if the title is a non-film event (mystery screening, watch party, …)."""
+    return bool(drop) and any(re.search(p, title, re.I) for p in drop)
+
+
 def run(config_path: str = "config.toml", only: set[str] | None = None) -> dict:
     cfg = load_config(config_path)
     tz = ZoneInfo(cfg.timezone)
@@ -36,7 +61,14 @@ def run(config_path: str = "config.toml", only: set[str] | None = None) -> dict:
         except Exception:
             log.exception("scraper %s failed — skipping it", key)
 
-    shows = [s for s in collected if _passes(s, cfg)]
+    tcfg = cfg.titles
+    normalized: list[Showtime] = []
+    for s in collected:
+        s.film_title = normalize_title(s.film_title, tcfg.strip_prefixes, tcfg.strip_suffixes)
+        if not is_non_film(s.film_title, tcfg.drop):
+            normalized.append(s)
+
+    shows = [s for s in normalized if _passes(s, cfg)]
     for s in shows:  # give timed events an end so add-to-calendar has a duration
         if not s.all_day and s.end is None:
             s.end = s.start + timedelta(minutes=s.runtime_minutes or cfg.default_runtime_minutes)
@@ -68,12 +100,22 @@ def _passes(s: Showtime, cfg: Config) -> bool:
 
 def _build_feed(cfg: Config, shows: list[Showtime], tz: ZoneInfo) -> dict:
     color_by = {k: t.color for k, t in cfg.theaters.items()}
+    films = sorted({s.film_title for s in shows}, key=str.lower)
+
+    # Resolve the default-selection allowlist to concrete titles; None => select all.
+    patterns = cfg.defaults.films
+    default_films = None
+    if patterns:
+        rx = [re.compile(p, re.I) for p in patterns]
+        default_films = [f for f in films if any(r.search(f) for r in rx)]
+
     return {
         "generated_at": datetime.now(tz).isoformat(),
         "timezone": cfg.timezone,
         "theaters": [{"key": k, "name": t.name, "color": t.color}
                      for k, t in cfg.theaters.items() if t.enabled],
-        "films": sorted({s.film_title for s in shows}, key=str.lower),
+        "films": films,
+        "default_films": default_films,
         "events": [s.to_event(color_by.get(s.theater, "#888888")) for s in shows],
     }
 

@@ -106,6 +106,13 @@ header .updated { margin: 6px 0 0; color: var(--muted); font-size: .8rem; }
 .modal .actions a.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
 .modal .addcal-label { font-size: .78rem; color: var(--muted); margin: 14px 0 4px; text-transform: uppercase; letter-spacing: .04em; }
 .modal .close { margin-left: auto; border: none; background: none; font-size: 1.5rem; line-height: 1; cursor: pointer; color: var(--muted); }
+.modal .showings { list-style: none; margin: 4px 0 0; padding: 0; }
+.modal .showing { display: flex; align-items: center; gap: 9px; padding: 9px 0; border-top: 1px solid var(--line); flex-wrap: wrap; }
+.modal .showing:first-child { border-top: none; }
+.modal .showing-meta { flex: 1 1 150px; font-size: .9rem; }
+.modal .showing-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+.modal .showing-actions a { font-size: .76rem; font-weight: 600; text-decoration: none; border: 1px solid var(--line); border-radius: 7px; padding: 5px 9px; color: var(--ink); white-space: nowrap; }
+.modal .showing-actions a:hover { border-color: var(--accent); color: var(--accent); }
 
 footer { color: var(--muted); font-size: .8rem; margin-top: 22px; text-align: center; }
 footer a { color: var(--accent); }

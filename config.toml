@@ -23,16 +23,18 @@ color = "#2E5EAA"
 location = "denver/amc-9-co-10"   # path under amctheatres.com/movie-theatres/<...>/showtimes
 
 # --- Secondary theaters: scraped but their filter chip starts OFF (default_on = false). ---
-# They occasionally carry indies/70mm/IMAX you can't find at the three above; readers opt in
-# by clicking the chip. `scraper` points at the class to reuse; `location` is its theatre id.
+# They occasionally carry indies/70mm/IMAX you can't find at the three above; readers opt in by
+# clicking the chip. `scraper` reuses another class; `location` is that scraper's theatre id.
+# Chip order on the page follows the order of these blocks.
+# (Regal reads from Fandango — regmovies.com is Cloudflare-gated — so its `location` is a Fandango id.)
 
-[theaters.amc_westminster]
+[theaters.regal_pavilions]
 enabled = true
 default_on = false
-name = "AMC Westminster Promenade 24"
-color = "#6C5CE7"
-scraper = "amc"
-location = "denver/amc-westminster-promenade-24"   # the "denver" metro segment is required
+name = "Regal UA Denver Pavilions"
+color = "#4C9F70"
+scraper = "fandango"
+location = "AAJJG"
 
 [theaters.alamo_sloans]
 enabled = true
@@ -42,8 +44,6 @@ color = "#E0A458"
 scraper = "alamo"
 location = "sloans-lake"
 
-# Regal's own site is Cloudflare-gated (today-only), so these read from Fandango instead —
-# Regal sells via Fandango, whose napi JSON is plain httpx. `location` is the Fandango theater id.
 [theaters.regal_colorado]
 enabled = true
 default_on = false
@@ -52,13 +52,13 @@ color = "#C44E9D"
 scraper = "fandango"
 location = "AAFXW"
 
-[theaters.regal_pavilions]
+[theaters.amc_westminster]
 enabled = true
 default_on = false
-name = "Regal UA Denver Pavilions"
-color = "#4C9F70"
-scraper = "fandango"
-location = "AAJJG"
+name = "AMC Westminster Promenade 24"
+color = "#6C5CE7"
+scraper = "amc"
+location = "denver/amc-westminster-promenade-24"   # the "denver" metro segment is required
 
 # Title standardization: strip repertory/event series labels from the START of a
 # film title (the label plus its ":" / "–" / "-" separator), so e.g.

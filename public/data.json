@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-29T15:40:43.359044-06:00",
+  "generated_at": "2026-06-29T15:50:11.975885-06:00",
   "timezone": "America/Denver",
   "theaters": [
     {
@@ -21,9 +21,9 @@
       "default_on": true
     },
     {
-      "key": "amc_westminster",
-      "name": "AMC Westminster Promenade 24",
-      "color": "#6C5CE7",
+      "key": "regal_pavilions",
+      "name": "Regal UA Denver Pavilions",
+      "color": "#4C9F70",
       "default_on": false
     },
     {
@@ -39,9 +39,9 @@
       "default_on": false
     },
     {
-      "key": "regal_pavilions",
-      "name": "Regal UA Denver Pavilions",
-      "color": "#4C9F70",
+      "key": "amc_westminster",
+      "name": "AMC Westminster Promenade 24",
+      "color": "#6C5CE7",
       "default_on": false
     }
   ],

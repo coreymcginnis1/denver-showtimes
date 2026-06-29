@@ -41,3 +41,8 @@ def landmark_movies():
 @pytest.fixture
 def amc_html():
     return (FIX / "amc_showtimes.html").read_text(encoding="utf-8")
+
+
+@pytest.fixture
+def alamo_schedule():
+    return _load("alamo_schedule.json")

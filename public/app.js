@@ -25,7 +25,10 @@
       .then(function (r) { return r.json(); })
       .then(function (data) {
         DATA = data;
-        enabledTheaters = new Set(data.theaters.map(function (t) { return t.key; }));
+        // Secondary theaters (default_on === false) start unchecked but available to toggle on.
+        enabledTheaters = new Set(data.theaters
+          .filter(function (t) { return t.default_on !== false; })
+          .map(function (t) { return t.key; }));
         // default_films (allowlist) pre-selects a subset; null means select everything.
         enabledFilms = data.default_films ? new Set(data.default_films) : new Set(data.films);
         renderUpdated();
@@ -119,6 +122,7 @@
       chip.className = "chip";
       chip.innerHTML = '<span class="dot" style="background:' + t.color + '"></span>' +
         t.name + ' <span class="count">' + countByTheater(t.key) + "</span>";
+      if (!enabledTheaters.has(t.key)) chip.classList.add("off");   // secondary theaters start off
       chip.addEventListener("click", function () {
         if (enabledTheaters.has(t.key)) enabledTheaters.delete(t.key);
         else enabledTheaters.add(t.key);
@@ -225,7 +229,9 @@
     $("srcLinks").innerHTML =
       '<a href="https://denverfilm.org/sie-filmcenter/" target="_blank" rel="noopener">Sie FilmCenter</a> · ' +
       '<a href="https://www.landmarktheatres.com/theaters/x02ak-landmark-mayan-theatre-denver/" target="_blank" rel="noopener">Landmark Mayan</a> · ' +
-      '<a href="https://www.amctheatres.com/movie-theatres/denver/amc-9-co-10/showtimes" target="_blank" rel="noopener">AMC 9+CO 10</a>';
+      '<a href="https://www.amctheatres.com/movie-theatres/denver/amc-9-co-10/showtimes" target="_blank" rel="noopener">AMC 9+CO 10</a> · ' +
+      '<a href="https://www.amctheatres.com/movie-theatres/denver/amc-westminster-promenade-24/showtimes" target="_blank" rel="noopener">AMC Westminster</a> · ' +
+      '<a href="https://drafthouse.com/denver/theater/sloans-lake" target="_blank" rel="noopener">Alamo Sloans Lake</a>';
   }
 
   // ---- Calendar ------------------------------------------------------------

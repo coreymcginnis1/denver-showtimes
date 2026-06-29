@@ -1,0 +1,2750 @@
+{
+ "data": {
+  "presentations": [
+   {
+    "slug": "disclosure-day",
+    "legacySlug": null,
+    "show": {
+     "slug": "disclosure-day",
+     "legacySlug": null,
+     "title": "Disclosure Day",
+     "vistaHoCodes": [
+      "A000036308",
+      "A000036309",
+      "A000036310",
+      "A000036311"
+     ],
+     "headline": "Spielberg returns to his extra-terrestrial roots",
+     "landscapeHeroImage": {
+      "uri": "https://img-assets.drafthouse.com/images/shows/disclosure-day/DISCLOSURE-DAY_hero.jpg?auto=compress&crop=focalpoint&fit=crop&fp-x=0.4723&fp-y=0.2891&h=1080&q=80&w=1920",
+      "altText": "DISCLOSURE DAY"
+     },
+     "portraitHeroImage": {
+      "uri": "https://img-assets.drafthouse.com/images/shows/disclosure-day/DISCLOSURE-DAY_hero.jpg?auto=compress&crop=focalpoint&fit=crop&fp-x=0.4723&fp-y=0.2891&h=1440&q=80&w=1080",
+      "altText": "DISCLOSURE DAY"
+     },
+     "posterImages": [
+      {
+       "uri": "https://img-assets.drafthouse.com/images/shows/disclosure-day/DISCLOSURE-DAY_sp-poster-copy.jpg?auto=compress&fit=clip&h=1620&q=80&w=1080",
+       "altText": "DISCLOSURE DAY"
+      }
+     ],
+     "certification": "PG-13"
+    },
+    "event": null,
+    "eventType": null,
+    "formatSlugs": [
+     "2d-digital"
+    ],
+    "presentationAttributeSlugs": [
+     "first-run"
+    ],
+    "associatedPresentationSlugs": [],
+    "openingDateClt": null,
+    "openingDateDisplay": null,
+    "superTitle": null,
+    "isHidden": false,
+    "primaryCollectionSlug": null,
+    "isAvailableForPersonalTheater": false
+   },
+   {
+    "slug": "supergirl-2026",
+    "legacySlug": null,
+    "show": {
+     "slug": "supergirl-2026",
+     "legacySlug": null,
+     "title": "Supergirl (2026)",
+     "vistaHoCodes": [
+      "A000036373",
+      "A000036374",
+      "A000036375"
+     ],
+     "headline": "Come for the Kryptonian, stay for puppy Krypto",
+     "landscapeHeroImage": {
+      "uri": "https://img-assets.drafthouse.com/images/shows/supergirl-2026/SUPERGIRL_hero-copy.jpg?auto=compress&crop=focalpoint&fit=crop&fp-x=0.5&fp-y=0.5&h=1080&q=80&w=1920",
+      "altText": "SUPERGIRL (2026)"
+     },
+     "portraitHeroImage": {
+      "uri": "https://img-assets.drafthouse.com/images/shows/supergirl-2026/SUPERGIRL_portrait.jpg?auto=compress&crop=focalpoint&fit=crop&fp-x=0.5&fp-y=0.5&h=1440&q=80&w=1080",
+      "altText": "SUPERGIRL (2026)"
+     },
+     "posterImages": [
+      {
+       "uri": "https://img-assets.drafthouse.com/images/shows/supergirl-2026/SUPERGIRL_sp-poster-copy.jpg?auto=compress&fit=clip&h=1620&q=80&w=1080",
+       "altText": "SUPERGIRL (2026)"
+      }
+     ],
+     "certification": "PG-13"
+    },
+    "event": null,
+    "eventType": null,
+    "formatSlugs": [
+     "2d-digital"
+    ],
+    "presentationAttributeSlugs": [
+     "first-run"
+    ],
+    "associatedPresentationSlugs": [],
+    "openingDateClt": null,
+    "openingDateDisplay": null,
+    "superTitle": null,
+    "isHidden": false,
+    "primaryCollectionSlug": null,
+    "isAvailableForPersonalTheater": false
+   },
+   {
+    "slug": "jackass-best-and-last",
+    "legacySlug": null,
+    "show": {
+     "slug": "jackass-best-and-last",
+     "legacySlug": null,
+     "title": "jackass: best and last",
+     "vistaHoCodes": [
+      "A000036414",
+      "A000036426"
+     ],
+     "headline": "The culmination of 25 years of glorious stupidity",
+     "landscapeHeroImage": {
+      "uri": "https://img-assets.drafthouse.com/images/shows/jackass-best-and-last/JACKASS-BEST-AND-LAST_hero.jpg?auto=compress&crop=focalpoint&fit=crop&fp-x=0.5&fp-y=0.5&h=1080&q=80&w=1920",
+      "altText": "JACKASS: BEST AND LAST"
+     },
+     "portraitHeroImage": {
+      "uri": "https://img-assets.drafthouse.com/images/shows/jackass-best-and-last/JACKASS-BEST-AND-LAST_portrait-copy.jpg?auto=compress&crop=focalpoint&fit=crop&fp-x=0.5&fp-y=0.5&h=1440&q=80&w=1080",
+      "altText": "JACKASS: BEST AND LAST"
+     },
+     "posterImages": [
+      {
+       "uri": "https://img-assets.drafthouse.com/images/shows/jackass-best-and-last/JACKASS-BEST-AND-LAST_sp-poster.jpg?auto=compress&fit=clip&h=1620&q=80&w=1080",
+       "altText": "JACKASS: BEST AND LAST"
+      }
+     ],
+     "certification": "R"
+    },
+    "event": null,
+    "eventType": null,
+    "formatSlugs": [
+     "2d-digital"
+    ],
+    "presentationAttributeSlugs": [
+     "first-run"
+    ],
+    "associatedPresentationSlugs": [],
+    "openingDateClt": null,
+    "openingDateDisplay": null,
+    "superTitle": null,
+    "isHidden": false,
+    "primaryCollectionSlug": null,
+    "isAvailableForPersonalTheater": false
+   },
+   {
+    "slug": "toy-story-5",
+    "legacySlug": null,
+    "show": {
+     "slug": "toy-story-5",
+     "legacySlug": null,
+     "title": "Toy Story 5",
+     "vistaHoCodes": [
+      "A000036295",
+      "A000036296",
+      "A000036297"
+     ],
+     "headline": "Something new has entered the playroom",
+     "landscapeHeroImage": {
+      "uri": "https://img-assets.drafthouse.com/images/shows/toy-story-5/TS5BDUS.jpg?auto=compress&crop=focalpoint&fit=crop&fp-x=0.5316&fp-y=0.312&h=1080&q=80&w=1920",
+      "altText": "TOY STORY 5"
+     },
+     "portraitHeroImage": {
+      "uri": "https://img-assets.drafthouse.com/images/shows/toy-story-5/TS5BDUS.jpg?auto=compress&crop=focalpoint&fit=crop&fp-x=0.5316&fp-y=0.312&h=1440&q=80&w=1080",
+      "altText": "TOY STORY 5"
+     },
+     "posterImages": [
+      {
+       "uri": "https://img-assets.drafthouse.com/images/shows/toy-story-5/TOY-STORY-5_sp-poster-copy.jpg?auto=compress&fit=clip&h=1620&q=80&w=1080",
+       "altText": "TOY STORY 5"
+      }
+     ],
+     "certification": "PG"
+    },
+    "event": null,
+    "eventType": null,
+    "formatSlugs": [
+     "2d-digital"
+    ],
+    "presentationAttributeSlugs": [
+     "family-friendly",
+     "first-run"
+    ],
+    "associatedPresentationSlugs": [],
+    "openingDateClt": null,
+    "openingDateDisplay": null,
+    "superTitle": null,
+    "isHidden": false,
+    "primaryCollectionSlug": null,
+    "isAvailableForPersonalTheater": false
+   },
+   {
+    "slug": "backrooms",
+    "legacySlug": null,
+    "show": {
+     "slug": "backrooms",
+     "legacySlug": null,
+     "title": "Backrooms",
+     "vistaHoCodes": [
+      "A000035993",
+      "A000035994",
+      "A000035998"
+     ],
+     "headline": "A strange doorway appears in the basement of a furniture showroom",
+     "landscapeHeroImage": {
+      "uri": "https://img-assets.drafthouse.com/images/shows/backrooms/BACKROOMS_hero-updated.jpg?auto=compress&crop=focalpoint&fit=crop&fp-x=0.4704&fp-y=0.3541&h=1080&q=80&w=1920",
+      "altText": "BACKROOMS"
+     },
+     "portraitHeroImage": {
+      "uri": "https://img-assets.drafthouse.com/images/shows/backrooms/BACKROOMS_hero-updated.jpg?auto=compress&crop=focalpoint&fit=crop&fp-x=0.4704&fp-y=0.3541&h=1440&q=80&w=1080",
+      "altText": "BACKROOMS"
+     },
+     "posterImages": [
+      {
+       "uri": "https://img-assets.drafthouse.com/images/shows/backrooms/BACKROOMS_sp-poster-updated.jpg?auto=compress&fit=clip&h=1620&q=80&w=1080",
+       "altText": "BACKROOMS"
+      }
+     ],
+     "certification": "R"
+    },
+    "event": null,
+    "eventType": null,
+    "formatSlugs": [
+     "2d-digital"
+    ],
+    "presentationAttributeSlugs": [
+     "first-run"
+    ],
+    "associatedPresentationSlugs": [],
+    "openingDateClt": null,
+    "openingDateDisplay": null,
+    "superTitle": null,
+    "isHidden": false,
+    "primaryCollectionSlug": null,
+    "isAvailableForPersonalTheater": false
+   },
+   {
+    "slug": "leviticus",
+    "legacySlug": null,
+    "show": {
+     "slug": "leviticus",
+     "legacySlug": null,
+     "title": "Leviticus",
+     "vistaHoCodes": [
+      "A000036322",
+      "A000036379"
+     ],
+     "headline": "You always hurt the ones you love",
+     "landscapeHeroImage": {
+      "uri": "https://img-assets.drafthouse.com/images/shows/leviticus/LEVITICUS_hero-copy.jpg?auto=compress&crop=focalpoint&fit=crop&fp-x=0.5&fp-y=0.5&h=1080&q=80&w=1920",
+      "altText": "LEVITICUS"
+     },
+     "portraitHeroImage": {
+      "uri": "https://img-assets.drafthouse.com/images/shows/leviticus/LEVITICUS_portrait.jpg?auto=compress&crop=focalpoint&fit=crop&fp-x=0.5&fp-y=0.5&h=1440&q=80&w=1080",
+      "altText": "LEVITICUS"
+     },
+     "posterImages": [
+      {
+       "uri": "https://img-assets.drafthouse.com/images/shows/leviticus/LEVITICUS_sp-poster.jpg?auto=compress&fit=clip&h=1620&q=80&w=1080",
+       "altText": "LEVITICUS"
+      }
+     ],
+     "certification": "R"
+    },
+    "event": null,
+    "eventType": null,
+    "formatSlugs": [
+     "2d-digital"
+    ],
+    "presentationAttributeSlugs": [
+     "first-run"
+    ],
+    "associatedPresentationSlugs": [],
+    "openingDateClt": null,
+    "openingDateDisplay": null,
+    "superTitle": null,
+    "isHidden": false,
+    "primaryCollectionSlug": null,
+    "isAvailableForPersonalTheater": false
+   },
+   {
+    "slug": "girls-like-girls",
+    "legacySlug": null,
+    "show": {
+     "slug": "girls-like-girls",
+     "legacySlug": null,
+     "title": "Girls Like Girls",
+     "vistaHoCodes": [
+      "A000036288",
+      "A000036289"
+     ],
+     "headline": "Love begins when you let it in",
+     "landscapeHeroImage": {
+      "uri": "https://img-assets.drafthouse.com/images/shows/girls-like-girls/GIRLS-LIKE-GIRLS_hero.jpg?auto=compress&crop=focalpoint&fit=crop&fp-x=0.5&fp-y=0.5&h=1080&q=80&w=1920",
+      "altText": "GIRLS LIKE GIRLS"
+     },
+     "portraitHeroImage": {
+      "uri": "https://img-assets.drafthouse.com/images/shows/girls-like-girls/GIRLS-LIKE-GIRLS_portrait-copy.jpg?auto=compress&crop=focalpoint&fit=crop&fp-x=0.5&fp-y=0.5&h=1440&q=80&w=1080",
+      "altText": "GIRLS LIKE GIRLS"
+     },
+     "posterImages": [
+      {
+       "uri": "https://img-assets.drafthouse.com/images/shows/girls-like-girls/GIRLS-LIKE-GIRLS_sp-poster-copy.jpg?auto=compress&fit=clip&h=1620&q=80&w=1080",
+       "altText": "GIRLS LIKE GIRLS"
+      }
+     ],
+     "certification": "R"
+    },
+    "event": null,
+    "eventType": null,
+    "formatSlugs": [
+     "2d-digital"
+    ],
+    "presentationAttributeSlugs": [
+     "first-run"
+    ],
+    "associatedPresentationSlugs": [],
+    "openingDateClt": null,
+    "openingDateDisplay": null,
+    "superTitle": null,
+    "isHidden": false,
+    "primaryCollectionSlug": null,
+    "isAvailableForPersonalTheater": false
+   },
+   {
+    "slug": "kids-camp-guillermo-del-toros-pinocchio",
+    "legacySlug": null,
+    "show": {
+     "slug": "guillermo-del-toros-pinocchio",
+     "legacySlug": null,
+     "title": "Guillermo del Toro's Pinocchio",
+     "vistaHoCodes": [
+      "A000027887"
+     ],
+     "headline": "A reimagining of the classic tale about a wooden boy",
+     "landscapeHeroImage": {
+      "uri": "https://img-assets.drafthouse.com/images/shows/guillermo-del-toros-pinocchio/GUILLERMO-DEL-TOROS-PINOCCHIO_hero.jpg?auto=compress&crop=focalpoint&fit=crop&fp-x=0.4753&fp-y=0.3801&h=1080&q=80&w=1920",
+      "altText": "Guillermo del Toro's Pinocchio"
+     },
+     "portraitHeroImage": {
+      "uri": "https://img-assets.drafthouse.com/images/shows/guillermo-del-toros-pinocchio/GUILLERMO-DEL-TOROS-PINOCCHIO_hero.jpg?auto=compress&crop=focalpoint&fit=crop&fp-x=0.4753&fp-y=0.3801&h=1440&q=80&w=1080",
+      "altText": "Guillermo del Toro's Pinocchio"
+     },
+     "posterImages": [
+      {
+       "uri": "https://img-assets.drafthouse.com/images/shows/guillermo-del-toros-pinocchio/GUILLERMO-DEL-TOROS-PINOCCHIO_sp-poster.jpg?auto=compress&fit=clip&h=1620&q=80&w=1080",
+       "altText": "Guillermo del Toro's Pinocchio movie poster"
+      }
+     ],
+     "certification": "PG"
+    },
+    "event": {
+     "slug": "kids-camp-guillermo-del-toros-pinocchio",
+     "title": "<show-title>Guillermo del Toro's Pinocchio</show-title>",
+     "eventTypeSlug": "special-event",
+     "eventTypeTitleOverride": null,
+     "headline": "A reimagining of the classic tale about a wooden boy",
+     "description": "<p>This show is part of our <a href=\"https://drafthouse.com/movies/alamo-kids-camp\"><strong>Kids Camp series</strong></a> – our summer program dedicated to providing affordable family movies for maximum family fun. Discounted tickets for everyone – little kids, big kids, and grownup kids – making it easy to bring your budding cinephile to the movies.</p>",
+     "vistaHoCodes": [
+      "A000036247"
+     ],
+     "cinemaSessionIds": [],
+     "landscapeHeroImage": null,
+     "portraitHeroImage": null,
+     "trailer": null,
+     "posterImage": null,
+     "additionalStillImages": [],
+     "showSlug": "guillermo-del-toros-pinocchio",
+     "brandPriority": "BETTER",
+     "certification": "PG",
+     "runtimeMinutes": 116,
+     "includeShowDescription": true,
+     "useDeluxeDescription": false,
+     "contentBlocks": []
+    },
+    "eventType": {
+     "id": "1869",
+     "slug": "special-event",
+     "title": "Special Event",
+     "headline": "For movie lovers, by movie lovers",
+     "description": "<p>Whether it’s a movie-inspired feast, an interactive party, or a screening paired with a live performance, we love sharing the movies we love in new and exciting ways.</p>",
+     "titleTreatmentImage": {
+      "uri": "https://img-assets.drafthouse.com/images/categories/special-event/SpecialEvent_2020.png?auto=compress&fit=clip&q=80",
+      "altText": "Special Event 2020"
+     },
+     "heroImage": {
+      "uri": "https://img-assets.drafthouse.com/images/categories/special-event/EventCategory_Web_Hero_SpecialEvent_1920x1080.png?auto=compress&crop=focalpoint&fit=crop&fp-x=0.5&fp-y=0.5&h=1080&q=80&w=1920",
+      "altText": "Special Event"
+     },
+     "titleCardImage": {
+      "uri": "https://img-assets.drafthouse.com/images/categories/special-event/EventCategory_Web_Hero_SpecialEvent_1920x1080_2026-02-10-153941_ieqb.png?auto=compress&crop=focalpoint&fit=crop&fp-x=0.5&fp-y=0.5&h=1080&q=80&w=1920",
+      "altText": "Event Category Web Hero Special Event 1920x1080"
+     },
+     "collectionSlug": "special-event"
+    },
+    "formatSlugs": [
+     "2d-digital"
+    ],
+    "presentationAttributeSlugs": [
+     "alamo-exclusive",
+     "family-friendly"
+    ],
+    "associatedPresentationSlugs": [],
+    "openingDateClt": null,
+    "openingDateDisplay": null,
+    "superTitle": {
+     "superTitle": "Kids Camp",
+     "type": "COLLECTION",
+     "slug": "alamo-kids-camp"
+    },
+    "isHidden": false,
+    "primaryCollectionSlug": "alamo-kids-camp",
+    "isAvailableForPersonalTheater": false
+   },
+   {
+    "slug": "godzilla-vs-biollante",
+    "legacySlug": null,
+    "show": {
+     "slug": "godzilla-vs-biollante",
+     "legacySlug": null,
+     "title": "Godzilla vs. Biollante",
+     "vistaHoCodes": [
+      "A000025446"
+     ],
+     "headline": "Godzilla and a human's cells are fused together to create a biological terror",
+     "landscapeHeroImage": {
+      "uri": "https://img-assets.drafthouse.com/images/shows/godzilla-vs-biollante/GODZILLA-VS-BIOLLANTE_hero-copy.jpg?auto=compress&crop=focalpoint&fit=crop&fp-x=0.5&fp-y=0.5&h=1080&q=80&w=1920",
+      "altText": "GODZILLA VS. BIOLLANTE"
+     },
+     "portraitHeroImage": {
+      "uri": "https://img-assets.drafthouse.com/images/shows/godzilla-vs-biollante/GODZILLA-VS-BIOLLANTE_portrait.jpg?auto=compress&crop=focalpoint&fit=crop&fp-x=0.5&fp-y=0.5&h=1440&q=80&w=1080",
+      "altText": "GODZILLA VS. BIOLLANTE"
+     },
+     "posterImages": [
+      {
+       "uri": "https://img-assets.drafthouse.com/images/shows/godzilla-vs-biollante/GODZILLA-VS-BIOLLANTE_sp-poster-copy.jpg?auto=compress&fit=clip&h=1620&q=80&w=1080",
+       "altText": "GODZILLA VS. BIOLLANTE"
+      }
+     ],
+     "certification": "NR"
+    },
+    "event": null,
+    "eventType": null,
+    "formatSlugs": [
+     "2d-digital"
+    ],
+    "presentationAttributeSlugs": [
+     "alamo-exclusive"
+    ],
+    "associatedPresentationSlugs": [],
+    "openingDateClt": null,
+    "openingDateDisplay": null,
+    "superTitle": null,
+    "isHidden": false,
+    "primaryCollectionSlug": null,
+    "isAvailableForPersonalTheater": false
+   },
+   {
+    "slug": "guest-selects-vengeance-is-mine-1984",
+    "legacySlug": null,
+    "show": {
+     "slug": "vengeance-is-mine-1984",
+     "legacySlug": null,
+     "title": "Vengeance is Mine (1984)",
+     "vistaHoCodes": [],
+     "headline": "A woman makes a new friend while trying to close old family wounds back home",
+     "landscapeHeroImage": {
+      "uri": "https://img-assets.drafthouse.com/images/shows/vengeance-is-mine-1984/VENGEANCE-IS-MINE-1984_hero-copy.jpg?auto=compress&crop=focalpoint&fit=crop&fp-x=0.5&fp-y=0.5&h=1080&q=80&w=1920",
+      "altText": "VENGEANCE IS MINE (1984)"
+     },
+     "portraitHeroImage": {
+      "uri": "https://img-assets.drafthouse.com/images/shows/vengeance-is-mine-1984/VENGEANCE-IS-MINE-1984_portrait.jpg?auto=compress&crop=focalpoint&fit=crop&fp-x=0.5&fp-y=0.5&h=1440&q=80&w=1080",
+      "altText": "VENGEANCE IS MINE (1984)"
+     },
+     "posterImages": [
+      {
+       "uri": "https://img-assets.drafthouse.com/images/shows/vengeance-is-mine-1984/VENGEANCE-IS-MINE-1984_sp-poster-copy.jpg?auto=compress&fit=clip&h=1620&q=80&w=1080",
+       "altText": "VENGEANCE IS MINE (1984)"
+      }
+     ],
+     "certification": "NR"
+    },
+    "event": {
+     "slug": "guest-selects-vengeance-is-mine-1984",
+     "title": "<show-title>Vengeance is Mine (1984)</show-title>",
+     "eventTypeSlug": "special-event",
+     "eventTypeTitleOverride": null,
+     "headline": "Programmed by John Early ahead of his new film MADDIE'S SECRET",
+     "description": "<p>VENGEANCE IS MINE (1984) is presented as part of our John Early Guest Selects for his new film, <a href=\"http://drafthouse.com/show/maddies-secret\"><strong>MADDIE'S SECRET</strong></a>.<em><br /></em></p>\n<p><em>This was a movie that was recommended to me as I was writing MADDIE'S SECRET and was looking out for melodramas. Michael Roemer, I think, has had a resurgence lately. A few people told me I needed to see this movie. I don't think they realized how relevant it was to me, because there is a mother-daughter relationship in this movie that is so disturbing in a way that you cannot put your finger on. MADDIE'S SECRET is so much more blunt and overtly comedic than VENGEANCE IS MINE, but the mother-daughter relationship in this movie, the way the mother haunts the whole movie... It seems to have the tone of a melodrama, but it has a very modest scope. It may have been a low-budget indie. That was really inspiring to me – how do you achieve the feeling of an older form with none of the money?</em> (John Early)</p>",
+     "vistaHoCodes": [
+      "A000036454"
+     ],
+     "cinemaSessionIds": [],
+     "landscapeHeroImage": null,
+     "portraitHeroImage": null,
+     "trailer": null,
+     "posterImage": null,
+     "additionalStillImages": [],
+     "showSlug": "vengeance-is-mine-1984",
+     "brandPriority": "BEST",
+     "certification": "NR",
+     "runtimeMinutes": 123,
+     "includeShowDescription": true,
+     "useDeluxeDescription": false,
+     "contentBlocks": []
+    },
+    "eventType": {
+     "id": "1869",
+     "slug": "special-event",
+     "title": "Special Event",
+     "headline": "For movie lovers, by movie lovers",
+     "description": "<p>Whether it’s a movie-inspired feast, an interactive party, or a screening paired with a live performance, we love sharing the movies we love in new and exciting ways.</p>",
+     "titleTreatmentImage": {
+      "uri": "https://img-assets.drafthouse.com/images/categories/special-event/SpecialEvent_2020.png?auto=compress&fit=clip&q=80",
+      "altText": "Special Event 2020"
+     },
+     "heroImage": {
+      "uri": "https://img-assets.drafthouse.com/images/categories/special-event/EventCategory_Web_Hero_SpecialEvent_1920x1080.png?auto=compress&crop=focalpoint&fit=crop&fp-x=0.5&fp-y=0.5&h=1080&q=80&w=1920",
+      "altText": "Special Event"
+     },
+     "titleCardImage": {
+      "uri": "https://img-assets.drafthouse.com/images/categories/special-event/EventCategory_Web_Hero_SpecialEvent_1920x1080_2026-02-10-153941_ieqb.png?auto=compress&crop=focalpoint&fit=crop&fp-x=0.5&fp-y=0.5&h=1080&q=80&w=1920",
+      "altText": "Event Category Web Hero Special Event 1920x1080"
+     },
+     "collectionSlug": "special-event"
+    },
+    "formatSlugs": [
+     "2d-digital"
+    ],
+    "presentationAttributeSlugs": [
+     "alamo-exclusive"
+    ],
+    "associatedPresentationSlugs": [],
+    "openingDateClt": null,
+    "openingDateDisplay": null,
+    "superTitle": {
+     "superTitle": "Guest Selects",
+     "type": "COLLECTION",
+     "slug": "guest-selects"
+    },
+    "isHidden": false,
+    "primaryCollectionSlug": "guest-selects",
+    "isAvailableForPersonalTheater": false
+   },
+   {
+    "slug": "obsession-2026",
+    "legacySlug": null,
+    "show": {
+     "slug": "obsession-2026",
+     "legacySlug": null,
+     "title": "Obsession (2026)",
+     "vistaHoCodes": [
+      "A000036047",
+      "A000036101",
+      "A000036121"
+     ],
+     "headline": "Be careful who you wish for",
+     "landscapeHeroImage": {
+      "uri": "https://img-assets.drafthouse.com/images/shows/obsession-2026/OBSESSION_hero2-copy.jpg?auto=compress&crop=focalpoint&fit=crop&fp-x=0.5375&fp-y=0.3383&h=1080&q=80&w=1920",
+      "altText": "OBSESSION (2026)"
+     },
+     "portraitHeroImage": {
+      "uri": "https://img-assets.drafthouse.com/images/shows/obsession-2026/OBSESSION_portrait.jpg?auto=compress&crop=focalpoint&fit=crop&fp-x=0.5&fp-y=0.5&h=1440&q=80&w=1080",
+      "altText": "OBSESSION"
+     },
+     "posterImages": [
+      {
+       "uri": "https://img-assets.drafthouse.com/images/shows/obsession-2026/OBSESSION_sp-poster-updated.jpg?auto=compress&fit=clip&h=1620&q=80&w=1080",
+       "altText": "OBSESSION (2026)"
+      }
+     ],
+     "certification": "R"
+    },
+    "event": null,
+    "eventType": null,
+    "formatSlugs": [
+     "2d-digital"
+    ],
+    "presentationAttributeSlugs": [
+     "first-run"
+    ],
+    "associatedPresentationSlugs": [],
+    "openingDateClt": null,
+    "openingDateDisplay": null,
+    "superTitle": {
+     "superTitle": "Drafthouse Recommends",
+     "type": "COLLECTION",
+     "slug": "drafthouse-recommends"
+    },
+    "isHidden": false,
+    "primaryCollectionSlug": "drafthouse-recommends",
+    "isAvailableForPersonalTheater": false
+   }
+  ],
+  "relatedPresentations": [],
+  "market": [
+   {
+    "id": "0400",
+    "slug": "denver",
+    "name": "Denver Area",
+    "status": "OPEN",
+    "subscriptionProgramStatus": "OPEN",
+    "isOpenAccessSeasonPassMarket": true,
+    "isOpenForBusiness": true,
+    "isFoodPreorderRequired": false,
+    "foodPreorderAvailability": "NONE",
+    "isMaxSafetyOperation": false,
+    "cinemas": [
+     {
+      "id": "0402",
+      "loyaltyCinemaId": "33",
+      "slug": "sloans-lake",
+      "name": "Sloans Lake",
+      "status": "OPEN",
+      "timeZoneName": "America/Denver",
+      "latitude": 39.7409,
+      "longitude": -105.0425,
+      "street1": "4255 W. Colfax Ave.",
+      "street2": null,
+      "city": "Denver",
+      "state": "CO",
+      "postalCode": "80204",
+      "phone": "720-577-4720",
+      "email": "grace.summerville@drafthouse.com",
+      "heroImageUrl": "https://crafthouse-assets-prod.s3.amazonaws.com/images/venues/sloans-lake/Copy-of-AB5A8174.jpg",
+      "googleMapsUrl": "https://www.google.com/maps/place/Alamo+Drafthouse+Sloans+Lake/@39.7443835,-105.0474525,16z/data=!4m8!1m2!2m1!1salamo+drafthouse+sloans+lake!3m4!1s0x0:0x47bea7d058fef152!8m2!3d39.74081!4d-105.0425255",
+      "appleMapsUrl": "https://maps.apple.com/?address=4255%20W%20Colfax%20Ave,%20Denver,%20CO%20%2080204,%20United%20States&auid=7372549213454154590&ll=39.740604,-105.042288&lsp=9902&q=Alamo%20Drafthouse%20Cinema%20-%20Sloans%20Lake&t=r",
+      "attachedBar": {
+       "name": "BarFly - Sloans Lake",
+       "websiteUrl": "https://drafthouse.com/denver/theater-bar/sloans-lake"
+      },
+      "isClosedCaptioningAvailable": true,
+      "isDescriptiveAudioAvailable": true,
+      "isAssistedListeningAvailable": true,
+      "menus": {
+       "theaterMenuPdf": "https://crafthouse-assets-prod.s3.amazonaws.com/files/venues/sloans-lake/ADC_CoreMenu_Tier2_Denver_Digital_3-9-26.pdf"
+      },
+      "foodPreorderAvailability": "NONE",
+      "parkingNotice": "<p>Directions & Parking<br />https://drafthouse.com/denver/theater/sloans-lake#theater-directions</p>",
+      "postPurchaseNotice": {
+       "title": "Directions & Parking",
+       "description": "https://drafthouse.com/denver/theater/sloans-lake#theater-directions"
+      },
+      "isWageNoticeDisplayed": false,
+      "adyenPaymentEnabled": false
+     },
+     {
+      "id": "0403",
+      "loyaltyCinemaId": "47",
+      "slug": "westminster",
+      "name": "Westminster",
+      "status": "OPEN",
+      "timeZoneName": "America/Denver",
+      "latitude": 39.858574,
+      "longitude": -105.062007,
+      "street1": "8905 Westminster Blvd",
+      "street2": null,
+      "city": "Westminster",
+      "state": "CO",
+      "postalCode": "80031",
+      "phone": "303-731-3330",
+      "email": "",
+      "heroImageUrl": "https://crafthouse-assets-prod.s3.amazonaws.com/images/venues/westminster/Westminster-External.jpg",
+      "googleMapsUrl": "https://goo.gl/maps/BzeJU7vwob7dPKi4A",
+      "appleMapsUrl": null,
+      "attachedBar": {
+       "name": "Pandora's Box - Westminster",
+       "websiteUrl": "https://drafthouse.com/denver/theater-bar/westminster"
+      },
+      "isClosedCaptioningAvailable": true,
+      "isDescriptiveAudioAvailable": true,
+      "isAssistedListeningAvailable": true,
+      "menus": {
+       "theaterMenuPdf": "https://crafthouse-assets-prod.s3.amazonaws.com/files/venues/westminster/ADC_CoreMenu_Tier2_Denver_Digital_3-9-26.pdf"
+      },
+      "foodPreorderAvailability": "NONE",
+      "parkingNotice": "<p>Directions & Parking<br />https://drafthouse.com/denver/theater/westminster#theater-directions</p>",
+      "postPurchaseNotice": {
+       "title": "Directions & Parking",
+       "description": "https://drafthouse.com/denver/theater/westminster#theater-directions"
+      },
+      "isWageNoticeDisplayed": false,
+      "adyenPaymentEnabled": false
+     },
+     {
+      "id": "0401",
+      "loyaltyCinemaId": "14",
+      "slug": "littleton",
+      "name": "Littleton",
+      "status": "OPEN",
+      "timeZoneName": "America/Denver",
+      "latitude": 39.5837,
+      "longitude": -105.0249,
+      "street1": "7301 S Santa Fe Dr.",
+      "street2": "Unit #850",
+      "city": "Littleton",
+      "state": "CO",
+      "postalCode": "80120",
+      "phone": "720-588-4107",
+      "email": "comments.littleton@drafthouse.com",
+      "heroImageUrl": "https://crafthouse-assets-prod.s3.amazonaws.com/images/venues/littleton/Copy-of-Alamo-Drafthouse-Littleton.jpg",
+      "googleMapsUrl": "https://www.google.com/maps/place/Alamo+Drafthouse+Cinema/@39.5837948,-105.0270721,17z/data=!4m12!1m6!3m5!1s0x876c8033349d2289:0x6771f223911c73f3!2sAlamo+Drafthouse+Cinema!8m2!3d39.5837907!4d-105.0248834!3m4!1s0x876c8033349d2289:0x6771f223911c73f3!8m2!3d3",
+      "appleMapsUrl": "https://maps.apple.com/?address=7301%20S%20Santa%20Fe%20Dr,%20Littleton,%20CO%20%2080120,%20United%20States&auid=9011421116280070564&ll=39.583747,-105.024834&lsp=9902&q=Alamo%20Drafthouse%20Cinema%20-%20Littleton&t=r",
+      "attachedBar": {
+       "name": "Glass Half Full Taproom - Littleton",
+       "websiteUrl": "https://drafthouse.com/denver/theater-bar/littleton"
+      },
+      "isClosedCaptioningAvailable": true,
+      "isDescriptiveAudioAvailable": true,
+      "isAssistedListeningAvailable": true,
+      "menus": {
+       "theaterMenuPdf": "https://crafthouse-assets-prod.s3.amazonaws.com/files/venues/littleton/ADC_CoreMenu_Tier2_Denver_Digital_3-9-26.pdf"
+      },
+      "foodPreorderAvailability": "NONE",
+      "parkingNotice": "<p>Directions & Parking<br />https://drafthouse.com/denver/theater/littleton#theater-directions</p>",
+      "postPurchaseNotice": {
+       "title": "Directions & Parking",
+       "description": "https://drafthouse.com/denver/theater/littleton#theater-directions"
+      },
+      "isWageNoticeDisplayed": false,
+      "adyenPaymentEnabled": false
+     }
+    ],
+    "marketStrings": [
+     {
+      "key": "closedCaptioning",
+      "value": "The personal closed captioning device displays feature film dialogue and other audio in the form of English-language text for individuals who are deaf or hard of hearing."
+     },
+     {
+      "key": "descriptiveAudio",
+      "value": "The descriptive audio headset provides individuals who are blind or have low vision with an English-language narration of the details of the feature presentation that can't be understood by the soundtrack alone."
+     },
+     {
+      "key": "assistedListening",
+      "value": "Upon request at the box office, we provide assistive listening headsets with amplified audio for those individuals who are hard of hearing. For guests who prefer to use their own hearing aids, neck loops, or cochlear implants, our assistive listening headsets have a 3.5mm headphone jack to connect to those devices."
+     },
+     {
+      "key": "latePolicy",
+      "value": "In order to ensure the highest quality experience for all guests, you may not enter a movie after it has started. We’d love to see you up to 30 minutes early. Running late? No worries, we will happily exchange your ticket for a different showtime or a raincheck to a future show."
+     }
+    ]
+   }
+  ],
+  "sessions": [
+   {
+    "cinemaId": "0402",
+    "sessionId": "115594",
+    "presentationSlug": "godzilla-vs-biollante",
+    "legacySlug": "godzilla-vs.-biollante",
+    "status": "PAST",
+    "businessDateClt": "2026-06-29",
+    "showTimeClt": "2026-06-29T12:00:00",
+    "cinemaTimeZoneName": "America/Denver",
+    "showTimeUtc": "2026-06-29T18:00:00",
+    "ticketTypesLoyaltyCount": 7,
+    "ticketTypesVoucherCount": 3,
+    "ticketTypesNormalCount": 2,
+    "reservedSeating": true,
+    "screenNumber": "3",
+    "formatSlug": "2d-digital",
+    "isClosedCaptioningAvailable": false,
+    "isDescriptiveAudioAvailable": false,
+    "isAssistedListeningAvailable": false,
+    "sessionAttributeSlugs": [
+     "Digital"
+    ],
+    "recognitionIds": [
+     "0",
+     "321",
+     "322",
+     "323",
+     "324",
+     "383",
+     "384",
+     "385",
+     "386",
+     "387",
+     "372",
+     "373",
+     "374",
+     "375",
+     "376",
+     "389",
+     "390",
+     "439",
+     "441"
+    ],
+    "agePolicySlug": "rated-pg-13",
+    "isHidden": false,
+    "ticketingExperience": "DEFAULT"
+   },
+   {
+    "cinemaId": "0402",
+    "sessionId": "115602",
+    "presentationSlug": "disclosure-day",
+    "legacySlug": "disclosure-day",
+    "status": "ONSALE",
+    "businessDateClt": "2026-06-29",
+    "showTimeClt": "2026-06-29T12:15:00",
+    "cinemaTimeZoneName": "America/Denver",
+    "showTimeUtc": "2026-06-29T18:15:00",
+    "ticketTypesLoyaltyCount": 7,
+    "ticketTypesVoucherCount": 3,
+    "ticketTypesNormalCount": 2,
+    "reservedSeating": true,
+    "screenNumber": "5",
+    "formatSlug": "2d-digital",
+    "isClosedCaptioningAvailable": true,
+    "isDescriptiveAudioAvailable": false,
+    "isAssistedListeningAvailable": false,
+    "sessionAttributeSlugs": [
+     "Digital"
+    ],
+    "recognitionIds": [
+     "0",
+     "321",
+     "322",
+     "323",
+     "324",
+     "383",
+     "384",
+     "385",
+     "386",
+     "387",
+     "372",
+     "373",
+     "374",
+     "375",
+     "376",
+     "389",
+     "390",
+     "439",
+     "441"
+    ],
+    "agePolicySlug": "rated-pg-13",
+    "isHidden": false,
+    "ticketingExperience": "DEFAULT"
+   },
+   {
+    "cinemaId": "0402",
+    "sessionId": "115603",
+    "presentationSlug": "toy-story-5",
+    "legacySlug": "toy-story-5",
+    "status": "ONSALE",
+    "businessDateClt": "2026-06-29",
+    "showTimeClt": "2026-06-29T12:15:00",
+    "cinemaTimeZoneName": "America/Denver",
+    "showTimeUtc": "2026-06-29T18:15:00",
+    "ticketTypesLoyaltyCount": 7,
+    "ticketTypesVoucherCount": 3,
+    "ticketTypesNormalCount": 2,
+    "reservedSeating": true,
+    "screenNumber": "1",
+    "formatSlug": "2d-digital",
+    "isClosedCaptioningAvailable": true,
+    "isDescriptiveAudioAvailable": false,
+    "isAssistedListeningAvailable": false,
+    "sessionAttributeSlugs": [
+     "Digital",
+     "KF"
+    ],
+    "recognitionIds": [
+     "0",
+     "321",
+     "322",
+     "323",
+     "324",
+     "383",
+     "384",
+     "385",
+     "386",
+     "387",
+     "372",
+     "373",
+     "374",
+     "375",
+     "376",
+     "389",
+     "390",
+     "439",
+     "441"
+    ],
+    "agePolicySlug": "rated-pg",
+    "isHidden": false,
+    "ticketingExperience": "KID_FRIENDLY"
+   },
+   {
+    "cinemaId": "0402",
+    "sessionId": "115587",
+    "presentationSlug": "girls-like-girls",
+    "legacySlug": "girls-like-girls",
+    "status": "ONSALE",
+    "businessDateClt": "2026-06-29",
+    "showTimeClt": "2026-06-29T12:45:00",
+    "cinemaTimeZoneName": "America/Denver",
+    "showTimeUtc": "2026-06-29T18:45:00",
+    "ticketTypesLoyaltyCount": 7,
+    "ticketTypesVoucherCount": 3,
+    "ticketTypesNormalCount": 2,
+    "reservedSeating": true,
+    "screenNumber": "8",
+    "formatSlug": "2d-digital",
+    "isClosedCaptioningAvailable": false,
+    "isDescriptiveAudioAvailable": false,
+    "isAssistedListeningAvailable": false,
+    "sessionAttributeSlugs": [
+     "Digital"
+    ],
+    "recognitionIds": [
+     "0",
+     "321",
+     "322",
+     "323",
+     "324",
+     "383",
+     "384",
+     "385",
+     "386",
+     "387",
+     "372",
+     "373",
+     "374",
+     "375",
+     "376",
+     "389",
+     "390",
+     "439",
+     "441"
+    ],
+    "agePolicySlug": "rated-r",
+    "isHidden": false,
+    "ticketingExperience": "DEFAULT"
+   },
+   {
+    "cinemaId": "0402",
+    "sessionId": "115575",
+    "presentationSlug": "backrooms",
+    "legacySlug": "backrooms",
+    "status": "ONSALE",
+    "businessDateClt": "2026-06-29",
+    "showTimeClt": "2026-06-29T13:00:00",
+    "cinemaTimeZoneName": "America/Denver",
+    "showTimeUtc": "2026-06-29T19:00:00",
+    "ticketTypesLoyaltyCount": 7,
+    "ticketTypesVoucherCount": 3,
+    "ticketTypesNormalCount": 2,
+    "reservedSeating": true,
+    "screenNumber": "7",
+    "formatSlug": "2d-digital",
+    "isClosedCaptioningAvailable": false,
+    "isDescriptiveAudioAvailable": false,
+    "isAssistedListeningAvailable": false,
+    "sessionAttributeSlugs": [
+     "Digital"
+    ],
+    "recognitionIds": [
+     "0",
+     "321",
+     "322",
+     "323",
+     "324",
+     "383",
+     "384",
+     "385",
+     "386",
+     "387",
+     "372",
+     "373",
+     "374",
+     "375",
+     "376",
+     "389",
+     "390",
+     "439",
+     "441"
+    ],
+    "agePolicySlug": "rated-r",
+    "isHidden": false,
+    "ticketingExperience": "DEFAULT"
+   },
+   {
+    "cinemaId": "0402",
+    "sessionId": "115604",
+    "presentationSlug": "supergirl-2026",
+    "legacySlug": "supergirl-2026",
+    "status": "ONSALE",
+    "businessDateClt": "2026-06-29",
+    "showTimeClt": "2026-06-29T13:00:00",
+    "cinemaTimeZoneName": "America/Denver",
+    "showTimeUtc": "2026-06-29T19:00:00",
+    "ticketTypesLoyaltyCount": 7,
+    "ticketTypesVoucherCount": 3,
+    "ticketTypesNormalCount": 2,
+    "reservedSeating": true,
+    "screenNumber": "4",
+    "formatSlug": "2d-digital",
+    "isClosedCaptioningAvailable": false,
+    "isDescriptiveAudioAvailable": false,
+    "isAssistedListeningAvailable": false,
+    "sessionAttributeSlugs": [
+     "Digital"
+    ],
+    "recognitionIds": [
+     "0",
+     "321",
+     "322",
+     "323",
+     "324",
+     "383",
+     "384",
+     "385",
+     "386",
+     "387",
+     "372",
+     "373",
+     "374",
+     "375",
+     "376",
+     "389",
+     "390",
+     "439",
+     "441"
+    ],
+    "agePolicySlug": "rated-pg-13",
+    "isHidden": false,
+    "ticketingExperience": "DEFAULT"
+   },
+   {
+    "cinemaId": "0402",
+    "sessionId": "115605",
+    "presentationSlug": "leviticus",
+    "legacySlug": "leviticus",
+    "status": "ONSALE",
+    "businessDateClt": "2026-06-29",
+    "showTimeClt": "2026-06-29T14:00:00",
+    "cinemaTimeZoneName": "America/Denver",
+    "showTimeUtc": "2026-06-29T20:00:00",
+    "ticketTypesLoyaltyCount": 7,
+    "ticketTypesVoucherCount": 3,
+    "ticketTypesNormalCount": 2,
+    "reservedSeating": true,
+    "screenNumber": "6",
+    "formatSlug": "2d-digital",
+    "isClosedCaptioningAvailable": true,
+    "isDescriptiveAudioAvailable": false,
+    "isAssistedListeningAvailable": false,
+    "sessionAttributeSlugs": [
+     "Digital"
+    ],
+    "recognitionIds": [
+     "0",
+     "321",
+     "322",
+     "323",
+     "324",
+     "383",
+     "384",
+     "385",
+     "386",
+     "387",
+     "372",
+     "373",
+     "374",
+     "375",
+     "376",
+     "389",
+     "390",
+     "439",
+     "441"
+    ],
+    "agePolicySlug": "rated-r",
+    "isHidden": false,
+    "ticketingExperience": "DEFAULT"
+   },
+   {
+    "cinemaId": "0402",
+    "sessionId": "115593",
+    "presentationSlug": "jackass-best-and-last",
+    "legacySlug": "jackass-best-and-last",
+    "status": "ONSALE",
+    "businessDateClt": "2026-06-29",
+    "showTimeClt": "2026-06-29T14:30:00",
+    "cinemaTimeZoneName": "America/Denver",
+    "showTimeUtc": "2026-06-29T20:30:00",
+    "ticketTypesLoyaltyCount": 7,
+    "ticketTypesVoucherCount": 3,
+    "ticketTypesNormalCount": 2,
+    "reservedSeating": true,
+    "screenNumber": "2",
+    "formatSlug": "2d-digital",
+    "isClosedCaptioningAvailable": true,
+    "isDescriptiveAudioAvailable": false,
+    "isAssistedListeningAvailable": false,
+    "sessionAttributeSlugs": [
+     "Digital"
+    ],
+    "recognitionIds": [
+     "0",
+     "321",
+     "322",
+     "323",
+     "324",
+     "383",
+     "384",
+     "385",
+     "386",
+     "387",
+     "372",
+     "373",
+     "374",
+     "375",
+     "376",
+     "389",
+     "390",
+     "439",
+     "441"
+    ],
+    "agePolicySlug": "rated-r",
+    "isHidden": false,
+    "ticketingExperience": "DEFAULT"
+   },
+   {
+    "cinemaId": "0402",
+    "sessionId": "114119",
+    "presentationSlug": "kids-camp-guillermo-del-toros-pinocchio",
+    "legacySlug": "kids-camp-guillermo-del-toros-pinocchio",
+    "status": "ONSALE",
+    "businessDateClt": "2026-06-29",
+    "showTimeClt": "2026-06-29T15:00:00",
+    "cinemaTimeZoneName": "America/Denver",
+    "showTimeUtc": "2026-06-29T21:00:00",
+    "ticketTypesLoyaltyCount": 7,
+    "ticketTypesVoucherCount": 3,
+    "ticketTypesNormalCount": 1,
+    "reservedSeating": true,
+    "screenNumber": "3",
+    "formatSlug": "2d-digital",
+    "isClosedCaptioningAvailable": false,
+    "isDescriptiveAudioAvailable": false,
+    "isAssistedListeningAvailable": false,
+    "sessionAttributeSlugs": [
+     "Digital",
+     "QR Menu 9"
+    ],
+    "recognitionIds": [
+     "0",
+     "321",
+     "322",
+     "323",
+     "324",
+     "383",
+     "384",
+     "385",
+     "386",
+     "387",
+     "372",
+     "373",
+     "374",
+     "375",
+     "376",
+     "389",
+     "390",
+     "439",
+     "441"
+    ],
+    "agePolicySlug": "rated-pg",
+    "isHidden": false,
+    "ticketingExperience": "DEFAULT"
+   },
+   {
+    "cinemaId": "0402",
+    "sessionId": "115580",
+    "presentationSlug": "toy-story-5",
+    "legacySlug": "toy-story-5",
+    "status": "ONSALE",
+    "businessDateClt": "2026-06-29",
+    "showTimeClt": "2026-06-29T15:15:00",
+    "cinemaTimeZoneName": "America/Denver",
+    "showTimeUtc": "2026-06-29T21:15:00",
+    "ticketTypesLoyaltyCount": 7,
+    "ticketTypesVoucherCount": 3,
+    "ticketTypesNormalCount": 2,
+    "reservedSeating": true,
+    "screenNumber": "1",
+    "formatSlug": "2d-digital",
+    "isClosedCaptioningAvailable": true,
+    "isDescriptiveAudioAvailable": false,
+    "isAssistedListeningAvailable": false,
+    "sessionAttributeSlugs": [
+     "Digital",
+     "KF"
+    ],
+    "recognitionIds": [
+     "0",
+     "321",
+     "322",
+     "323",
+     "324",
+     "383",
+     "384",
+     "385",
+     "386",
+     "387",
+     "372",
+     "373",
+     "374",
+     "375",
+     "376",
+     "389",
+     "390",
+     "439",
+     "441"
+    ],
+    "agePolicySlug": "rated-pg",
+    "isHidden": false,
+    "ticketingExperience": "KID_FRIENDLY"
+   },
+   {
+    "cinemaId": "0402",
+    "sessionId": "115586",
+    "presentationSlug": "girls-like-girls",
+    "legacySlug": "girls-like-girls",
+    "status": "ONSALE",
+    "businessDateClt": "2026-06-29",
+    "showTimeClt": "2026-06-29T15:30:00",
+    "cinemaTimeZoneName": "America/Denver",
+    "showTimeUtc": "2026-06-29T21:30:00",
+    "ticketTypesLoyaltyCount": 7,
+    "ticketTypesVoucherCount": 3,
+    "ticketTypesNormalCount": 2,
+    "reservedSeating": true,
+    "screenNumber": "8",
+    "formatSlug": "2d-digital",
+    "isClosedCaptioningAvailable": false,
+    "isDescriptiveAudioAvailable": false,
+    "isAssistedListeningAvailable": false,
+    "sessionAttributeSlugs": [
+     "Digital"
+    ],
+    "recognitionIds": [
+     "0",
+     "321",
+     "322",
+     "323",
+     "324",
+     "383",
+     "384",
+     "385",
+     "386",
+     "387",
+     "372",
+     "373",
+     "374",
+     "375",
+     "376",
+     "389",
+     "390",
+     "439",
+     "441"
+    ],
+    "agePolicySlug": "rated-r",
+    "isHidden": false,
+    "ticketingExperience": "DEFAULT"
+   },
+   {
+    "cinemaId": "0402",
+    "sessionId": "115592",
+    "presentationSlug": "backrooms",
+    "legacySlug": "backrooms",
+    "status": "ONSALE",
+    "businessDateClt": "2026-06-29",
+    "showTimeClt": "2026-06-29T16:00:00",
+    "cinemaTimeZoneName": "America/Denver",
+    "showTimeUtc": "2026-06-29T22:00:00",
+    "ticketTypesLoyaltyCount": 7,
+    "ticketTypesVoucherCount": 3,
+    "ticketTypesNormalCount": 2,
+    "reservedSeating": true,
+    "screenNumber": "7",
+    "formatSlug": "2d-digital",
+    "isClosedCaptioningAvailable": false,
+    "isDescriptiveAudioAvailable": false,
+    "isAssistedListeningAvailable": false,
+    "sessionAttributeSlugs": [
+     "Digital"
+    ],
+    "recognitionIds": [
+     "0",
+     "321",
+     "322",
+     "323",
+     "324",
+     "383",
+     "384",
+     "385",
+     "386",
+     "387",
+     "372",
+     "373",
+     "374",
+     "375",
+     "376",
+     "389",
+     "390",
+     "439",
+     "441"
+    ],
+    "agePolicySlug": "rated-r",
+    "isHidden": false,
+    "ticketingExperience": "DEFAULT"
+   },
+   {
+    "cinemaId": "0402",
+    "sessionId": "115606",
+    "presentationSlug": "disclosure-day",
+    "legacySlug": "disclosure-day",
+    "status": "ONSALE",
+    "businessDateClt": "2026-06-29",
+    "showTimeClt": "2026-06-29T16:00:00",
+    "cinemaTimeZoneName": "America/Denver",
+    "showTimeUtc": "2026-06-29T22:00:00",
+    "ticketTypesLoyaltyCount": 7,
+    "ticketTypesVoucherCount": 3,
+    "ticketTypesNormalCount": 2,
+    "reservedSeating": true,
+    "screenNumber": "5",
+    "formatSlug": "2d-digital",
+    "isClosedCaptioningAvailable": true,
+    "isDescriptiveAudioAvailable": false,
+    "isAssistedListeningAvailable": false,
+    "sessionAttributeSlugs": [
+     "Digital"
+    ],
+    "recognitionIds": [
+     "0",
+     "321",
+     "322",
+     "323",
+     "324",
+     "383",
+     "384",
+     "385",
+     "386",
+     "387",
+     "372",
+     "373",
+     "374",
+     "375",
+     "376",
+     "389",
+     "390",
+     "439",
+     "441"
+    ],
+    "agePolicySlug": "rated-pg-13",
+    "isHidden": false,
+    "ticketingExperience": "DEFAULT"
+   },
+   {
+    "cinemaId": "0402",
+    "sessionId": "115581",
+    "presentationSlug": "supergirl-2026",
+    "legacySlug": "supergirl-2026",
+    "status": "ONSALE",
+    "businessDateClt": "2026-06-29",
+    "showTimeClt": "2026-06-29T16:00:00",
+    "cinemaTimeZoneName": "America/Denver",
+    "showTimeUtc": "2026-06-29T22:00:00",
+    "ticketTypesLoyaltyCount": 7,
+    "ticketTypesVoucherCount": 3,
+    "ticketTypesNormalCount": 2,
+    "reservedSeating": true,
+    "screenNumber": "4",
+    "formatSlug": "2d-digital",
+    "isClosedCaptioningAvailable": false,
+    "isDescriptiveAudioAvailable": false,
+    "isAssistedListeningAvailable": false,
+    "sessionAttributeSlugs": [
+     "Digital"
+    ],
+    "recognitionIds": [
+     "0",
+     "321",
+     "322",
+     "323",
+     "324",
+     "383",
+     "384",
+     "385",
+     "386",
+     "387",
+     "372",
+     "373",
+     "374",
+     "375",
+     "376",
+     "389",
+     "390",
+     "439",
+     "441"
+    ],
+    "agePolicySlug": "rated-pg-13",
+    "isHidden": false,
+    "ticketingExperience": "DEFAULT"
+   },
+   {
+    "cinemaId": "0402",
+    "sessionId": "115582",
+    "presentationSlug": "leviticus",
+    "legacySlug": "leviticus",
+    "status": "ONSALE",
+    "businessDateClt": "2026-06-29",
+    "showTimeClt": "2026-06-29T16:45:00",
+    "cinemaTimeZoneName": "America/Denver",
+    "showTimeUtc": "2026-06-29T22:45:00",
+    "ticketTypesLoyaltyCount": 7,
+    "ticketTypesVoucherCount": 3,
+    "ticketTypesNormalCount": 2,
+    "reservedSeating": true,
+    "screenNumber": "6",
+    "formatSlug": "2d-digital",
+    "isClosedCaptioningAvailable": true,
+    "isDescriptiveAudioAvailable": false,
+    "isAssistedListeningAvailable": false,
+    "sessionAttributeSlugs": [
+     "Digital"
+    ],
+    "recognitionIds": [
+     "0",
+     "321",
+     "322",
+     "323",
+     "324",
+     "383",
+     "384",
+     "385",
+     "386",
+     "387",
+     "372",
+     "373",
+     "374",
+     "375",
+     "376",
+     "389",
+     "390",
+     "439",
+     "441"
+    ],
+    "agePolicySlug": "rated-r",
+    "isHidden": false,
+    "ticketingExperience": "DEFAULT"
+   },
+   {
+    "cinemaId": "0402",
+    "sessionId": "115598",
+    "presentationSlug": "jackass-best-and-last",
+    "legacySlug": "jackass-best-and-last",
+    "status": "ONSALE",
+    "businessDateClt": "2026-06-29",
+    "showTimeClt": "2026-06-29T17:15:00",
+    "cinemaTimeZoneName": "America/Denver",
+    "showTimeUtc": "2026-06-29T23:15:00",
+    "ticketTypesLoyaltyCount": 7,
+    "ticketTypesVoucherCount": 3,
+    "ticketTypesNormalCount": 2,
+    "reservedSeating": true,
+    "screenNumber": "2",
+    "formatSlug": "2d-digital",
+    "isClosedCaptioningAvailable": true,
+    "isDescriptiveAudioAvailable": false,
+    "isAssistedListeningAvailable": false,
+    "sessionAttributeSlugs": [
+     "Digital"
+    ],
+    "recognitionIds": [
+     "0",
+     "321",
+     "322",
+     "323",
+     "324",
+     "383",
+     "384",
+     "385",
+     "386",
+     "387",
+     "372",
+     "373",
+     "374",
+     "375",
+     "376",
+     "389",
+     "390",
+     "439",
+     "441"
+    ],
+    "agePolicySlug": "rated-r",
+    "isHidden": false,
+    "ticketingExperience": "DEFAULT"
+   },
+   {
+    "cinemaId": "0402",
+    "sessionId": "115247",
+    "presentationSlug": "guest-selects-vengeance-is-mine-1984",
+    "legacySlug": "guest-selects-vengeance-is-mine-1984",
+    "status": "ONSALE",
+    "businessDateClt": "2026-06-29",
+    "showTimeClt": "2026-06-29T18:15:00",
+    "cinemaTimeZoneName": "America/Denver",
+    "showTimeUtc": "2026-06-30T00:15:00",
+    "ticketTypesLoyaltyCount": 7,
+    "ticketTypesVoucherCount": 3,
+    "ticketTypesNormalCount": 2,
+    "reservedSeating": true,
+    "screenNumber": "3",
+    "formatSlug": "2d-digital",
+    "isClosedCaptioningAvailable": false,
+    "isDescriptiveAudioAvailable": false,
+    "isAssistedListeningAvailable": false,
+    "sessionAttributeSlugs": [
+     "Digital"
+    ],
+    "recognitionIds": [
+     "0",
+     "321",
+     "322",
+     "323",
+     "324",
+     "383",
+     "384",
+     "385",
+     "386",
+     "387",
+     "372",
+     "373",
+     "374",
+     "375",
+     "376",
+     "389",
+     "390",
+     "439",
+     "441"
+    ],
+    "agePolicySlug": "rated-pg-13",
+    "isHidden": false,
+    "ticketingExperience": "DEFAULT"
+   },
+   {
+    "cinemaId": "0402",
+    "sessionId": "115583",
+    "presentationSlug": "toy-story-5",
+    "legacySlug": "toy-story-5",
+    "status": "ONSALE",
+    "businessDateClt": "2026-06-29",
+    "showTimeClt": "2026-06-29T18:15:00",
+    "cinemaTimeZoneName": "America/Denver",
+    "showTimeUtc": "2026-06-30T00:15:00",
+    "ticketTypesLoyaltyCount": 7,
+    "ticketTypesVoucherCount": 3,
+    "ticketTypesNormalCount": 2,
+    "reservedSeating": true,
+    "screenNumber": "1",
+    "formatSlug": "2d-digital",
+    "isClosedCaptioningAvailable": true,
+    "isDescriptiveAudioAvailable": false,
+    "isAssistedListeningAvailable": false,
+    "sessionAttributeSlugs": [
+     "Digital",
+     "KF"
+    ],
+    "recognitionIds": [
+     "0",
+     "321",
+     "322",
+     "323",
+     "324",
+     "383",
+     "384",
+     "385",
+     "386",
+     "387",
+     "372",
+     "373",
+     "374",
+     "375",
+     "376",
+     "389",
+     "390",
+     "439",
+     "441"
+    ],
+    "agePolicySlug": "rated-pg",
+    "isHidden": false,
+    "ticketingExperience": "KID_FRIENDLY"
+   },
+   {
+    "cinemaId": "0402",
+    "sessionId": "115576",
+    "presentationSlug": "girls-like-girls",
+    "legacySlug": "girls-like-girls",
+    "status": "ONSALE",
+    "businessDateClt": "2026-06-29",
+    "showTimeClt": "2026-06-29T18:30:00",
+    "cinemaTimeZoneName": "America/Denver",
+    "showTimeUtc": "2026-06-30T00:30:00",
+    "ticketTypesLoyaltyCount": 7,
+    "ticketTypesVoucherCount": 3,
+    "ticketTypesNormalCount": 2,
+    "reservedSeating": true,
+    "screenNumber": "8",
+    "formatSlug": "2d-digital",
+    "isClosedCaptioningAvailable": false,
+    "isDescriptiveAudioAvailable": false,
+    "isAssistedListeningAvailable": false,
+    "sessionAttributeSlugs": [
+     "Digital"
+    ],
+    "recognitionIds": [
+     "0",
+     "321",
+     "322",
+     "323",
+     "324",
+     "383",
+     "384",
+     "385",
+     "386",
+     "387",
+     "372",
+     "373",
+     "374",
+     "375",
+     "376",
+     "389",
+     "390",
+     "439",
+     "441"
+    ],
+    "agePolicySlug": "rated-r",
+    "isHidden": false,
+    "ticketingExperience": "DEFAULT"
+   },
+   {
+    "cinemaId": "0402",
+    "sessionId": "115584",
+    "presentationSlug": "supergirl-2026",
+    "legacySlug": "supergirl-2026",
+    "status": "ONSALE",
+    "businessDateClt": "2026-06-29",
+    "showTimeClt": "2026-06-29T19:00:00",
+    "cinemaTimeZoneName": "America/Denver",
+    "showTimeUtc": "2026-06-30T01:00:00",
+    "ticketTypesLoyaltyCount": 7,
+    "ticketTypesVoucherCount": 3,
+    "ticketTypesNormalCount": 2,
+    "reservedSeating": true,
+    "screenNumber": "4",
+    "formatSlug": "2d-digital",
+    "isClosedCaptioningAvailable": false,
+    "isDescriptiveAudioAvailable": false,
+    "isAssistedListeningAvailable": false,
+    "sessionAttributeSlugs": [
+     "Digital"
+    ],
+    "recognitionIds": [
+     "0",
+     "321",
+     "322",
+     "323",
+     "324",
+     "383",
+     "384",
+     "385",
+     "386",
+     "387",
+     "372",
+     "373",
+     "374",
+     "375",
+     "376",
+     "389",
+     "390",
+     "439",
+     "441"
+    ],
+    "agePolicySlug": "rated-pg-13",
+    "isHidden": false,
+    "ticketingExperience": "DEFAULT"
+   },
+   {
+    "cinemaId": "0402",
+    "sessionId": "115590",
+    "presentationSlug": "backrooms",
+    "legacySlug": "backrooms",
+    "status": "ONSALE",
+    "businessDateClt": "2026-06-29",
+    "showTimeClt": "2026-06-29T19:15:00",
+    "cinemaTimeZoneName": "America/Denver",
+    "showTimeUtc": "2026-06-30T01:15:00",
+    "ticketTypesLoyaltyCount": 7,
+    "ticketTypesVoucherCount": 3,
+    "ticketTypesNormalCount": 2,
+    "reservedSeating": true,
+    "screenNumber": "7",
+    "formatSlug": "2d-digital",
+    "isClosedCaptioningAvailable": false,
+    "isDescriptiveAudioAvailable": false,
+    "isAssistedListeningAvailable": false,
+    "sessionAttributeSlugs": [
+     "Digital"
+    ],
+    "recognitionIds": [
+     "0",
+     "321",
+     "322",
+     "323",
+     "324",
+     "383",
+     "384",
+     "385",
+     "386",
+     "387",
+     "372",
+     "373",
+     "374",
+     "375",
+     "376",
+     "389",
+     "390",
+     "439",
+     "441"
+    ],
+    "agePolicySlug": "rated-r",
+    "isHidden": false,
+    "ticketingExperience": "DEFAULT"
+   },
+   {
+    "cinemaId": "0402",
+    "sessionId": "115600",
+    "presentationSlug": "leviticus",
+    "legacySlug": "leviticus",
+    "status": "ONSALE",
+    "businessDateClt": "2026-06-29",
+    "showTimeClt": "2026-06-29T19:30:00",
+    "cinemaTimeZoneName": "America/Denver",
+    "showTimeUtc": "2026-06-30T01:30:00",
+    "ticketTypesLoyaltyCount": 7,
+    "ticketTypesVoucherCount": 3,
+    "ticketTypesNormalCount": 2,
+    "reservedSeating": true,
+    "screenNumber": "6",
+    "formatSlug": "2d-digital",
+    "isClosedCaptioningAvailable": true,
+    "isDescriptiveAudioAvailable": false,
+    "isAssistedListeningAvailable": false,
+    "sessionAttributeSlugs": [
+     "Digital"
+    ],
+    "recognitionIds": [
+     "0",
+     "321",
+     "322",
+     "323",
+     "324",
+     "383",
+     "384",
+     "385",
+     "386",
+     "387",
+     "372",
+     "373",
+     "374",
+     "375",
+     "376",
+     "389",
+     "390",
+     "439",
+     "441"
+    ],
+    "agePolicySlug": "rated-r",
+    "isHidden": false,
+    "ticketingExperience": "DEFAULT"
+   },
+   {
+    "cinemaId": "0402",
+    "sessionId": "115599",
+    "presentationSlug": "disclosure-day",
+    "legacySlug": "disclosure-day",
+    "status": "ONSALE",
+    "businessDateClt": "2026-06-29",
+    "showTimeClt": "2026-06-29T19:45:00",
+    "cinemaTimeZoneName": "America/Denver",
+    "showTimeUtc": "2026-06-30T01:45:00",
+    "ticketTypesLoyaltyCount": 7,
+    "ticketTypesVoucherCount": 3,
+    "ticketTypesNormalCount": 2,
+    "reservedSeating": true,
+    "screenNumber": "5",
+    "formatSlug": "2d-digital",
+    "isClosedCaptioningAvailable": true,
+    "isDescriptiveAudioAvailable": false,
+    "isAssistedListeningAvailable": false,
+    "sessionAttributeSlugs": [
+     "Digital"
+    ],
+    "recognitionIds": [
+     "0",
+     "321",
+     "322",
+     "323",
+     "324",
+     "383",
+     "384",
+     "385",
+     "386",
+     "387",
+     "372",
+     "373",
+     "374",
+     "375",
+     "376",
+     "389",
+     "390",
+     "439",
+     "441"
+    ],
+    "agePolicySlug": "rated-pg-13",
+    "isHidden": false,
+    "ticketingExperience": "DEFAULT"
+   },
+   {
+    "cinemaId": "0402",
+    "sessionId": "115597",
+    "presentationSlug": "jackass-best-and-last",
+    "legacySlug": "jackass-best-and-last",
+    "status": "ONSALE",
+    "businessDateClt": "2026-06-29",
+    "showTimeClt": "2026-06-29T20:00:00",
+    "cinemaTimeZoneName": "America/Denver",
+    "showTimeUtc": "2026-06-30T02:00:00",
+    "ticketTypesLoyaltyCount": 7,
+    "ticketTypesVoucherCount": 3,
+    "ticketTypesNormalCount": 2,
+    "reservedSeating": true,
+    "screenNumber": "2",
+    "formatSlug": "2d-digital",
+    "isClosedCaptioningAvailable": true,
+    "isDescriptiveAudioAvailable": false,
+    "isAssistedListeningAvailable": false,
+    "sessionAttributeSlugs": [
+     "Digital"
+    ],
+    "recognitionIds": [
+     "0",
+     "321",
+     "322",
+     "323",
+     "324",
+     "383",
+     "384",
+     "385",
+     "386",
+     "387",
+     "372",
+     "373",
+     "374",
+     "375",
+     "376",
+     "389",
+     "390",
+     "439",
+     "441"
+    ],
+    "agePolicySlug": "rated-r",
+    "isHidden": false,
+    "ticketingExperience": "DEFAULT"
+   },
+   {
+    "cinemaId": "0402",
+    "sessionId": "115577",
+    "presentationSlug": "toy-story-5",
+    "legacySlug": "toy-story-5",
+    "status": "ONSALE",
+    "businessDateClt": "2026-06-29",
+    "showTimeClt": "2026-06-29T21:15:00",
+    "cinemaTimeZoneName": "America/Denver",
+    "showTimeUtc": "2026-06-30T03:15:00",
+    "ticketTypesLoyaltyCount": 7,
+    "ticketTypesVoucherCount": 3,
+    "ticketTypesNormalCount": 2,
+    "reservedSeating": true,
+    "screenNumber": "1",
+    "formatSlug": "2d-digital",
+    "isClosedCaptioningAvailable": true,
+    "isDescriptiveAudioAvailable": false,
+    "isAssistedListeningAvailable": false,
+    "sessionAttributeSlugs": [
+     "Digital"
+    ],
+    "recognitionIds": [
+     "0",
+     "321",
+     "322",
+     "323",
+     "324",
+     "383",
+     "384",
+     "385",
+     "386",
+     "387",
+     "372",
+     "373",
+     "374",
+     "375",
+     "376",
+     "389",
+     "390",
+     "439",
+     "441"
+    ],
+    "agePolicySlug": "rated-pg",
+    "isHidden": false,
+    "ticketingExperience": "DEFAULT"
+   },
+   {
+    "cinemaId": "0402",
+    "sessionId": "115579",
+    "presentationSlug": "disclosure-day",
+    "legacySlug": "disclosure-day",
+    "status": "ONSALE",
+    "businessDateClt": "2026-06-29",
+    "showTimeClt": "2026-06-29T21:30:00",
+    "cinemaTimeZoneName": "America/Denver",
+    "showTimeUtc": "2026-06-30T03:30:00",
+    "ticketTypesLoyaltyCount": 7,
+    "ticketTypesVoucherCount": 3,
+    "ticketTypesNormalCount": 2,
+    "reservedSeating": true,
+    "screenNumber": "3",
+    "formatSlug": "2d-digital",
+    "isClosedCaptioningAvailable": true,
+    "isDescriptiveAudioAvailable": false,
+    "isAssistedListeningAvailable": false,
+    "sessionAttributeSlugs": [
+     "Digital"
+    ],
+    "recognitionIds": [
+     "0",
+     "321",
+     "322",
+     "323",
+     "324",
+     "383",
+     "384",
+     "385",
+     "386",
+     "387",
+     "372",
+     "373",
+     "374",
+     "375",
+     "376",
+     "389",
+     "390",
+     "439",
+     "441"
+    ],
+    "agePolicySlug": "rated-pg-13",
+    "isHidden": false,
+    "ticketingExperience": "DEFAULT"
+   },
+   {
+    "cinemaId": "0402",
+    "sessionId": "115589",
+    "presentationSlug": "obsession-2026",
+    "legacySlug": "obsession-2026",
+    "status": "ONSALE",
+    "businessDateClt": "2026-06-29",
+    "showTimeClt": "2026-06-29T21:30:00",
+    "cinemaTimeZoneName": "America/Denver",
+    "showTimeUtc": "2026-06-30T03:30:00",
+    "ticketTypesLoyaltyCount": 7,
+    "ticketTypesVoucherCount": 3,
+    "ticketTypesNormalCount": 2,
+    "reservedSeating": true,
+    "screenNumber": "8",
+    "formatSlug": "2d-digital",
+    "isClosedCaptioningAvailable": false,
+    "isDescriptiveAudioAvailable": false,
+    "isAssistedListeningAvailable": false,
+    "sessionAttributeSlugs": [
+     "Digital"
+    ],
+    "recognitionIds": [
+     "0",
+     "321",
+     "322",
+     "323",
+     "324",
+     "383",
+     "384",
+     "385",
+     "386",
+     "387",
+     "372",
+     "373",
+     "374",
+     "375",
+     "376",
+     "389",
+     "390",
+     "439",
+     "441"
+    ],
+    "agePolicySlug": "rated-r",
+    "isHidden": false,
+    "ticketingExperience": "DEFAULT"
+   },
+   {
+    "cinemaId": "0402",
+    "sessionId": "115591",
+    "presentationSlug": "backrooms",
+    "legacySlug": "backrooms",
+    "status": "ONSALE",
+    "businessDateClt": "2026-06-29",
+    "showTimeClt": "2026-06-29T22:00:00",
+    "cinemaTimeZoneName": "America/Denver",
+    "showTimeUtc": "2026-06-30T04:00:00",
+    "ticketTypesLoyaltyCount": 7,
+    "ticketTypesVoucherCount": 3,
+    "ticketTypesNormalCount": 2,
+    "reservedSeating": true,
+    "screenNumber": "9",
+    "formatSlug": "2d-digital",
+    "isClosedCaptioningAvailable": false,
+    "isDescriptiveAudioAvailable": false,
+    "isAssistedListeningAvailable": false,
+    "sessionAttributeSlugs": [
+     "Digital"
+    ],
+    "recognitionIds": [
+     "0",
+     "321",
+     "322",
+     "323",
+     "324",
+     "383",
+     "384",
+     "385",
+     "386",
+     "387",
+     "372",
+     "373",
+     "374",
+     "375",
+     "376",
+     "389",
+     "390",
+     "439",
+     "441"
+    ],
+    "agePolicySlug": "rated-r",
+    "isHidden": false,
+    "ticketingExperience": "DEFAULT"
+   },
+   {
+    "cinemaId": "0402",
+    "sessionId": "115578",
+    "presentationSlug": "supergirl-2026",
+    "legacySlug": "supergirl-2026",
+    "status": "ONSALE",
+    "businessDateClt": "2026-06-29",
+    "showTimeClt": "2026-06-29T22:00:00",
+    "cinemaTimeZoneName": "America/Denver",
+    "showTimeUtc": "2026-06-30T04:00:00",
+    "ticketTypesLoyaltyCount": 7,
+    "ticketTypesVoucherCount": 3,
+    "ticketTypesNormalCount": 2,
+    "reservedSeating": true,
+    "screenNumber": "4",
+    "formatSlug": "2d-digital",
+    "isClosedCaptioningAvailable": false,
+    "isDescriptiveAudioAvailable": false,
+    "isAssistedListeningAvailable": false,
+    "sessionAttributeSlugs": [
+     "Digital"
+    ],
+    "recognitionIds": [
+     "0",
+     "321",
+     "322",
+     "323",
+     "324",
+     "383",
+     "384",
+     "385",
+     "386",
+     "387",
+     "372",
+     "373",
+     "374",
+     "375",
+     "376",
+     "389",
+     "390",
+     "439",
+     "441"
+    ],
+    "agePolicySlug": "rated-pg-13",
+    "isHidden": false,
+    "ticketingExperience": "DEFAULT"
+   },
+   {
+    "cinemaId": "0402",
+    "sessionId": "115585",
+    "presentationSlug": "leviticus",
+    "legacySlug": "leviticus",
+    "status": "ONSALE",
+    "businessDateClt": "2026-06-29",
+    "showTimeClt": "2026-06-29T22:15:00",
+    "cinemaTimeZoneName": "America/Denver",
+    "showTimeUtc": "2026-06-30T04:15:00",
+    "ticketTypesLoyaltyCount": 7,
+    "ticketTypesVoucherCount": 3,
+    "ticketTypesNormalCount": 2,
+    "reservedSeating": true,
+    "screenNumber": "7",
+    "formatSlug": "2d-digital",
+    "isClosedCaptioningAvailable": true,
+    "isDescriptiveAudioAvailable": false,
+    "isAssistedListeningAvailable": false,
+    "sessionAttributeSlugs": [
+     "Digital"
+    ],
+    "recognitionIds": [
+     "0",
+     "321",
+     "322",
+     "323",
+     "324",
+     "383",
+     "384",
+     "385",
+     "386",
+     "387",
+     "372",
+     "373",
+     "374",
+     "375",
+     "376",
+     "389",
+     "390",
+     "439",
+     "441"
+    ],
+    "agePolicySlug": "rated-r",
+    "isHidden": false,
+    "ticketingExperience": "DEFAULT"
+   },
+   {
+    "cinemaId": "0402",
+    "sessionId": "115596",
+    "presentationSlug": "jackass-best-and-last",
+    "legacySlug": "jackass-best-and-last",
+    "status": "ONSALE",
+    "businessDateClt": "2026-06-29",
+    "showTimeClt": "2026-06-29T22:25:00",
+    "cinemaTimeZoneName": "America/Denver",
+    "showTimeUtc": "2026-06-30T04:25:00",
+    "ticketTypesLoyaltyCount": 7,
+    "ticketTypesVoucherCount": 3,
+    "ticketTypesNormalCount": 2,
+    "reservedSeating": true,
+    "screenNumber": "6",
+    "formatSlug": "2d-digital",
+    "isClosedCaptioningAvailable": true,
+    "isDescriptiveAudioAvailable": false,
+    "isAssistedListeningAvailable": false,
+    "sessionAttributeSlugs": [
+     "Digital"
+    ],
+    "recognitionIds": [
+     "0",
+     "321",
+     "322",
+     "323",
+     "324",
+     "383",
+     "384",
+     "385",
+     "386",
+     "387",
+     "372",
+     "373",
+     "374",
+     "375",
+     "376",
+     "389",
+     "390",
+     "439",
+     "441"
+    ],
+    "agePolicySlug": "rated-r",
+    "isHidden": false,
+    "ticketingExperience": "DEFAULT"
+   },
+   {
+    "cinemaId": "0402",
+    "sessionId": "115631",
+    "presentationSlug": "toy-story-5",
+    "legacySlug": "toy-story-5",
+    "status": "ONSALE",
+    "businessDateClt": "2026-06-30",
+    "showTimeClt": "2026-06-30T12:30:00",
+    "cinemaTimeZoneName": "America/Denver",
+    "showTimeUtc": "2026-06-30T18:30:00",
+    "ticketTypesLoyaltyCount": 7,
+    "ticketTypesVoucherCount": 3,
+    "ticketTypesNormalCount": 1,
+    "reservedSeating": true,
+    "screenNumber": "1",
+    "formatSlug": "2d-digital",
+    "isClosedCaptioningAvailable": true,
+    "isDescriptiveAudioAvailable": false,
+    "isAssistedListeningAvailable": false,
+    "sessionAttributeSlugs": [
+     "Digital",
+     "KF",
+     "BD"
+    ],
+    "recognitionIds": [
+     "0",
+     "321",
+     "322",
+     "323",
+     "324",
+     "383",
+     "384",
+     "385",
+     "386",
+     "387",
+     "372",
+     "373",
+     "374",
+     "375",
+     "376",
+     "389",
+     "390",
+     "439",
+     "441"
+    ],
+    "agePolicySlug": "all-ages",
+    "isHidden": false,
+    "ticketingExperience": "BABY_DAY"
+   },
+   {
+    "cinemaId": "0402",
+    "sessionId": "115632",
+    "presentationSlug": "disclosure-day",
+    "legacySlug": "disclosure-day",
+    "status": "ONSALE",
+    "businessDateClt": "2026-06-30",
+    "showTimeClt": "2026-06-30T12:45:00",
+    "cinemaTimeZoneName": "America/Denver",
+    "showTimeUtc": "2026-06-30T18:45:00",
+    "ticketTypesLoyaltyCount": 7,
+    "ticketTypesVoucherCount": 3,
+    "ticketTypesNormalCount": 1,
+    "reservedSeating": true,
+    "screenNumber": "3",
+    "formatSlug": "2d-digital",
+    "isClosedCaptioningAvailable": true,
+    "isDescriptiveAudioAvailable": false,
+    "isAssistedListeningAvailable": false,
+    "sessionAttributeSlugs": [
+     "Digital",
+     "BD"
+    ],
+    "recognitionIds": [
+     "0",
+     "321",
+     "322",
+     "323",
+     "324",
+     "383",
+     "384",
+     "385",
+     "386",
+     "387",
+     "372",
+     "373",
+     "374",
+     "375",
+     "376",
+     "389",
+     "390",
+     "439",
+     "441"
+    ],
+    "agePolicySlug": "all-ages",
+    "isHidden": false,
+    "ticketingExperience": "BABY_DAY"
+   },
+   {
+    "cinemaId": "0402",
+    "sessionId": "115629",
+    "presentationSlug": "leviticus",
+    "legacySlug": "leviticus",
+    "status": "ONSALE",
+    "businessDateClt": "2026-06-30",
+    "showTimeClt": "2026-06-30T13:00:00",
+    "cinemaTimeZoneName": "America/Denver",
+    "showTimeUtc": "2026-06-30T19:00:00",
+    "ticketTypesLoyaltyCount": 7,
+    "ticketTypesVoucherCount": 3,
+    "ticketTypesNormalCount": 1,
+    "reservedSeating": true,
+    "screenNumber": "6",
+    "formatSlug": "2d-digital",
+    "isClosedCaptioningAvailable": true,
+    "isDescriptiveAudioAvailable": false,
+    "isAssistedListeningAvailable": false,
+    "sessionAttributeSlugs": [
+     "Digital",
+     "BD"
+    ],
+    "recognitionIds": [
+     "0",
+     "321",
+     "322",
+     "323",
+     "324",
+     "383",
+     "384",
+     "385",
+     "386",
+     "387",
+     "372",
+     "373",
+     "374",
+     "375",
+     "376",
+     "389",
+     "390",
+     "439",
+     "441"
+    ],
+    "agePolicySlug": "all-ages",
+    "isHidden": false,
+    "ticketingExperience": "BABY_DAY"
+   },
+   {
+    "cinemaId": "0402",
+    "sessionId": "115608",
+    "presentationSlug": "backrooms",
+    "legacySlug": "backrooms",
+    "status": "ONSALE",
+    "businessDateClt": "2026-06-30",
+    "showTimeClt": "2026-06-30T13:15:00",
+    "cinemaTimeZoneName": "America/Denver",
+    "showTimeUtc": "2026-06-30T19:15:00",
+    "ticketTypesLoyaltyCount": 7,
+    "ticketTypesVoucherCount": 3,
+    "ticketTypesNormalCount": 1,
+    "reservedSeating": true,
+    "screenNumber": "7",
+    "formatSlug": "2d-digital",
+    "isClosedCaptioningAvailable": false,
+    "isDescriptiveAudioAvailable": false,
+    "isAssistedListeningAvailable": false,
+    "sessionAttributeSlugs": [
+     "Digital",
+     "BD"
+    ],
+    "recognitionIds": [
+     "0",
+     "321",
+     "322",
+     "323",
+     "324",
+     "383",
+     "384",
+     "385",
+     "386",
+     "387",
+     "372",
+     "373",
+     "374",
+     "375",
+     "376",
+     "389",
+     "390",
+     "439",
+     "441"
+    ],
+    "agePolicySlug": "all-ages",
+    "isHidden": false,
+    "ticketingExperience": "BABY_DAY"
+   },
+   {
+    "cinemaId": "0402",
+    "sessionId": "115630",
+    "presentationSlug": "supergirl-2026",
+    "legacySlug": "supergirl-2026",
+    "status": "ONSALE",
+    "businessDateClt": "2026-06-30",
+    "showTimeClt": "2026-06-30T13:15:00",
+    "cinemaTimeZoneName": "America/Denver",
+    "showTimeUtc": "2026-06-30T19:15:00",
+    "ticketTypesLoyaltyCount": 7,
+    "ticketTypesVoucherCount": 3,
+    "ticketTypesNormalCount": 1,
+    "reservedSeating": true,
+    "screenNumber": "4",
+    "formatSlug": "2d-digital",
+    "isClosedCaptioningAvailable": false,
+    "isDescriptiveAudioAvailable": false,
+    "isAssistedListeningAvailable": false,
+    "sessionAttributeSlugs": [
+     "Digital",
+     "BD"
+    ],
+    "recognitionIds": [
+     "0",
+     "321",
+     "322",
+     "323",
+     "324",
+     "383",
+     "384",
+     "385",
+     "386",
+     "387",
+     "372",
+     "373",
+     "374",
+     "375",
+     "376",
+     "389",
+     "390",
+     "439",
+     "441"
+    ],
+    "agePolicySlug": "all-ages",
+    "isHidden": false,
+    "ticketingExperience": "BABY_DAY"
+   },
+   {
+    "cinemaId": "0402",
+    "sessionId": "115621",
+    "presentationSlug": "jackass-best-and-last",
+    "legacySlug": "jackass-best-and-last",
+    "status": "ONSALE",
+    "businessDateClt": "2026-06-30",
+    "showTimeClt": "2026-06-30T13:30:00",
+    "cinemaTimeZoneName": "America/Denver",
+    "showTimeUtc": "2026-06-30T19:30:00",
+    "ticketTypesLoyaltyCount": 7,
+    "ticketTypesVoucherCount": 3,
+    "ticketTypesNormalCount": 1,
+    "reservedSeating": true,
+    "screenNumber": "2",
+    "formatSlug": "2d-digital",
+    "isClosedCaptioningAvailable": true,
+    "isDescriptiveAudioAvailable": false,
+    "isAssistedListeningAvailable": false,
+    "sessionAttributeSlugs": [
+     "Digital",
+     "BD"
+    ],
+    "recognitionIds": [
+     "0",
+     "321",
+     "322",
+     "323",
+     "324",
+     "383",
+     "384",
+     "385",
+     "386",
+     "387",
+     "372",
+     "373",
+     "374",
+     "375",
+     "376",
+     "389",
+     "390",
+     "439",
+     "441"
+    ],
+    "agePolicySlug": "all-ages",
+    "isHidden": false,
+    "ticketingExperience": "BABY_DAY"
+   },
+   {
+    "cinemaId": "0402",
+    "sessionId": "115628",
+    "presentationSlug": "disclosure-day",
+    "legacySlug": "disclosure-day",
+    "status": "ONSALE",
+    "businessDateClt": "2026-06-30",
+    "showTimeClt": "2026-06-30T14:15:00",
+    "cinemaTimeZoneName": "America/Denver",
+    "showTimeUtc": "2026-06-30T20:15:00",
+    "ticketTypesLoyaltyCount": 7,
+    "ticketTypesVoucherCount": 3,
+    "ticketTypesNormalCount": 1,
+    "reservedSeating": true,
+    "screenNumber": "5",
+    "formatSlug": "2d-digital",
+    "isClosedCaptioningAvailable": true,
+    "isDescriptiveAudioAvailable": false,
+    "isAssistedListeningAvailable": false,
+    "sessionAttributeSlugs": [
+     "Digital",
+     "BD"
+    ],
+    "recognitionIds": [
+     "0",
+     "321",
+     "322",
+     "323",
+     "324",
+     "383",
+     "384",
+     "385",
+     "386",
+     "387",
+     "372",
+     "373",
+     "374",
+     "375",
+     "376",
+     "389",
+     "390",
+     "439",
+     "441"
+    ],
+    "agePolicySlug": "all-ages",
+    "isHidden": false,
+    "ticketingExperience": "BABY_DAY"
+   },
+   {
+    "cinemaId": "0402",
+    "sessionId": "115609",
+    "presentationSlug": "girls-like-girls",
+    "legacySlug": "girls-like-girls",
+    "status": "ONSALE",
+    "businessDateClt": "2026-06-30",
+    "showTimeClt": "2026-06-30T14:15:00",
+    "cinemaTimeZoneName": "America/Denver",
+    "showTimeUtc": "2026-06-30T20:15:00",
+    "ticketTypesLoyaltyCount": 7,
+    "ticketTypesVoucherCount": 3,
+    "ticketTypesNormalCount": 1,
+    "reservedSeating": true,
+    "screenNumber": "8",
+    "formatSlug": "2d-digital",
+    "isClosedCaptioningAvailable": false,
+    "isDescriptiveAudioAvailable": false,
+    "isAssistedListeningAvailable": false,
+    "sessionAttributeSlugs": [
+     "Digital",
+     "BD"
+    ],
+    "recognitionIds": [
+     "0",
+     "321",
+     "322",
+     "323",
+     "324",
+     "383",
+     "384",
+     "385",
+     "386",
+     "387",
+     "372",
+     "373",
+     "374",
+     "375",
+     "376",
+     "389",
+     "390",
+     "439",
+     "441"
+    ],
+    "agePolicySlug": "all-ages",
+    "isHidden": false,
+    "ticketingExperience": "BABY_DAY"
+   },
+   {
+    "cinemaId": "0402",
+    "sessionId": "115616",
+    "presentationSlug": "toy-story-5",
+    "legacySlug": "toy-story-5",
+    "status": "ONSALE",
+    "businessDateClt": "2026-06-30",
+    "showTimeClt": "2026-06-30T15:30:00",
+    "cinemaTimeZoneName": "America/Denver",
+    "showTimeUtc": "2026-06-30T21:30:00",
+    "ticketTypesLoyaltyCount": 7,
+    "ticketTypesVoucherCount": 3,
+    "ticketTypesNormalCount": 1,
+    "reservedSeating": true,
+    "screenNumber": "1",
+    "formatSlug": "2d-digital",
+    "isClosedCaptioningAvailable": true,
+    "isDescriptiveAudioAvailable": false,
+    "isAssistedListeningAvailable": false,
+    "sessionAttributeSlugs": [
+     "Digital",
+     "KF"
+    ],
+    "recognitionIds": [
+     "0",
+     "321",
+     "322",
+     "323",
+     "324",
+     "383",
+     "384",
+     "385",
+     "386",
+     "387",
+     "372",
+     "373",
+     "374",
+     "375",
+     "376",
+     "389",
+     "390",
+     "439",
+     "441"
+    ],
+    "agePolicySlug": "rated-pg",
+    "isHidden": false,
+    "ticketingExperience": "KID_FRIENDLY"
+   }
+  ],
+  "presentationAttributes": [
+   {
+    "slug": "first-run",
+    "name": "New Releases",
+    "description": "New Releases",
+    "isUserVisible": true,
+    "isUserFilterable": true
+   },
+   {
+    "slug": "alamo-exclusive",
+    "name": "Only at the Alamo",
+    "description": "Alamo Drafthouse Specialty Programming",
+    "isUserVisible": true,
+    "isUserFilterable": true
+   },
+   {
+    "slug": "advance-sales",
+    "name": "Advance Sales",
+    "description": "Shows available for pre-sale",
+    "isUserVisible": true,
+    "isUserFilterable": true
+   },
+   {
+    "slug": "family-friendly",
+    "name": "Family Friendly",
+    "description": "Shows that are family friendly",
+    "isUserVisible": true,
+    "isUserFilterable": true
+   }
+  ],
+  "sessionAttributes": [
+   {
+    "slug": "35MM",
+    "name": "35MM",
+    "description": null,
+    "isUserVisible": false,
+    "isUserFilterable": false
+   },
+   {
+    "slug": "BD",
+    "name": "Baby Day Show",
+    "description": "For our baby day shows, we keep the lights up a bit, and the sound down a bit, so your little one never has to know they even went to the movies!",
+    "isUserVisible": true,
+    "isUserFilterable": true
+   },
+   {
+    "slug": "Digital",
+    "name": "Digital",
+    "description": null,
+    "isUserVisible": false,
+    "isUserFilterable": false
+   },
+   {
+    "slug": "KF",
+    "name": "Kid Friendly",
+    "description": "Grab the fam and let the fun begin! Our Kid Friendly screenings include pre-show activity sheets and crayons, a relaxed noise policy, and kids menus. Ages 3+ welcome with a parent or guardian.",
+    "isUserVisible": true,
+    "isUserFilterable": true
+   },
+   {
+    "slug": "QR Menu 3",
+    "name": "Menu Add Special Screening 3",
+    "description": "Menu Add Special Screening 3",
+    "isUserVisible": false,
+    "isUserFilterable": false
+   },
+   {
+    "slug": "QR Menu 9",
+    "name": "Menu Add Special Screening 9",
+    "description": "Menu Add Special Screening 9",
+    "isUserVisible": false,
+    "isUserFilterable": false
+   }
+  ],
+  "formats": [
+   {
+    "slug": "2d-digital",
+    "vistaSlug": "Digital",
+    "title": "2D Digital",
+    "headline": "Digital format projected using a digital projector.",
+    "description": "<p>Digital format projected using a digital projector.</p>",
+    "titleTreatmentImage": {
+     "uri": "https://img-assets.drafthouse.com/images/categories/1205/2d-tt.svg?auto=compress&fit=clip&q=80",
+     "altText": "2d tt"
+    },
+    "heroImage": null
+   }
+  ],
+  "agePolicies": [
+   {
+    "slug": "all-ages",
+    "name": "All Ages",
+    "description": "All minors under the age of 18 must be accompanied by an adult. Children ages 6+ admitted. Children 5 and under (including infants) are ONLY admitted during specifically designated \"All Ages\" and \"Family Friendly\" screenings."
+   },
+   {
+    "slug": "rated-pg",
+    "name": "Rated PG",
+    "description": "All minors under the age of 18 must be accompanied by an adult. Children ages 6+ admitted. Children 5 and under (including infants) are ONLY admitted during specifically designated \"All Ages\" and \"Family Friendly\" screenings."
+   },
+   {
+    "slug": "rated-pg-13",
+    "name": "Rated PG-13 (Standard)",
+    "description": "All minors under the age of 18 must be accompanied by an adult. Children ages 6+ admitted. Children 5 and under (including infants) are ONLY admitted during specifically designated \"All Ages\" and \"Family Friendly\" screenings."
+   },
+   {
+    "slug": "rated-pg-adult-focus",
+    "name": "Rated PG with Adult Focus",
+    "description": "All minors under the age of 18 must be accompanied by an adult. Children ages 6+ admitted. Children 5 and under (including infants) are ONLY admitted during specifically designated \"All Ages\" and \"Family Friendly\" screenings."
+   },
+   {
+    "slug": "rated-r",
+    "name": "Rated R",
+    "description": "All minors under the age of 18 must be accompanied by an adult. Children ages 6+ admitted. Children 5 and under (including infants) are ONLY admitted during specifically designated \"All Ages\" and \"Family Friendly\" screenings."
+   }
+  ],
+  "queues": []
+ }
+}

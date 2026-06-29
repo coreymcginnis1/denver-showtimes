@@ -9,9 +9,12 @@ from pydantic import BaseModel, Field
 
 
 class TheaterCfg(BaseModel):
-    enabled: bool = True
+    enabled: bool = True             # scrape this theater and include it in the feed
+    default_on: bool = True          # whether its filter chip starts ON when the page loads
     name: str
     color: str = "#888888"
+    scraper: Optional[str] = None    # which scraper class to use; defaults to the theater key
+    location: Optional[str] = None   # scraper-specific id (AMC slug path / Alamo venue / Regal route)
 
 
 class Filters(BaseModel):
@@ -29,12 +32,19 @@ DEFAULT_STRIP_PREFIXES = [
     r"Members?\s+Only[^:]*",
     r"Fan Faves",
     r"Staff Pick",
+    r"The Popcorn List",          # "The Popcorn List: The Fisherman" -> "The Fisherman"
 ]
 
 DEFAULT_STRIP_SUFFIXES = [
     r"\s+w/\s+.*$",                # "Rocky Horror ... w/ ... Shadowcast"
     r":\s+.*\bExperience$",        # "Sleepaway Camp: The Midnight Mass Experience"
     r"\s+Fan First Screenings?$",  # "Supergirl Fan First Screenings"
+    r"\s*\(\d{4}\)$",              # trailing release year: "Moana (2026)" -> "Moana"
+    r"\s*[-–—]?\s*\d{1,3}(?:st|nd|rd|th)\s+Anniversary$",     # "Citizen Kane 85th Anniversary"
+    r"\s*[-–—]\s*Studio Ghibli Fest(?:ival)?(?:\s+\d{4})?$",  # "... - Studio Ghibli Fest 2026"
+    r"\s+(?:IMAX\s+)?(?:Opening Night\s+)?Fan Event$",        # "MOANA IMAX Opening Night Fan Event"
+    r"\s+(?:IMAX\s+)?(?:Early Access|Advance)\s+Screenings?$",  # "... Early Access Screening"
+    r"\s+on\s+\d{2,3}\s?mm$",     # format tag in the title: "Interstellar on 35mm" -> "Interstellar"
 ]
 
 # Titles matching these are dropped entirely (not a specific movie).
@@ -43,6 +53,10 @@ DEFAULT_DROP = [
     r"GOLAZO",                    # soccer watch parties
     r"Watch Part(?:y|ies)",
     r"Tokusatsu",                 # recurring series label with no film attached
+    r"Private Theatre Rental",    # AMC private-booking options, not public screenings
+    r"Copa Mundial",              # FIFA World Cup watch parties (Telemundo), not films
+    r"Apple TV Live",             # live sports broadcasts: "F1 on Apple TV Live in IMAX: ..."
+    r"Memorial Screening",        # tribute events with no film named: "Classic - ... Memorial Screening"
 ]
 
 

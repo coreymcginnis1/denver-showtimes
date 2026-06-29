@@ -1,5 +1,6 @@
 from datetime import date
 
+from movie_scraper.scrapers.alamo import AlamoScraper
 from movie_scraper.scrapers.amc import AmcScraper
 from movie_scraper.scrapers.landmark import LandmarkScraper
 from movie_scraper.scrapers.sie_eventive import SieScraper
@@ -50,3 +51,28 @@ def test_amc_parse(cfg, amc_html):
     assert all(len(s.film_title) < 80 for s in out)
     assert all("AMC Signature" not in s.film_title for s in out)
     assert any(s.fmt for s in out)  # at least some formats parsed (Dolby/Laser/RealD)
+
+
+def test_amc_location_param(cfg):
+    """One AmcScraper class backs several locations via the `location` slug path."""
+    main = AmcScraper(cfg, cfg.theaters["amc"], key="amc")
+    assert main.slug == "amc-9-co-10"
+    assert main.url == "https://www.amctheatres.com/movie-theatres/denver/amc-9-co-10/showtimes"
+
+    west = AmcScraper(cfg, cfg.theaters["amc_westminster"], key="amc_westminster")
+    assert west.key == "amc_westminster"   # so its showtimes tag as their own theater
+    assert west.slug == "amc-westminster-promenade-24"
+    assert "amc-westminster-promenade-24/showtimes" in west.url
+
+
+def test_alamo_build(cfg, alamo_schedule):
+    scraper = AlamoScraper(cfg, cfg.theaters["alamo_sloans"], key="alamo_sloans")
+    out = scraper.build(alamo_schedule["data"], "sloans-lake", date(2026, 6, 29), date(2026, 6, 30))
+
+    assert out, "expected Alamo showtimes from fixture"
+    assert all(s.theater == "alamo_sloans" and not s.all_day for s in out)
+    assert all(s.start.tzinfo is not None for s in out)
+    assert any(s.screen and s.screen.startswith("Screen ") for s in out)
+    assert all("drafthouse.com/" in (s.ticket_url or "") for s in out)
+    assert any(s.film_title and s.film_title != "(untitled)" for s in out)
+    assert all(len(s.film_title) < 90 for s in out)        # real titles, not blobs

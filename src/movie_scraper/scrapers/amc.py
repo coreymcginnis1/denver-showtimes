@@ -21,8 +21,7 @@ from ..models import Showtime
 
 log = logging.getLogger(__name__)
 
-SHOWTIMES_URL = "https://www.amctheatres.com/movie-theatres/denver/amc-9-co-10/showtimes"
-THEATRE_SLUG = "amc-9-co-10"
+DEFAULT_LOCATION = "denver/amc-9-co-10"   # path under /movie-theatres/<...>/showtimes
 UA = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
       "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36")
 TIME_RE = re.compile(r"(\d{1,2}):(\d{2})\s*([apAP])[mM]")
@@ -60,6 +59,15 @@ def _block_heavy(route) -> None:
 class AmcScraper(BaseScraper):
     key = "amc"
 
+    def __init__(self, cfg, theater_cfg, key=None):
+        super().__init__(cfg, theater_cfg, key)
+        # `location` is the path under /movie-theatres/.../showtimes (e.g. "denver/amc-9-co-10"
+        # or "amc-westminster-promenade-24"). The last segment is the theatre slug AMC embeds
+        # in its format-heading element ids, used by _format().
+        self.location = (theater_cfg.location or DEFAULT_LOCATION).strip("/")
+        self.slug = self.location.rsplit("/", 1)[-1]
+        self.url = f"https://www.amctheatres.com/movie-theatres/{self.location}/showtimes"
+
     def fetch(self, start: date, end: date) -> list[Showtime]:
         results: list[Showtime] = []
         proxy = _proxy_config()
@@ -74,7 +82,7 @@ class AmcScraper(BaseScraper):
             if proxy:
                 log.info("amc: routing through proxy %s", proxy["server"])
             try:
-                page.goto(SHOWTIMES_URL, wait_until="domcontentloaded", timeout=60000)
+                page.goto(self.url, wait_until="domcontentloaded", timeout=60000)
                 self._wait_showtimes(page)
             except PWTimeout:
                 log.warning("amc: showtimes did not render (likely bot-challenged); skipping")
@@ -87,7 +95,7 @@ class AmcScraper(BaseScraper):
                     continue
                 if value:  # "" == Today (already loaded); other dates via ?date=
                     try:
-                        page.goto(f"{SHOWTIMES_URL}?date={value}",
+                        page.goto(f"{self.url}?date={value}",
                                   wait_until="domcontentloaded", timeout=60000)
                         self._wait_showtimes(page)
                         page.wait_for_timeout(500)
@@ -177,7 +185,7 @@ class AmcScraper(BaseScraper):
         amenities list, which we skip. Text after ' : ' is a marketing tagline.
         """
         for tok in described[1:]:
-            if f"-{THEATRE_SLUG}-" not in tok or tok.endswith("-attributes"):
+            if f"-{self.slug}-" not in tok or tok.endswith("-attributes"):
                 continue
             if not re.search(r"-\d+$", tok):
                 continue

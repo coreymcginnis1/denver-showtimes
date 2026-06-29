@@ -10,23 +10,53 @@ from zoneinfo import ZoneInfo
 
 from .config import Config, load_config
 from .models import Showtime
+from .scrapers.alamo import AlamoScraper
 from .scrapers.amc import AmcScraper
 from .scrapers.landmark import LandmarkScraper
+from .scrapers.regal import RegalScraper
 from .scrapers.sie_eventive import SieScraper
 
 log = logging.getLogger(__name__)
 
-SCRAPERS = {"sie": SieScraper, "landmark": LandmarkScraper, "amc": AmcScraper}
+# Scraper classes by name. A theater entry uses its key as the scraper name unless it sets
+# `scraper = "..."` (so several theaters can share one class, e.g. two AMC locations).
+SCRAPERS = {
+    "sie": SieScraper,
+    "landmark": LandmarkScraper,
+    "amc": AmcScraper,
+    "alamo": AlamoScraper,
+    "regal": RegalScraper,
+}
 WEEKDAYS = {"mon": 0, "tue": 1, "wed": 2, "thu": 3, "fri": 4, "sat": 5, "sun": 6}
+
+
+# Short words kept lowercase mid-title when re-casing an all-caps/all-lowercase title.
+_TITLE_SMALL = {"a", "an", "and", "as", "at", "but", "by", "for", "from", "in", "of",
+                "on", "or", "nor", "the", "to", "v", "vs", "via", "with"}
+
+
+def _titlecase(t: str) -> str:
+    """Title-case a uniformly-cased string, keeping short connector words lowercase."""
+    words = t.split(" ")
+    out = []
+    for i, w in enumerate(words):
+        if i and w.lower() in _TITLE_SMALL:
+            out.append(w.lower())
+        elif w[:1].isalpha():
+            out.append(w[:1].upper() + w[1:].lower())
+        else:
+            out.append(w)
+    return " ".join(out)
 
 
 def normalize_title(title: str, prefixes: list[str] = (), suffixes: list[str] = ()) -> str:
     """Standardize a film title.
 
     Strips a leading repertory/event series label (e.g. 'Bleak Week: ') and/or a trailing
-    event descriptor (e.g. ': The Midnight Mass Experience'), then title-cases fully
-    UPPERCASE titles so casing variants merge. Real titles with a colon (e.g.
-    'Star Wars: ...') are preserved because only configured labels are stripped.
+    event descriptor (e.g. ': The Midnight Mass Experience', ' (2026)', ' 85th Anniversary'),
+    then re-cases fully UPPERCASE *or* fully lowercase titles to Title Case so casing variants
+    merge (e.g. 'jackass: best and last' -> 'Jackass: Best and Last'). Mixed-case titles and
+    real colons (e.g. 'Star Wars: ...') are preserved — only configured labels are stripped.
     """
     t = (title or "").strip()
     if prefixes:
@@ -35,14 +65,27 @@ def normalize_title(title: str, prefixes: list[str] = (), suffixes: list[str] = 
             t = t[m.end():].strip()
     for suffix in suffixes or ():
         t = re.sub(suffix, "", t, flags=re.I).strip()
-    if t and t.upper() == t and t.lower() != t:   # ALL CAPS -> Title Case
-        t = re.sub(r"[A-Za-z]+", lambda mm: mm.group(0).capitalize(), t)
+    if t and (t == t.upper() or t == t.lower()) and t.upper() != t.lower():
+        t = _titlecase(t)   # uniformly UPPER or lower -> Title Case
     return t or (title or "").strip()
 
 
 def is_non_film(title: str, drop: list[str]) -> bool:
     """True if the title is a non-film event (mystery screening, watch party, …)."""
     return bool(drop) and any(re.search(p, title, re.I) for p in drop)
+
+
+_TITLE_FORMAT_RE = re.compile(r"\bon\s+(\d{2,3})\s?mm\b", re.I)
+
+
+def title_format(title: str) -> str | None:
+    """Film-gauge format embedded in a title, e.g. 'Interstellar on 35mm' -> '35mm'.
+
+    Captured before normalize_title strips the tag, so the gauge can be moved to the
+    showtime's format field instead of being lost.
+    """
+    m = _TITLE_FORMAT_RE.search(title or "")
+    return f"{m.group(1)}mm" if m else None
 
 
 def run(config_path: str = "config.toml", only: set[str] | None = None) -> dict:
@@ -52,18 +95,24 @@ def run(config_path: str = "config.toml", only: set[str] | None = None) -> dict:
     end = today + timedelta(days=cfg.days_ahead)
 
     collected: list[Showtime] = []
-    for key, cls in SCRAPERS.items():
-        tc = cfg.theaters.get(key)
-        if not tc or not tc.enabled or (only and key not in only):
+    for key, tc in cfg.theaters.items():
+        if not tc.enabled or (only and key not in only):
+            continue
+        cls = SCRAPERS.get(tc.scraper or key)
+        if cls is None:
+            log.warning("theater %s: no scraper %r — skipping", key, tc.scraper or key)
             continue
         try:
-            collected.extend(cls(cfg, tc).fetch(today, end))
+            collected.extend(cls(cfg, tc, key=key).fetch(today, end))
         except Exception:
             log.exception("scraper %s failed — skipping it", key)
 
     tcfg = cfg.titles
     normalized: list[Showtime] = []
     for s in collected:
+        gauge = title_format(s.film_title)   # capture "35mm"/"70mm" before normalize strips it
+        if gauge and not s.fmt:
+            s.fmt = gauge
         s.film_title = normalize_title(s.film_title, tcfg.strip_prefixes, tcfg.strip_suffixes)
         if not is_non_film(s.film_title, tcfg.drop):
             normalized.append(s)
@@ -112,7 +161,7 @@ def _build_feed(cfg: Config, shows: list[Showtime], tz: ZoneInfo) -> dict:
     return {
         "generated_at": datetime.now(tz).isoformat(),
         "timezone": cfg.timezone,
-        "theaters": [{"key": k, "name": t.name, "color": t.color}
+        "theaters": [{"key": k, "name": t.name, "color": t.color, "default_on": t.default_on}
                      for k, t in cfg.theaters.items() if t.enabled],
         "films": films,
         "default_films": default_films,

@@ -6,7 +6,7 @@ from movie_scraper.config import (
     DEFAULT_DROP, DEFAULT_STRIP_PREFIXES, DEFAULT_STRIP_SUFFIXES, load_config,
 )
 from movie_scraper.models import Showtime
-from movie_scraper.pipeline import _build_feed, _passes, is_non_film, normalize_title
+from movie_scraper.pipeline import _build_feed, _passes, is_non_film, normalize_title, title_format
 
 DEN = ZoneInfo("America/Denver")
 ROOT = Path(__file__).parent.parent
@@ -70,6 +70,52 @@ def test_normalize_title_strips_suffix_and_caps():
     assert normalize_title("STOP! THAT! TRAIN!", P, S) == "Stop! That! Train!"
 
 
+def test_normalize_title_strips_year_and_event_suffixes():
+    P, S = DEFAULT_STRIP_PREFIXES, DEFAULT_STRIP_SUFFIXES
+    assert normalize_title("Moana (2026)", P, S) == "Moana"
+    assert normalize_title("Scarface (1983)", P, S) == "Scarface"
+    assert normalize_title("Citizen Kane 85th Anniversary", P, S) == "Citizen Kane"
+    assert normalize_title("Talladega Nights: Ballad of Ricky Bobby - 20th Anniversary", P, S) == "Talladega Nights: Ballad of Ricky Bobby"
+    assert normalize_title("My Neighbor Totoro - Studio Ghibli Fest 2026", P, S) == "My Neighbor Totoro"
+    assert normalize_title("MOANA IMAX Opening Night Fan Event", P, S) == "Moana"
+    assert normalize_title("Minions & Monsters Early Access Screening", P, S) == "Minions & Monsters"
+    # a real number in parens that isn't a 4-digit year is left alone
+    assert normalize_title("Se7en", P, S) == "Se7en"
+
+
+def test_normalize_title_lowercase_to_titlecase():
+    assert normalize_title("jackass: best and last") == "Jackass: Best and Last"
+    assert normalize_title("the lord of the rings") == "The Lord of the Rings"
+    # mixed-case titles are left untouched (only uniform upper/lower get re-cased)
+    assert normalize_title("To Wong Foo, Thanks for Everything, Julie Newmar") == "To Wong Foo, Thanks for Everything, Julie Newmar"
+
+
+def test_is_non_film_drops_soccer_watch_parties():
+    assert is_non_film("Argentina vs Cabo Verde - Telemundo presenta la Copa Mundial de la FIFA 2026", DEFAULT_DROP)
+    assert is_non_film("Cuartos de Final - Telemundo presenta la Copa Mundial de la FIFA 2026", DEFAULT_DROP)
+    assert not is_non_film("Supergirl", DEFAULT_DROP)
+
+
+def test_normalize_title_series_prefix_and_format_suffix():
+    P, S = DEFAULT_STRIP_PREFIXES, DEFAULT_STRIP_SUFFIXES
+    assert normalize_title("The Popcorn List: The Fisherman", P) == "The Fisherman"
+    assert normalize_title("Interstellar on 35mm", P, S) == "Interstellar"
+    assert normalize_title("Oppenheimer on 70mm", P, S) == "Oppenheimer"
+
+
+def test_is_non_film_drops_live_broadcast_and_memorial():
+    assert is_non_film("F1 on Apple TV Live in IMAX: British Race", DEFAULT_DROP)
+    assert is_non_film("Classic - Tim Kaminski Memorial Screening", DEFAULT_DROP)
+    assert not is_non_film("F1", DEFAULT_DROP)            # the real 2025 film must survive
+    assert not is_non_film("F1: The Movie", DEFAULT_DROP)
+
+
+def test_title_format_extraction():
+    assert title_format("Interstellar on 35mm") == "35mm"
+    assert title_format("Oppenheimer on 70mm") == "70mm"
+    assert title_format("Interstellar") is None
+
+
 def test_is_non_film_drop():
     assert is_non_film("AMC Screen Unseen: June 22", DEFAULT_DROP)
     assert is_non_film("¡GOLAZO!: 2026 Soccer Watch Parties", DEFAULT_DROP)
@@ -99,3 +145,21 @@ def test_build_feed_default_films_empty_means_all():
     c.defaults.films = []
     feed = _build_feed(c, [st("Dune")], DEN)
     assert feed["default_films"] is None
+
+
+def test_secondary_theaters_config():
+    c = fresh_cfg()
+    assert c.theaters["amc"].default_on is True             # primary theaters start on
+    assert c.theaters["amc_westminster"].default_on is False  # secondary start off
+    assert c.theaters["amc_westminster"].scraper == "amc"   # reuses the AMC scraper
+    assert c.theaters["alamo_sloans"].default_on is False
+    assert c.theaters["regal_colorado"].enabled is False    # Cloudflare-gated -> disabled
+
+
+def test_build_feed_carries_default_on():
+    c = fresh_cfg()
+    feed = _build_feed(c, [st("A", 19, "amc")], DEN)
+    by_key = {t["key"]: t for t in feed["theaters"]}
+    assert by_key["amc"]["default_on"] is True
+    assert by_key["amc_westminster"]["default_on"] is False
+    assert "regal_colorado" not in by_key                  # disabled theaters omitted from feed

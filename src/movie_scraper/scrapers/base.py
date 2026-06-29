@@ -37,10 +37,12 @@ class BaseScraper(ABC):
 
     key: str = ""
 
-    def __init__(self, cfg: Config, theater_cfg: TheaterCfg):
+    def __init__(self, cfg: Config, theater_cfg: TheaterCfg, key: str | None = None):
         self.cfg = cfg
         self.theater_cfg = theater_cfg
         self.tz = ZoneInfo(cfg.timezone)
+        if key:                      # one scraper class can back several theaters (e.g. two AMCs)
+            self.key = key
 
     @abstractmethod
     def fetch(self, start: date, end: date) -> list[Showtime]:

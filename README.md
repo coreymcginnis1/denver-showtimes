@@ -1,9 +1,10 @@
 # Denver Indie & Repertory Showtimes
 
-An interactive web calendar of movie showtimes for three Denver theaters —
-**Sie FilmCenter**, **Landmark Mayan**, and **AMC 9+CO 10** — that readers can filter
-by film and from which they can add any screening to their own calendar
-(Google / Outlook / Apple `.ics`). Built to be linked from a Substack post.
+An interactive web calendar of Denver movie showtimes — the three indie/repertory mainstays
+**Sie FilmCenter**, **Landmark Mayan**, and **AMC 9+CO 10**, plus opt-in secondary venues
+(**AMC Westminster**, **Alamo Drafthouse Sloans Lake**) that occasionally carry indies/70mm/IMAX
+— that readers can filter by film and from which they can add any screening to their own
+calendar (Google / Outlook / Apple `.ics`). Built to be linked from a Substack post.
 
 ## How it works
 
@@ -28,6 +29,13 @@ scraper (Python, local)  ──►  public/data.json  ──►  static site (Fu
 | Sie FilmCenter | Eventive public API (`api.eventive.org`) | Exact showtimes |
 | AMC 9+CO 10 | Rendered showtimes page (Playwright) | Exact showtimes, ~2 weeks |
 | Landmark Mayan | `boxofficeapi` `schedule` endpoint | Exact showtimes, screen + format, direct booking links |
+| AMC Westminster Promenade 24 | Same AMC scraper, different `location` slug | Exact showtimes; **off by default** |
+| Alamo Drafthouse Sloans Lake | "mother" schedule API (`drafthouse.com/s/mother/v2`) | Exact showtimes, screen, special formats (35/70mm); **off by default** |
+| Regal Colorado Center / Denver Pavilions | Theatre-page `__NEXT_DATA__` (Playwright) | **Disabled** — Cloudflare "verify you are human" gates future dates (see `scrapers/regal.py`) |
+
+"Off by default" theaters are scraped and available, but their filter chip starts unchecked —
+readers click it to add them. Regal ships **disabled** (`enabled = false`) because its site only
+server-renders the current day behind a CAPTCHA wall.
 
 ## Quick start (local)
 
@@ -48,7 +56,10 @@ Useful flags: `--theater sie|landmark|amc` (repeatable), `--dry-run`, `--output 
 ## Configuration — `config.toml`
 
 - `timezone`, `days_ahead` (rolling window), `default_runtime_minutes`
-- `[theaters.*]` — `enabled`, display `name`, calendar `color`
+- `[theaters.*]` — `enabled` (scrape + include), `default_on` (whether its filter chip starts
+  ON; set `false` for secondary venues), display `name`, calendar `color`, and optionally
+  `scraper` (reuse another theater's scraper class) + `location` (that scraper's theatre id —
+  an AMC slug path, an Alamo venue, or a Regal route)
 - `[filters]` (optional) — `title_include` / `title_exclude` (regex), `weekdays`,
   `earliest` / `latest` (local `HH:MM`). Empty = include everything.
 

@@ -8,8 +8,10 @@ Dates come from a <select name="date"> with value="YYYY-MM-DD" options.
 from __future__ import annotations
 
 import logging
+import os
 import re
 from datetime import date, datetime
+from urllib.parse import urlparse
 
 from bs4 import BeautifulSoup
 from playwright.sync_api import TimeoutError as PWTimeout, sync_playwright
@@ -26,18 +28,51 @@ UA = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
 TIME_RE = re.compile(r"(\d{1,2}):(\d{2})\s*([apAP])[mM]")
 
 
+def _proxy_config() -> dict | None:
+    """Playwright proxy from the AMC_PROXY env var (e.g. http://user:pass@host:port), or None.
+
+    AMC blocks datacenter IPs, so CI routes its browser through a residential proxy. Local
+    runs (no AMC_PROXY set) hit AMC directly.
+    """
+    raw = os.environ.get("AMC_PROXY", "").strip()
+    if not raw:
+        return None
+    parsed = urlparse(raw)
+    if not parsed.hostname:
+        return None
+    server = f"{parsed.scheme or 'http'}://{parsed.hostname}" + (f":{parsed.port}" if parsed.port else "")
+    cfg: dict = {"server": server}
+    if parsed.username:
+        cfg["username"] = parsed.username
+    if parsed.password:
+        cfg["password"] = parsed.password
+    return cfg
+
+
+def _block_heavy(route) -> None:
+    """Abort image/media/font requests — saves proxy bandwidth and speeds up the render."""
+    if route.request.resource_type in ("image", "media", "font"):
+        route.abort()
+    else:
+        route.continue_()
+
+
 class AmcScraper(BaseScraper):
     key = "amc"
 
     def fetch(self, start: date, end: date) -> list[Showtime]:
         results: list[Showtime] = []
+        proxy = _proxy_config()
         with sync_playwright() as pw:
-            browser = pw.chromium.launch(headless=True)
+            browser = pw.chromium.launch(headless=True, **({"proxy": proxy} if proxy else {}))
             ctx = browser.new_context(
                 user_agent=UA, locale="en-US", timezone_id=self.cfg.timezone,
                 viewport={"width": 1366, "height": 2400},
             )
             page = ctx.new_page()
+            page.route("**/*", _block_heavy)
+            if proxy:
+                log.info("amc: routing through proxy %s", proxy["server"])
             try:
                 page.goto(SHOWTIMES_URL, wait_until="domcontentloaded", timeout=60000)
                 self._wait_showtimes(page)

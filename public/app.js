@@ -14,6 +14,11 @@
 
   function $(id) { return document.getElementById(id); }
   function stripTZ(iso) { return iso.replace(/([+-]\d{2}:\d{2}|Z)$/, ""); }
+  function fmtTime(iso) {   // compact Denver wall-clock from the ISO string, e.g. "4:15p", "12p"
+    var hh = parseInt(iso.slice(11, 13), 10), mm = parseInt(iso.slice(14, 16), 10);
+    var h = hh % 12 || 12;
+    return h + (mm ? ":" + String(mm).padStart(2, "0") : "") + (hh >= 12 ? "p" : "a");
+  }
 
   function init() {
     fetch("data.json?_=" + Date.now())
@@ -237,7 +242,35 @@
       },
       views: {
         listDay: { buttonText: "Daily" },
-        dayGridWeek: { buttonText: "Week", dayMaxEvents: false },  // 7 day-columns, showtimes stacked
+        dayGridWeek: {
+          buttonText: "Week",                    // 7 day-columns; films grouped into title + chips
+          dayMaxEvents: false,
+          eventClassNames: function () { return ["wk-event"]; },
+          eventContent: function (arg) {         // scoped to Week only, so Daily/Month keep defaults
+            var wrap = document.createElement("div");
+            wrap.className = "wk-film";
+            var title = document.createElement("div");
+            title.className = "wk-film-title";
+            title.textContent = arg.event.title;
+            wrap.appendChild(title);
+            var chips = document.createElement("div");
+            chips.className = "wk-chips";
+            (arg.event.extendedProps.showtimes || []).slice()
+              .sort(function (a, b) { return a.start < b.start ? -1 : 1; })
+              .forEach(function (s) {
+                var chip = document.createElement("span");
+                chip.className = "wk-chip";
+                var dot = document.createElement("span");
+                dot.className = "wk-dot";
+                dot.style.background = theaterMeta(s.extendedProps.theater).color;
+                chip.appendChild(dot);
+                chip.appendChild(document.createTextNode(fmtTime(s.start)));
+                chips.appendChild(chip);
+              });
+            wrap.appendChild(chips);
+            return { domNodes: [wrap] };
+          },
+        },
         dayGridMonth: { dayMaxEvents: true },    // collapse busy days to a "+N more" list
       },
       height: "auto",
@@ -249,7 +282,7 @@
         // dayGridMonth spans ~35-42 days; Week=7, Daily=1. Use the fetch range (not the
         // active view, which can lag mid-switch) to decide whether to aggregate.
         var spanDays = (new Date(info.end) - new Date(info.start)) / 86400000;
-        success(spanDays > 8 ? filmDayEvents() : filteredEvents());
+        success(spanDays > 1 ? filmDayEvents() : filteredEvents());   // Daily individual; Week/Month by film
       },
       eventClick: function (arg) { arg.jsEvent.preventDefault(); openModal(arg.event); },
       datesSet: function (arg) {

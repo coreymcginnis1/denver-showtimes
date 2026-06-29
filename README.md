@@ -8,13 +8,15 @@ by film and from which they can add any screening to their own calendar
 ## How it works
 
 ```
-scraper (Python)  ──►  public/data.json  ──►  static site (FullCalendar)  ──►  GitHub Pages
-   every theater          the data feed         filter + add-to-calendar        daily via Actions
+scraper (Python, local)  ──►  public/data.json  ──►  static site (FullCalendar)  ──►  GitHub Pages
+   you run it weekly             the data feed         filter + add-to-calendar       deploy via Actions
 ```
 
 - A Python scraper pulls showtimes from each theater and writes `public/data.json`.
 - `public/` is a dependency-free static site (FullCalendar + vanilla JS) that renders the feed.
-- A scheduled **GitHub Action** re-scrapes daily and deploys `public/` to **GitHub Pages**.
+- You run the scraper **on your machine** (weekly — showtimes turn over Wed/Thu) and push
+  `data.json`; a **GitHub Action** then publishes `public/` to **GitHub Pages**. Scraping is local
+  because AMC blocks cloud datacenter IPs (your home IP works).
 - You paste the Pages URL into Substack; it renders a preview card that readers click through.
   (Substack can't embed interactive widgets inline — only a fixed allowlist — so the calendar
   lives on its own page and Substack links to it.)
@@ -54,11 +56,29 @@ Useful flags: `--theater sie|landmark|amc` (repeatable), `--dry-run`, `--output 
 
 1. Push this repo to GitHub.
 2. **Settings → Pages → Build and deployment → Source: GitHub Actions.**
-3. The workflow [`.github/workflows/update.yml`](.github/workflows/update.yml) runs on a daily
-   cron, on every push to `main`, and via **Run workflow** (Actions tab). It scrapes, injects the
-   Pages URL into the page's Open Graph tags, and deploys `public/`.
+3. The workflow [`.github/workflows/update.yml`](.github/workflows/update.yml) is **deploy-only**:
+   on every push to `main` (and via **Run workflow**) it injects the Pages URL into the Open Graph
+   tags and publishes `public/`. It does **not** scrape — see *Updating showtimes* below.
 
 Your calendar will be at `https://<user>.github.io/<repo>/`.
+
+## Updating showtimes
+
+Scraping runs **on your machine**, not in the cloud (AMC blocks GitHub's datacenter IPs; your home
+IP works). Showtimes turn over Wed/Thu, so once a week is plenty:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\update.ps1
+```
+
+It scrapes all three theaters, commits `public/data.json` if it changed, and pushes — the
+deploy-only Action republishes. To automate it, add a weekly Windows Task Scheduler job (adjust the
+path):
+
+```powershell
+schtasks /create /tn "Denver Showtimes Update" /sc weekly /d THU /st 09:00 ^
+  /tr "powershell -ExecutionPolicy Bypass -File C:\Users\CMcGinnis\PythonProjects\movie-scraper\scripts\update.ps1"
+```
 
 ## Link it from Substack
 
@@ -71,7 +91,8 @@ Paste the Pages URL on its own line in a post and press Enter — Substack rende
 src/movie_scraper/        scraper package (models, config, pipeline, cli, scrapers/)
 public/                   static site (index.html, app.js, styles.css, data.json, preview.png)
 tests/                    offline tests + saved fixtures
-.github/workflows/        daily scrape + Pages deploy
+.github/workflows/        Pages deploy (deploy-only)
+scripts/update.ps1        local weekly scrape + push
 config.toml               settings
 ```
 
@@ -86,9 +107,10 @@ pytest                    # runs offline against saved fixtures in tests/fixture
 - All three theaters carry exact showtimes. Landmark's come from a live `schedule` endpoint
   the site calls only after a theater is selected (`from`/`to` cinema-day window +
   `theaters={"id":"X02AK",...}`) — see `src/movie_scraper/scrapers/landmark.py`.
-- **AMC** is bot-protected; rendering usually succeeds, but a run from GitHub's datacenter IPs may
-  occasionally be challenged. The pipeline isolates each theater, so one failing still deploys the
-  others (and a failed Action emails you).
+- **AMC** is bot-protected and blocks datacenter IPs, so it can't be scraped from GitHub's runners —
+  which is why scraping runs locally (your home IP works). The scraper still supports an `AMC_PROXY`
+  env var (a residential proxy) if you ever want AMC scraped from CI, but the local-weekly flow
+  doesn't need it.
 - The Sie/Eventive request uses Eventive's public publishable read key embedded in their site; if
   it ever rotates, re-extract it (see `src/movie_scraper/scrapers/sie_eventive.py`).
 - Scraping is for personal/community convenience — times can change; always confirm on the

@@ -76,6 +76,13 @@ header .updated { margin: 6px 0 0; color: var(--muted); font-size: .8rem; }
 .fc .fc-button { text-transform: capitalize; }
 .fc-event { cursor: pointer; }
 .fc .list-meta { color: var(--muted); font-weight: 400; font-size: .88em; margin-left: 10px; }
+
+/* Week view: films grouped with theater-dot + time chips */
+.fc-daygrid-event.wk-event { background: none !important; border: none !important; box-shadow: none; padding: 0; margin: 1px 2px 7px; white-space: normal; }
+.wk-film-title { font-weight: 600; font-size: .82rem; color: var(--ink); line-height: 1.2; }
+.wk-chips { display: flex; flex-wrap: wrap; gap: 2px 8px; margin-top: 2px; }
+.wk-chip { display: inline-flex; align-items: center; gap: 4px; font-size: .75rem; color: var(--muted); white-space: nowrap; }
+.wk-dot { width: 8px; height: 8px; border-radius: 50%; flex: none; }
 .fc-event.amc-allday-na { opacity: .9; }
 
 /* Modal */

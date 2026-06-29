@@ -17,8 +17,14 @@ if ($LASTEXITCODE -ne 0) { Write-Error "Scrape failed."; exit 1 }
 git add public/data.json
 if (git status --porcelain public/data.json) {
     git commit -m "Update showtimes $(Get-Date -Format 'yyyy-MM-dd')"
+    # git push uses whichever GitHub account gh has active; force the personal one.
+    gh auth switch --user coreymcginnis1 2>$null
     git push
-    Write-Host "`nShowtimes updated and pushed - the site will redeploy shortly."
+    if ($LASTEXITCODE -eq 0) {
+        Write-Host "`nShowtimes updated and pushed - the site will redeploy shortly."
+    } else {
+        Write-Error "Push failed - run 'gh auth status'; the active account needs write access to coreymcginnis1/denver-showtimes."
+    }
 } else {
     Write-Host "`nNo change in showtimes; nothing to push."
 }

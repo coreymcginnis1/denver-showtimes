@@ -101,6 +101,9 @@ def test_normalize_title_series_prefix_and_format_suffix():
     assert normalize_title("The Popcorn List: The Fisherman", P) == "The Fisherman"
     assert normalize_title("Interstellar on 35mm", P, S) == "Interstellar"
     assert normalize_title("Oppenheimer on 70mm", P, S) == "Oppenheimer"
+    assert normalize_title("Minions & Monsters: Xfinity", P, S) == "Minions & Monsters"
+    # a real colon subtitle that isn't a sponsor tag is preserved
+    assert normalize_title("Mission: Impossible", P, S) == "Mission: Impossible"
 
 
 def test_is_non_film_drops_live_broadcast_and_memorial():

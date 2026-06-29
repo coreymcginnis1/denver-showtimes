@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-29T15:36:45.379272-06:00",
+  "generated_at": "2026-06-29T15:40:43.359044-06:00",
   "timezone": "America/Denver",
   "theaters": [
     {
@@ -89,7 +89,6 @@
     "Michael",
     "Mikey and Nicky",
     "Minions & Monsters",
-    "Minions & Monsters: Xfinity",
     "Moana",
     "Moonlight",
     "My Neighbor Totoro",
@@ -15151,8 +15150,8 @@
       "end": "2026-07-01T17:45:00-06:00"
     },
     {
-      "id": "ms_cf1270147de2bd4e",
-      "title": "Minions & Monsters: Xfinity",
+      "id": "ms_2afc9e20d9c01692",
+      "title": "Minions & Monsters",
       "start": "2026-07-01T15:20:00-06:00",
       "allDay": false,
       "backgroundColor": "#4C9F70",

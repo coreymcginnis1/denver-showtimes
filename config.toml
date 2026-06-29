@@ -87,6 +87,7 @@ strip_suffixes = [
   '\s+(?:IMAX\s+)?(?:Opening Night\s+)?Fan Event$',      # "MOANA IMAX Opening Night Fan Event"
   '\s+(?:IMAX\s+)?(?:Early Access|Advance)\s+Screenings?$',  # "... Early Access Screening"
   '\s+on\s+\d{2,3}\s?mm$',      # format tag in title: "Interstellar on 35mm" -> "Interstellar"
+  '\s*[:–—-]\s*Xfinity\b.*$',   # sponsor tag: "Minions & Monsters: Xfinity" -> "Minions & Monsters"
 ]
 # Titles matching any of these are dropped entirely — events that aren't a specific
 # movie (mystery screenings, watch parties, etc.). Case-insensitive regex.

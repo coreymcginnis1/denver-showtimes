@@ -45,6 +45,7 @@ DEFAULT_STRIP_SUFFIXES = [
     r"\s+(?:IMAX\s+)?(?:Opening Night\s+)?Fan Event$",        # "MOANA IMAX Opening Night Fan Event"
     r"\s+(?:IMAX\s+)?(?:Early Access|Advance)\s+Screenings?$",  # "... Early Access Screening"
     r"\s+on\s+\d{2,3}\s?mm$",     # format tag in the title: "Interstellar on 35mm" -> "Interstellar"
+    r"\s*[:–—-]\s*Xfinity\b.*$",  # sponsor tag: "Minions & Monsters: Xfinity" -> "Minions & Monsters"
 ]
 
 # Titles matching these are dropped entirely (not a specific movie).

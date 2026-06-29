@@ -21,7 +21,7 @@
   }
 
   function init() {
-    fetch("data.json?_=" + Date.now())
+    fetch("data.json?_=" + Date.now(), { cache: "no-store" })
       .then(function (r) { return r.json(); })
       .then(function (data) {
         DATA = data;

@@ -46,3 +46,8 @@ def amc_html():
 @pytest.fixture
 def alamo_schedule():
     return _load("alamo_schedule.json")
+
+
+@pytest.fixture
+def fandango_showtimes():
+    return _load("fandango_showtimes.json")

@@ -31,11 +31,12 @@ scraper (Python, local)  ──►  public/data.json  ──►  static site (Fu
 | Landmark Mayan | `boxofficeapi` `schedule` endpoint | Exact showtimes, screen + format, direct booking links |
 | AMC Westminster Promenade 24 | Same AMC scraper, different `location` slug | Exact showtimes; **off by default** |
 | Alamo Drafthouse Sloans Lake | "mother" schedule API (`drafthouse.com/s/mother/v2`) | Exact showtimes, screen, special formats (35/70mm); **off by default** |
-| Regal Colorado Center / Denver Pavilions | Theatre-page `__NEXT_DATA__` (Playwright) | **Disabled** — Cloudflare "verify you are human" gates future dates (see `scrapers/regal.py`) |
+| Regal Colorado Center / Denver Pavilions | Fandango napi (`fandango.com/napi/theaterMovieShowtimes`) | Exact showtimes + formats (IMAX/RPX), via plain httpx; **off by default** |
 
 "Off by default" theaters are scraped and available, but their filter chip starts unchecked —
-readers click it to add them. Regal ships **disabled** (`enabled = false`) because its site only
-server-renders the current day behind a CAPTCHA wall.
+readers click it to add them. **Regal** reads from **Fandango** (one JSON call per date, no
+browser) because Regal's own site is Cloudflare-gated and only server-renders the current day —
+Regal sells tickets through Fandango, whose `napi` endpoints are open (see `scrapers/fandango.py`).
 
 ## Quick start (local)
 
@@ -59,7 +60,7 @@ Useful flags: `--theater sie|landmark|amc` (repeatable), `--dry-run`, `--output 
 - `[theaters.*]` — `enabled` (scrape + include), `default_on` (whether its filter chip starts
   ON; set `false` for secondary venues), display `name`, calendar `color`, and optionally
   `scraper` (reuse another theater's scraper class) + `location` (that scraper's theatre id —
-  an AMC slug path, an Alamo venue, or a Regal route)
+  an AMC slug path, an Alamo venue, or a Fandango theater id)
 - `[filters]` (optional) — `title_include` / `title_exclude` (regex), `weekdays`,
   `earliest` / `latest` (local `HH:MM`). Empty = include everything.
 

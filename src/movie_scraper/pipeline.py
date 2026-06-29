@@ -12,20 +12,21 @@ from .config import Config, load_config
 from .models import Showtime
 from .scrapers.alamo import AlamoScraper
 from .scrapers.amc import AmcScraper
+from .scrapers.fandango import FandangoScraper
 from .scrapers.landmark import LandmarkScraper
-from .scrapers.regal import RegalScraper
 from .scrapers.sie_eventive import SieScraper
 
 log = logging.getLogger(__name__)
 
 # Scraper classes by name. A theater entry uses its key as the scraper name unless it sets
-# `scraper = "..."` (so several theaters can share one class, e.g. two AMC locations).
+# `scraper = "..."` (so several theaters can share one class, e.g. two AMCs, or the two Regal
+# locations both reading from Fandango).
 SCRAPERS = {
     "sie": SieScraper,
     "landmark": LandmarkScraper,
     "amc": AmcScraper,
     "alamo": AlamoScraper,
-    "regal": RegalScraper,
+    "fandango": FandangoScraper,
 }
 WEEKDAYS = {"mon": 0, "tue": 1, "wed": 2, "thu": 3, "fri": 4, "sat": 5, "sun": 6}
 
@@ -67,6 +68,11 @@ def normalize_title(title: str, prefixes: list[str] = (), suffixes: list[str] = 
         t = re.sub(suffix, "", t, flags=re.I).strip()
     if t and (t == t.upper() or t == t.lower()) and t.upper() != t.lower():
         t = _titlecase(t)   # uniformly UPPER or lower -> Title Case
+    elif t:
+        # In a mixed-case title, down-case ALL-CAPS words of 4+ letters so casing variants merge
+        # ("BLEACH: ..." -> "Bleach: ...", "The LEGO ..." -> "The Lego ..."), while short
+        # acronyms (UFC, RRR) and stylized mixed-case are left alone.
+        t = re.sub(r"\b[A-Z]{4,}\b", lambda m: m.group(0).capitalize(), t)
     return t or (title or "").strip()
 
 

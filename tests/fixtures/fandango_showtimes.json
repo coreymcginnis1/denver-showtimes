@@ -1,0 +1,823 @@
+{
+ "viewModel": {
+  "theater": {
+   "id": "AAFXW",
+   "name": "Regal UA Colorado Center"
+  },
+  "movies": [
+   {
+    "id": 229078,
+    "title": "REGAL: Monday Mystery Movie",
+    "runtime": 0,
+    "releaseDate": null,
+    "rating": "R",
+    "poster": {
+     "size": {
+      "100": "https://images.fandango.com/ImageRenderer/100/0/redesign/static/img/default_poster.png/0/images/MasterRepository/fandango/229078/regalMMM.png",
+      "200": "https://images.fandango.com/ImageRenderer/200/0/redesign/static/img/default_poster.png/0/images/MasterRepository/fandango/229078/regalMMM.png",
+      "300": "https://images.fandango.com/ImageRenderer/300/0/redesign/static/img/default_poster.png/0/images/MasterRepository/fandango/229078/regalMMM.png",
+      "400": "https://images.fandango.com/ImageRenderer/400/0/redesign/static/img/default_poster.png/0/images/MasterRepository/fandango/229078/regalMMM.png",
+      "500": "https://images.fandango.com/ImageRenderer/500/0/redesign/static/img/default_poster.png/0/images/MasterRepository/fandango/229078/regalMMM.png",
+      "full": "https://images.fandango.com/ImageRenderer/0/0/redesign/static/img/default_poster.png/0/images/MasterRepository/fandango/229078/regalMMM.png"
+     },
+     "uri": "images/MasterRepository/fandango/229078/regalMMM.png"
+    },
+    "darkPoster": {
+     "size": {
+      "100": "https://images.fandango.com/ImageRenderer/100/0/redesign/static/img/default_poster--dark-mode.png/0/images/MasterRepository/fandango/229078/regalMMM.png",
+      "200": "https://images.fandango.com/ImageRenderer/200/0/redesign/static/img/default_poster--dark-mode.png/0/images/MasterRepository/fandango/229078/regalMMM.png",
+      "300": "https://images.fandango.com/ImageRenderer/300/0/redesign/static/img/default_poster--dark-mode.png/0/images/MasterRepository/fandango/229078/regalMMM.png",
+      "400": "https://images.fandango.com/ImageRenderer/400/0/redesign/static/img/default_poster--dark-mode.png/0/images/MasterRepository/fandango/229078/regalMMM.png",
+      "500": "https://images.fandango.com/ImageRenderer/500/0/redesign/static/img/default_poster--dark-mode.png/0/images/MasterRepository/fandango/229078/regalMMM.png",
+      "full": "https://images.fandango.com/ImageRenderer/0/0/redesign/static/img/default_poster--dark-mode.png/0/images/MasterRepository/fandango/229078/regalMMM.png"
+     },
+     "uri": "images/MasterRepository/fandango/229078/regalMMM.png"
+    },
+    "mopURI": "/regal-monday-mystery-movie-229078/movie-overview",
+    "genres": [],
+    "variants": [
+     {
+      "filmFormatHeader": "Standard",
+      "amenityGroups": [
+       {
+        "lateNightMsg": "",
+        "amenities": [
+         {
+          "id": 2011,
+          "imageUrl": null,
+          "name": "Reserved seating",
+          "description": "This showtime allows you to reserve your seats ahead of time."
+         },
+         {
+          "id": 2012,
+          "imageUrl": null,
+          "name": "No passes",
+          "description": "Vouchers and coupons for free or discounted admission cannot be used for this showing. Refer to your pass for details."
+         },
+         {
+          "id": 1012,
+          "imageUrl": null,
+          "name": "Closed caption",
+          "description": "Closed Captioning devices display a movie's dialogue and sound effects as text; captions are not shown on the main screen.  Devices available by request."
+         },
+         {
+          "id": 1283,
+          "imageUrl": null,
+          "name": "Stadium Seating",
+          "description": "This auditorium has stadium seating."
+         },
+         {
+          "id": 1472,
+          "imageUrl": null,
+          "name": "Laser Projection",
+          "description": "Presented with sharp images of our laser projection system."
+         }
+        ],
+        "hasReservedSeating": true,
+        "isDolby": false,
+        "movieVariantId": 229078,
+        "showtimes": [
+         {
+          "date": "7:00p",
+          "expired": false,
+          "hasMatineeMessage": false,
+          "showtimeHashCode": "v2-1e9eb9354cf40ef6fdbd110cf7295d2498bcdf614ea6ccec25bb858e37055b18",
+          "id": 551680856,
+          "matineeMessage": "",
+          "message": null,
+          "screenReaderTime": "7 o'clock PM",
+          "ticketingDate": "2026-06-29+19:00",
+          "type": "available",
+          "filmFormat": [],
+          "ticketingJumpPageURL": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-06-29%2B19%3A00&from=mov_det_showtimes&source=desktop&mid=229078&tid=AAFXW&dfam=webbrowser&showtimehashcode=v2-1e9eb9354cf40ef6fdbd110cf7295d2498bcdf614ea6ccec25bb858e37055b18"
+         }
+        ],
+        "amenityString": "Reserved seating, No passes, Closed caption, Stadium Seating, Laser Projection"
+       }
+      ],
+      "amenityGroupClassName": "shared-showtimes__amenity-group-card--standard",
+      "filmFormatHeaderClassName": "shared-showtimes__title-header--standard"
+     }
+    ],
+    "hasMatinee": false,
+    "isFavorite": false
+   },
+   {
+    "id": 245528,
+    "title": "Jackass: Best and Last (2026)",
+    "runtime": 92,
+    "releaseDate": "2026-06-26",
+    "rating": "R",
+    "poster": {
+     "size": {
+      "100": "https://images.fandango.com/ImageRenderer/100/0/redesign/static/img/default_poster.png/0/images/MasterRepository/fandango/245528/jackassbestandlast_new.jpg",
+      "200": "https://images.fandango.com/ImageRenderer/200/0/redesign/static/img/default_poster.png/0/images/MasterRepository/fandango/245528/jackassbestandlast_new.jpg",
+      "300": "https://images.fandango.com/ImageRenderer/300/0/redesign/static/img/default_poster.png/0/images/MasterRepository/fandango/245528/jackassbestandlast_new.jpg",
+      "400": "https://images.fandango.com/ImageRenderer/400/0/redesign/static/img/default_poster.png/0/images/MasterRepository/fandango/245528/jackassbestandlast_new.jpg",
+      "500": "https://images.fandango.com/ImageRenderer/500/0/redesign/static/img/default_poster.png/0/images/MasterRepository/fandango/245528/jackassbestandlast_new.jpg",
+      "full": "https://images.fandango.com/ImageRenderer/0/0/redesign/static/img/default_poster.png/0/images/MasterRepository/fandango/245528/jackassbestandlast_new.jpg"
+     },
+     "uri": "images/MasterRepository/fandango/245528/jackassbestandlast_new.jpg"
+    },
+    "darkPoster": {
+     "size": {
+      "100": "https://images.fandango.com/ImageRenderer/100/0/redesign/static/img/default_poster--dark-mode.png/0/images/MasterRepository/fandango/245528/jackassbestandlast_new.jpg",
+      "200": "https://images.fandango.com/ImageRenderer/200/0/redesign/static/img/default_poster--dark-mode.png/0/images/MasterRepository/fandango/245528/jackassbestandlast_new.jpg",
+      "300": "https://images.fandango.com/ImageRenderer/300/0/redesign/static/img/default_poster--dark-mode.png/0/images/MasterRepository/fandango/245528/jackassbestandlast_new.jpg",
+      "400": "https://images.fandango.com/ImageRenderer/400/0/redesign/static/img/default_poster--dark-mode.png/0/images/MasterRepository/fandango/245528/jackassbestandlast_new.jpg",
+      "500": "https://images.fandango.com/ImageRenderer/500/0/redesign/static/img/default_poster--dark-mode.png/0/images/MasterRepository/fandango/245528/jackassbestandlast_new.jpg",
+      "full": "https://images.fandango.com/ImageRenderer/0/0/redesign/static/img/default_poster--dark-mode.png/0/images/MasterRepository/fandango/245528/jackassbestandlast_new.jpg"
+     },
+     "uri": "images/MasterRepository/fandango/245528/jackassbestandlast_new.jpg"
+    },
+    "mopURI": "/jackass-best-and-last-2026-245528/movie-overview",
+    "genres": [
+     "Comedy"
+    ],
+    "variants": [
+     {
+      "filmFormatHeader": "Standard",
+      "amenityGroups": [
+       {
+        "lateNightMsg": "",
+        "amenities": [
+         {
+          "id": 2011,
+          "imageUrl": null,
+          "name": "Reserved seating",
+          "description": "This showtime allows you to reserve your seats ahead of time."
+         },
+         {
+          "id": 1012,
+          "imageUrl": null,
+          "name": "Closed caption",
+          "description": "Closed Captioning devices display a movie's dialogue and sound effects as text; captions are not shown on the main screen.  Devices available by request."
+         },
+         {
+          "id": 1029,
+          "imageUrl": null,
+          "name": "Accessibility devices available",
+          "description": "Descriptive Video devices provide audio descriptions of the movie to accommodate the needs of visually impaired guests. Devices available by request."
+         },
+         {
+          "id": 1283,
+          "imageUrl": null,
+          "name": "Stadium Seating",
+          "description": "This auditorium has stadium seating."
+         },
+         {
+          "id": 1472,
+          "imageUrl": null,
+          "name": "Laser Projection",
+          "description": "Presented with sharp images of our laser projection system."
+         }
+        ],
+        "hasReservedSeating": true,
+        "isDolby": false,
+        "movieVariantId": 245528,
+        "showtimes": [
+         {
+          "date": "11:50a",
+          "expired": true,
+          "hasMatineeMessage": false,
+          "showtimeHashCode": "v2-83de63e5f4c1ccc41f57f20910d8010ecb11e225e57c0fb9e660a697735bb626",
+          "id": 550351903,
+          "matineeMessage": "",
+          "message": null,
+          "screenReaderTime": "11:50 AM",
+          "ticketingDate": "2026-06-29+11:50",
+          "type": "pastshowtime",
+          "filmFormat": [],
+          "ticketingJumpPageURL": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-06-29%2B11%3A50&from=mov_det_showtimes&source=desktop&mid=245528&tid=AAFXW&dfam=webbrowser&showtimehashcode=v2-83de63e5f4c1ccc41f57f20910d8010ecb11e225e57c0fb9e660a697735bb626"
+         },
+         {
+          "date": "2:20p",
+          "expired": true,
+          "hasMatineeMessage": false,
+          "showtimeHashCode": "v2-d9c85b81685580cc28658a295588c861d639c6859afc80d4604febabad2bdfd7",
+          "id": 550351906,
+          "matineeMessage": "",
+          "message": null,
+          "screenReaderTime": "2:20 PM",
+          "ticketingDate": "2026-06-29+14:20",
+          "type": "pastshowtime",
+          "filmFormat": [],
+          "ticketingJumpPageURL": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-06-29%2B14%3A20&from=mov_det_showtimes&source=desktop&mid=245528&tid=AAFXW&dfam=webbrowser&showtimehashcode=v2-d9c85b81685580cc28658a295588c861d639c6859afc80d4604febabad2bdfd7"
+         },
+         {
+          "date": "4:50p",
+          "expired": false,
+          "hasMatineeMessage": false,
+          "showtimeHashCode": "v2-60c09f8b70452b7f3537ee0965a127804f768a6b61cbda605ee601520c4dc8fb",
+          "id": 550351905,
+          "matineeMessage": "",
+          "message": null,
+          "screenReaderTime": "4:50 PM",
+          "ticketingDate": "2026-06-29+16:50",
+          "type": "available",
+          "filmFormat": [],
+          "ticketingJumpPageURL": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-06-29%2B16%3A50&from=mov_det_showtimes&source=desktop&mid=245528&tid=AAFXW&dfam=webbrowser&showtimehashcode=v2-60c09f8b70452b7f3537ee0965a127804f768a6b61cbda605ee601520c4dc8fb"
+         },
+         {
+          "date": "5:20p",
+          "expired": false,
+          "hasMatineeMessage": false,
+          "showtimeHashCode": "v2-6678ebeb2ca1e748692af21be1a1957d5469b17e37767306f0c193c9b8f281c5",
+          "id": 553022735,
+          "matineeMessage": "",
+          "message": null,
+          "screenReaderTime": "5:20 PM",
+          "ticketingDate": "2026-06-29+17:20",
+          "type": "available",
+          "filmFormat": [],
+          "ticketingJumpPageURL": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-06-29%2B17%3A20&from=mov_det_showtimes&source=desktop&mid=245528&tid=AAFXW&dfam=webbrowser&showtimehashcode=v2-6678ebeb2ca1e748692af21be1a1957d5469b17e37767306f0c193c9b8f281c5"
+         },
+         {
+          "date": "7:20p",
+          "expired": false,
+          "hasMatineeMessage": false,
+          "showtimeHashCode": "v2-48eac770a0f2c6f25459fbdc20c45ef71b3a976270a9cea02e16c7915416683f",
+          "id": 550351904,
+          "matineeMessage": "",
+          "message": null,
+          "screenReaderTime": "7:20 PM",
+          "ticketingDate": "2026-06-29+19:20",
+          "type": "available",
+          "filmFormat": [],
+          "ticketingJumpPageURL": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-06-29%2B19%3A20&from=mov_det_showtimes&source=desktop&mid=245528&tid=AAFXW&dfam=webbrowser&showtimehashcode=v2-48eac770a0f2c6f25459fbdc20c45ef71b3a976270a9cea02e16c7915416683f"
+         },
+         {
+          "date": "7:50p",
+          "expired": false,
+          "hasMatineeMessage": false,
+          "showtimeHashCode": "v2-38ac9f703b6251b09b8d56feb69d209379ab5e8c8cfda575ed0b00919ef840d3",
+          "id": 553022754,
+          "matineeMessage": "",
+          "message": null,
+          "screenReaderTime": "7:50 PM",
+          "ticketingDate": "2026-06-29+19:50",
+          "type": "available",
+          "filmFormat": [],
+          "ticketingJumpPageURL": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-06-29%2B19%3A50&from=mov_det_showtimes&source=desktop&mid=245528&tid=AAFXW&dfam=webbrowser&showtimehashcode=v2-38ac9f703b6251b09b8d56feb69d209379ab5e8c8cfda575ed0b00919ef840d3"
+         },
+         {
+          "date": "9:50p",
+          "expired": false,
+          "hasMatineeMessage": false,
+          "showtimeHashCode": "v2-0a523035083b14a108fde2611044afd2c92c3cf47f5540a7c5363bbca6147171",
+          "id": 550351907,
+          "matineeMessage": "",
+          "message": null,
+          "screenReaderTime": "9:50 PM",
+          "ticketingDate": "2026-06-29+21:50",
+          "type": "available",
+          "filmFormat": [],
+          "ticketingJumpPageURL": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-06-29%2B21%3A50&from=mov_det_showtimes&source=desktop&mid=245528&tid=AAFXW&dfam=webbrowser&showtimehashcode=v2-0a523035083b14a108fde2611044afd2c92c3cf47f5540a7c5363bbca6147171"
+         },
+         {
+          "date": "10:15p",
+          "expired": false,
+          "hasMatineeMessage": false,
+          "showtimeHashCode": "v2-0af5820b101a2211117f3f9356fc7b0e1f4413c731146cfe87b47964ea380023",
+          "id": 553022736,
+          "matineeMessage": "",
+          "message": null,
+          "screenReaderTime": "10:15 PM",
+          "ticketingDate": "2026-06-29+22:15",
+          "type": "available",
+          "filmFormat": [],
+          "ticketingJumpPageURL": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-06-29%2B22%3A15&from=mov_det_showtimes&source=desktop&mid=245528&tid=AAFXW&dfam=webbrowser&showtimehashcode=v2-0af5820b101a2211117f3f9356fc7b0e1f4413c731146cfe87b47964ea380023"
+         }
+        ],
+        "amenityString": "Reserved seating, Closed caption, Accessibility devices available, Stadium Seating, Laser Projection"
+       }
+      ],
+      "amenityGroupClassName": "shared-showtimes__amenity-group-card--standard",
+      "filmFormatHeaderClassName": "shared-showtimes__title-header--standard"
+     }
+    ],
+    "hasMatinee": false,
+    "isFavorite": false,
+    "offer": {
+     "id": 596,
+     "endDate": "2026-07-06T06:59:00",
+     "label": "Buy 2 tickets get 1",
+     "title": "with code JACKASSB2G1",
+     "description": "Buy 2 tickets to jackass: best and last, get 1 ticket free (equal or lesser price, up to $20 total ticket price and fees) with code JACKASSB2G1",
+     "flagTitle": "Special Offer",
+     "offerTypeId": 1,
+     "targetTypeId": 3,
+     "termsAndConditions": "Limited time offer. While supplies last. There is a limited quantity of Code redemptions allowed in this promotion. Log into your Fandango account on Fandango.com or via the Fandango app between 6:00am PT on 6/8/26 and 11:59pm PT on 7/5/26, purchase two (2) or more tickets to see Jackass: Best and Last, and use the Fandango Promotional Code JACKASSB2G1 (“Code”) to get up to $20 off one (1) additional ticket for the same showtime (equal or lesser value, up to $20 total ticket price and associated fees and charges). Code must be entered at checkout. Code expires and can no longer be used after 11:59pm PT on 7/5/26, or when Jackass: Best and Last is no longer in theaters, or when the limit of Code redemptions is reached, whichever comes first. Only valid for purchase of movie tickets made at Fandango.com or via the Fandango app and cannot be redeemed directly at any theater box office. You must have a Fandango account, and be logged into your account, to use the Code. Fandango is free to join; you must be 18 years of age or older to create a Fandango account. If lost or stolen, cannot be replaced. No cash value, except as required by law. Void where prohibited. Not valid with any other offer. Offer valid in U.S. only (excluding U.S territories and where prohibited by law). Non-transferable. One-time use only. Not for resale; void if sold or exchanged. You may have to pay taxes additionally. If cost of the ticket (and associated fees and charges) obtained through the Code is more than Code’s maximum discount, then you must pay the difference. Any price difference between total transaction price and Code’s maximum discount will not be refunded. Fandango reserves the right to modify or cancel this offer at any time and without notice. This offer and redemption of the Code are subject to Fandango’s Terms and Policies at www.fandango.com/terms-and-policies.\t",
+     "image": "https://images.fandango.com/images/offers/596/1/FAN_GWP_JackassBestandLastB3G1_620x350_V2_lg.jpg",
+     "memberRestrictions": "None",
+     "offerText": "Special Offer",
+     "url": "/offers/details/596/with-code-jackassb2g1",
+     "icon": "gift-box"
+    }
+   },
+   {
+    "id": 243716,
+    "title": "Supergirl (2026)",
+    "runtime": 108,
+    "releaseDate": "2026-06-26",
+    "rating": "PG13",
+    "poster": {
+     "size": {
+      "100": "https://images.fandango.com/ImageRenderer/100/0/redesign/static/img/default_poster.png/0/images/MasterRepository/fandango/243716/supergirlmain1.jpg",
+      "200": "https://images.fandango.com/ImageRenderer/200/0/redesign/static/img/default_poster.png/0/images/MasterRepository/fandango/243716/supergirlmain1.jpg",
+      "300": "https://images.fandango.com/ImageRenderer/300/0/redesign/static/img/default_poster.png/0/images/MasterRepository/fandango/243716/supergirlmain1.jpg",
+      "400": "https://images.fandango.com/ImageRenderer/400/0/redesign/static/img/default_poster.png/0/images/MasterRepository/fandango/243716/supergirlmain1.jpg",
+      "500": "https://images.fandango.com/ImageRenderer/500/0/redesign/static/img/default_poster.png/0/images/MasterRepository/fandango/243716/supergirlmain1.jpg",
+      "full": "https://images.fandango.com/ImageRenderer/0/0/redesign/static/img/default_poster.png/0/images/MasterRepository/fandango/243716/supergirlmain1.jpg"
+     },
+     "uri": "images/MasterRepository/fandango/243716/supergirlmain1.jpg"
+    },
+    "darkPoster": {
+     "size": {
+      "100": "https://images.fandango.com/ImageRenderer/100/0/redesign/static/img/default_poster--dark-mode.png/0/images/MasterRepository/fandango/243716/supergirlmain1.jpg",
+      "200": "https://images.fandango.com/ImageRenderer/200/0/redesign/static/img/default_poster--dark-mode.png/0/images/MasterRepository/fandango/243716/supergirlmain1.jpg",
+      "300": "https://images.fandango.com/ImageRenderer/300/0/redesign/static/img/default_poster--dark-mode.png/0/images/MasterRepository/fandango/243716/supergirlmain1.jpg",
+      "400": "https://images.fandango.com/ImageRenderer/400/0/redesign/static/img/default_poster--dark-mode.png/0/images/MasterRepository/fandango/243716/supergirlmain1.jpg",
+      "500": "https://images.fandango.com/ImageRenderer/500/0/redesign/static/img/default_poster--dark-mode.png/0/images/MasterRepository/fandango/243716/supergirlmain1.jpg",
+      "full": "https://images.fandango.com/ImageRenderer/0/0/redesign/static/img/default_poster--dark-mode.png/0/images/MasterRepository/fandango/243716/supergirlmain1.jpg"
+     },
+     "uri": "images/MasterRepository/fandango/243716/supergirlmain1.jpg"
+    },
+    "mopURI": "/supergirl-2026-243716/movie-overview",
+    "genres": [
+     "Action/Adventure",
+     "Sci-Fi/Fantasy"
+    ],
+    "variants": [
+     {
+      "filmFormatHeader": "Premium Format",
+      "amenityGroups": [
+       {
+        "lateNightMsg": "",
+        "amenities": [
+         {
+          "id": 1002,
+          "imageUrl": {
+           "size": {
+            "100": "https://images.fandango.com/cms/assets/8ef537b0-8828-11f0-a588-3b078e6b3d8a--imax.svg",
+            "200": "https://images.fandango.com/cms/assets/8ef537b0-8828-11f0-a588-3b078e6b3d8a--imax.svg",
+            "300": "https://images.fandango.com/cms/assets/8ef537b0-8828-11f0-a588-3b078e6b3d8a--imax.svg",
+            "400": "https://images.fandango.com/cms/assets/8ef537b0-8828-11f0-a588-3b078e6b3d8a--imax.svg",
+            "500": "https://images.fandango.com/cms/assets/8ef537b0-8828-11f0-a588-3b078e6b3d8a--imax.svg",
+            "full": "https://images.fandango.com/cms/assets/8ef537b0-8828-11f0-a588-3b078e6b3d8a--imax.svg"
+           },
+           "uri": "https://images.fandango.com/cms/assets/8ef537b0-8828-11f0-a588-3b078e6b3d8a--imax.svg"
+          },
+          "name": "IMAX",
+          "description": "IMAX® digital projection uses dual projectors with sub-pixel alignment to produce clear, high contrast images, with powerful, laser-aligned digital sound and customized theatre geometry, creating the world's most immersive digital movie experience."
+         },
+         {
+          "id": 2011,
+          "imageUrl": null,
+          "name": "Reserved seating",
+          "description": "This showtime allows you to reserve your seats ahead of time."
+         },
+         {
+          "id": 2012,
+          "imageUrl": null,
+          "name": "No passes",
+          "description": "Vouchers and coupons for free or discounted admission cannot be used for this showing. Refer to your pass for details."
+         },
+         {
+          "id": 1012,
+          "imageUrl": null,
+          "name": "Closed caption",
+          "description": "Closed Captioning devices display a movie's dialogue and sound effects as text; captions are not shown on the main screen.  Devices available by request."
+         },
+         {
+          "id": 1029,
+          "imageUrl": null,
+          "name": "Accessibility devices available",
+          "description": "Descriptive Video devices provide audio descriptions of the movie to accommodate the needs of visually impaired guests. Devices available by request."
+         },
+         {
+          "id": 1283,
+          "imageUrl": null,
+          "name": "Stadium Seating",
+          "description": "This auditorium has stadium seating."
+         }
+        ],
+        "hasReservedSeating": true,
+        "isDolby": false,
+        "movieVariantId": 245957,
+        "showtimes": [
+         {
+          "date": "10:00a",
+          "expired": true,
+          "hasMatineeMessage": false,
+          "showtimeHashCode": "v2-5ed51fbc58647be388e1f279255cb7f57515ef235e64d2da8803c2bafcfcea77",
+          "id": 553022756,
+          "matineeMessage": "",
+          "message": null,
+          "screenReaderTime": "10 o'clock AM",
+          "ticketingDate": "2026-06-29+10:00",
+          "type": "pastshowtime",
+          "filmFormat": [
+           {
+            "filterName": "IMAX",
+            "order": 2
+           }
+          ],
+          "ticketingJumpPageURL": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-06-29%2B10%3A00&from=mov_det_showtimes&source=desktop&mid=245957&tid=AAFXW&dfam=webbrowser&showtimehashcode=v2-5ed51fbc58647be388e1f279255cb7f57515ef235e64d2da8803c2bafcfcea77"
+         },
+         {
+          "date": "12:40p",
+          "expired": true,
+          "hasMatineeMessage": false,
+          "showtimeHashCode": "v2-a88b71abefb7ed6d471f3919c25820d8377d7b5e61ff60c8b0eb8889a1da8685",
+          "id": 549185659,
+          "matineeMessage": "",
+          "message": null,
+          "screenReaderTime": "12:40 PM",
+          "ticketingDate": "2026-06-29+12:40",
+          "type": "pastshowtime",
+          "filmFormat": [
+           {
+            "filterName": "IMAX",
+            "order": 2
+           }
+          ],
+          "ticketingJumpPageURL": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-06-29%2B12%3A40&from=mov_det_showtimes&source=desktop&mid=245957&tid=AAFXW&dfam=webbrowser&showtimehashcode=v2-a88b71abefb7ed6d471f3919c25820d8377d7b5e61ff60c8b0eb8889a1da8685"
+         },
+         {
+          "date": "3:20p",
+          "expired": false,
+          "hasMatineeMessage": false,
+          "showtimeHashCode": "v2-efd5e6da31a2b127399b943ff909e662538c1e3cfdfa33df5fd7e04646dc4c0c",
+          "id": 549185658,
+          "matineeMessage": "",
+          "message": null,
+          "screenReaderTime": "3:20 PM",
+          "ticketingDate": "2026-06-29+15:20",
+          "type": "available",
+          "filmFormat": [
+           {
+            "filterName": "IMAX",
+            "order": 2
+           }
+          ],
+          "ticketingJumpPageURL": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-06-29%2B15%3A20&from=mov_det_showtimes&source=desktop&mid=245957&tid=AAFXW&dfam=webbrowser&showtimehashcode=v2-efd5e6da31a2b127399b943ff909e662538c1e3cfdfa33df5fd7e04646dc4c0c"
+         }
+        ],
+        "amenityString": "Reserved seating, No passes, Closed caption, Accessibility devices available, Stadium Seating",
+        "amenityWithImage": {
+         "id": 1002,
+         "imageUrl": {
+          "size": {
+           "100": "https://images.fandango.com/cms/assets/8ef537b0-8828-11f0-a588-3b078e6b3d8a--imax.svg",
+           "200": "https://images.fandango.com/cms/assets/8ef537b0-8828-11f0-a588-3b078e6b3d8a--imax.svg",
+           "300": "https://images.fandango.com/cms/assets/8ef537b0-8828-11f0-a588-3b078e6b3d8a--imax.svg",
+           "400": "https://images.fandango.com/cms/assets/8ef537b0-8828-11f0-a588-3b078e6b3d8a--imax.svg",
+           "500": "https://images.fandango.com/cms/assets/8ef537b0-8828-11f0-a588-3b078e6b3d8a--imax.svg",
+           "full": "https://images.fandango.com/cms/assets/8ef537b0-8828-11f0-a588-3b078e6b3d8a--imax.svg"
+          },
+          "uri": "https://images.fandango.com/cms/assets/8ef537b0-8828-11f0-a588-3b078e6b3d8a--imax.svg"
+         },
+         "name": "IMAX",
+         "description": "IMAX® digital projection uses dual projectors with sub-pixel alignment to produce clear, high contrast images, with powerful, laser-aligned digital sound and customized theatre geometry, creating the world's most immersive digital movie experience."
+        }
+       }
+      ],
+      "amenityGroupClassName": "shared-showtimes__amenity-group-card--premium-experience",
+      "filmFormatHeaderClassName": "shared-showtimes__title-header--premium-experience"
+     },
+     {
+      "filmFormatHeader": "3D",
+      "amenityGroups": [
+       {
+        "lateNightMsg": "",
+        "amenities": [
+         {
+          "id": 1009,
+          "imageUrl": {
+           "size": {
+            "100": "https://images.fandango.com/cms/assets/88ae9ea0-8828-11f0-ab6e-6bc4e16d49df--reald3d.svg",
+            "200": "https://images.fandango.com/cms/assets/88ae9ea0-8828-11f0-ab6e-6bc4e16d49df--reald3d.svg",
+            "300": "https://images.fandango.com/cms/assets/88ae9ea0-8828-11f0-ab6e-6bc4e16d49df--reald3d.svg",
+            "400": "https://images.fandango.com/cms/assets/88ae9ea0-8828-11f0-ab6e-6bc4e16d49df--reald3d.svg",
+            "500": "https://images.fandango.com/cms/assets/88ae9ea0-8828-11f0-ab6e-6bc4e16d49df--reald3d.svg",
+            "full": "https://images.fandango.com/cms/assets/88ae9ea0-8828-11f0-ab6e-6bc4e16d49df--reald3d.svg"
+           },
+           "uri": "https://images.fandango.com/cms/assets/88ae9ea0-8828-11f0-ab6e-6bc4e16d49df--reald3d.svg"
+          },
+          "name": "RealD 3D",
+          "description": "RealD is the most widely used digital 3D cinema technology."
+         },
+         {
+          "id": 1014,
+          "imageUrl": null,
+          "name": "Digital 3D",
+          "description": "Digital 3D describes presentations  where three-dimensional images are projected digitally."
+         },
+         {
+          "id": 2011,
+          "imageUrl": null,
+          "name": "Reserved seating",
+          "description": "This showtime allows you to reserve your seats ahead of time."
+         },
+         {
+          "id": 2012,
+          "imageUrl": null,
+          "name": "No passes",
+          "description": "Vouchers and coupons for free or discounted admission cannot be used for this showing. Refer to your pass for details."
+         },
+         {
+          "id": 1012,
+          "imageUrl": null,
+          "name": "Closed caption",
+          "description": "Closed Captioning devices display a movie's dialogue and sound effects as text; captions are not shown on the main screen.  Devices available by request."
+         },
+         {
+          "id": 1029,
+          "imageUrl": null,
+          "name": "Accessibility devices available",
+          "description": "Descriptive Video devices provide audio descriptions of the movie to accommodate the needs of visually impaired guests. Devices available by request."
+         },
+         {
+          "id": 1283,
+          "imageUrl": null,
+          "name": "Stadium Seating",
+          "description": "This auditorium has stadium seating."
+         },
+         {
+          "id": 1472,
+          "imageUrl": null,
+          "name": "Laser Projection",
+          "description": "Presented with sharp images of our laser projection system."
+         }
+        ],
+        "hasReservedSeating": true,
+        "isDolby": false,
+        "movieVariantId": 245956,
+        "showtimes": [
+         {
+          "date": "4:45p",
+          "expired": false,
+          "hasMatineeMessage": false,
+          "showtimeHashCode": "v2-eb28b883be64642a0f667f85f9aafc38f69c10db3219f57b33432b7b255a3ca7",
+          "id": 549185656,
+          "matineeMessage": "",
+          "message": null,
+          "screenReaderTime": "4:45 PM",
+          "ticketingDate": "2026-06-29+16:45",
+          "type": "available",
+          "filmFormat": [
+           {
+            "filterName": "3D",
+            "order": 7
+           }
+          ],
+          "ticketingJumpPageURL": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-06-29%2B16%3A45&from=mov_det_showtimes&source=desktop&mid=245956&tid=AAFXW&dfam=webbrowser&showtimehashcode=v2-eb28b883be64642a0f667f85f9aafc38f69c10db3219f57b33432b7b255a3ca7"
+         }
+        ],
+        "amenityString": "Digital 3D, Reserved seating, No passes, Closed caption, Accessibility devices available, Stadium Seating, Laser Projection",
+        "amenityWithImage": {
+         "id": 1009,
+         "imageUrl": {
+          "size": {
+           "100": "https://images.fandango.com/cms/assets/88ae9ea0-8828-11f0-ab6e-6bc4e16d49df--reald3d.svg",
+           "200": "https://images.fandango.com/cms/assets/88ae9ea0-8828-11f0-ab6e-6bc4e16d49df--reald3d.svg",
+           "300": "https://images.fandango.com/cms/assets/88ae9ea0-8828-11f0-ab6e-6bc4e16d49df--reald3d.svg",
+           "400": "https://images.fandango.com/cms/assets/88ae9ea0-8828-11f0-ab6e-6bc4e16d49df--reald3d.svg",
+           "500": "https://images.fandango.com/cms/assets/88ae9ea0-8828-11f0-ab6e-6bc4e16d49df--reald3d.svg",
+           "full": "https://images.fandango.com/cms/assets/88ae9ea0-8828-11f0-ab6e-6bc4e16d49df--reald3d.svg"
+          },
+          "uri": "https://images.fandango.com/cms/assets/88ae9ea0-8828-11f0-ab6e-6bc4e16d49df--reald3d.svg"
+         },
+         "name": "RealD 3D",
+         "description": "RealD is the most widely used digital 3D cinema technology."
+        }
+       }
+      ],
+      "amenityGroupClassName": "shared-showtimes__amenity-group-card--3d",
+      "filmFormatHeaderClassName": "shared-showtimes__title-header--3d"
+     },
+     {
+      "filmFormatHeader": "Standard",
+      "amenityGroups": [
+       {
+        "lateNightMsg": "",
+        "amenities": [
+         {
+          "id": 2011,
+          "imageUrl": null,
+          "name": "Reserved seating",
+          "description": "This showtime allows you to reserve your seats ahead of time."
+         },
+         {
+          "id": 2012,
+          "imageUrl": null,
+          "name": "No passes",
+          "description": "Vouchers and coupons for free or discounted admission cannot be used for this showing. Refer to your pass for details."
+         },
+         {
+          "id": 1012,
+          "imageUrl": null,
+          "name": "Closed caption",
+          "description": "Closed Captioning devices display a movie's dialogue and sound effects as text; captions are not shown on the main screen.  Devices available by request."
+         },
+         {
+          "id": 1029,
+          "imageUrl": null,
+          "name": "Accessibility devices available",
+          "description": "Descriptive Video devices provide audio descriptions of the movie to accommodate the needs of visually impaired guests. Devices available by request."
+         },
+         {
+          "id": 1283,
+          "imageUrl": null,
+          "name": "Stadium Seating",
+          "description": "This auditorium has stadium seating."
+         },
+         {
+          "id": 1472,
+          "imageUrl": null,
+          "name": "Laser Projection",
+          "description": "Presented with sharp images of our laser projection system."
+         }
+        ],
+        "hasReservedSeating": true,
+        "isDolby": false,
+        "movieVariantId": 243716,
+        "showtimes": [
+         {
+          "date": "2:00p",
+          "expired": true,
+          "hasMatineeMessage": false,
+          "showtimeHashCode": "v2-d1c2294869b44e72ece0e2d3dc1c7f7b4ce3dbd8b8b7ab4b24b7296a2c529e14",
+          "id": 549185657,
+          "matineeMessage": "",
+          "message": null,
+          "screenReaderTime": "2 o'clock PM",
+          "ticketingDate": "2026-06-29+14:00",
+          "type": "pastshowtime",
+          "filmFormat": [],
+          "ticketingJumpPageURL": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-06-29%2B14%3A00&from=mov_det_showtimes&source=desktop&mid=243716&tid=AAFXW&dfam=webbrowser&showtimehashcode=v2-d1c2294869b44e72ece0e2d3dc1c7f7b4ce3dbd8b8b7ab4b24b7296a2c529e14"
+         },
+         {
+          "date": "7:30p",
+          "expired": false,
+          "hasMatineeMessage": false,
+          "showtimeHashCode": "v2-c1236d398239ec92c4a558c10337d1e164728aef42e47e17cc3853ecf8df75ab",
+          "id": 549185653,
+          "matineeMessage": "",
+          "message": null,
+          "screenReaderTime": "7:30 PM",
+          "ticketingDate": "2026-06-29+19:30",
+          "type": "available",
+          "filmFormat": [],
+          "ticketingJumpPageURL": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-06-29%2B19%3A30&from=mov_det_showtimes&source=desktop&mid=243716&tid=AAFXW&dfam=webbrowser&showtimehashcode=v2-c1236d398239ec92c4a558c10337d1e164728aef42e47e17cc3853ecf8df75ab"
+         },
+         {
+          "date": "10:15p",
+          "expired": false,
+          "hasMatineeMessage": false,
+          "showtimeHashCode": "v2-7d9e7af025cf2cca0c3bfbe0fe5e8d4315c1d33a0f4b6cb1b463c0941ef7ad0d",
+          "id": 549185654,
+          "matineeMessage": "",
+          "message": null,
+          "screenReaderTime": "10:15 PM",
+          "ticketingDate": "2026-06-29+22:15",
+          "type": "available",
+          "filmFormat": [],
+          "ticketingJumpPageURL": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-06-29%2B22%3A15&from=mov_det_showtimes&source=desktop&mid=243716&tid=AAFXW&dfam=webbrowser&showtimehashcode=v2-7d9e7af025cf2cca0c3bfbe0fe5e8d4315c1d33a0f4b6cb1b463c0941ef7ad0d"
+         }
+        ],
+        "amenityString": "Reserved seating, No passes, Closed caption, Accessibility devices available, Stadium Seating, Laser Projection"
+       }
+      ],
+      "amenityGroupClassName": "shared-showtimes__amenity-group-card--standard",
+      "filmFormatHeaderClassName": "shared-showtimes__title-header--standard"
+     }
+    ],
+    "hasMatinee": false,
+    "isFavorite": false,
+    "offer": {
+     "id": 595,
+     "endDate": "2026-07-13T06:59:00",
+     "label": "See Supergirl in RealD 3D",
+     "title": "get $5 off a ticket with code SUPERGIRL3D!",
+     "description": "See Supergirl in RealD 3D and get $5 off a ticket with code SUPERGIRL3D!\t\t\t\t\t",
+     "flagTitle": "Special Offer",
+     "offerTypeId": 1,
+     "targetTypeId": 3,
+     "termsAndConditions": "Limited time offer. While supplies last. There is a limited quantity of Code redemptions allowed in this promotion. Log in to your Fandango account on Fandango.com or via the Fandango app between 6/3/26 and 7/12/26, purchase one or more RealD 3D tickets to see Supergirl at a participating Fandango theater, and enter the Fandango promotional code SUPERGIRL3D (\"Code\") to receive up to $5 off your purchase. Code expires, and can no longer be used, if not redeemed by 11:59pm on 7/12/26, or when the limit of Code redemptions is reached, or when Supergirl is no longer available in RealD theaters, whichever comes first. Code must be entered at checkout. Only valid for purchase of movie tickets made at Fandango.com or via the Fandango app and cannot be redeemed directly at any theater box office. You must have, and be logged into, a Fandango account to redeem the Code on Fandango. Fandango is free to join; you must be 18 years of age or older to create a Fandango account. If cost of movie ticket and associated fees and charges is more than Code’s maximum discount, then user must pay the difference. Any price difference between total transaction price and Code’s maximum discount will not be refunded. One-time use only. Void where prohibited. Offer is non-transferable and cannot be combined with any other offer or discount. No cash value, except as required by law. Not for resale; void if sold or exchanged. Offer valid in the U.S. only (excluding U.S. territories and where prohibited by law). You may have to pay taxes additionally. Limit 1 Code redemption per person. Fandango reserves the right to modify or cancel this offer at any time and without notice. This offer and redemption of the Code are subject to Fandango's Terms and Policies and Privacy Policy at http://www.fandango.com/terms-and-policies.\t\t\t\t\t\t",
+     "image": "https://images.fandango.com/images/offers/595/1/FAN_GWP_Supergirl_RealDOffer_620x350_V2_lg.jpg",
+     "memberRestrictions": "None",
+     "offerText": "Special Offer",
+     "url": "/offers/details/595/get-5-off-a-ticket-with-code-supergirl3d",
+     "icon": "gift-box"
+    }
+   },
+   {
+    "id": 243756,
+    "title": "The Death of Robin Hood (2026)",
+    "runtime": 123,
+    "releaseDate": "2026-06-19",
+    "rating": "R",
+    "poster": {
+     "size": {
+      "100": "https://images.fandango.com/ImageRenderer/100/0/redesign/static/img/default_poster.png/0/images/MasterRepository/fandango/243756/DRH_321_DIGITAL-FINISH_2025x3000_V70.jpg",
+      "200": "https://images.fandango.com/ImageRenderer/200/0/redesign/static/img/default_poster.png/0/images/MasterRepository/fandango/243756/DRH_321_DIGITAL-FINISH_2025x3000_V70.jpg",
+      "300": "https://images.fandango.com/ImageRenderer/300/0/redesign/static/img/default_poster.png/0/images/MasterRepository/fandango/243756/DRH_321_DIGITAL-FINISH_2025x3000_V70.jpg",
+      "400": "https://images.fandango.com/ImageRenderer/400/0/redesign/static/img/default_poster.png/0/images/MasterRepository/fandango/243756/DRH_321_DIGITAL-FINISH_2025x3000_V70.jpg",
+      "500": "https://images.fandango.com/ImageRenderer/500/0/redesign/static/img/default_poster.png/0/images/MasterRepository/fandango/243756/DRH_321_DIGITAL-FINISH_2025x3000_V70.jpg",
+      "full": "https://images.fandango.com/ImageRenderer/0/0/redesign/static/img/default_poster.png/0/images/MasterRepository/fandango/243756/DRH_321_DIGITAL-FINISH_2025x3000_V70.jpg"
+     },
+     "uri": "images/MasterRepository/fandango/243756/DRH_321_DIGITAL-FINISH_2025x3000_V70.jpg"
+    },
+    "darkPoster": {
+     "size": {
+      "100": "https://images.fandango.com/ImageRenderer/100/0/redesign/static/img/default_poster--dark-mode.png/0/images/MasterRepository/fandango/243756/DRH_321_DIGITAL-FINISH_2025x3000_V70.jpg",
+      "200": "https://images.fandango.com/ImageRenderer/200/0/redesign/static/img/default_poster--dark-mode.png/0/images/MasterRepository/fandango/243756/DRH_321_DIGITAL-FINISH_2025x3000_V70.jpg",
+      "300": "https://images.fandango.com/ImageRenderer/300/0/redesign/static/img/default_poster--dark-mode.png/0/images/MasterRepository/fandango/243756/DRH_321_DIGITAL-FINISH_2025x3000_V70.jpg",
+      "400": "https://images.fandango.com/ImageRenderer/400/0/redesign/static/img/default_poster--dark-mode.png/0/images/MasterRepository/fandango/243756/DRH_321_DIGITAL-FINISH_2025x3000_V70.jpg",
+      "500": "https://images.fandango.com/ImageRenderer/500/0/redesign/static/img/default_poster--dark-mode.png/0/images/MasterRepository/fandango/243756/DRH_321_DIGITAL-FINISH_2025x3000_V70.jpg",
+      "full": "https://images.fandango.com/ImageRenderer/0/0/redesign/static/img/default_poster--dark-mode.png/0/images/MasterRepository/fandango/243756/DRH_321_DIGITAL-FINISH_2025x3000_V70.jpg"
+     },
+     "uri": "images/MasterRepository/fandango/243756/DRH_321_DIGITAL-FINISH_2025x3000_V70.jpg"
+    },
+    "mopURI": "/the-death-of-robin-hood-2026-243756/movie-overview",
+    "genres": [
+     "Action/Adventure",
+     "Drama"
+    ],
+    "variants": [
+     {
+      "filmFormatHeader": "Standard",
+      "amenityGroups": [
+       {
+        "lateNightMsg": "",
+        "amenities": [
+         {
+          "id": 2011,
+          "imageUrl": null,
+          "name": "Reserved seating",
+          "description": "This showtime allows you to reserve your seats ahead of time."
+         },
+         {
+          "id": 1012,
+          "imageUrl": null,
+          "name": "Closed caption",
+          "description": "Closed Captioning devices display a movie's dialogue and sound effects as text; captions are not shown on the main screen.  Devices available by request."
+         },
+         {
+          "id": 1029,
+          "imageUrl": null,
+          "name": "Accessibility devices available",
+          "description": "Descriptive Video devices provide audio descriptions of the movie to accommodate the needs of visually impaired guests. Devices available by request."
+         },
+         {
+          "id": 1283,
+          "imageUrl": null,
+          "name": "Stadium Seating",
+          "description": "This auditorium has stadium seating."
+         },
+         {
+          "id": 1472,
+          "imageUrl": null,
+          "name": "Laser Projection",
+          "description": "Presented with sharp images of our laser projection system."
+         }
+        ],
+        "hasReservedSeating": true,
+        "isDolby": false,
+        "movieVariantId": 243756,
+        "showtimes": [
+         {
+          "date": "12:00p",
+          "expired": true,
+          "hasMatineeMessage": false,
+          "showtimeHashCode": "v2-0ab0eb688af74286ccd1ae8423d306938cc862cadf262fd6712e10ccf4ca832e",
+          "id": 553022742,
+          "matineeMessage": "",
+          "message": null,
+          "screenReaderTime": "12 o'clock PM",
+          "ticketingDate": "2026-06-29+12:00",
+          "type": "pastshowtime",
+          "filmFormat": [],
+          "ticketingJumpPageURL": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-06-29%2B12%3A00&from=mov_det_showtimes&source=desktop&mid=243756&tid=AAFXW&dfam=webbrowser&showtimehashcode=v2-0ab0eb688af74286ccd1ae8423d306938cc862cadf262fd6712e10ccf4ca832e"
+         }
+        ],
+        "amenityString": "Reserved seating, Closed caption, Accessibility devices available, Stadium Seating, Laser Projection"
+       }
+      ],
+      "amenityGroupClassName": "shared-showtimes__amenity-group-card--standard",
+      "filmFormatHeaderClassName": "shared-showtimes__title-header--standard"
+     }
+    ],
+    "hasMatinee": false,
+    "isFavorite": false
+   }
+  ],
+  "date": "2026-06-29",
+  "formats": [
+   "IMAX",
+   "3D"
+  ]
+ }
+}

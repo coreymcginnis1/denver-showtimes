@@ -116,6 +116,22 @@ def test_title_format_extraction():
     assert title_format("Interstellar") is None
 
 
+def test_normalize_title_recases_allcaps_words():
+    P = DEFAULT_STRIP_PREFIXES
+    # 4+ letter all-caps words in a mixed-case title are down-cased so variants merge
+    assert normalize_title("BLEACH: Thousand-Year Blood War - The Calamity", P) == \
+        "Bleach: Thousand-Year Blood War - The Calamity"
+    assert normalize_title("The LEGO Ninjago Movie", P) == "The Lego Ninjago Movie"
+    assert normalize_title("Jack Johnson: SURFILMUSIC", P) == "Jack Johnson: Surfilmusic"
+    # short interior acronyms are left alone
+    assert normalize_title("UFC 329: McGregor vs. Holloway 2", P) == "UFC 329: McGregor vs. Holloway 2"
+
+
+def test_is_non_film_drops_ufc_broadcasts():
+    assert is_non_film("UFC 329: McGregor vs. Holloway 2", DEFAULT_DROP)
+    assert not is_non_film("Jack Johnson: Surfilmusic", DEFAULT_DROP)
+
+
 def test_is_non_film_drop():
     assert is_non_film("AMC Screen Unseen: June 22", DEFAULT_DROP)
     assert is_non_film("¡GOLAZO!: 2026 Soccer Watch Parties", DEFAULT_DROP)
@@ -153,7 +169,9 @@ def test_secondary_theaters_config():
     assert c.theaters["amc_westminster"].default_on is False  # secondary start off
     assert c.theaters["amc_westminster"].scraper == "amc"   # reuses the AMC scraper
     assert c.theaters["alamo_sloans"].default_on is False
-    assert c.theaters["regal_colorado"].enabled is False    # Cloudflare-gated -> disabled
+    assert c.theaters["regal_colorado"].enabled is True     # scraped via Fandango
+    assert c.theaters["regal_colorado"].default_on is False  # but off by default
+    assert c.theaters["regal_colorado"].scraper == "fandango"
 
 
 def test_build_feed_carries_default_on():
@@ -162,4 +180,4 @@ def test_build_feed_carries_default_on():
     by_key = {t["key"]: t for t in feed["theaters"]}
     assert by_key["amc"]["default_on"] is True
     assert by_key["amc_westminster"]["default_on"] is False
-    assert "regal_colorado" not in by_key                  # disabled theaters omitted from feed
+    assert by_key["regal_colorado"]["default_on"] is False  # enabled via Fandango, off by default

@@ -2,6 +2,7 @@ from datetime import date
 
 from movie_scraper.scrapers.alamo import AlamoScraper
 from movie_scraper.scrapers.amc import AmcScraper
+from movie_scraper.scrapers.fandango import FandangoScraper
 from movie_scraper.scrapers.landmark import LandmarkScraper
 from movie_scraper.scrapers.sie_eventive import SieScraper
 
@@ -76,3 +77,16 @@ def test_alamo_build(cfg, alamo_schedule):
     assert all("drafthouse.com/" in (s.ticket_url or "") for s in out)
     assert any(s.film_title and s.film_title != "(untitled)" for s in out)
     assert all(len(s.film_title) < 90 for s in out)        # real titles, not blobs
+
+
+def test_fandango_parse(cfg, fandango_showtimes):
+    scraper = FandangoScraper(cfg, cfg.theaters["regal_colorado"], key="regal_colorado")
+    out = scraper.parse_day(fandango_showtimes["viewModel"], date(2026, 6, 29), date(2026, 6, 29))
+
+    assert out, "expected Fandango showtimes from fixture"
+    assert all(s.theater == "regal_colorado" and not s.all_day for s in out)
+    assert all(s.start.tzinfo is not None and s.start.date() == date(2026, 6, 29) for s in out)
+    assert all("fandango.com" in (s.ticket_url or "") for s in out)
+    assert any("Supergirl" in s.film_title for s in out)
+    assert any(s.fmt == "Premium Format" for s in out)     # surfaced; "Standard" is hidden
+    assert all(s.fmt != "Standard" for s in out)

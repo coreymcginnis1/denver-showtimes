@@ -231,7 +231,9 @@
       '<a href="https://www.landmarktheatres.com/theaters/x02ak-landmark-mayan-theatre-denver/" target="_blank" rel="noopener">Landmark Mayan</a> · ' +
       '<a href="https://www.amctheatres.com/movie-theatres/denver/amc-9-co-10/showtimes" target="_blank" rel="noopener">AMC 9+CO 10</a> · ' +
       '<a href="https://www.amctheatres.com/movie-theatres/denver/amc-westminster-promenade-24/showtimes" target="_blank" rel="noopener">AMC Westminster</a> · ' +
-      '<a href="https://drafthouse.com/denver/theater/sloans-lake" target="_blank" rel="noopener">Alamo Sloans Lake</a>';
+      '<a href="https://drafthouse.com/denver/theater/sloans-lake" target="_blank" rel="noopener">Alamo Sloans Lake</a> · ' +
+      '<a href="https://www.regmovies.com/theatres/regal-ua-colorado-center-1308" target="_blank" rel="noopener">Regal Colorado Center</a> · ' +
+      '<a href="https://www.regmovies.com/theatres/regal-ua-denver-pavilions-rpx-1315" target="_blank" rel="noopener">Regal Denver Pavilions</a>';
   }
 
   // ---- Calendar ------------------------------------------------------------

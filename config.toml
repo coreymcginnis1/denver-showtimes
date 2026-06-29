@@ -42,24 +42,23 @@ color = "#E0A458"
 scraper = "alamo"
 location = "sloans-lake"
 
-# Regal is behind a Cloudflare "verify you are human" challenge that gates future dates, so a
-# headless run can only get the current day — left disabled until that's solved (see regal.py).
-# Flip enabled = true to scrape whatever day the page renders.
+# Regal's own site is Cloudflare-gated (today-only), so these read from Fandango instead —
+# Regal sells via Fandango, whose napi JSON is plain httpx. `location` is the Fandango theater id.
 [theaters.regal_colorado]
-enabled = false
+enabled = true
 default_on = false
 name = "Regal UA Colorado Center & IMAX"
 color = "#C44E9D"
-scraper = "regal"
-location = "regal-ua-colorado-center-1308"
+scraper = "fandango"
+location = "AAFXW"
 
 [theaters.regal_pavilions]
-enabled = false
+enabled = true
 default_on = false
 name = "Regal UA Denver Pavilions"
 color = "#4C9F70"
-scraper = "regal"
-location = "regal-ua-denver-pavilions-rpx-1315"
+scraper = "fandango"
+location = "AAJJG"
 
 # Title standardization: strip repertory/event series labels from the START of a
 # film title (the label plus its ":" / "–" / "-" separator), so e.g.
@@ -100,6 +99,8 @@ drop = [
   'Copa Mundial',             # FIFA World Cup watch parties (Telemundo), not films
   'Apple TV Live',            # live sports broadcasts: "F1 on Apple TV Live in IMAX: ..."
   'Memorial Screening',       # tribute events with no film named
+  'Mystery Movie',            # surprise screenings, no film named ("REGAL: Monday Mystery Movie")
+  '\bUFC \d',                 # live UFC pay-per-view broadcasts ("UFC 329: ..."), not films
 ]
 
 # Which films are pre-checked when the page first loads (others start unchecked but

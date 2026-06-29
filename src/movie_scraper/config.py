@@ -57,6 +57,8 @@ DEFAULT_DROP = [
     r"Copa Mundial",              # FIFA World Cup watch parties (Telemundo), not films
     r"Apple TV Live",             # live sports broadcasts: "F1 on Apple TV Live in IMAX: ..."
     r"Memorial Screening",        # tribute events with no film named: "Classic - ... Memorial Screening"
+    r"Mystery Movie",             # surprise screenings, no film named (e.g. "REGAL: Monday Mystery Movie")
+    r"\bUFC \d",                  # live UFC pay-per-view broadcasts ("UFC 329: ..."), not films
 ]
 
 

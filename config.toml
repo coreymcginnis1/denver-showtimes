@@ -109,11 +109,26 @@ drop = [
 # Leave the list empty to pre-select ALL films (the long default). Edit to taste.
 [defaults]
 films = [
+  'Alien\b',                  # word boundary: matches "Alien ..." but not "Aliens ..."
+  'American Psycho',
   'Backrooms',
-  'I Love Boosters',
-  'Tuner',
-  'The Invite',
+  'Blow Out',
+  'Citizen Kane',
   'Disclosure Day',
+  'Inception',
+  'Interstellar',
+  'Jaws',
+  'Lawrence of Arabia',
+  "Maddie's Secret",
+  'Mikey and Nicky',
+  'Moonlight',
+  'My Neighbor Totoro',
+  'Obsession',
+  'Project Hail Mary',
+  'Scarface',
+  'Shortbus',
+  'Talladega Nights: The Ballad of Ricky Bobby',
+  'The Invite'
 ]
 
 # Optional filters. Omit/comment out a key to disable that filter.

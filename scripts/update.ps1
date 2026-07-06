@@ -11,11 +11,13 @@
 $ErrorActionPreference = "Stop"
 Set-Location (Resolve-Path (Join-Path $PSScriptRoot ".."))
 
+# The scrape prints a "new titles since last run" digest — eyeball it for any that need a
+# cleanup rule in config.toml before it publishes.
 & .\.venv\Scripts\python.exe -m movie_scraper
 if ($LASTEXITCODE -ne 0) { Write-Error "Scrape failed."; exit 1 }
 
-git add public/data.json
-if (git status --porcelain public/data.json) {
+git add public/data.json known_titles.txt
+if (git status --porcelain public/data.json known_titles.txt) {
     git commit -m "Update showtimes $(Get-Date -Format 'yyyy-MM-dd')"
     # git push uses whichever GitHub account gh has active; force the personal one.
     gh auth switch --user coreymcginnis1 2>$null

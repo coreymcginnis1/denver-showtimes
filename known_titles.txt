@@ -1,0 +1,74 @@
+# Titles the scraper has already seen — powers the new-title digest.
+# Auto-updated each run. Delete a line to re-flag that title, or delete the file to reset.
+A Minecraft Movie
+Alien
+Aliens
+Alpha
+American Psycho
+Baahubali: The Epic
+Backrooms
+Batman Begins
+Bleach: Thousand-Year Blood War - The Calamity
+Buffet Infinity
+Camp
+Carlito's Way
+Citizen Kane
+Couture
+Disclosure Day
+Doppelganger
+E.T. The Extra-Terrestrial
+Evil Dead Burn
+Excalibur
+Gail Daughtry and the Celebrity Sex Pass
+Girls Like Girls
+Goat
+How to Train Your Dragon
+I Know Who You Are
+I Shot Andy Warhol
+Idle Hands
+Inception
+Interstellar
+Jack Johnson: Surfilmusic
+Jackass: Best and Last
+Jaws
+Jinsei
+Jurassic Park
+Lawrence of Arabia
+Leviticus
+Lockbox
+Lucky Strike
+Maddie's Secret
+Masters of the Universe
+Minions & Monsters
+Moana
+My Neighbor Totoro
+Night Nurse
+Obsession
+Once Upon a Time in China
+Peter Asher: Everywhere Man
+Rao Bahadur
+Saturday Morning Cartoons
+Scarface
+Scary Movie
+Scoob!
+She's the He!
+Shortbus
+Sonic the Hedgehog 2
+Sonic the Hedgehog 3
+Star Wars: The Mandalorian and Grogu
+Stop! That! Train!
+Supergirl
+The Burning
+The Death of Robin Hood
+The Faculty
+The Fisherman
+The Furious
+The Goonies
+The Invite
+The Lego Movie
+The Lego Ninjago Movie
+The Odyssey
+To Wong Foo, Thanks for Everything, Julie Newmar
+Toy Story 5
+Tuner
+Young Washington

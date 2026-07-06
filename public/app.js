@@ -196,6 +196,11 @@
   }
 
   function wireControls() {
+    var ft = $("filtersToggle");   // mobile: expand/collapse the filter panel
+    if (ft) ft.addEventListener("click", function () {
+      var open = $("controls").classList.toggle("open");
+      ft.setAttribute("aria-expanded", open ? "true" : "false");
+    });
     $("filmSearch").addEventListener("input", function (ev) {
       query = ev.target.value.trim().toLowerCase();
       applySearch();

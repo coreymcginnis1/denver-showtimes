@@ -3,14 +3,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Denver Indie &amp; Repertory Showtimes</title>
-  <meta name="description" content="Showtimes for Sie FilmCenter, Landmark Mayan, and AMC 9+CO 10 — filter by film and add screenings to your calendar." />
+  <title>Denver Movie Showtimes</title>
+  <meta name="description" content="Repertory, indie & first-run movie showtimes across Denver — filter by film and add any screening to your calendar. A companion to The Movie Newsletter." />
 
   <!-- Open Graph / preview card (used when this URL is pasted into Substack, etc.).
        __SITE_URL__ is replaced with the deployed Pages URL by the GitHub Action. -->
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="Denver Indie & Repertory Showtimes" />
-  <meta property="og:description" content="Sie FilmCenter · Landmark Mayan · AMC 9+CO 10 — filter by film and add screenings to your calendar." />
+  <meta property="og:title" content="Denver Movie Showtimes" />
+  <meta property="og:description" content="Repertory, indie & first-run movie showtimes across Denver — filter by film and add any screening to your calendar. A companion to The Movie Newsletter." />
   <meta property="og:url" content="__SITE_URL__" />
   <meta property="og:image" content="__SITE_URL__preview.png" />
   <meta name="twitter:card" content="summary_large_image" />
@@ -21,20 +21,23 @@
 <body>
   <div class="wrap">
     <header>
-      <h1>Denver Indie &amp; Repertory Showtimes</h1>
-      <p class="subtitle">Sie FilmCenter · Landmark Mayan · AMC 9+CO 10</p>
+      <h1>Denver Movie Showtimes</h1>
+      <p class="subtitle">A companion to <a href="https://coreymcginnis.substack.com/" target="_blank" rel="noopener">The Movie Newsletter</a></p>
       <p class="updated" id="updated"></p>
     </header>
 
-    <section class="controls" aria-label="Filters">
-      <div class="chips" id="theaterChips"></div>
-      <div class="film-bar">
-        <input type="search" id="filmSearch" placeholder="Search films…" autocomplete="off" />
-        <button class="btn" id="picksBtn" type="button">Corey's picks</button>
-        <button class="btn" id="selectAll" type="button">All films</button>
-        <button class="btn" id="clearAll" type="button">None</button>
+    <section class="controls" id="controls" aria-label="Filters">
+      <button class="filters-toggle" id="filtersToggle" type="button" aria-expanded="false" aria-controls="controlsBody">Filters</button>
+      <div class="controls-body" id="controlsBody">
+        <div class="chips" id="theaterChips"></div>
+        <div class="film-bar">
+          <input type="search" id="filmSearch" placeholder="Search films…" autocomplete="off" />
+          <button class="btn" id="picksBtn" type="button">Corey's picks</button>
+          <button class="btn" id="selectAll" type="button">All films</button>
+          <button class="btn" id="clearAll" type="button">None</button>
+        </div>
+        <div class="film-list" id="filmList"></div>
       </div>
-      <div class="film-list" id="filmList"></div>
     </section>
 
     <div id="calendar"></div>

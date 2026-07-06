@@ -7,7 +7,7 @@ import sys
 from collections import Counter
 
 from .config import load_config
-from .pipeline import run, write_feed
+from .pipeline import diff_new_titles, run, write_feed
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -43,6 +43,15 @@ def main(argv: list[str] | None = None) -> int:
     output = args.output or load_config(args.config).output
     write_feed(feed, output)
     print(f"Wrote {len(events)} events to {output}")
+
+    new = diff_new_titles(feed["films"])
+    if new:
+        print(f"\n{len(new)} new title(s) since last run — eyeball these for cleanup:")
+        for t in new:
+            print(f"  • {t}")
+        print("(added to known_titles.txt; they won't be flagged again next week)")
+    else:
+        print("\nNo new titles since last run.")
     return 0
 
 

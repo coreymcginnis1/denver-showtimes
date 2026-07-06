@@ -70,7 +70,7 @@ strip_prefixes = [
   'Bleak Week',
   'Sie/?Saw',
   'Sci-?Fi Film Series(?:\s*#\d+)?',
-  'Members?\s+Only[^:]*',
+  'Scream Screen',             # Sie horror series: "Scream Screen: Idle Hands" -> "Idle Hands"
   'Fan Faves',
   'Staff Pick',
   'The Popcorn List',          # "The Popcorn List: The Fisherman" -> "The Fisherman"
@@ -82,11 +82,16 @@ strip_suffixes = [
   ':\s+.*\bExperience$',
   '\s+Fan First Screenings?$',
   '\s*\(\d{4}\)$',                                       # release year: "Moana (2026)" -> "Moana"
-  '\s*[-–—]?\s*\d{1,3}(?:st|nd|rd|th)\s+Anniversary$',   # "Citizen Kane 85th Anniversary"
+  '\s*[-–—]?\s*\(?\d{1,3}(?:st|nd|rd|th)\s+Anniversary\)?$',  # "85th Anniversary" / "(40th Anniversary)"
+  '\s*[-–—:]?\s*(?:Director\W?s|Extended|Theatrical|Final|Uncut)\s+Cut$',  # "- Directors Cut" -> base film
+  '\s*[:–—-]\s*[^:]*\bEdition$',   # "Backrooms: Everything Must Go Edition" -> "Backrooms"
+  '\s*[-–—]\s*(?:Promo|Preview|Sneak(?:\s+Preview)?)\s+Screenings?$',   # "... - Promo Screening"
   '\s*[-–—]\s*Studio Ghibli Fest(?:ival)?(?:\s+\d{4})?$',  # "... - Studio Ghibli Fest 2026"
   '\s+(?:IMAX\s+)?(?:Opening Night\s+)?Fan Event$',      # "MOANA IMAX Opening Night Fan Event"
   '\s+(?:IMAX\s+)?(?:Early Access|Advance)\s+Screenings?$',  # "... Early Access Screening"
-  '\s+on\s+\d{2,3}\s?mm$',      # format tag in title: "Interstellar on 35mm" -> "Interstellar"
+  '\s+on\s+\d{2,3}\s?mm(?:\s+film)?$',   # "Interstellar on 35mm" / "The Odyssey on 35mm film"
+  '\s*[:–—-]\s*Sensory[- ]?Friendly\b.*$',  # "Supergirl: Sensory Friendly Screening" -> "Supergirl"
+  '\s*\(dir\.?\s[^)]*\)$',      # director annotation: "Alpha (dir. Rawail)" -> "Alpha"
   '\s*[:–—-]\s*Xfinity\b.*$',   # sponsor tag: "Minions & Monsters: Xfinity" -> "Minions & Monsters"
 ]
 # Titles matching any of these are dropped entirely — events that aren't a specific
@@ -102,6 +107,7 @@ drop = [
   'Memorial Screening',       # tribute events with no film named
   'Mystery Movie',            # surprise screenings, no film named ("REGAL: Monday Mystery Movie")
   '\bUFC \d',                 # live UFC pay-per-view broadcasts ("UFC 329: ..."), not films
+  'Members?\s+Only',          # members-only screenings (public can't attend) — drop them
 ]
 
 # Which films are pre-checked when the page first loads (others start unchecked but

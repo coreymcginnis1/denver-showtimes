@@ -6,7 +6,9 @@ from movie_scraper.config import (
     DEFAULT_DROP, DEFAULT_STRIP_PREFIXES, DEFAULT_STRIP_SUFFIXES, load_config,
 )
 from movie_scraper.models import Showtime
-from movie_scraper.pipeline import _build_feed, _passes, is_non_film, normalize_title, title_format
+from movie_scraper.pipeline import (
+    _build_feed, _passes, diff_new_titles, is_non_film, normalize_title, title_format,
+)
 
 DEN = ZoneInfo("America/Denver")
 ROOT = Path(__file__).parent.parent
@@ -50,8 +52,6 @@ def test_normalize_title_strips_series():
     assert normalize_title("Bleak Week: The Sweet Hereafter", P) == "The Sweet Hereafter"
     assert normalize_title("Sie/Saw: eXistenZ", P) == "eXistenZ"
     assert normalize_title("Sci-Fi Film Series #1: Jaws", P) == "Jaws"
-    assert normalize_title("MEMBERS ONLY Staff Pick: Holes", P) == "Holes"
-    assert normalize_title("Member Only Sneak Preview: The Invite", P) == "The Invite"
     assert normalize_title("Fan Faves: Michael", P) == "Michael"
 
 
@@ -104,6 +104,39 @@ def test_normalize_title_series_prefix_and_format_suffix():
     assert normalize_title("Minions & Monsters: Xfinity", P, S) == "Minions & Monsters"
     # a real colon subtitle that isn't a sponsor tag is preserved
     assert normalize_title("Mission: Impossible", P, S) == "Mission: Impossible"
+
+
+def test_normalize_title_consolidates_editions_cuts_anniversaries():
+    P, S = DEFAULT_STRIP_PREFIXES, DEFAULT_STRIP_SUFFIXES
+    assert normalize_title("Backrooms: Everything Must Go Edition", P, S) == "Backrooms"
+    assert normalize_title("Alien - Director's Cut", P, S) == "Alien"
+    assert normalize_title("Blade Runner - Final Cut", P, S) == "Blade Runner"
+    # both a cut and a parenthetical anniversary strip off
+    assert normalize_title("Aliens: Director's Cut (40th Anniversary)", P, S) == "Aliens"
+    assert normalize_title("Jaws (45th Anniversary)", P, S) == "Jaws"
+
+
+def test_normalize_title_strips_series_and_screening_labels():
+    P, S = DEFAULT_STRIP_PREFIXES, DEFAULT_STRIP_SUFFIXES
+    assert normalize_title("Scream Screen: Idle Hands", P, S) == "Idle Hands"
+    assert normalize_title("Supergirl: Sensory Friendly Screening", P, S) == "Supergirl"
+    assert normalize_title("The Odyssey on 35mm film", P, S) == "The Odyssey"
+    assert normalize_title("Alpha (dir. Rawail)", P, S) == "Alpha"
+    assert normalize_title("Interstellar on 35mm", P, S) == "Interstellar"   # plain form still works
+
+
+def test_is_non_film_drops_members_only():
+    assert is_non_film("Some Indie Film - Promo Screening (Members Only)", DEFAULT_DROP)
+    assert is_non_film("Member Only Sneak Preview: The Invite", DEFAULT_DROP)
+    assert not is_non_film("The Invite", DEFAULT_DROP)
+
+
+def test_diff_new_titles(tmp_path):
+    kp = tmp_path / "known.txt"
+    assert diff_new_titles(["Jaws", "Alien"], kp) == ["Alien", "Jaws"]   # first run: all new
+    assert kp.exists()
+    assert diff_new_titles(["Jaws", "Alien", "Dune"], kp) == ["Dune"]    # only the genuinely new one
+    assert diff_new_titles(["Jaws"], kp) == []                           # nothing new (fewer is fine)
 
 
 def test_is_non_film_drops_live_broadcast_and_memorial():

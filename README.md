@@ -83,8 +83,11 @@ IP works). Showtimes turn over Wed/Thu, so once a week is plenty:
 powershell -ExecutionPolicy Bypass -File scripts\update.ps1
 ```
 
-It scrapes all three theaters, commits `public/data.json` if it changed, and pushes — the
-deploy-only Action republishes. To automate it, add a weekly Windows Task Scheduler job (adjust the
+It scrapes the enabled theaters, commits `public/data.json` (and `known_titles.txt`) if they
+changed, and pushes — the deploy-only Action republishes. Each run also prints a **new-titles
+digest** — the titles that are new since the last run — so you can spot any that need a cleanup
+rule in `config.toml` (`[titles]`) before it publishes, instead of re-scanning the whole list.
+To automate it, add a weekly Windows Task Scheduler job (adjust the
 path):
 
 ```powershell

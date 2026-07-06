@@ -179,3 +179,25 @@ def write_feed(feed: dict, output: str | Path) -> None:
     path = Path(output)
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(feed, indent=2, ensure_ascii=False), encoding="utf-8")
+
+
+def diff_new_titles(films: list[str], known_path: str | Path = "known_titles.txt") -> list[str]:
+    """Titles in `films` not seen before (per known_path), for the weekly "what's new" digest.
+
+    Reads the running list of previously-seen titles, returns the ones that are new (so a
+    reviewer only eyeballs new/odd titles instead of the whole list), then folds the current
+    titles into the file so they won't be reported again.
+    """
+    path = Path(known_path)
+    known: set[str] = set()
+    if path.exists():
+        known = {ln.strip() for ln in path.read_text(encoding="utf-8").splitlines()
+                 if ln.strip() and not ln.lstrip().startswith("#")}
+    new = sorted(set(films) - known, key=str.lower)
+    if new:  # only rewrite when something changed
+        allk = sorted(known | set(films), key=str.lower)
+        path.write_text(
+            "# Titles the scraper has already seen — powers the new-title digest.\n"
+            "# Auto-updated each run. Delete a line to re-flag that title, or delete the file to reset.\n"
+            + "\n".join(allk) + "\n", encoding="utf-8")
+    return new

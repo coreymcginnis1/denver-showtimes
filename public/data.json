@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-02T09:02:11.146885-06:00",
+  "generated_at": "2026-07-06T12:36:36.603852-06:00",
   "timezone": "America/Denver",
   "theaters": [
     {
@@ -47,13 +47,12 @@
   ],
   "films": [
     "A Minecraft Movie",
-    "Alien - Director's Cut",
-    "Aliens: Director's Cut (40th Anniversary)",
-    "Alpha (dir. Rawail)",
+    "Alien",
+    "Aliens",
+    "Alpha",
     "American Psycho",
     "Baahubali: The Epic",
     "Backrooms",
-    "Backrooms: Everything Must Go Edition",
     "Batman Begins",
     "Bleach: Thousand-Year Blood War - The Calamity",
     "Buffet Infinity",
@@ -67,12 +66,12 @@
     "Evil Dead Burn",
     "Excalibur",
     "Gail Daughtry and the Celebrity Sex Pass",
-    "Gail Daughtry and the Celebrity Sex Pass - Promo Screening (Members Only)",
     "Girls Like Girls",
     "Goat",
     "How to Train Your Dragon",
     "I Know Who You Are",
     "I Shot Andy Warhol",
+    "Idle Hands",
     "Inception",
     "Interstellar",
     "Jack Johnson: Surfilmusic",
@@ -98,7 +97,6 @@
     "Scarface",
     "Scary Movie",
     "Scoob!",
-    "Scream Screen: Idle Hands",
     "She's the He!",
     "Shortbus",
     "Sonic the Hedgehog 2",
@@ -106,7 +104,6 @@
     "Star Wars: The Mandalorian and Grogu",
     "Stop! That! Train!",
     "Supergirl",
-    "Supergirl: Sensory Friendly Screening",
     "The Burning",
     "The Death of Robin Hood",
     "The Faculty",
@@ -117,17 +114,15 @@
     "The Lego Movie",
     "The Lego Ninjago Movie",
     "The Odyssey",
-    "The Odyssey on 35mm film",
     "To Wong Foo, Thanks for Everything, Julie Newmar",
     "Toy Story 5",
     "Tuner",
     "Young Washington"
   ],
   "default_films": [
-    "Alien - Director's Cut",
+    "Alien",
     "American Psycho",
     "Backrooms",
-    "Backrooms: Everything Must Go Edition",
     "Citizen Kane",
     "Disclosure Day",
     "Inception",
@@ -7825,8 +7820,8 @@
       "end": "2026-07-03T11:35:00-06:00"
     },
     {
-      "id": "ms_dee0d746a7b558ca",
-      "title": "Backrooms: Everything Must Go Edition",
+      "id": "ms_3c9755f2e179cc54",
+      "title": "Backrooms",
       "start": "2026-07-03T09:45:00-06:00",
       "allDay": false,
       "backgroundColor": "#4C9F70",
@@ -8400,8 +8395,8 @@
       "end": "2026-07-03T13:00:00-06:00"
     },
     {
-      "id": "ms_cbd218c217295cfe",
-      "title": "Backrooms: Everything Must Go Edition",
+      "id": "ms_de048b83947196d7",
+      "title": "Backrooms",
       "start": "2026-07-03T11:00:00-06:00",
       "allDay": false,
       "backgroundColor": "#6C5CE7",
@@ -8791,8 +8786,8 @@
       "end": "2026-07-03T13:23:00-06:00"
     },
     {
-      "id": "ms_b9b87a8db532b277",
-      "title": "Backrooms: Everything Must Go Edition",
+      "id": "ms_22aad3243c1eab51",
+      "title": "Backrooms",
       "start": "2026-07-03T11:45:00-06:00",
       "allDay": false,
       "backgroundColor": "#4C9F70",
@@ -9757,8 +9752,8 @@
       "end": "2026-07-03T14:57:00-06:00"
     },
     {
-      "id": "ms_fbf178567e6203f3",
-      "title": "Backrooms: Everything Must Go Edition",
+      "id": "ms_e90c58fa4cdda824",
+      "title": "Backrooms",
       "start": "2026-07-03T13:20:00-06:00",
       "allDay": false,
       "backgroundColor": "#6C5CE7",
@@ -10470,8 +10465,8 @@
       "end": "2026-07-03T16:15:00-06:00"
     },
     {
-      "id": "ms_8ba2590f663a97e7",
-      "title": "Backrooms: Everything Must Go Edition",
+      "id": "ms_d771535dc5c5bbad",
+      "title": "Backrooms",
       "start": "2026-07-03T14:50:00-06:00",
       "allDay": false,
       "backgroundColor": "#2E5EAA",
@@ -10585,8 +10580,8 @@
       "end": "2026-07-03T16:30:00-06:00"
     },
     {
-      "id": "ms_ffeb6cf6ff8571df",
-      "title": "Backrooms: Everything Must Go Edition",
+      "id": "ms_d99ca3916d6fb8eb",
+      "title": "Backrooms",
       "start": "2026-07-03T15:00:00-06:00",
       "allDay": false,
       "backgroundColor": "#4C9F70",
@@ -11367,8 +11362,8 @@
       "end": "2026-07-03T18:10:00-06:00"
     },
     {
-      "id": "ms_b39a4d8b7cf6cced",
-      "title": "Backrooms: Everything Must Go Edition",
+      "id": "ms_1a12e468c53559f4",
+      "title": "Backrooms",
       "start": "2026-07-03T16:10:00-06:00",
       "allDay": false,
       "backgroundColor": "#C44E9D",
@@ -11781,8 +11776,8 @@
       "end": "2026-07-03T19:00:00-06:00"
     },
     {
-      "id": "ms_ca15165796636d92",
-      "title": "Backrooms: Everything Must Go Edition",
+      "id": "ms_b36aecfeb00616ed",
+      "title": "Backrooms",
       "start": "2026-07-03T17:00:00-06:00",
       "allDay": false,
       "backgroundColor": "#6C5CE7",
@@ -12172,8 +12167,8 @@
       "end": "2026-07-03T20:00:00-06:00"
     },
     {
-      "id": "ms_f6becfa97fe1c238",
-      "title": "Backrooms: Everything Must Go Edition",
+      "id": "ms_5b078878a91c2fb8",
+      "title": "Backrooms",
       "start": "2026-07-03T18:00:00-06:00",
       "allDay": false,
       "backgroundColor": "#2E5EAA",
@@ -12379,8 +12374,8 @@
       "end": "2026-07-03T20:15:00-06:00"
     },
     {
-      "id": "ms_bda119bce87a092f",
-      "title": "Backrooms: Everything Must Go Edition",
+      "id": "ms_0012c9e011c74c95",
+      "title": "Backrooms",
       "start": "2026-07-03T18:15:00-06:00",
       "allDay": false,
       "backgroundColor": "#4C9F70",
@@ -12517,8 +12512,8 @@
       "end": "2026-07-03T20:30:00-06:00"
     },
     {
-      "id": "ms_7227b6e101a50053",
-      "title": "Alpha (dir. Rawail)",
+      "id": "ms_7b6f98bbbe5f9b34",
+      "title": "Alpha",
       "start": "2026-07-03T18:30:00-06:00",
       "allDay": false,
       "backgroundColor": "#6C5CE7",
@@ -13345,8 +13340,8 @@
       "end": "2026-07-03T21:00:00-06:00"
     },
     {
-      "id": "ms_82e9fff78803cb16",
-      "title": "Backrooms: Everything Must Go Edition",
+      "id": "ms_388b87713c5b63f3",
+      "title": "Backrooms",
       "start": "2026-07-03T19:35:00-06:00",
       "allDay": false,
       "backgroundColor": "#6C5CE7",
@@ -14012,8 +14007,8 @@
       "end": "2026-07-03T22:37:00-06:00"
     },
     {
-      "id": "ms_26caf39b6783d8ee",
-      "title": "Backrooms: Everything Must Go Edition",
+      "id": "ms_bc46b9f79d417e4f",
+      "title": "Backrooms",
       "start": "2026-07-03T21:10:00-06:00",
       "allDay": false,
       "backgroundColor": "#2E5EAA",
@@ -14541,8 +14536,8 @@
       "end": "2026-07-04T00:00:00-06:00"
     },
     {
-      "id": "ms_74d6e881fdb1498b",
-      "title": "Alpha (dir. Rawail)",
+      "id": "ms_f1f03ab2e6e81a6c",
+      "title": "Alpha",
       "start": "2026-07-03T22:00:00-06:00",
       "allDay": false,
       "backgroundColor": "#6C5CE7",
@@ -14702,8 +14697,8 @@
       "end": "2026-07-04T00:10:00-06:00"
     },
     {
-      "id": "ms_1f748d9d7ae45911",
-      "title": "Backrooms: Everything Must Go Edition",
+      "id": "ms_09964f01e161bd98",
+      "title": "Backrooms",
       "start": "2026-07-03T22:10:00-06:00",
       "allDay": false,
       "backgroundColor": "#C44E9D",
@@ -14932,8 +14927,8 @@
       "end": "2026-07-04T00:18:00-06:00"
     },
     {
-      "id": "ms_d39eff92786c0e53",
-      "title": "Backrooms: Everything Must Go Edition",
+      "id": "ms_7e60b62c7ff5b0f7",
+      "title": "Backrooms",
       "start": "2026-07-03T22:30:00-06:00",
       "allDay": false,
       "backgroundColor": "#4C9F70",
@@ -15001,8 +14996,8 @@
       "end": "2026-07-04T00:35:00-06:00"
     },
     {
-      "id": "ms_97862e3fd08824f1",
-      "title": "Backrooms: Everything Must Go Edition",
+      "id": "ms_df5eaa56a09082f5",
+      "title": "Backrooms",
       "start": "2026-07-03T22:40:00-06:00",
       "allDay": false,
       "backgroundColor": "#6C5CE7",
@@ -15645,8 +15640,8 @@
       "end": "2026-07-04T11:15:00-06:00"
     },
     {
-      "id": "ms_91c75f1e1a136876",
-      "title": "Backrooms: Everything Must Go Edition",
+      "id": "ms_bc40385d5ac947b9",
+      "title": "Backrooms",
       "start": "2026-07-04T09:20:00-06:00",
       "allDay": false,
       "backgroundColor": "#4C9F70",
@@ -16473,8 +16468,8 @@
       "end": "2026-07-04T13:00:00-06:00"
     },
     {
-      "id": "ms_8952411e3645df3e",
-      "title": "Backrooms: Everything Must Go Edition",
+      "id": "ms_8422b04969024471",
+      "title": "Backrooms",
       "start": "2026-07-04T11:00:00-06:00",
       "allDay": false,
       "backgroundColor": "#6C5CE7",
@@ -16887,8 +16882,8 @@
       "end": "2026-07-04T13:00:00-06:00"
     },
     {
-      "id": "ms_9764499c1a0d4a20",
-      "title": "Backrooms: Everything Must Go Edition",
+      "id": "ms_41e7d87dece32c5b",
+      "title": "Backrooms",
       "start": "2026-07-04T11:30:00-06:00",
       "allDay": false,
       "backgroundColor": "#4C9F70",
@@ -17899,8 +17894,8 @@
       "end": "2026-07-04T15:20:00-06:00"
     },
     {
-      "id": "ms_64cca28e364ae8f8",
-      "title": "Backrooms: Everything Must Go Edition",
+      "id": "ms_e048bcc7d58a2249",
+      "title": "Backrooms",
       "start": "2026-07-04T13:20:00-06:00",
       "allDay": false,
       "backgroundColor": "#6C5CE7",
@@ -18612,8 +18607,8 @@
       "end": "2026-07-04T16:45:00-06:00"
     },
     {
-      "id": "ms_2f105d22ddd0d37d",
-      "title": "Backrooms: Everything Must Go Edition",
+      "id": "ms_3f00686fe63a7b3d",
+      "title": "Backrooms",
       "start": "2026-07-04T14:45:00-06:00",
       "allDay": false,
       "backgroundColor": "#4C9F70",
@@ -18635,8 +18630,8 @@
       "end": "2026-07-04T16:51:00-06:00"
     },
     {
-      "id": "ms_08630be99c3c7e1d",
-      "title": "Backrooms: Everything Must Go Edition",
+      "id": "ms_8a484515ef4d9655",
+      "title": "Backrooms",
       "start": "2026-07-04T14:50:00-06:00",
       "allDay": false,
       "backgroundColor": "#2E5EAA",
@@ -19509,8 +19504,8 @@
       "end": "2026-07-04T18:10:00-06:00"
     },
     {
-      "id": "ms_ad6ac497182f3e19",
-      "title": "Backrooms: Everything Must Go Edition",
+      "id": "ms_84e6596cc8fff86d",
+      "title": "Backrooms",
       "start": "2026-07-04T16:10:00-06:00",
       "allDay": false,
       "backgroundColor": "#C44E9D",
@@ -19992,8 +19987,8 @@
       "end": "2026-07-04T19:00:00-06:00"
     },
     {
-      "id": "ms_8e52d9f6d5aea498",
-      "title": "Backrooms: Everything Must Go Edition",
+      "id": "ms_45821e0f7ded56a4",
+      "title": "Backrooms",
       "start": "2026-07-04T17:00:00-06:00",
       "allDay": false,
       "backgroundColor": "#6C5CE7",
@@ -20360,8 +20355,8 @@
       "end": "2026-07-04T20:00:00-06:00"
     },
     {
-      "id": "ms_77c0efcd2442d0fa",
-      "title": "Backrooms: Everything Must Go Edition",
+      "id": "ms_ad1b77c2be202d22",
+      "title": "Backrooms",
       "start": "2026-07-04T18:00:00-06:00",
       "allDay": false,
       "backgroundColor": "#2E5EAA",
@@ -21418,8 +21413,8 @@
       "end": "2026-07-04T21:08:00-06:00"
     },
     {
-      "id": "ms_a347f0b910bf4679",
-      "title": "Backrooms: Everything Must Go Edition",
+      "id": "ms_cc06ee79458a494d",
+      "title": "Backrooms",
       "start": "2026-07-04T19:20:00-06:00",
       "allDay": false,
       "backgroundColor": "#4C9F70",
@@ -21602,8 +21597,8 @@
       "end": "2026-07-04T21:00:00-06:00"
     },
     {
-      "id": "ms_142ee849e21ea8b9",
-      "title": "Backrooms: Everything Must Go Edition",
+      "id": "ms_8d4179591de357c2",
+      "title": "Backrooms",
       "start": "2026-07-04T19:35:00-06:00",
       "allDay": false,
       "backgroundColor": "#6C5CE7",
@@ -21786,8 +21781,8 @@
       "end": "2026-07-04T21:30:00-06:00"
     },
     {
-      "id": "ms_f370503d6a966bff",
-      "title": "Alpha (dir. Rawail)",
+      "id": "ms_80f7a291795d7599",
+      "title": "Alpha",
       "start": "2026-07-04T20:05:00-06:00",
       "allDay": false,
       "backgroundColor": "#6C5CE7",
@@ -22177,8 +22172,8 @@
       "end": "2026-07-04T22:32:00-06:00"
     },
     {
-      "id": "ms_874331abc60ec668",
-      "title": "Backrooms: Everything Must Go Edition",
+      "id": "ms_408315c1d528356f",
+      "title": "Backrooms",
       "start": "2026-07-04T21:10:00-06:00",
       "allDay": false,
       "backgroundColor": "#2E5EAA",
@@ -22200,8 +22195,8 @@
       "end": "2026-07-04T23:10:00-06:00"
     },
     {
-      "id": "ms_a0bc5da1219f1b12",
-      "title": "Alpha (dir. Rawail)",
+      "id": "ms_5390b18b74a628a0",
+      "title": "Alpha",
       "start": "2026-07-04T21:10:00-06:00",
       "allDay": false,
       "backgroundColor": "#6C5CE7",
@@ -22821,8 +22816,8 @@
       "end": "2026-07-05T00:10:00-06:00"
     },
     {
-      "id": "ms_f003e0254507f499",
-      "title": "Backrooms: Everything Must Go Edition",
+      "id": "ms_66b9ade50eaef5d5",
+      "title": "Backrooms",
       "start": "2026-07-04T22:10:00-06:00",
       "allDay": false,
       "backgroundColor": "#C44E9D",
@@ -23005,8 +23000,8 @@
       "end": "2026-07-05T00:18:00-06:00"
     },
     {
-      "id": "ms_b45dc270ee1ff9e8",
-      "title": "Backrooms: Everything Must Go Edition",
+      "id": "ms_b979efd03a07c9e0",
+      "title": "Backrooms",
       "start": "2026-07-04T22:30:00-06:00",
       "allDay": false,
       "backgroundColor": "#4C9F70",
@@ -23097,8 +23092,8 @@
       "end": "2026-07-05T00:40:00-06:00"
     },
     {
-      "id": "ms_43be9326675e9794",
-      "title": "Backrooms: Everything Must Go Edition",
+      "id": "ms_622346f7bd0bebc2",
+      "title": "Backrooms",
       "start": "2026-07-04T22:45:00-06:00",
       "allDay": false,
       "backgroundColor": "#6C5CE7",
@@ -23787,8 +23782,8 @@
       "end": "2026-07-05T11:20:00-06:00"
     },
     {
-      "id": "ms_f8d99dbfac28a0f1",
-      "title": "Backrooms: Everything Must Go Edition",
+      "id": "ms_18f82c75d96d9aa2",
+      "title": "Backrooms",
       "start": "2026-07-05T09:20:00-06:00",
       "allDay": false,
       "backgroundColor": "#4C9F70",
@@ -24569,8 +24564,8 @@
       "end": "2026-07-05T13:00:00-06:00"
     },
     {
-      "id": "ms_354c3d2abfd280b5",
-      "title": "Backrooms: Everything Must Go Edition",
+      "id": "ms_18d29ed3a977d435",
+      "title": "Backrooms",
       "start": "2026-07-05T11:00:00-06:00",
       "allDay": false,
       "backgroundColor": "#6C5CE7",
@@ -25581,8 +25576,8 @@
       "end": "2026-07-05T14:35:00-06:00"
     },
     {
-      "id": "ms_e6ac55e7f8969537",
-      "title": "Backrooms: Everything Must Go Edition",
+      "id": "ms_b7c23120b530d4b2",
+      "title": "Backrooms",
       "start": "2026-07-05T12:40:00-06:00",
       "allDay": false,
       "backgroundColor": "#4C9F70",
@@ -25972,8 +25967,8 @@
       "end": "2026-07-05T15:20:00-06:00"
     },
     {
-      "id": "ms_80724366374779fc",
-      "title": "Backrooms: Everything Must Go Edition",
+      "id": "ms_b176d005c9e313e1",
+      "title": "Backrooms",
       "start": "2026-07-05T13:20:00-06:00",
       "allDay": false,
       "backgroundColor": "#6C5CE7",
@@ -26708,8 +26703,8 @@
       "end": "2026-07-05T16:45:00-06:00"
     },
     {
-      "id": "ms_0af72199f19f5f78",
-      "title": "Backrooms: Everything Must Go Edition",
+      "id": "ms_31603db54d2ff251",
+      "title": "Backrooms",
       "start": "2026-07-05T14:50:00-06:00",
       "allDay": false,
       "backgroundColor": "#2E5EAA",
@@ -27582,8 +27577,8 @@
       "end": "2026-07-05T18:10:00-06:00"
     },
     {
-      "id": "ms_6a0255d5abb06aad",
-      "title": "Backrooms: Everything Must Go Edition",
+      "id": "ms_93fc8ae8dc905b10",
+      "title": "Backrooms",
       "start": "2026-07-05T16:10:00-06:00",
       "allDay": false,
       "backgroundColor": "#C44E9D",
@@ -28088,8 +28083,8 @@
       "end": "2026-07-05T19:00:00-06:00"
     },
     {
-      "id": "ms_8aa843ae5c02ddfa",
-      "title": "Backrooms: Everything Must Go Edition",
+      "id": "ms_2c8982af49bd69ec",
+      "title": "Backrooms",
       "start": "2026-07-05T17:00:00-06:00",
       "allDay": false,
       "backgroundColor": "#6C5CE7",
@@ -28479,8 +28474,8 @@
       "end": "2026-07-05T20:00:00-06:00"
     },
     {
-      "id": "ms_5fef21cf810a20c9",
-      "title": "Backrooms: Everything Must Go Edition",
+      "id": "ms_81c9c3038385bec7",
+      "title": "Backrooms",
       "start": "2026-07-05T18:00:00-06:00",
       "allDay": false,
       "backgroundColor": "#2E5EAA",
@@ -29261,8 +29256,8 @@
       "end": "2026-07-05T21:15:00-06:00"
     },
     {
-      "id": "ms_71c53b25278e634f",
-      "title": "Backrooms: Everything Must Go Edition",
+      "id": "ms_067a4471c1396105",
+      "title": "Backrooms",
       "start": "2026-07-05T19:10:00-06:00",
       "allDay": false,
       "backgroundColor": "#4C9F70",
@@ -29675,8 +29670,8 @@
       "end": "2026-07-05T21:06:00-06:00"
     },
     {
-      "id": "ms_e3ab411b26447bc3",
-      "title": "Backrooms: Everything Must Go Edition",
+      "id": "ms_9e367714204d3ac6",
+      "title": "Backrooms",
       "start": "2026-07-05T19:35:00-06:00",
       "allDay": false,
       "backgroundColor": "#6C5CE7",
@@ -29882,8 +29877,8 @@
       "end": "2026-07-05T21:30:00-06:00"
     },
     {
-      "id": "ms_740d2d1dd98f0bfc",
-      "title": "Alpha (dir. Rawail)",
+      "id": "ms_f0be37dfd8e0c344",
+      "title": "Alpha",
       "start": "2026-07-05T20:05:00-06:00",
       "allDay": false,
       "backgroundColor": "#6C5CE7",
@@ -30250,8 +30245,8 @@
       "end": "2026-07-05T23:05:00-06:00"
     },
     {
-      "id": "ms_4260ba7837a9a8d7",
-      "title": "Backrooms: Everything Must Go Edition",
+      "id": "ms_e3ce57c898b1dd5d",
+      "title": "Backrooms",
       "start": "2026-07-05T21:10:00-06:00",
       "allDay": false,
       "backgroundColor": "#2E5EAA",
@@ -30618,8 +30613,8 @@
       "end": "2026-07-05T23:45:00-06:00"
     },
     {
-      "id": "ms_f2b29355be691f52",
-      "title": "Backrooms: Everything Must Go Edition",
+      "id": "ms_c5b5f4b9804e7121",
+      "title": "Backrooms",
       "start": "2026-07-05T21:45:00-06:00",
       "allDay": false,
       "backgroundColor": "#4C9F70",
@@ -30894,8 +30889,8 @@
       "end": "2026-07-05T23:53:00-06:00"
     },
     {
-      "id": "ms_85f01a2601536df5",
-      "title": "Backrooms: Everything Must Go Edition",
+      "id": "ms_33cea24b5c4af6b8",
+      "title": "Backrooms",
       "start": "2026-07-05T22:10:00-06:00",
       "allDay": false,
       "backgroundColor": "#C44E9D",
@@ -31032,8 +31027,8 @@
       "end": "2026-07-06T00:20:00-06:00"
     },
     {
-      "id": "ms_79a360a3ea2e718e",
-      "title": "Alpha (dir. Rawail)",
+      "id": "ms_5c6f10c1f96230de",
+      "title": "Alpha",
       "start": "2026-07-05T22:20:00-06:00",
       "allDay": false,
       "backgroundColor": "#6C5CE7",
@@ -31285,8 +31280,8 @@
       "end": "2026-07-06T00:45:00-06:00"
     },
     {
-      "id": "ms_7015a83de1a56089",
-      "title": "Backrooms: Everything Must Go Edition",
+      "id": "ms_47cbf64af9bfce11",
+      "title": "Backrooms",
       "start": "2026-07-05T22:45:00-06:00",
       "allDay": false,
       "backgroundColor": "#6C5CE7",
@@ -31722,8 +31717,8 @@
       "end": "2026-07-06T13:00:00-06:00"
     },
     {
-      "id": "ms_66b29e3dd2d1dd19",
-      "title": "Backrooms: Everything Must Go Edition",
+      "id": "ms_d2a2a1b13d7bdb39",
+      "title": "Backrooms",
       "start": "2026-07-06T11:00:00-06:00",
       "allDay": false,
       "backgroundColor": "#6C5CE7",
@@ -32228,8 +32223,8 @@
       "end": "2026-07-06T13:45:00-06:00"
     },
     {
-      "id": "ms_967c1359fb0e985b",
-      "title": "Backrooms: Everything Must Go Edition",
+      "id": "ms_4fd35762a43fd971",
+      "title": "Backrooms",
       "start": "2026-07-06T11:45:00-06:00",
       "allDay": false,
       "backgroundColor": "#4C9F70",
@@ -32872,8 +32867,8 @@
       "end": "2026-07-06T14:48:00-06:00"
     },
     {
-      "id": "ms_03e27b2281d8ed8a",
-      "title": "Backrooms: Everything Must Go Edition",
+      "id": "ms_351b7d27a3f9bf79",
+      "title": "Backrooms",
       "start": "2026-07-06T13:05:00-06:00",
       "allDay": false,
       "backgroundColor": "#6C5CE7",
@@ -33723,8 +33718,8 @@
       "end": "2026-07-06T16:45:00-06:00"
     },
     {
-      "id": "ms_62cc866b3f94db57",
-      "title": "Backrooms: Everything Must Go Edition",
+      "id": "ms_574567ad5a6c8983",
+      "title": "Backrooms",
       "start": "2026-07-06T14:50:00-06:00",
       "allDay": false,
       "backgroundColor": "#2E5EAA",
@@ -33861,8 +33856,8 @@
       "end": "2026-07-06T16:30:00-06:00"
     },
     {
-      "id": "ms_8557a3fa25fc4914",
-      "title": "Backrooms: Everything Must Go Edition",
+      "id": "ms_46b6b9e77202d37b",
+      "title": "Backrooms",
       "start": "2026-07-06T15:00:00-06:00",
       "allDay": false,
       "backgroundColor": "#4C9F70",
@@ -34482,8 +34477,8 @@
       "end": "2026-07-06T18:00:00-06:00"
     },
     {
-      "id": "ms_d0ebdc445121176d",
-      "title": "Backrooms: Everything Must Go Edition",
+      "id": "ms_493b5c2bfe97ebdd",
+      "title": "Backrooms",
       "start": "2026-07-06T16:00:00-06:00",
       "allDay": false,
       "backgroundColor": "#C44E9D",
@@ -35057,8 +35052,8 @@
       "end": "2026-07-06T19:00:00-06:00"
     },
     {
-      "id": "ms_cbd40519a16e156c",
-      "title": "Backrooms: Everything Must Go Edition",
+      "id": "ms_2fee98664d2706c0",
+      "title": "Backrooms",
       "start": "2026-07-06T17:00:00-06:00",
       "allDay": false,
       "backgroundColor": "#6C5CE7",
@@ -35425,8 +35420,8 @@
       "end": "2026-07-06T20:00:00-06:00"
     },
     {
-      "id": "ms_c8966de4822950a9",
-      "title": "Backrooms: Everything Must Go Edition",
+      "id": "ms_81695c2916163557",
+      "title": "Backrooms",
       "start": "2026-07-06T18:00:00-06:00",
       "allDay": false,
       "backgroundColor": "#2E5EAA",
@@ -35678,8 +35673,8 @@
       "end": "2026-07-06T20:15:00-06:00"
     },
     {
-      "id": "ms_9a0431102432b314",
-      "title": "Backrooms: Everything Must Go Edition",
+      "id": "ms_3cd1fe4e888f8e11",
+      "title": "Backrooms",
       "start": "2026-07-06T18:15:00-06:00",
       "allDay": false,
       "backgroundColor": "#4C9F70",
@@ -36184,31 +36179,8 @@
       "end": "2026-07-06T21:05:00-06:00"
     },
     {
-      "id": "ms_cf23e551c4f54458",
-      "title": "Gail Daughtry and the Celebrity Sex Pass - Promo Screening (Members Only)",
-      "start": "2026-07-06T19:00:00-06:00",
-      "allDay": false,
-      "backgroundColor": "#E4572E",
-      "borderColor": "#E4572E",
-      "extendedProps": {
-        "theater": "sie",
-        "theaterName": "Sie FilmCenter",
-        "screen": "H2 - Maglione",
-        "fmt": null,
-        "ticketUrl": "https://denverfilm.eventive.org/films/6a42b326659ab4b027cc283e",
-        "filmUrl": "https://denverfilm.eventive.org/films/6a42b326659ab4b027cc283e",
-        "poster": "https://static-a.eventive.org/18a20516be269addc597e4971a52e97a.jpg?w=300",
-        "rating": null,
-        "runtime": 93,
-        "director": "David Wain",
-        "year": 2026,
-        "note": null
-      },
-      "end": "2026-07-06T20:33:00-06:00"
-    },
-    {
-      "id": "ms_0fecd44c2c53caa0",
-      "title": "Backrooms: Everything Must Go Edition",
+      "id": "ms_5cab6f7863ea65fe",
+      "title": "Backrooms",
       "start": "2026-07-06T19:05:00-06:00",
       "allDay": false,
       "backgroundColor": "#6C5CE7",
@@ -37150,8 +37122,8 @@
       "end": "2026-07-06T23:00:00-06:00"
     },
     {
-      "id": "ms_ed01b0847230be53",
-      "title": "Backrooms: Everything Must Go Edition",
+      "id": "ms_d5308d1c8b1f9d06",
+      "title": "Backrooms",
       "start": "2026-07-06T21:10:00-06:00",
       "allDay": false,
       "backgroundColor": "#2E5EAA",
@@ -37311,8 +37283,8 @@
       "end": "2026-07-06T23:20:00-06:00"
     },
     {
-      "id": "ms_b1757df3ac641f71",
-      "title": "Backrooms: Everything Must Go Edition",
+      "id": "ms_87e644aeeef565a4",
+      "title": "Backrooms",
       "start": "2026-07-06T21:20:00-06:00",
       "allDay": false,
       "backgroundColor": "#4C9F70",
@@ -37771,8 +37743,8 @@
       "end": "2026-07-07T00:00:00-06:00"
     },
     {
-      "id": "ms_66dd6738f926e8d3",
-      "title": "Backrooms: Everything Must Go Edition",
+      "id": "ms_1da438bb93b67541",
+      "title": "Backrooms",
       "start": "2026-07-06T22:00:00-06:00",
       "allDay": false,
       "backgroundColor": "#6C5CE7",
@@ -37932,8 +37904,8 @@
       "end": "2026-07-07T00:10:00-06:00"
     },
     {
-      "id": "ms_892442a0f6c49706",
-      "title": "Backrooms: Everything Must Go Edition",
+      "id": "ms_17ce80242a933dbb",
+      "title": "Backrooms",
       "start": "2026-07-06T22:10:00-06:00",
       "allDay": false,
       "backgroundColor": "#C44E9D",
@@ -37978,8 +37950,8 @@
       "end": "2026-07-06T23:58:00-06:00"
     },
     {
-      "id": "ms_8387ee5ae5f93dec",
-      "title": "Alpha (dir. Rawail)",
+      "id": "ms_70a5664dfa561493",
+      "title": "Alpha",
       "start": "2026-07-06T22:15:00-06:00",
       "allDay": false,
       "backgroundColor": "#6C5CE7",
@@ -38691,8 +38663,8 @@
       "end": "2026-07-07T13:00:00-06:00"
     },
     {
-      "id": "ms_c2a65b7300c58c49",
-      "title": "Backrooms: Everything Must Go Edition",
+      "id": "ms_b483c3df6d2a1b3b",
+      "title": "Backrooms",
       "start": "2026-07-07T11:00:00-06:00",
       "allDay": false,
       "backgroundColor": "#6C5CE7",
@@ -39128,8 +39100,8 @@
       "end": "2026-07-07T13:45:00-06:00"
     },
     {
-      "id": "ms_f238fb56147ad470",
-      "title": "Backrooms: Everything Must Go Edition",
+      "id": "ms_4f590783c25036e5",
+      "title": "Backrooms",
       "start": "2026-07-07T11:45:00-06:00",
       "allDay": false,
       "backgroundColor": "#4C9F70",
@@ -39841,8 +39813,8 @@
       "end": "2026-07-07T14:48:00-06:00"
     },
     {
-      "id": "ms_2b7f065416ccae10",
-      "title": "Backrooms: Everything Must Go Edition",
+      "id": "ms_9f0d9d9c2251a424",
+      "title": "Backrooms",
       "start": "2026-07-07T13:05:00-06:00",
       "allDay": false,
       "backgroundColor": "#6C5CE7",
@@ -40692,8 +40664,8 @@
       "end": "2026-07-07T16:45:00-06:00"
     },
     {
-      "id": "ms_98eaa017cd0770ee",
-      "title": "Backrooms: Everything Must Go Edition",
+      "id": "ms_4f21a4a9084d6523",
+      "title": "Backrooms",
       "start": "2026-07-07T14:50:00-06:00",
       "allDay": false,
       "backgroundColor": "#2E5EAA",
@@ -40784,8 +40756,8 @@
       "end": "2026-07-07T16:30:00-06:00"
     },
     {
-      "id": "ms_3caa1b31c65c1392",
-      "title": "Backrooms: Everything Must Go Edition",
+      "id": "ms_1f52f6c3894e5cfa",
+      "title": "Backrooms",
       "start": "2026-07-07T15:00:00-06:00",
       "allDay": false,
       "backgroundColor": "#4C9F70",
@@ -41474,8 +41446,8 @@
       "end": "2026-07-07T17:38:00-06:00"
     },
     {
-      "id": "ms_ce2e380abf2c5866",
-      "title": "Backrooms: Everything Must Go Edition",
+      "id": "ms_995bcaa6c34843e3",
+      "title": "Backrooms",
       "start": "2026-07-07T16:00:00-06:00",
       "allDay": false,
       "backgroundColor": "#C44E9D",
@@ -42072,8 +42044,8 @@
       "end": "2026-07-07T19:00:00-06:00"
     },
     {
-      "id": "ms_bcbd8904c9316991",
-      "title": "Backrooms: Everything Must Go Edition",
+      "id": "ms_7c9ed88483638896",
+      "title": "Backrooms",
       "start": "2026-07-07T17:00:00-06:00",
       "allDay": false,
       "backgroundColor": "#6C5CE7",
@@ -42394,8 +42366,8 @@
       "end": "2026-07-07T20:00:00-06:00"
     },
     {
-      "id": "ms_0d9ef1d570aa5a5f",
-      "title": "Backrooms: Everything Must Go Edition",
+      "id": "ms_902fca14bef48969",
+      "title": "Backrooms",
       "start": "2026-07-07T18:00:00-06:00",
       "allDay": false,
       "backgroundColor": "#2E5EAA",
@@ -42624,8 +42596,8 @@
       "end": "2026-07-07T20:15:00-06:00"
     },
     {
-      "id": "ms_3a2f96fff852d8fd",
-      "title": "Backrooms: Everything Must Go Edition",
+      "id": "ms_10c6b06d3d6c90a6",
+      "title": "Backrooms",
       "start": "2026-07-07T18:15:00-06:00",
       "allDay": false,
       "backgroundColor": "#4C9F70",
@@ -43222,8 +43194,8 @@
       "end": "2026-07-07T20:48:00-06:00"
     },
     {
-      "id": "ms_33046117ef30def1",
-      "title": "Backrooms: Everything Must Go Edition",
+      "id": "ms_baf06df76929da8a",
+      "title": "Backrooms",
       "start": "2026-07-07T19:05:00-06:00",
       "allDay": false,
       "backgroundColor": "#6C5CE7",
@@ -43843,8 +43815,8 @@
       "end": "2026-07-07T21:32:00-06:00"
     },
     {
-      "id": "ms_f3ec603c8e5bfcab",
-      "title": "Alpha (dir. Rawail)",
+      "id": "ms_3e7dfd7f567332ca",
+      "title": "Alpha",
       "start": "2026-07-07T20:05:00-06:00",
       "allDay": false,
       "backgroundColor": "#6C5CE7",
@@ -44188,8 +44160,8 @@
       "end": "2026-07-07T23:05:00-06:00"
     },
     {
-      "id": "ms_34bcc2a0a2bdc599",
-      "title": "Backrooms: Everything Must Go Edition",
+      "id": "ms_3b7438039c8c0288",
+      "title": "Backrooms",
       "start": "2026-07-07T21:10:00-06:00",
       "allDay": false,
       "backgroundColor": "#2E5EAA",
@@ -44901,8 +44873,8 @@
       "end": "2026-07-07T23:53:00-06:00"
     },
     {
-      "id": "ms_b344abd1e6a6d622",
-      "title": "Backrooms: Everything Must Go Edition",
+      "id": "ms_530a6f19a1b69432",
+      "title": "Backrooms",
       "start": "2026-07-07T22:10:00-06:00",
       "allDay": false,
       "backgroundColor": "#6C5CE7",
@@ -44947,8 +44919,8 @@
       "end": "2026-07-08T00:10:00-06:00"
     },
     {
-      "id": "ms_cb51615a42808690",
-      "title": "Backrooms: Everything Must Go Edition",
+      "id": "ms_fcecce0ea7838ba0",
+      "title": "Backrooms",
       "start": "2026-07-07T22:10:00-06:00",
       "allDay": false,
       "backgroundColor": "#C44E9D",
@@ -45085,8 +45057,8 @@
       "end": "2026-07-08T00:20:00-06:00"
     },
     {
-      "id": "ms_21382b629b8b6c4b",
-      "title": "Backrooms: Everything Must Go Edition",
+      "id": "ms_d441f3f89f9ae9f9",
+      "title": "Backrooms",
       "start": "2026-07-07T22:20:00-06:00",
       "allDay": false,
       "backgroundColor": "#4C9F70",
@@ -45591,8 +45563,8 @@
       "end": "2026-07-08T13:00:00-06:00"
     },
     {
-      "id": "ms_2abeba7dc1ab1129",
-      "title": "Backrooms: Everything Must Go Edition",
+      "id": "ms_94a1ef3906f2c875",
+      "title": "Backrooms",
       "start": "2026-07-08T11:00:00-06:00",
       "allDay": false,
       "backgroundColor": "#6C5CE7",
@@ -46074,8 +46046,8 @@
       "end": "2026-07-08T13:45:00-06:00"
     },
     {
-      "id": "ms_8c0b6b77ceb23bed",
-      "title": "Backrooms: Everything Must Go Edition",
+      "id": "ms_5f3d6bed14284582",
+      "title": "Backrooms",
       "start": "2026-07-08T11:45:00-06:00",
       "allDay": false,
       "backgroundColor": "#4C9F70",
@@ -46856,8 +46828,8 @@
       "end": "2026-07-08T14:48:00-06:00"
     },
     {
-      "id": "ms_e077e961b354ea83",
-      "title": "Backrooms: Everything Must Go Edition",
+      "id": "ms_b340de1c4983f943",
+      "title": "Backrooms",
       "start": "2026-07-08T13:05:00-06:00",
       "allDay": false,
       "backgroundColor": "#6C5CE7",
@@ -47776,8 +47748,8 @@
       "end": "2026-07-08T16:45:00-06:00"
     },
     {
-      "id": "ms_6897e5b09a041014",
-      "title": "Backrooms: Everything Must Go Edition",
+      "id": "ms_d0f6b9216916dc1c",
+      "title": "Backrooms",
       "start": "2026-07-08T14:50:00-06:00",
       "allDay": false,
       "backgroundColor": "#2E5EAA",
@@ -47868,8 +47840,8 @@
       "end": "2026-07-08T16:30:00-06:00"
     },
     {
-      "id": "ms_882916d5f6a6f66f",
-      "title": "Backrooms: Everything Must Go Edition",
+      "id": "ms_ab43f5ce26014413",
+      "title": "Backrooms",
       "start": "2026-07-08T15:00:00-06:00",
       "allDay": false,
       "backgroundColor": "#4C9F70",
@@ -48489,8 +48461,8 @@
       "end": "2026-07-08T18:00:00-06:00"
     },
     {
-      "id": "ms_13f6e22321a4c363",
-      "title": "Backrooms: Everything Must Go Edition",
+      "id": "ms_1576d322fb5f8501",
+      "title": "Backrooms",
       "start": "2026-07-08T16:00:00-06:00",
       "allDay": false,
       "backgroundColor": "#C44E9D",
@@ -49133,8 +49105,8 @@
       "end": "2026-07-08T19:00:00-06:00"
     },
     {
-      "id": "ms_077e70293aaef230",
-      "title": "Backrooms: Everything Must Go Edition",
+      "id": "ms_dce9b3b3ea8e65b4",
+      "title": "Backrooms",
       "start": "2026-07-08T17:00:00-06:00",
       "allDay": false,
       "backgroundColor": "#6C5CE7",
@@ -49455,8 +49427,8 @@
       "end": "2026-07-08T20:00:00-06:00"
     },
     {
-      "id": "ms_cea95569ec1fea6e",
-      "title": "Backrooms: Everything Must Go Edition",
+      "id": "ms_d29962f8e4420f94",
+      "title": "Backrooms",
       "start": "2026-07-08T18:00:00-06:00",
       "allDay": false,
       "backgroundColor": "#2E5EAA",
@@ -50145,8 +50117,8 @@
       "end": "2026-07-08T21:00:00-06:00"
     },
     {
-      "id": "ms_714ffb919113d765",
-      "title": "Supergirl: Sensory Friendly Screening",
+      "id": "ms_7eb6c6c35a386279",
+      "title": "Supergirl",
       "start": "2026-07-08T19:00:00-06:00",
       "allDay": false,
       "backgroundColor": "#6C5CE7",
@@ -50283,8 +50255,8 @@
       "end": "2026-07-08T20:48:00-06:00"
     },
     {
-      "id": "ms_d5c4c8ffa0f124d8",
-      "title": "Backrooms: Everything Must Go Edition",
+      "id": "ms_ab1335d2b4127d7b",
+      "title": "Backrooms",
       "start": "2026-07-08T19:05:00-06:00",
       "allDay": false,
       "backgroundColor": "#6C5CE7",
@@ -50835,8 +50807,8 @@
       "end": "2026-07-08T21:30:00-06:00"
     },
     {
-      "id": "ms_a9ed48048c6c882e",
-      "title": "Alpha (dir. Rawail)",
+      "id": "ms_09c70b5266257105",
+      "title": "Alpha",
       "start": "2026-07-08T20:05:00-06:00",
       "allDay": false,
       "backgroundColor": "#6C5CE7",
@@ -51180,8 +51152,8 @@
       "end": "2026-07-08T23:00:00-06:00"
     },
     {
-      "id": "ms_a211f61ccc7d4c17",
-      "title": "Backrooms: Everything Must Go Edition",
+      "id": "ms_fe722f9006f75094",
+      "title": "Backrooms",
       "start": "2026-07-08T21:10:00-06:00",
       "allDay": false,
       "backgroundColor": "#2E5EAA",
@@ -51663,8 +51635,8 @@
       "end": "2026-07-08T23:45:00-06:00"
     },
     {
-      "id": "ms_095b2e99e997085d",
-      "title": "Backrooms: Everything Must Go Edition",
+      "id": "ms_4a0f553e6c76af57",
+      "title": "Backrooms",
       "start": "2026-07-08T21:45:00-06:00",
       "allDay": false,
       "backgroundColor": "#4C9F70",
@@ -51709,8 +51681,8 @@
       "end": "2026-07-09T00:15:00-06:00"
     },
     {
-      "id": "ms_d1486df438f9f78f",
-      "title": "Backrooms: Everything Must Go Edition",
+      "id": "ms_9f5360d24e119301",
+      "title": "Backrooms",
       "start": "2026-07-08T21:55:00-06:00",
       "allDay": false,
       "backgroundColor": "#6C5CE7",
@@ -51962,8 +51934,8 @@
       "end": "2026-07-09T00:10:00-06:00"
     },
     {
-      "id": "ms_efadbdb5c5a8ed28",
-      "title": "Backrooms: Everything Must Go Edition",
+      "id": "ms_aa6647f19a566127",
+      "title": "Backrooms",
       "start": "2026-07-08T22:10:00-06:00",
       "allDay": false,
       "backgroundColor": "#C44E9D",
@@ -56999,8 +56971,8 @@
       "end": "2026-07-10T23:25:00-06:00"
     },
     {
-      "id": "ms_452838cb3ed9dec3",
-      "title": "Alien - Director's Cut",
+      "id": "ms_c599feafaca0d47d",
+      "title": "Alien",
       "start": "2026-07-10T21:30:00-06:00",
       "allDay": false,
       "backgroundColor": "#E4572E",
@@ -59184,8 +59156,8 @@
       "end": "2026-07-11T20:55:00-06:00"
     },
     {
-      "id": "ms_ec16d2f5aba9380d",
-      "title": "Scream Screen: Idle Hands",
+      "id": "ms_3ceacbe4d69705f3",
+      "title": "Idle Hands",
       "start": "2026-07-11T19:00:00-06:00",
       "allDay": false,
       "backgroundColor": "#E4572E",
@@ -59575,8 +59547,8 @@
       "end": "2026-07-11T23:25:00-06:00"
     },
     {
-      "id": "ms_7d7b29235477eee4",
-      "title": "Alien - Director's Cut",
+      "id": "ms_de8482dabf9ceb88",
+      "title": "Alien",
       "start": "2026-07-11T21:30:00-06:00",
       "allDay": false,
       "backgroundColor": "#E4572E",
@@ -60449,8 +60421,8 @@
       "end": "2026-07-12T14:00:00-06:00"
     },
     {
-      "id": "ms_b0ea886b5b95513b",
-      "title": "Alien - Director's Cut",
+      "id": "ms_6f791cd570b179c0",
+      "title": "Alien",
       "start": "2026-07-12T12:00:00-06:00",
       "allDay": false,
       "backgroundColor": "#E4572E",
@@ -68338,8 +68310,8 @@
       "end": "2026-07-15T20:00:00-06:00"
     },
     {
-      "id": "ms_82d8a5c4978b99fd",
-      "title": "Aliens: Director's Cut (40th Anniversary)",
+      "id": "ms_64380d5289bacb9b",
+      "title": "Aliens",
       "start": "2026-07-15T18:00:00-06:00",
       "allDay": false,
       "backgroundColor": "#E4572E",
@@ -69718,8 +69690,8 @@
       "end": "2026-07-16T17:52:00-06:00"
     },
     {
-      "id": "ms_d52eb14de13cfda2",
-      "title": "The Odyssey on 35mm film",
+      "id": "ms_278688570213de25",
+      "title": "The Odyssey",
       "start": "2026-07-16T15:00:00-06:00",
       "allDay": false,
       "backgroundColor": "#E4572E",
@@ -70293,8 +70265,8 @@
       "end": "2026-07-16T21:52:00-06:00"
     },
     {
-      "id": "ms_2db7278d9a8d1141",
-      "title": "The Odyssey on 35mm film",
+      "id": "ms_f620924fb3d059ac",
+      "title": "The Odyssey",
       "start": "2026-07-16T19:00:00-06:00",
       "allDay": false,
       "backgroundColor": "#E4572E",

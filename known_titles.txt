@@ -1,28 +1,41 @@
 # Titles the scraper has already seen — powers the new-title digest.
 # Auto-updated each run. Delete a line to re-flag that title, or delete the file to reset.
 A Minecraft Movie
+Above and Below
+Aida: Met Summer Encore 2026
 Alien
 Aliens
 Alpha
+AMC Scream Unseen: August 3
 American Psycho
 Animal Farm
 Arco
+Ateez : Light the Way in Cinemas
+Ateez: Light the Way in Cinemas
 Baahubali: The Epic
 Back to the Future
 Backrooms
 Bad Counselors
 Batman Begins
 Bleach: Thousand-Year Blood War - The Calamity
+Boyhood
 Buffet Infinity
 Camp
 Carlito's Way
 Casualties of War
 Charli xcx: Music, Fashion, Film - The Listening Events
+Charlie the Wonderdog
+Chennai Love Story
 Citizen Kane
+CO150: Butch Cassidy and the Sundance Kid
 Colorado-Based Film Test Screening - Be the first to see it!
 Communion
+Cookie Queens
 Couture
 Crossing
+DCI 2026: Big, Loud & Live
+DCI 2026: Big, Loud and Live
+Despicable Me 4
 Dhamaal 4
 Disclosure Day
 Dog Man
@@ -36,6 +49,7 @@ Evil Dead Burn
 Excalibur
 Eyes Without A Face
 Flow
+Foodie Film: Ratatouille
 Fucktoys
 Gail Daughtry and the Celebrity Sex Pass
 Girls Like Girls
@@ -44,17 +58,22 @@ Hadestown: The Musical
 Haunted Heist
 Her Private Hell
 How to Train Your Dragon
+Häxan with Live Quarkestra Orchestra
 I Know Who You Are
+I Saw the TV Glow
 I Shot Andy Warhol
 I Want Your Sex
+Ice Cream Man
 Idle Hands
 Inception
 Interstellar
 Jack Johnson: Surfilmusic
 Jackass: Best and Last
+Jana Nayagan
 Jaws
 Jinsei
 Jurassic Park
+La Dolce Vita
 Lawrence of Arabia
 Lenin
 Leviticus
@@ -64,6 +83,7 @@ Macho Dancer
 Maddie's Secret
 Mary Oliver: Saved by the Beauty of the World
 Masters of the Universe
+MET Summer Encore: Aida
 Met Summer Encore: The Merry Widow
 Minions & Monsters
 Moana
@@ -71,6 +91,7 @@ Mob Psycho 100 Anniversary Celebration
 Mob Psycho 100 Celebrates Its
 Motor City
 My Neighbor Totoro
+Mystery Machine (7/27/2026)
 Mystery Voyage
 Night Nurse
 Nofx: 40 Years of Fuckin' Up
@@ -80,6 +101,7 @@ Once Upon a Time in China
 Onda Nova
 Orlando
 Otaku Tuesdays
+Paddington 2
 Paddington in Peru
 Peter Asher: Everywhere Man
 Pinocchio Unstrung
@@ -89,12 +111,14 @@ Project Hail Mary
 Rao Bahadur
 Rashomon
 Reading Lolita in Tehran
+Rose of Nevada
 Saturday Morning Cartoons
 Scarface
 Scary Movie
 Scoob!
 Seeds
 She's the He!
+Sheep in the Box
 Shortbus
 Sia: Nostalgic For The Present
 Snake Eyes
@@ -108,7 +132,11 @@ Splash City
 Star Wars: The Mandalorian and Grogu
 Stop! That! Train!
 Summer Tour
+Super Troopers 3
+Super Troopers 3: Special Broken Lizard
+Super Troopers 3: Special Broken Lizard Fan Event Q&A
 Supergirl
+Teenage Sex and Death at Camp Miasma
 The Bad Guys 2
 The Burning
 The Dark Knight
@@ -122,6 +150,7 @@ The Fifth Element (2026 Event)
 The Fisherman
 The Furious
 The Goonies
+The Hunger
 The Invite
 The Iron Giant
 The Lego Movie
@@ -130,17 +159,24 @@ The Merry Widow: Met Summer Encore 2026
 The Neon Demon
 The Odyssey
 The SpongeBob Movie: Search for SquarePants
+The Spongebob Movie: Search for Squarepants
 The Substance
 The Thing Called Love
+The Untouchables
 The Wild Robot
 Time and Water
 Tiny Furniture
 To Wong Foo, Thanks for Everything, Julie Newmar
 Toy Story 5
 Tuner
+We're All Going to the World's Fair
 Welcome Space Brothers
 Wham! 10 Days in China
 Wham! 10 Days In China
+Willy Wonka & The Chocolate Factory
+Willy Wonka & the Chocolate Factory
 Wto/99
+WWE SummerSlam 2026
+WWE SummerSlam 2026
 Young Washington
 Young Washington, An Angel Sponsored Screening

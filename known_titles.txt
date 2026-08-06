@@ -1,11 +1,14 @@
 # Titles the scraper has already seen — powers the new-title digest.
 # Auto-updated each run. Delete a line to re-flag that title, or delete the file to reset.
+2026 Cortis Tour <PUT Your Phone Down> in La: Live Viewing
 A Minecraft Movie
+A New Leaf
 Above and Below
 Aida: Met Summer Encore 2026
 Alien
 Aliens
 Alpha
+AMC Scream Unseen: August 17
 AMC Scream Unseen: August 3
 American Psycho
 Animal Farm
@@ -17,7 +20,9 @@ Back to the Future
 Backrooms
 Bad Counselors
 Batman Begins
+Blade Runner: The
 Bleach: Thousand-Year Blood War - The Calamity
+Bound
 Boyhood
 Buffet Infinity
 Camp
@@ -33,6 +38,11 @@ CO150: Badlands
 CO150: Butch Cassidy and the Sundance Kid
 CO150: Coffy
 CO150: Dr. Strangelove or: How I Learned to Stop Worrying and Love the Bomb
+CO150: Elevation
+CO150: Indiana Jones and the Last Crusade
+CO150: Ladybugs
+CO150: Over the Edge
+CO150: South Park: Bigger, Longer & Uncut
 CO150: Things to Do in Denver When You're Dead
 Colorado-Based Film Test Screening - Be the first to see it!
 Communion
@@ -59,11 +69,13 @@ Eyes Without A Face
 Flow
 Foodie Film: Ratatouille
 Fucktoys
+G.d.n.
 Gail Daughtry and the Celebrity Sex Pass
 Girls Like Girls
+Give It Up
 Goat
-Grateful Dead Meet-Up At The Movies 2026
 Grateful Dead Meet-Up at the Movies 2026
+Grateful Dead Meet-Up At The Movies 2026
 Hadestown: The Musical
 Haunted Heist
 Hell's Highway: The True Story of Highway Safety Films
@@ -77,6 +89,7 @@ I Want Your Sex
 Ice Cream Man
 Idle Hands
 Inception
+Insidious: Out of the Further
 Interstellar
 Jack Johnson: Surfilmusic
 Jackass: Best and Last
@@ -86,6 +99,7 @@ Jinsei
 Jurassic Park
 Katseye: Wild Hearts
 La Dolce Vita
+La La Land
 Lawrence of Arabia
 Lenin
 Leviticus
@@ -105,10 +119,13 @@ Mob Psycho 100 Anniversary Celebration
 Mob Psycho 100 Celebrates Its
 Motor City
 Muppet Treasure Island
+Mutiny
 My Neighbor Totoro
+Mysterious Skin (4K Restoration)
 Mystery Machine (7/27/2026)
 Mystery Machine (8/10/2026)
 Mystery Voyage
+Never Stop Chasing
 Night Nurse
 Nimrods
 Nimrods Early Access – Green Day Intro + Bonus Performance
@@ -120,6 +137,7 @@ Onda Nova
 One Night Only
 One Night Only - Singles Opening Night Event
 Only Yesterday 35th Anniversary
+Open Caption: Mary Oliver: Saved by the Beauty of the World
 Orlando
 Otaku Tuesdays
 Over the Hedge
@@ -128,13 +146,16 @@ Paddington in Peru
 PAW Patrol: The Dino Movie
 PAW Patrol: The Dino Movie - Early Access
 Peter Asher: Everywhere Man
+Phantom of the Paradise
 Pinocchio Unstrung
 Piranha
+Point Break
 Practical Magic
 Practical Magic Re-Release
 Princess Mononoke
 Project Hail Mary
 Pulp Fiction
+Pure Scum
 Raising Cain
 Rao Bahadur
 Rashomon
@@ -150,6 +171,7 @@ She's the He!
 Sheep in the Box
 Shortbus
 Sia: Nostalgic For The Present
+Six: The Musical Live!
 Snake Eyes
 Sonic the Hedgehog 2
 Sonic The Hedgehog 3
@@ -160,6 +182,8 @@ Spider-Man: Brand New Day Dolby
 Splash City
 Star Wars: The Mandalorian and Grogu
 Stop! That! Train!
+Streets of Fire
+Summer Scream 2026
 Summer Tour
 Super Troopers 3
 Super Troopers 3: Special Broken Lizard
@@ -168,6 +192,9 @@ Supergirl
 Tales from Earthsea 20th Anniversary
 Teenage Sex and Death at Camp Miasma
 Tenebre
+Terror Tuesday: the Texas Chainsaw Massacre Part 2
+Texas Chain Saw Day
+Texas Chainsaw Day
 The Bad Guys 2
 The Brink of War
 The Burning
@@ -175,26 +202,33 @@ The Cable Guy
 The Dark Knight
 The Dark Knight Rises
 The Death of Robin Hood
-The End of Evangelion (Evangelion 30th Movie Fest)
+The Descent
 The End Of Evangelion (Evangelion 30th Movie Fest)
+The End of Evangelion (Evangelion 30th Movie Fest)
 The End of Oak Street
 The Faculty
+The Fast And The Furious:
 The Fifth Element
 The Fifth Element (2026 Event)
 The Fisherman
+The Floaters
 The Furious
+The Garbage Pail Kids Movie
 The Goonies
 The Hunger
 The Invite
 The Iron Giant
 The Lego Movie
 The Lego Ninjago Movie
+The Magic Faraway Tree
 The Merry Widow: Met Summer Encore 2026
 The Neon Demon
 The Odyssey
 The Odyssey on Digital 4K
+The Piano
 The Piano - 4K Restoration
 The Rivals of Amziah King
+The Samurai and the Prisoner
 The Sandlot
 The Spongebob Movie: Search for Squarepants
 The SpongeBob Movie: Search for SquarePants
@@ -203,16 +237,19 @@ The Tenant
 The Thing Called Love
 The Untouchables
 The Wild Robot
+The Wrong Girls
 Time and Water
 Tiny Furniture
 To Wong Foo, Thanks for Everything, Julie Newmar
 Tony
 Toy Story 5
+Train to Busan - 10th Anniversary Remastered & Revived
 Tuner
 We're All Going to the World's Fair
 Welcome Space Brothers
-Wham! 10 Days In China
+Wet Hot American Summer:
 Wham! 10 Days in China
+Wham! 10 Days In China
 Willy Wonka & the Chocolate Factory
 Willy Wonka & The Chocolate Factory
 Wto/99
@@ -220,3 +257,5 @@ WWE SummerSlam 2026
 WWE SummerSlam 2026
 Young Washington
 Young Washington, An Angel Sponsored Screening
+Your Letter
+Your Name.

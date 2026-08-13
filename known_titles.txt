@@ -1,15 +1,19 @@
 # Titles the scraper has already seen — powers the new-title digest.
 # Auto-updated each run. Delete a line to re-flag that title, or delete the file to reset.
 2026 Cortis Tour <PUT Your Phone Down> in La: Live Viewing
+40 Years of F**kin' Up
 A Minecraft Movie
 A New Leaf
 Above and Below
 Aida: Met Summer Encore 2026
 Alien
 Aliens
+Almost Famous
 Alpha
 AMC Scream Unseen: August 17
+AMC Scream Unseen: August 24
 AMC Scream Unseen: August 3
+American Martyr: The Stanley Rother Story
 American Psycho
 Animal Farm
 Arco
@@ -20,13 +24,21 @@ Back to the Future
 Backrooms
 Bad Counselors
 Batman Begins
+Batwara 1947
+Beyond Belief
+Beyond the Infinite Two Minutes
+Blade Runner 2049
 Blade Runner: The
 Bleach: Thousand-Year Blood War - The Calamity
+Blow Out
 Bound
 Boyhood
 Buffet Infinity
+Butthole Surfers: The Hole Truth and Nothing Butt
 Camp
 Carlito's Way
+Carrie
+Castle in the Sky 40th Anniversary
 Casualties of War
 CatVideoFest 2026
 Charli xcx: Music, Fashion, Film - The Listening Events
@@ -36,26 +48,34 @@ Citizen Kane
 CO150: About Schmidt
 CO150: Badlands
 CO150: Butch Cassidy and the Sundance Kid
+CO150: City Slickers
 CO150: Coffy
 CO150: Dr. Strangelove or: How I Learned to Stop Worrying and Love the Bomb
 CO150: Elevation
+CO150: Happy Death Day
 CO150: Indiana Jones and the Last Crusade
 CO150: Ladybugs
 CO150: Over the Edge
 CO150: South Park: Bigger, Longer & Uncut
+CO150: The Hateful Eight
 CO150: Things to Do in Denver When You're Dead
+Colorado 150: Stephen King's THE Shining Miniseries
 Colorado-Based Film Test Screening - Be the first to see it!
 Communion
 Cookie Queens
 Couture
+Coyote vs. Acme
+Coyote vs. Acme Early Access
 Crossing
 Days of Thunder
 DCI 2026: Big, Loud & Live
 DCI 2026: Big, Loud and Live
+De Palma
 Despicable Me 4
 Dhamaal 4
 Disclosure Day
 Dog Man
+Donnie Darko
 Doppelganger
 Drop Dead Gorgeous
 E.T. The Extra-Terrestrial
@@ -66,20 +86,29 @@ Evangelion: Death (True)² & Rebirth (Evangelion 30th Movie Fest)
 Evil Dead Burn
 Excalibur
 Eyes Without A Face
+Finding Emily
 Flow
 Foodie Film: Ratatouille
 Fucktoys
 G.d.n.
 Gail Daughtry and the Celebrity Sex Pass
+Ghost: 2 Big To Rig
 Girls Like Girls
 Give It Up
 Goat
 Grateful Dead Meet-Up at the Movies 2026
 Grateful Dead Meet-Up At The Movies 2026
 Hadestown: The Musical
+Harry Potter and the Chamber of Secrets
+Harry Potter And The Chamber of Secrets
+Harry Potter and the Philosopher's Stone 3D
+Harry Potter And The Philosopher's Stone:
+Harry Potter and the Sorcerer's Stone
 Haunted Heist
 Hell's Highway: The True Story of Highway Safety Films
 Her Private Hell
+Hot Spot
+House of Worship
 How to Train Your Dragon
 Häxan with Live Quarkestra Orchestra
 I Know Who You Are
@@ -87,6 +116,7 @@ I Saw the TV Glow
 I Shot Andy Warhol
 I Want Your Sex
 Ice Cream Man
+Idiots
 Idle Hands
 Inception
 Insidious: Out of the Further
@@ -102,7 +132,9 @@ La Dolce Vita
 La La Land
 Lawrence of Arabia
 Lenin
+Let's Scare Jessica to Death
 Leviticus
+Little Shop of Horrors The
 Lockbox
 Lucky Strike
 Macho Dancer
@@ -143,6 +175,7 @@ Otaku Tuesdays
 Over the Hedge
 Paddington 2
 Paddington in Peru
+Party! Teenage Sex and Death at Camp Miasma
 PAW Patrol: The Dino Movie
 PAW Patrol: The Dino Movie - Early Access
 Peter Asher: Everywhere Man
@@ -174,8 +207,9 @@ Sia: Nostalgic For The Present
 Six: The Musical Live!
 Snake Eyes
 Sonic the Hedgehog 2
-Sonic The Hedgehog 3
 Sonic the Hedgehog 3
+Sonic The Hedgehog 3
+Spa Weekend
 Spider-Man: Brand New Day
 Spider-Man: Brand New Day Amazon Prime
 Spider-Man: Brand New Day Dolby
@@ -203,11 +237,14 @@ The Dark Knight
 The Dark Knight Rises
 The Death of Robin Hood
 The Descent
+The Dog Stars
 The End Of Evangelion (Evangelion 30th Movie Fest)
 The End of Evangelion (Evangelion 30th Movie Fest)
 The End of Oak Street
 The Faculty
+The Fast and the Furious
 The Fast And The Furious:
+The Fast and the Furious:
 The Fifth Element
 The Fifth Element (2026 Event)
 The Fisherman
@@ -218,6 +255,7 @@ The Goonies
 The Hunger
 The Invite
 The Iron Giant
+The King of Cannabis
 The Lego Movie
 The Lego Ninjago Movie
 The Magic Faraway Tree
@@ -230,8 +268,8 @@ The Piano - 4K Restoration
 The Rivals of Amziah King
 The Samurai and the Prisoner
 The Sandlot
-The Spongebob Movie: Search for Squarepants
 The SpongeBob Movie: Search for SquarePants
+The Spongebob Movie: Search for Squarepants
 The Substance
 The Tenant
 The Thing Called Love
@@ -245,13 +283,16 @@ Tony
 Toy Story 5
 Train to Busan - 10th Anniversary Remastered & Revived
 Tuner
+Vishwanath & Sons
 We're All Going to the World's Fair
 Welcome Space Brothers
+Wet Hot American Summer
 Wet Hot American Summer:
 Wham! 10 Days in China
 Wham! 10 Days In China
-Willy Wonka & the Chocolate Factory
+Where is the Friend's House?
 Willy Wonka & The Chocolate Factory
+Willy Wonka & the Chocolate Factory
 Wto/99
 WWE SummerSlam 2026
 WWE SummerSlam 2026

@@ -1,5 +1,6 @@
 # Titles the scraper has already seen — powers the new-title digest.
 # Auto-updated each run. Delete a line to re-flag that title, or delete the file to reset.
+12 Monkeys
 2026 Cortis Tour <PUT Your Phone Down> in La: Live Viewing
 40 Years of F**kin' Up
 A Minecraft Movie
@@ -9,6 +10,8 @@ A Streetcar Named Desire
 Above and Below
 Aida: Met Summer Encore 2026
 Akira
+Akira (Dubbed) in 4K
+Akira (Subtitled) in 4K
 Akira 4K Re-Release
 Alien
 Aliens
@@ -18,11 +21,13 @@ Alpha
 AMC Scream Unseen: August 17
 AMC Scream Unseen: August 24
 AMC Scream Unseen: August 3
+American Doctor
 American Martyr: The Stanley Rother Story
 American Psycho
 American Summer
 Amok Time + Star Trek III: The Search for Spock 60th Anniversary Event
 Amyl and The Sniffers Present Truth or Consequence
+Angel Heart
 Animal Farm
 Arco
 Ateez : Light the Way in Cinemas
@@ -56,6 +61,7 @@ Carlito's Way
 Carrie
 Cars:
 Castle in the Sky 40th Anniversary
+Castration Movie Anthology ii. the best of both worlds
 Casualties of War
 CatVideoFest 2026
 Charli xcx: Music, Fashion, Film - The Listening Events
@@ -94,6 +100,7 @@ Days of Thunder
 DCI 2026: Big, Loud & Live
 DCI 2026: Big, Loud and Live
 De Palma
+Dear You
 Demolition Man
 Despicable Me 4
 Dhamaal 4
@@ -105,37 +112,45 @@ Doppelganger
 Double Indemnity
 Dreams in Nightmares
 Drop Dead Gorgeous
+Duck Soup
+E.T. the Extra-Terrestrial
 E.T. The Extra-Terrestrial
+Election
 Elf
 Elijah Peel
 Evangelion: Death (True)2 & Rebirth (Evangelion 30th Movie Fest)
 Evangelion: Death (True)² & Rebirth (Evangelion 30th Movie Fest)
 Evil Dead Burn
 Excalibur
+Eyes Wide Shut
 Eyes Without A Face
 Fall 2: Deadpoint
 Fear and Loathing in Las Vegas
 Ferris Bueller's Day Off
 Finding Emily
+First Blood
 Flow
 Foodie Film: Ratatouille
+Found Footage Festival Vol. 11
 Fucktoys
 G.d.n.
 Gail Daughtry and the Celebrity Sex Pass
+Gandahar
 Ghost: 2 Big To Rig
 Girls Like Girls
 Give It Up
 Goat
 Grateful Dead Meet-Up At The Movies 2026
 Grateful Dead Meet-Up at the Movies 2026
+Gypsy 83: The
 Hadestown: The Musical
 Halloween
 Halloween II
 Halloween III: Season of the Witch
 Harry Potter & Deathly Hallows: Part 1 (HPD26)
 Harry Potter & Deathly Hallows: Part 2 (HPD26)
-Harry Potter And The Chamber of Secrets
 Harry Potter and the Chamber of Secrets
+Harry Potter And The Chamber of Secrets
 Harry Potter and the Deathly Hallows: Part 1
 Harry Potter and the Deathly Hallows: Part 2
 Harry Potter And The Goblet Of Fire
@@ -151,6 +166,7 @@ Harry Potter And The Prisoner Of Azkaban (HPD26)
 Harry Potter and the Sorcerer's Stone
 Harry Potter and the Sorcerer’s Stone:
 Haunted Heist
+Hell's Highway - The True Story of Highway Safety Films
 Hell's Highway: The True Story of Highway Safety Films
 Her Private Hell
 Hong Kong Community Screening: Four Trails
@@ -181,11 +197,12 @@ Jaws
 Jinsei
 Jurassic Park
 Katseye: Wild Hearts
-Katy Perry: The Lifetimes Tour - Live from Paris
 Katy Perry: The Lifetimes Tour - Live From Paris
+Katy Perry: The Lifetimes Tour - Live from Paris
 Kiss the Girls
 La Dolce Vita
 La La Land
+Labyrinth - 40th Anniversary 4K Restoration!
 Laufey's A Night At The Symphony: Hollywood Bowl
 Lawrence of Arabia
 Learning to Fly
@@ -247,6 +264,7 @@ Paper Flowers
 Party! Teenage Sex and Death at Camp Miasma
 PAW Patrol: The Dino Movie
 PAW Patrol: The Dino Movie - Early Access
+Pee Wee's Big Adventure
 Peter Asher: Everywhere Man
 Phantom of the Paradise
 Pinocchio Unstrung
@@ -263,7 +281,10 @@ Raising Cain
 Rao Bahadur
 Rashomon
 Reading Lolita in Tehran
+Rear Window
+Resident Evil
 Rocky Horror Picture Show
+Romanchakam
 Rose of Nevada
 Rosebush Pruning
 Runner
@@ -272,7 +293,10 @@ Saturday Morning Cartoons
 Scarface
 Scary Movie
 Scoob!
+Scream Screen1: Habit / Depraved Double Feature
+Scream Screen2: Blackout / Trauma, OR Monsters ALL Double Feature
 Seeds
+Shaun the Sheep: The Beast of Mossy Bottom
 She's the He!
 Sheep in the Box
 Shortbus
@@ -288,6 +312,7 @@ Spider-Man: Brand New Day
 Spider-Man: Brand New Day Amazon Prime
 Spider-Man: Brand New Day Dolby
 Splash City
+Star Trek
 Star Trek Double Feature - Amok Time & Star Trek III: The Search for Spock - 60th Anniversary Event
 Star Trek Double Feature - Space Seed & Star Trek II: The Wrath of Khan - 60th Anniversary Event
 Star Trek Double Feature - The Changeling & Star Trek: The Motion Picture - 60th Anniversary Event
@@ -297,7 +322,9 @@ Star Trek IV: The Voyage Home
 Star Trek IV: The Voyage Home  + Season 1 Episode 28: "The City on the Edge of Forever"
 Star Trek: The Genesis Trilogy
 Star Wars: The Mandalorian and Grogu
+Steel Magnolias
 Stop! That! Train!
+Strangers on a Train
 Streets of Fire
 Stuart Little
 Summer Scream 2026
@@ -307,14 +334,15 @@ Super Troopers 3: Special Broken Lizard
 Super Troopers 3: Special Broken Lizard Fan Event Q&A
 Supergirl
 Tales from Earthsea 20th Anniversary
-Teenage Sex and Death at Camp Miasma
 Teenage Sex And Death At Camp Miasma
+Teenage Sex and Death at Camp Miasma
 Tenebre
 Terminator 2: Judgment Day
 Terror Tuesday: the Texas Chainsaw Massacre Part 2
 Texas Chain Saw Day
 Texas Chainsaw Day
 The Bad Guys 2
+The Best Little Whorehouse in Texas
 The Bridge on the River Kwai
 The Brink of War
 The Burning
@@ -326,6 +354,7 @@ The Dark Knight Rises
 The Death of Robin Hood
 The Descent
 The Dog Stars
+The Doors
 The End of Evangelion (Evangelion 30th Movie Fest)
 The End Of Evangelion (Evangelion 30th Movie Fest)
 The End of Oak Street
@@ -366,20 +395,25 @@ The Passion of the Christ (2026 Event)
 The Piano
 The Piano - 4K Restoration
 The Rivals of Amziah King
+The Salt Path
 The Samurai and the Prisoner
 The Sandlot
 The Searchers
-The Spongebob Movie: Search for Squarepants
 The SpongeBob Movie: Search for SquarePants
+The Spongebob Movie: Search for Squarepants
 The Substance
 The Sun Never Sets
 The Tenant
 The Thing Called Love
 The Toxic Avenger
+The Transformers: The Movie
+The Treasure of the Sierra Madre
 The Truman Show
 The Untouchables
 The Uprising
 The Uprising: Early Access Live Q&A with Paul Greengrass and Andrew Garfield
+The Wailing
+The Weight
 The Wild Robot
 The Wrong Girls
 Time and Water
@@ -393,13 +427,14 @@ Toxic: A Fairy Tale for Grown-Ups
 Toy Story 5
 Train to Busan - 10th Anniversary Remastered & Revived
 Tuner
+Twilight
 Vishwanath & Sons
 We're All Going to the World's Fair
 Welcome Space Brothers
 Wet Hot American Summer
 Wet Hot American Summer:
-Wham! 10 Days In China
 Wham! 10 Days in China
+Wham! 10 Days In China
 Where is the Friend's House?
 Willy Wonka & The Chocolate Factory
 Willy Wonka & the Chocolate Factory
@@ -410,3 +445,4 @@ Young Washington
 Young Washington, An Angel Sponsored Screening
 Your Letter
 Your Name.
+Zoot Suit

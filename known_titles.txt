@@ -1,7 +1,6 @@
 # Titles the scraper has already seen — powers the new-title digest.
 # Auto-updated each run. Delete a line to re-flag that title, or delete the file to reset.
 "You Must Remember This" Double Feature
-#CULT
 12 Monkeys
 12 Years a Slave
 2026 Cortis Tour <PUT Your Phone Down> in La: Live Viewing
@@ -41,6 +40,7 @@ American Martyr: The Stanley Rother Story
 American Movie
 American Pachuco: The Legend of Luis Valdez
 American Psycho
+American Sniper
 American Summer
 Amok Time + Star Trek III: The Search for Spock 60th Anniversary Event
 Amyl and The Sniffers Present Truth or Consequence
@@ -160,6 +160,7 @@ Crocodile Dose
 Crossing
 Crunchyroll Anime Night Sneak Peek (9/21/2026)
 Crunchyroll Anime Nights Sneak Peek (9/21/2026)
+Crunchyroll Anime Nights: Dive In Wonderland
 Daniel and the Fiery Furnace
 Dark Star
 Daughters of Darkness
@@ -194,6 +195,9 @@ Drive
 Drop Dead Gorgeous
 Drummer Boy
 Duck Soup
+Dune: Part One & Dune: Part Two Double Feature
+Dune: Part One Reissue
+Dune: Part Two Reissue
 E.T. the Extra-Terrestrial
 E.T. The Extra-Terrestrial
 Ebenezer
@@ -213,6 +217,7 @@ Fall 2: Deadpoint
 Fatherland
 Fear and Loathing in Las Vegas
 Ferris Bueller's Day Off
+Festive Fun with Peppa Cinema Experience
 Final Dose of Reality Screening: Human Shield
 Finding Emily
 First Blood
@@ -231,8 +236,8 @@ Gandahar
 Ghost Dog: The Way of the Samurai
 Ghost in the Shell
 Ghost in the Shell (Dubbed)
-Ghost in the Shell (SUBTITLED)
 Ghost in the Shell (Subtitled)
+Ghost in the Shell (SUBTITLED)
 Ghost in the Shell 30th Anniversary - 4K
 Ghost Soldier
 Ghost: 2 Big To Rig
@@ -242,6 +247,7 @@ Girls Like Girls
 Give It a Shot
 Give It Up
 Goat
+God With Us
 Godzilla Minus Zero
 Godzilla Minus Zero - Godzilla Day Imax Early Access
 Godzilla vs. Mechagodzilla
@@ -266,8 +272,8 @@ Harry Potter and the Chamber of Secrets
 Harry Potter And The Chamber of Secrets
 Harry Potter and the Deathly Hallows: Part 1
 Harry Potter and the Deathly Hallows: Part 2
-Harry Potter And The Goblet Of Fire
 Harry Potter and the Goblet of Fire
+Harry Potter And The Goblet Of Fire
 Harry Potter And The Half Blood Prince
 Harry Potter and the Half-Blood Prince
 Harry Potter and the Order of the Phoenix
@@ -337,8 +343,8 @@ Ken Russell’s The Devils
 Kika
 Killer of Sheep
 Kiss the Girls
-Klara and the Sun
 Klara and The Sun
+Klara and the Sun
 Kung Fu Soccer
 Kwaidan - New 4K Restoration
 La Bamba
@@ -349,6 +355,7 @@ Labyrinth - 40th Anniversary 4K Restoration!
 Lady in White
 Laufey's A Night At The Symphony: Hollywood Bowl
 Lawrence of Arabia
+League of Legends Worlds 26 - Finals in Theater
 Learning to Fly
 Legend of the White Dragon
 Lenin
@@ -434,8 +441,8 @@ Other Mommy
 Other Mommy Fan Event Screenings
 Out of Sight
 Over the Hedge
-Ozzy & Black Sabbath: Back To The Beginning
 Ozzy & Black Sabbath: Back to the Beginning
+Ozzy & Black Sabbath: Back To The Beginning
 Paddington 2
 Paddington in Peru
 Paging Hezbollah
@@ -472,6 +479,7 @@ Pure Scum
 Queen Budapest
 Raising Cain
 Ramayana
+Rammstein - Live in Mexico City
 Rao Bahadur
 Rashomon
 Reading Lolita in Tehran
@@ -520,6 +528,7 @@ Snake Eyes
 Sonic the Hedgehog 2
 Sonic The Hedgehog 3
 Sonic the Hedgehog 3
+Soul Patrol
 Southland Tales
 Spa Weekend
 Space Seed + Star Trek II: The Wrath of Khan - Director's Cut 60th Anniversary Event
@@ -550,6 +559,7 @@ Street Fighter: Bonus Round
 Streets of Fire
 Stuart Little
 Sudden Fury
+Summer Holidays
 Summer Scream 2026
 Summer Tour
 Sunset Boulevard
@@ -561,8 +571,8 @@ Swingers
 Tales from Earthsea 20th Anniversary
 Tales From the Hood
 Tally Brown, New York
-Teenage Sex And Death At Camp Miasma
 Teenage Sex and Death at Camp Miasma
+Teenage Sex And Death At Camp Miasma
 Tenebre
 Tenzing
 Terminator 2: Judgment Day
@@ -573,6 +583,7 @@ Terror Tuesday: the Texas Chainsaw Massacre Part 2
 Texas Chain Saw Day
 Texas Chainsaw Day
 The Addams Family
+The Angry Birds Movie:
 The Bad Guys 2
 The Best Little Whorehouse in Texas
 The Birdcage
@@ -589,6 +600,7 @@ The Cat in the Hat
 The Changeling + Star Trek: The Motion Picture - Director's Edition - 60th Anniversary Event
 The City on The Edge of Forever + Star Trek IV: The Voyage Home 60th Anniversary Event
 The Conjuring
+The Cook, The Thief, His Wife, & Her Lover
 The Cycle
 The Dark Knight
 The Dark Knight Rises
@@ -598,13 +610,13 @@ The Descent
 The Devil Queen
 The Dog Stars
 The Doors
-The End Of Evangelion (Evangelion 30th Movie Fest)
 The End of Evangelion (Evangelion 30th Movie Fest)
+The End Of Evangelion (Evangelion 30th Movie Fest)
 The End of Oak Street
 The Faculty
 The Fast and the Furious
-The Fast and the Furious:
 The Fast And The Furious:
+The Fast and the Furious:
 The Fifth Element
 The Fifth Element (2026 Event)
 The Fisherman
@@ -680,8 +692,8 @@ The Shining
 The Sixty-Year Mission: How Star Trek Changed Television and the World
 The Skin I Live In
 The Social Reckoning
-The Spongebob Movie: Search for Squarepants
 The SpongeBob Movie: Search for SquarePants
+The Spongebob Movie: Search for Squarepants
 The Stepford Wives
 The Stunt Driver
 The Substance
@@ -716,8 +728,8 @@ To Wong Foo, Thanks for Everything, Julie Newmar
 Tom and Jerry: The Forbidden Compass
 Tomorrow X Together World Tour 'ACT : Tomorrow'
 Tony
-Toxic: A Fairy Tale For Grown-ups
 Toxic: A Fairy Tale for Grown-Ups
+Toxic: A Fairy Tale For Grown-ups
 Toy Story 5
 Train to Busan - 10th Anniversary Remastered & Revived
 Tremors
@@ -735,6 +747,7 @@ Verity
 Victorian Psycho
 Village of the Damned
 Vishwanath & Sons
+Visitor Q
 Volver
 We're All Going to the World's Fair
 Welcome Space Brothers

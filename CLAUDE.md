@@ -185,6 +185,9 @@ Redesigned Nov 2026 (Letterboxd-inspired, not a copy): **one day at a time**, no
 - **Schedule** of the day in time order (Morning/Afternoon/Evening/Late; earlier-today rows
   hidden behind a button). Desktop: sticky right column. Phone: Films / Schedule toggle.
 - **Tap a time** → sheet with Get tickets, Google, Outlook, Apple/.ics (ICS uses TZID America/Denver).
+- **Times read "h:mm a.m." / "h:mm p.m."** everywhere ("3:00 p.m.", Corey's house style; `hm12()`
+  in `app.js`). On screen the digits are tabular but "a.m./p.m." sits in `.ap` with normal
+  figures, because tabular figures also widen the periods ("p . m .").
 - **My list** (+ on a poster) and theater choices are saved in `localStorage` (try/catch; optional).
   The schedule can show only My list.
 - "Floating time": the ISO offset is ignored; Denver wall-clock shows for every viewer, and

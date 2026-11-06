@@ -89,8 +89,12 @@
   // ---- Formatting ------------------------------------------------------------
 
   function dateObj(d) { return new Date(d + "T12:00:00"); }
-  function hm12(hm) { var h = +hm.slice(0, 2), m = hm.slice(3); return ((h % 12) || 12) + (m === "00" ? "" : ":" + m) + (h < 12 ? "a" : "p"); }
-  function longTime(hm) { var h = +hm.slice(0, 2); return ((h % 12) || 12) + ":" + hm.slice(3) + " " + (h < 12 ? "AM" : "PM"); }
+  // Every showtime reads "h:mm a.m." / "h:mm p.m." (Corey's house style), e.g. "3:00 p.m.".
+  function hm12(hm) { var h = +hm.slice(0, 2); return ((h % 12) || 12) + ":" + hm.slice(3) + " " + (h < 12 ? "a.m." : "p.m."); }
+  var longTime = hm12;   // plain text, for labels and calendar entries
+  // On screen the digits stay tabular (so times line up) but "a.m."/"p.m." don't: tabular
+  // figures also widen the periods, which spaced it out as "p . m .".
+  function timeHTML(hm) { var t = hm12(hm), i = t.indexOf(" "); return t.slice(0, i) + ' <span class="ap">' + t.slice(i + 1) + "</span>"; }
   function longDate(d) { return dateObj(d).toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" }); }
   function relDay(d) {
     var i = days.indexOf(d), t = days.indexOf(NOW.day);
@@ -193,7 +197,7 @@
         return '<div class="venue" style="--c:' + t.color + '"><div class="vn"><i></i>' + esc(tName(e[0])) + '</div><div class="times">' +
           e[1].map(function (s) {
             var tag = FMT_TAG[s.fmt] ? "<sup>" + FMT_TAG[s.fmt] + "</sup>" : "";
-            var label = s.hm ? hm12(s.hm) : "Times vary";
+            var label = s.hm ? timeHTML(s.hm) : "Times vary";
             return '<button type="button" class="time' + (isPast(s) ? " past" : "") + '" data-i="' + shows.indexOf(s) + '" aria-label="' +
               esc(f.t) + ", " + (s.hm ? longTime(s.hm) : "times vary") + ", " + esc(t.name || "") + '">' + label + tag + "</button>";
           }).join("") + "</div></div>";
@@ -233,7 +237,7 @@
       html += '<div class="slot"><span>' + sl[0] + "</span><span>" + rows.length + "</span></div>" + rows.map(function (s) {
         var f = films[s.f], t = theaterOf(s.th) || { color: "#888" }, extra = [s.fmt === "Premium Format" ? "Premium" : s.fmt, s.scr].filter(Boolean).join(" · ");
         return '<button type="button" class="row' + (isPast(s) ? " past" : "") + '" data-i="' + shows.indexOf(s) + '" style="--c:' + t.color + '">' +
-          '<span class="t">' + hm12(s.hm) + "</span>" + (f.posters.length ? posterHTML(s.f, "th") : '<span class="th"></span>') +
+          '<span class="t">' + timeHTML(s.hm) + "</span>" + (f.posters.length ? posterHTML(s.f, "th") : '<span class="th"></span>') +
           '<span class="f"><b>' + esc(f.t) + "</b><span><i></i>" + esc(tName(s.th)) + (extra ? " · " + esc(extra) : "") + "</span></span></button>";
       }).join("");
     });
@@ -280,7 +284,7 @@
     var where = [t.name, s.scr, s.fmt].filter(Boolean).join(" · "), links = s.hm ? calendarLinks(s) : null;
     icsUrl = links && links.ics;
     var when = dateObj(s.d).toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" }) +
-      (s.hm ? " · " + longTime(s.hm) + "–" + longTime(links.end.hm) : " · times vary");
+      (s.hm ? " · " + timeHTML(s.hm) + "–" + timeHTML(links.end.hm) : " · times vary");
     $("backdrop").innerHTML = '<div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetT">' +
       (f.posters.length ? posterHTML(s.f, "sheet-poster") : '<div class="ph"></div>') +
       '<div><h3 id="sheetT">' + esc(f.t) + '</h3><div class="when">' + when + "</div>" +

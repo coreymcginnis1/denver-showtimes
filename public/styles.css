@@ -139,6 +139,7 @@ button { font: inherit; color: inherit; }
   min-height: 34px; min-width: 58px; padding: 0 9px; border-radius: var(--r-sm); border: 1px solid var(--line);
   background: var(--raised); color: var(--paper); cursor: pointer; font-size: 13.5px; font-weight: 500;
   font-variant-numeric: tabular-nums; display: inline-flex; align-items: center; justify-content: center; gap: 4px;
+  white-space: nowrap;
 }
 .time:hover { border-color: var(--brick); }
 .time sup { font-size: 9.5px; color: var(--brick); letter-spacing: .04em; font-weight: 600; }
@@ -160,12 +161,13 @@ button { font: inherit; color: inherit; }
 .scope button:disabled { cursor: default; opacity: .5; }
 .slot { margin: 14px 0 4px; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--faint); display: flex; justify-content: space-between; }
 .row {
-  display: grid; grid-template-columns: 52px 30px minmax(0, 1fr); gap: 10px; align-items: center;
+  display: grid; grid-template-columns: 74px 30px minmax(0, 1fr); gap: 10px; align-items: center;
   width: 100%; text-align: left; background: none; border: 0; border-top: 1px solid var(--line);
   padding: 8px 4px; cursor: pointer; border-radius: 0;
 }
 .row:hover { background: var(--raised); }
-.row .t { font-variant-numeric: tabular-nums; font-weight: 600; font-size: 14px; }
+.ap { font-variant-numeric: normal; letter-spacing: 0; font-size: .9em; }
+.row .t { font-variant-numeric: tabular-nums; font-weight: 600; font-size: 13.5px; white-space: nowrap; }
 .row .th { width: 30px; height: 45px; border-radius: 3px; object-fit: cover; background: var(--raised); display: block; }
 .row .f { min-width: 0; }
 .row .f b { display: block; font: 600 15px/1.2 var(--display); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }

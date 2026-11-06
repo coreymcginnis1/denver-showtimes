@@ -1,5 +1,5 @@
 # Configuration for the Denver showtimes scraper.
-# Edit and re-run `python -m movie_scraper` (or let the daily GitHub Action run it).
+# The weekly GitHub Action runs `python -m movie_scraper` with these settings.
 
 timezone = "America/Denver"
 days_ahead = 14                  # rolling window: today .. today + days_ahead
@@ -20,13 +20,15 @@ color = "#17BEBB"
 enabled = true
 name = "AMC 9+CO 10"
 color = "#2E5EAA"
-location = "denver/amc-9-co-10"   # path under amctheatres.com/movie-theatres/<...>/showtimes
+scraper = "fandango"
+location = "AAYUA"                # Fandango theater id
 
 # --- Secondary theaters: scraped but their filter chip starts OFF (default_on = false). ---
 # They occasionally carry indies/70mm/IMAX you can't find at the three above; readers opt in by
 # clicking the chip. `scraper` reuses another class; `location` is that scraper's theatre id.
 # Chip order on the page follows the order of these blocks.
-# (Regal reads from Fandango — regmovies.com is Cloudflare-gated — so its `location` is a Fandango id.)
+# (AMC and Regal read from Fandango — both chains' own sites block scrapers — so their
+# `location` is a Fandango id.)
 
 [theaters.regal_pavilions]
 enabled = true
@@ -57,8 +59,8 @@ enabled = true
 default_on = false
 name = "AMC Westminster Promenade 24"
 color = "#6C5CE7"
-scraper = "amc"
-location = "denver/amc-westminster-promenade-24"   # the "denver" metro segment is required
+scraper = "fandango"
+location = "AAECN"
 
 # Title standardization: strip repertory/event series labels from the START of a
 # film title (the label plus its ":" / "–" / "-" separator), so e.g.
@@ -88,7 +90,8 @@ strip_suffixes = [
   '\s*[-–—]\s*(?:Promo|Preview|Sneak(?:\s+Preview)?)\s+Screenings?$',   # "... - Promo Screening"
   '\s*[-–—]\s*Studio Ghibli Fest(?:ival)?(?:\s+\d{4})?$',  # "... - Studio Ghibli Fest 2026"
   '\s+(?:IMAX\s+)?(?:Opening Night\s+)?Fan Event$',      # "MOANA IMAX Opening Night Fan Event"
-  '\s+(?:IMAX\s+)?(?:Early Access|Advance)\s+Screenings?$',  # "... Early Access Screening"
+  '\s+(?:IMAX\s+)?(?:Early Access(?:\s+Screenings?)?|Advance\s+Screenings?)$',  # "... Early Access [Screening]"
+  '\s*[-–—:]?\s*\(?\b(?:Re-?release|RE\d{2})\)?$',       # "Coraline Re-release" / "Coraline (RE26)"
   '\s+on\s+\d{2,3}\s?mm(?:\s+film)?$',   # "Interstellar on 35mm" / "The Odyssey on 35mm film"
   '\s*[:–—-]\s*Sensory[- ]?Friendly\b.*$',  # "Supergirl: Sensory Friendly Screening" -> "Supergirl"
   '\s*\(dir\.?\s[^)]*\)$',      # director annotation: "Alpha (dir. Rawail)" -> "Alpha"

@@ -1,14 +1,16 @@
-"""Regal showtimes via Fandango's public napi JSON.
+"""AMC and Regal showtimes via Fandango's public napi JSON.
 
-Regal's own site (regmovies.com) is Cloudflare-gated and only server-renders the current day,
-so we read showtimes from Fandango instead — Regal sells tickets through Fandango, and its
+Both chains' own sites block scrapers: regmovies.com is Cloudflare-gated and only server-renders
+the current day, and amctheatres.com bot-challenges headless browsers. Both sell tickets through
+Fandango, so we read showtimes from there instead. Its
 
     GET /napi/theaterMovieShowtimes/<theaterId>?startDate=YYYY-MM-DD&isdesktop=true
         -> {viewModel: {movies: [{title, rating, poster, variants: [{filmFormatHeader,
             amenityGroups: [{showtimes: [{ticketingDate, ticketingJumpPageURL, ...}]}]}]}]}}
 
 endpoint is plain JSON over httpx (no browser, no challenge). One call per date. `location`
-is the Fandango theater id (AAFXW = Regal UA Colorado Center, AAJJG = Regal UA Denver Pavilions).
+is the Fandango theater id (AAFXW = Regal UA Colorado Center, AAJJG = Regal UA Denver Pavilions,
+AAYUA = AMC 9+CO 10, AAECN = AMC Westminster Promenade 24).
 """
 from __future__ import annotations
 

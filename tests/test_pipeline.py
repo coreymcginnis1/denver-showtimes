@@ -1,13 +1,18 @@
-from datetime import datetime
+import json
+from datetime import date, datetime, timedelta
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
+import pytest
+
+from movie_scraper import cli, pipeline
 from movie_scraper.config import (
     DEFAULT_DROP, DEFAULT_STRIP_PREFIXES, DEFAULT_STRIP_SUFFIXES, load_config,
 )
 from movie_scraper.models import Showtime
 from movie_scraper.pipeline import (
-    _build_feed, _passes, diff_new_titles, is_non_film, normalize_title, title_format,
+    _build_feed, _passes, diff_new_titles, is_non_film, normalize_title, render_summary, run,
+    title_format,
 )
 
 DEN = ZoneInfo("America/Denver")
@@ -203,7 +208,8 @@ def test_secondary_theaters_config():
     c = fresh_cfg()
     assert c.theaters["amc"].default_on is True             # primary theaters start on
     assert c.theaters["amc_westminster"].default_on is False  # secondary start off
-    assert c.theaters["amc_westminster"].scraper == "amc"   # reuses the AMC scraper
+    assert c.theaters["amc"].scraper == "fandango"          # AMC reads from Fandango
+    assert c.theaters["amc_westminster"].scraper == "fandango"
     assert c.theaters["alamo_sloans"].default_on is False
     assert c.theaters["regal_colorado"].enabled is True     # scraped via Fandango
     assert c.theaters["regal_colorado"].default_on is False  # but off by default
@@ -217,3 +223,110 @@ def test_build_feed_carries_default_on():
     assert by_key["amc"]["default_on"] is True
     assert by_key["amc_westminster"]["default_on"] is False
     assert by_key["regal_colorado"]["default_on"] is False  # enabled via Fandango, off by default
+
+
+def test_title_variants_from_fandango_and_amc():
+    t = fresh_cfg().titles
+    for raw, want in [
+        ("The Nightmare Before Christmas Re-release", "The Nightmare Before Christmas"),
+        ("The Nightmare Before Christmas (RE26)", "The Nightmare Before Christmas"),
+        ("The Hunger Games: Sunrise on the Reaping Early Access",
+         "The Hunger Games: Sunrise on the Reaping"),
+        ("Sinners Early Access Screening", "Sinners"),
+        ("The Release", "The Release"),      # a real title ending in "release" is untouched
+    ]:
+        assert normalize_title(raw, t.strip_prefixes, t.strip_suffixes) == want
+
+
+# ---- a failing theater keeps its last published showtimes ----------------------------------------
+
+def _event(title, theater, day):
+    return {"id": f"{theater}-{title}", "title": title, "start": f"{day.isoformat()}T19:00:00-07:00",
+            "allDay": False, "extendedProps": {"theater": theater}}
+
+
+@pytest.fixture
+def flaky_site(tmp_path, monkeypatch):
+    """Two theaters with a previous feed on disk; returns (config path, set the flaky fetch)."""
+    today = date.today()
+    out = tmp_path / "data.json"
+    out.write_text(json.dumps({"events": [
+        _event("Old Good Film", "good", today + timedelta(days=30)),
+        _event("Long Gone", "flaky", today - timedelta(days=30)),
+        _event("Upcoming", "flaky", today + timedelta(days=30)),
+    ]}), encoding="utf-8")
+    config = tmp_path / "config.toml"
+    config.write_text(f'output = "{out.as_posix()}"\n'
+                      '[theaters.good]\nname = "Good"\n'
+                      '[theaters.flaky]\nname = "Flaky"\n', encoding="utf-8")
+    state = {"fetch": lambda: []}
+
+    class Scraper:
+        def __init__(self, cfg, tc, key=None):
+            self.key = key
+
+        def fetch(self, start, end):
+            return [st("Fresh Film", 19, "good")] if self.key == "good" else state["fetch"]()
+
+    monkeypatch.setattr(pipeline, "SCRAPERS", {"good": Scraper, "flaky": Scraper})
+    monkeypatch.chdir(tmp_path)        # diff_new_titles writes known_titles.txt to the cwd
+    return config, state
+
+
+def _raise():
+    raise RuntimeError("blocked")
+
+
+@pytest.mark.parametrize("fetch", [lambda: [], _raise], ids=["no rows", "exception"])
+def test_failed_theater_keeps_upcoming_rows(flaky_site, fetch):
+    config, state = flaky_site
+    state["fetch"] = fetch
+    feed = run(str(config))
+    titles = {e["title"] for e in feed["events"]}
+    assert feed["stale_theaters"] == ["flaky"]
+    assert titles == {"Fresh Film", "Upcoming"}   # past rows age out; healthy theater is replaced
+    assert feed["films"] == ["Fresh Film", "Upcoming"]
+
+
+def test_healthy_run_replaces_everything(flaky_site):
+    config, state = flaky_site
+    state["fetch"] = lambda: [st("New Flaky Film", 20, "flaky")]
+    feed = run(str(config))
+    assert feed["stale_theaters"] == []
+    assert {e["title"] for e in feed["events"]} == {"Fresh Film", "New Flaky Film"}
+
+
+def test_cli_publishes_but_exits_nonzero_when_a_theater_fails(flaky_site, tmp_path):
+    config, _ = flaky_site
+    summary = tmp_path / "summary.md"
+    rc = cli.main(["--config", str(config), "--summary", str(summary)])
+    assert rc == cli.EXIT_THEATER_FAILED
+    written = json.loads((tmp_path / "data.json").read_text(encoding="utf-8"))
+    assert "Upcoming" in {e["title"] for e in written["events"]}   # still written, so it deploys
+    assert "❌ failed, kept 1 from the last feed" in summary.read_text(encoding="utf-8")
+
+
+def test_cli_dry_run_reports_failure_without_writing(flaky_site, tmp_path):
+    config, _ = flaky_site
+    before = (tmp_path / "data.json").read_text(encoding="utf-8")
+    assert cli.main(["--config", str(config), "--dry-run"]) == cli.EXIT_THEATER_FAILED
+    assert (tmp_path / "data.json").read_text(encoding="utf-8") == before
+    assert not (tmp_path / "known_titles.txt").exists()
+
+
+def test_cli_exits_zero_when_all_theaters_succeed(flaky_site):
+    config, state = flaky_site
+    state["fetch"] = lambda: [st("New Flaky Film", 20, "flaky")]
+    assert cli.main(["--config", str(config), "--dry-run"]) == 0
+
+
+def test_summary_flags_big_drops_and_lists_new_titles():
+    theaters = [{"key": "a", "name": "Theater A"}, {"key": "b", "name": "Theater B"}]
+    day = date(2026, 1, 1)
+    prev = {"events": [_event(str(i), "a", day) for i in range(10)] + [_event("x", "b", day)]}
+    feed = {"theaters": theaters, "stale_theaters": [],
+            "events": [_event("1", "a", day), _event("x", "b", day)]}
+    out = render_summary(feed, prev, ["Brand New Film"])
+    assert "| Theater A | 10 | 1 | ⚠️ dropped by more than half |" in out
+    assert "| Theater B | 1 | 1 | ✅ |" in out
+    assert "- Brand New Film" in out

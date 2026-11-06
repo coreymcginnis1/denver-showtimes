@@ -1,7 +1,6 @@
 from datetime import date
 
 from movie_scraper.scrapers.alamo import AlamoScraper
-from movie_scraper.scrapers.amc import AmcScraper
 from movie_scraper.scrapers.fandango import FandangoScraper
 from movie_scraper.scrapers.landmark import LandmarkScraper
 from movie_scraper.scrapers.sie_eventive import SieScraper
@@ -38,34 +37,6 @@ def test_landmark_build(cfg, landmark_schedule, landmark_movies):
     assert any(not s.film_title.startswith("Movie ") for s in out)       # titles resolved
 
 
-def test_amc_parse(cfg, amc_html):
-    scraper = AmcScraper(cfg, cfg.theaters["amc"])
-    out = scraper._parse(amc_html, date(2026, 6, 18))
-
-    assert len(out) > 20
-    titles = {s.film_title for s in out}
-    assert "Toy Story 5" in titles
-    assert "Backrooms" in titles
-    assert all(s.theater == "amc" and not s.all_day for s in out)
-    assert all("amctheatres.com/showtimes/" in (s.ticket_url or "") for s in out)
-    # titles must be the clean film name, not the whole movie-card text dump
-    assert all(len(s.film_title) < 80 for s in out)
-    assert all("AMC Signature" not in s.film_title for s in out)
-    assert any(s.fmt for s in out)  # at least some formats parsed (Dolby/Laser/RealD)
-
-
-def test_amc_location_param(cfg):
-    """One AmcScraper class backs several locations via the `location` slug path."""
-    main = AmcScraper(cfg, cfg.theaters["amc"], key="amc")
-    assert main.slug == "amc-9-co-10"
-    assert main.url == "https://www.amctheatres.com/movie-theatres/denver/amc-9-co-10/showtimes"
-
-    west = AmcScraper(cfg, cfg.theaters["amc_westminster"], key="amc_westminster")
-    assert west.key == "amc_westminster"   # so its showtimes tag as their own theater
-    assert west.slug == "amc-westminster-promenade-24"
-    assert "amc-westminster-promenade-24/showtimes" in west.url
-
-
 def test_alamo_build(cfg, alamo_schedule):
     scraper = AlamoScraper(cfg, cfg.theaters["alamo_sloans"], key="alamo_sloans")
     out = scraper.build(alamo_schedule["data"], "sloans-lake", date(2026, 6, 29), date(2026, 6, 30))
@@ -90,3 +61,15 @@ def test_fandango_parse(cfg, fandango_showtimes):
     assert any("Supergirl" in s.film_title for s in out)
     assert any(s.fmt == "Premium Format" for s in out)     # surfaced; "Standard" is hidden
     assert all(s.fmt != "Standard" for s in out)
+
+
+def test_fandango_backs_amc_theaters(cfg, fandango_showtimes):
+    """The AMC theaters read from Fandango and keep their own keys and ids."""
+    assert cfg.theaters["amc"].location == "AAYUA"
+    assert cfg.theaters["amc_westminster"].location == "AAECN"
+
+    west = FandangoScraper(cfg, cfg.theaters["amc_westminster"], key="amc_westminster")
+    out = west.parse_day(fandango_showtimes["viewModel"], date(2026, 6, 29), date(2026, 6, 29))
+    assert out
+    assert all(s.theater == "amc_westminster" for s in out)   # tagged as their own theater
+    assert all(s.theater_name == "AMC Westminster Promenade 24" for s in out)

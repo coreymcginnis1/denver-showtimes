@@ -1,29 +1,113 @@
-name: Deploy showtimes site
+name: Update showtimes
 
-# Deploy-only: publishes the committed public/ (incl. data.json). Scraping runs locally
-# (see scripts/update.ps1) because AMC blocks GitHub's datacenter IPs — your home IP works.
+# Everything runs on GitHub; nothing depends on a personal computer.
+#   Thursdays and "Run workflow": scrape -> commit the refreshed data -> publish the site.
+#   Pushes to main: publish the site without scraping.
+#   Pull requests: run the tests and a scrape that writes nothing, proving every theater source
+#     still answers from GitHub's network before a change merges.
+# A push made with GITHUB_TOKEN doesn't trigger workflows, so the data commit can't loop, which
+# is also why publishing is a job in this workflow rather than a reaction to that push.
 on:
+  schedule:
+    - cron: "0 15 * * 4"      # Thursdays 15:00 UTC = 9am MDT / 8am MST (showtimes turn over Wed/Thu)
   workflow_dispatch:
   push:
     branches: [main]
+  pull_request:
+    paths:
+      - "src/**"
+      - "tests/**"
+      - "config.toml"
+      - "pyproject.toml"
+      - ".github/workflows/**"
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: pages
-  cancel-in-progress: false
 
 jobs:
-  deploy:
+  check:
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: pyproject.toml
+
+      - run: pip install -e ".[dev]"
+
+      - run: pytest
+
+      - name: Scrape every theater from GitHub's network (writes nothing)
+        run: python -m movie_scraper --dry-run --summary "$GITHUB_STEP_SUMMARY"
+
+  scrape:
+    if: (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+    concurrency:
+      group: pages
+      cancel-in-progress: false
+    outputs:
+      outcome: ${{ steps.scrape.outcome }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: pyproject.toml
+
+      - run: pip install -e .
+
+      # A failed theater keeps its last published showtimes, so the data below is still worth
+      # publishing. The alert job fails the run afterward, which is what triggers GitHub's email.
+      - name: Scrape every theater
+        id: scrape
+        continue-on-error: true
+        run: python -m movie_scraper --summary "$GITHUB_STEP_SUMMARY"
+
+      - name: Commit the refreshed data
+        run: |
+          git add public/data.json known_titles.txt
+          if git diff --cached --quiet; then
+            echo "No data changes to commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Update showtimes $(TZ=America/Denver date +%F)"
+          git pull --rebase origin main
+          git push origin HEAD:main
+
+  deploy:
+    needs: scrape
+    if: >-
+      always() && github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+      && (needs.scrape.result == 'success' || needs.scrape.result == 'skipped')
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    concurrency:
+      group: pages
+      cancel-in-progress: false
     environment:
       name: github-pages
       url: ${{ steps.deploy.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: main            # includes the data commit the scrape job just pushed
 
       - uses: actions/configure-pages@v5
         id: pages
@@ -31,12 +115,11 @@ jobs:
       - name: Inject site URL + per-deploy asset version (cache-busting)
         env:
           SITE_URL: ${{ steps.pages.outputs.base_url }}
-          ASSET_VERSION: ${{ github.sha }}
         run: |
           url="${SITE_URL%/}/"
           sed -i "s#__SITE_URL__#${url}#g" public/index.html
           # Bust app.js/styles.css caches on every deploy so frontend changes show immediately.
-          sed -i "s#__ASSET_VERSION__#${ASSET_VERSION}#g" public/index.html
+          sed -i "s#__ASSET_VERSION__#$(git rev-parse HEAD)#g" public/index.html
 
       - uses: actions/upload-pages-artifact@v3
         with:
@@ -44,3 +127,12 @@ jobs:
 
       - uses: actions/deploy-pages@v4
         id: deploy
+
+  alert:
+    needs: [scrape, deploy]
+    if: always() && needs.scrape.outputs.outcome == 'failure'
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "::error::A theater failed to scrape, or the scraper crashed. The site kept its last good data; see the summary on the scrape job."
+          exit 1

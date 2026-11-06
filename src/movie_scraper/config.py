@@ -14,7 +14,7 @@ class TheaterCfg(BaseModel):
     name: str
     color: str = "#888888"
     scraper: Optional[str] = None    # which scraper class to use; defaults to the theater key
-    location: Optional[str] = None   # scraper-specific id (AMC slug path / Alamo venue / Regal route)
+    location: Optional[str] = None   # scraper-specific id (Alamo venue / Fandango theater id)
 
 
 class Filters(BaseModel):
@@ -46,7 +46,8 @@ DEFAULT_STRIP_SUFFIXES = [
     r"\s*[-–—]\s*(?:Promo|Preview|Sneak(?:\s+Preview)?)\s+Screenings?$",   # "... - Promo Screening"
     r"\s*[-–—]\s*Studio Ghibli Fest(?:ival)?(?:\s+\d{4})?$",  # "... - Studio Ghibli Fest 2026"
     r"\s+(?:IMAX\s+)?(?:Opening Night\s+)?Fan Event$",        # "MOANA IMAX Opening Night Fan Event"
-    r"\s+(?:IMAX\s+)?(?:Early Access|Advance)\s+Screenings?$",  # "... Early Access Screening"
+    r"\s+(?:IMAX\s+)?(?:Early Access(?:\s+Screenings?)?|Advance\s+Screenings?)$",  # "... Early Access [Screening]"
+    r"\s*[-–—:]?\s*\(?\b(?:Re-?release|RE\d{2})\)?$",  # "Coraline Re-release" / "Coraline (RE26)"
     r"\s+on\s+\d{2,3}\s?mm(?:\s+film)?$",   # "Interstellar on 35mm" / "The Odyssey on 35mm film"
     r"\s*[:–—-]\s*Sensory[- ]?Friendly\b.*$",  # "Supergirl: Sensory Friendly Screening" -> "Supergirl"
     r"\s*\(dir\.?\s[^)]*\)$",     # director annotation: "Alpha (dir. Rawail)" -> "Alpha"

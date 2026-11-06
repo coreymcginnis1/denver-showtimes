@@ -89,11 +89,10 @@
   // ---- Formatting ------------------------------------------------------------
 
   function dateObj(d) { return new Date(d + "T12:00:00"); }
-  // Every showtime reads "h:mm a.m." / "h:mm p.m." (Corey's house style), e.g. "3:00 p.m.".
-  function hm12(hm) { var h = +hm.slice(0, 2); return ((h % 12) || 12) + ":" + hm.slice(3) + " " + (h < 12 ? "a.m." : "p.m."); }
+  // Every showtime reads "h:mm am" / "h:mm pm" (Corey's house style), e.g. "3:00 pm".
+  function hm12(hm) { var h = +hm.slice(0, 2); return ((h % 12) || 12) + ":" + hm.slice(3) + " " + (h < 12 ? "am" : "pm"); }
   var longTime = hm12;   // plain text, for labels and calendar entries
-  // On screen the digits stay tabular (so times line up) but "a.m."/"p.m." don't: tabular
-  // figures also widen the periods, which spaced it out as "p . m .".
+  // On screen the digits stay tabular (so times line up) but "am"/"pm" uses normal figures.
   function timeHTML(hm) { var t = hm12(hm), i = t.indexOf(" "); return t.slice(0, i) + ' <span class="ap">' + t.slice(i + 1) + "</span>"; }
   function longDate(d) { return dateObj(d).toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" }); }
   function relDay(d) {

@@ -192,6 +192,11 @@ Redesigned Nov 2026 (Letterboxd-inspired, not a copy): **one day at a time**, no
   repertory by original release) · Popular this week (TMDB `popularity`, refreshed at each weekly
   scrape; a Wikipedia 7-day page-view version is on hold) · A–Z. Films without the data sort last.
   No ratings (see above). New releases get an "Opening day" / "New this week" tag.
+- **"Next 2 weeks"** (first button in the day strip; `state.day === "all"`): the same cards for every
+  film with an upcoming showtime in the window, but each theater gets one line ("Nov 6–12 · 14
+  showings") and a "Next …" button for its soonest showing instead of every time. Upcoming
+  openings show "Opens Nov 19". No schedule column in this view (`layout[data-mode="span"]`).
+- **Toolbar:** Show and Sort sit on one line under the heading, split by a hairline; they wrap on phones.
 - **Schedule** of the day in time order (Morning/Afternoon/Evening/Late; earlier-today rows
   hidden behind a button). Desktop: sticky right column. Phone: Films / Schedule toggle.
 - **Tap a time** → sheet with Get tickets, Google, Outlook, Apple/.ics (ICS uses TZID America/Denver).

@@ -72,8 +72,11 @@
     var openings = data.openings || {};
     films.forEach(function (f, i) {
       // theater art first (Fandango's is the most consistent), then TMDB's
-      f.posters.sort(function (a, b) { return (b.indexOf("fandango") >= 0) - (a.indexOf("fandango") >= 0); });
-      if (f.tmdbPoster) f.posters.push(f.tmdbPoster);
+      // TMDB's poster first: official art for every matched film. Fandango silently serves a grey
+      // "F" placeholder when it lacks art (it loads fine, so the error fallback never fires), so
+      // its images go last; other theaters' art sits in between, mainly for special events.
+      f.posters.sort(function (a, b) { return (a.indexOf("fandango") >= 0) - (b.indexOf("fandango") >= 0); });
+      if (f.tmdbPoster) f.posters.unshift(f.tmdbPoster);
       // Denver opening: the first day it played at a theater we track (kept by the scraper).
       f.opened = openings[f.t] || shows.filter(function (s) { return s.f === i; })
         .map(function (s) { return s.d; }).sort()[0] || null;
@@ -231,26 +234,39 @@
     var ids = sortFilms(Array.from(byFilm.keys())), rel = relDay(state.day);
 
     var all = state.day === ALL;
+    // Searching also finds a film beyond the chosen theaters/day ("Fjord" only at AMC Westminster):
+    // those matches follow the normal results as compact two-week cards.
+    var elsewhere = new Map();
+    if (state.q) {
+      var q = state.q.toLowerCase();
+      shows.forEach(function (s) {
+        var f = films[s.f];
+        if (byFilm.has(s.f) || days.indexOf(s.d) < 0 || isPast(s) || f.t.toLowerCase().indexOf(q) < 0) return;
+        if (state.kind !== "all" && (f.event || (state.kind === "rep") !== f.rep)) return;
+        if (!elsewhere.has(s.f)) elsewhere.set(s.f, []); elsewhere.get(s.f).push(s);
+      });
+    }
+    var extraIds = sortFilms(Array.from(elsewhere.keys()));
     $("filmsH").textContent = all ? "Playing the next two weeks" : "Playing " + (rel ? rel.toLowerCase() : longDate(state.day));
     $("filmsSub").textContent = (all ? shortDate(days[0]) + "–" + shortDate(days[days.length - 1]) + " · "
       : rel ? longDate(state.day) + " · " : "") + ids.length + " film" + (ids.length === 1 ? "" : "s") +
       " · " + state.theaters.size + " theater" + (state.theaters.size === 1 ? "" : "s");
 
-    if (!ids.length) {
+    if (!ids.length && !extraIds.length) {
       $("grid").innerHTML = '<p class="empty">' + (state.theaters.size
         ? "Nothing matches" + (all ? "" : " on this day") + ". Try " + (all ? "" : "another day, ") + "more theaters, or clear the search."
         : "Pick at least one theater above to see films.") + "</p>";
       return;
     }
-    var cardHTML = function (i) {
-      var f = films[i], list = byFilm.get(i), venues = new Map();
+    var cardHTML = function (i, other) {   // other: a match from beyond the selected theaters/day
+      var f = films[i], list = (other ? elsewhere : byFilm).get(i), venues = new Map(), asSpan = all || !!other;
       list.sort(function (a, b) { return (a.d + (a.hm || "")).localeCompare(b.d + (b.hm || "")); })
         .forEach(function (s) { if (!venues.has(s.th)) venues.set(s.th, []); venues.get(s.th).push(s); });
       var fmts = Array.from(new Set(list.map(function (s) { return s.fmt === "Premium Format" ? "Premium" : s.fmt; }).filter(Boolean)));
       var meta = [f.year ? "<span>" + f.year + "</span>" : "", f.rating ? "<span>" + esc(f.rating) + "</span>" : "",
         f.runtime ? "<span>" + runtime(f.runtime) + "</span>" : ""]
         .concat(fmts.map(function (x) { return '<span class="tag">' + esc(x) + "</span>"; })).join("");
-      var since = f.opened ? dayDiff(f.opened, all ? days[0] : state.day) : null;
+      var since = f.opened ? dayDiff(f.opened, asSpan ? days[0] : state.day) : null;
       var fresh = f.rep || f.event || since == null ? "" : since < 0 ? "Opens " + shortDate(f.opened)
         : since === 0 ? "Opening day" : since <= 6 ? "New this week" : "";
       if (fresh) meta += '<span class="tag fresh">' + fresh + "</span>";
@@ -260,7 +276,7 @@
       var order = theaters.map(function (t) { return t.key; });
       var vhtml = Array.from(venues.entries()).sort(function (a, b) { return order.indexOf(a[0]) - order.indexOf(b[0]); }).map(function (e) {
         var t = theaterOf(e[0]) || { color: "#888" };
-        if (all) {   // one line per theater: when it plays, how often, and the next showing
+        if (asSpan) {   // one line per theater: when it plays, how often, and the next showing
           var first = e[1][0], last = e[1][e[1].length - 1], n = e[1].length;
           var span = first.d === last.d ? dayName(first.d) : shortDate(first.d) + "–" + shortDate(last.d);
           return '<div class="venue" style="--c:' + t.color + '"><div class="vn"><i></i>' + esc(tName(e[0])) + "</div>" +
@@ -290,11 +306,17 @@
       var now = ids.filter(function (i) { return soon.indexOf(i) < 0; });
       soon.sort(function (a, b) { return films[a].opened.localeCompare(films[b].opened) || films[a].t.localeCompare(films[b].t); });
       $("grid").innerHTML = (now.length ? '<h3 class="group">Now playing <span>' + now.length + "</span></h3>" +
-          '<div class="grid">' + now.map(cardHTML).join("") + "</div>" : "") +
+          '<div class="grid">' + now.map(function (i) { return cardHTML(i); }).join("") + "</div>" : "") +
         (soon.length ? '<h3 class="group">Opening soon <span>' + soon.length + "</span></h3>" +
-          '<div class="grid">' + soon.map(cardHTML).join("") + "</div>" : "");
+          '<div class="grid">' + soon.map(function (i) { return cardHTML(i); }).join("") + "</div>" : "");
     } else {
-      $("grid").innerHTML = '<div class="grid">' + ids.map(cardHTML).join("") + "</div>";
+      $("grid").innerHTML = ids.length ? '<div class="grid">' + ids.map(function (i) { return cardHTML(i); }).join("") + "</div>"
+        : '<p class="empty">No match at these theaters' + (all ? "" : " on this day") + ".</p>";
+    }
+    if (extraIds.length) {
+      $("grid").innerHTML += '<h3 class="group">Also playing elsewhere <span>' + extraIds.length + "</span></h3>" +
+        '<p class="group-note">Other theaters or days in the next two weeks.</p>' +
+        '<div class="grid">' + extraIds.map(function (i) { return cardHTML(i, true); }).join("") + "</div>";
     }
     clampVenues();
   }

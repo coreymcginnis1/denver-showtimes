@@ -90,7 +90,8 @@ button { font: inherit; color: inherit; }
 /* "Next 2 weeks" groups */
 .group { font: 600 20px/1.2 var(--display); margin: 8px 0 14px; }
 .group span { font: 500 13px var(--ui); color: var(--faint); margin-left: 6px; }
-#grid > .grid + .group { margin-top: 36px; }
+#grid > .grid + .group, #grid > .empty + .group { margin-top: 36px; }
+.group-note { color: var(--muted); font-size: 13.5px; margin: -8px 0 14px; }
 .tag.kind { color: var(--muted); }
 .filters { display: flex; gap: 10px; align-items: center; min-width: 0; }
 .filters .scroller { flex: 1 1 auto; min-width: 0; }

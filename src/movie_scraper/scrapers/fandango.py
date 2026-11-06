@@ -105,5 +105,7 @@ class FandangoScraper(BaseScraper):
     def _poster(m: dict) -> str | None:
         sizes = (m.get("poster") or {}).get("size") or {}
         url = sizes.get("300") or sizes.get("200") or sizes.get("full") or None
+        if url and url.split("?")[0].rstrip("/").endswith("default_poster.png"):
+            return None   # Fandango has no art: its URL *is* the grey placeholder (After Hours)
         # Fandango's renderer takes any width; 600 px stays sharp on 2x screens (cards are ~220 px).
         return url.replace("/ImageRenderer/300/", "/ImageRenderer/600/") if url else None

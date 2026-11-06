@@ -180,8 +180,14 @@ Redesigned Nov 2026 (Letterboxd-inspired, not a copy): **one day at a time**, no
   (default-on theaters from `config.toml`, with that day's counts), search. Sticky on desktop.
 - **Poster cards** for every film playing that day at the selected theaters: poster, title (TMDB
   name), year · rating · runtime · format tags, then times
-  grouped by theater, and a "View on Letterboxd" link. Posters try the theater's image (Fandango's
-  first), then TMDB's, then a typeset placeholder.
+  grouped by theater, and a "View on Letterboxd" link. **Posters: TMDB's first** (official art for
+  every matched film), then other theaters' art, **Fandango last**, then a typeset placeholder.
+  Fandango silently serves a grey "F" placeholder when it lacks art (it loads, so the error
+  fallback never fires — After Hours, The Only Living Pickpocket in New York); the scraper also drops
+  Fandango URLs that *are* the placeholder (`…/default_poster.png`).
+- **Search reaches beyond the selection:** matches at the selected theaters/day show first; any other
+  match (other theaters or days in the window) follows under "Also playing elsewhere" as compact
+  two-week cards (Fjord, only at AMC Westminster).
 - **Denver opening date** (`openings` in `data.json`, title → date; `pipeline.denver_openings()`):
   the first day a film had a showtime at any theater we track. It's carried over each run and only
   moves earlier, and entries for films no longer playing are forgotten after 400 days. Backfilled from

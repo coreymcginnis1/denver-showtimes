@@ -190,20 +190,6 @@ def test_build_feed_shape():
     assert {e["extendedProps"]["theater"] for e in feed["events"]} == {"amc", "sie"}
 
 
-def test_build_feed_default_films_allowlist():
-    c = fresh_cfg()
-    c.defaults.films = ["dune", "jaws"]
-    feed = _build_feed(c, [st("Dune: Part Two"), st("Jaws"), st("Barbie")], DEN)
-    assert feed["default_films"] == ["Dune: Part Two", "Jaws"]  # matched, sorted; Barbie excluded
-
-
-def test_build_feed_default_films_empty_means_all():
-    c = fresh_cfg()
-    c.defaults.films = []
-    feed = _build_feed(c, [st("Dune")], DEN)
-    assert feed["default_films"] is None
-
-
 def test_secondary_theaters_config():
     c = fresh_cfg()
     assert c.theaters["amc"].default_on is True             # primary theaters start on
@@ -391,12 +377,6 @@ def test_dry_run_reports_new_titles_without_recording_them(tmp_path):
     known.write_text("Old\n", encoding="utf-8")
     assert diff_new_titles(["Old", "New"], known, update=False) == ["New"]
     assert known.read_text(encoding="utf-8") == "Old\n"
-
-
-def test_no_picks_means_every_film_preselected():
-    cfg = fresh_cfg()
-    feed = _build_feed(cfg, [st("Dune"), st("Jaws")], DEN)
-    assert feed["default_films"] is None     # retired picks: the page selects all, hides the button
 
 
 def test_denver_openings_remember_the_first_showtime_and_forget_old_ones():

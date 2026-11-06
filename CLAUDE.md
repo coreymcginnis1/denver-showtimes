@@ -1,270 +1,225 @@
 # Denver Movie Showtimes — project guide
 
-An interactive web calendar of Denver movie showtimes, built as a companion to Corey
-McGinnis's Substack **The Movie Newsletter** (https://coreymcginnis.substack.com/). Readers
-filter by film/theater and add any screening to their own calendar (Google / Outlook / .ics).
-Live at **https://coreymcginnis1.github.io/denver-showtimes/**, linked from the newsletter.
+A web page of Denver movie showtimes, built as a companion to Corey McGinnis's Substack **The
+Movie Newsletter** (https://coreymcginnis.substack.com/). One day at a time: poster cards for
+every film playing, that day's schedule, tickets and add-to-calendar. Live at
+**https://coreymcginnis1.github.io/denver-showtimes/**, linked from the newsletter.
 
 ## Deploy & account rules — IMPORTANT
 
-- This is a **personal** project. Deploy ONLY to the personal GitHub account
-  **`coreymcginnis1`** (repo `coreymcginnis1/denver-showtimes`). **Never** push to or use the
-  DRCOG/work account **`cmcginnisdrcog`** for this project.
+- This is a **personal** project. Use ONLY the personal GitHub account **`coreymcginnis1`**
+  (repo `coreymcginnis1/denver-showtimes`). **Never** push to or use the DRCOG/work account
+  **`cmcginnisdrcog`** for this project.
 - **The project lives only on GitHub** (no local copy since Nov 2026). Changes are made from
-  **Claude Code cloud sessions** on this repo: work on a branch, push, open a **PR**, and Corey
-  merges it (or asks Claude to). The Claude GitHub App needs write access to this repo for
-  sessions to push; a 403 "Resource not accessible by integration" means that access lapsed
-  (fix: github.com/apps/claude → configure for `coreymcginnis1` → include this repo).
-- PR checks run `pytest` plus a `--dry-run` scrape from GitHub's network (only when `src/`,
-  `tests/`, `config.toml`, `pyproject.toml` or the workflow change). Merging to `main` publishes
-  `public/` to GitHub Pages without scraping; new data comes from the Thursday run or a manual
-  **Actions → Update showtimes → Run workflow** (`.github/workflows/update.yml`).
-- If Corey ever works from his desktop again: both accounts are logged into `gh` there, and
-  `git push` uses the active one, so run `gh auth switch --user coreymcginnis1` before pushing and
-  `gh auth switch --user cmcginnisdrcog` after (the work account must stay active for his job).
+  **Claude Code cloud sessions**: work on a branch, push, open a **PR**, and Corey merges it (or
+  asks Claude to). The Claude GitHub App needs write access to this repo; a 403 "Resource not
+  accessible by integration" means that lapsed (fix: github.com/apps/claude → configure for
+  `coreymcginnis1` → include this repo).
+- Corey reviews changes in a **preview** before merging: a private claude.ai page running the PR's
+  real `public/` code with that week's data and bundled posters (the page can't load images from
+  other sites). Build it from a scratch scrape; don't commit preview files.
+- If Corey ever works from his desktop again: both accounts are logged into `gh` there and
+  `git push` uses the active one, so `gh auth switch --user coreymcginnis1` before pushing and
+  `gh auth switch --user cmcginnisdrcog` after.
 
-## How it works
+## How it runs
 
 ```
-scraper (Python, GitHub Actions, weekly)  →  TMDB match  →  public/data.json  →  static site (vanilla JS)  →  GitHub Pages
+scrapers → cleanup rules → TMDB match → trending, openings → public/data.json → static site → GitHub Pages
 ```
 
-- `src/movie_scraper/` — Python package: per-theater scrapers → normalize/filter/dedupe →
-  writes `public/data.json`. Run `python -m movie_scraper` (flags: `--theater KEY` repeatable,
-  `--dry-run`, `--output`, `--summary`, `-v`). Python 3.11+; deps: httpx, pydantic.
-- `public/` — dependency-free static site (`index.html` + `styles.css` + vanilla `app.js`, Google Fonts only). No build.
-- **Scraping runs in GitHub Actions, not on anyone's computer.** `update.yml`: Thursdays 15:00 UTC
-  and "Run workflow" scrape → commit `public/data.json` + `known_titles.txt` → publish. Pushes to
-  `main` publish without scraping. PRs run `pytest` plus a `--dry-run` scrape from GitHub's network.
-- **When a theater fails** (an exception or zero rows) it keeps its upcoming rows from the last feed
-  and is listed in `stale_theaters` in `data.json`. The CLI exits 3, the site still publishes, then
-  the run is marked failed so GitHub emails Corey. Each run's summary has a per-theater table
-  (flags drops of more than half) and the new titles.
-- `pytest` runs offline against saved fixtures in `tests/fixtures/`.
+`.github/workflows/update.yml` does everything; nothing runs on anyone's computer.
 
-## Theaters & data sources (`config.toml` `[theaters.*]`)
+- **Daily at 5:20 am Denver time** (and "Run workflow"): scrape → commit `public/data.json` +
+  `known_titles.txt` → publish. Cron is UTC, so it's scheduled at 11:20 and 12:20 UTC and the `gate`
+  job lets through only the one that is 5:20 am locally (checks Denver's current UTC offset).
+- **Pushes to `main`** publish the site without scraping (frontend changes go live at once).
+- **Pull requests** run `pytest` and a `--dry-run` scrape from GitHub's network with the real
+  secrets. The dry run prints a `MATCH |` line per film (TMDB id, release, IMDb id) for reviewing
+  matches, plus new titles and cleanup-rule suggestions.
+- **A theater that fails** (exception or zero rows) keeps its upcoming rows from the last feed and is
+  listed in `stale_theaters`; the site still publishes, then the run is marked failed so GitHub
+  emails Corey. Each run's summary has a per-theater table (flags drops over half), TMDB coverage
+  and the new titles.
+- **Nothing piles up:** each run rebuilds `data.json` for today … +14 days; `openings` forget films
+  400 days after they last opened; `film_meta`/`tmdb_ids` hold only current films. Events carry only
+  the fields the site reads (no nulls), so a daily data commit is ~2.5 MB raw. Git history grows
+  ~30–120 MB/year; don't rewrite history to trim it.
 
-Ten theaters. The first three are on by default; the rest have `default_on = false` (their
-filter chip starts unchecked — opt-in secondary venues). One scraper class can back several
-theaters via `scraper` + `location`.
+### Secrets (repository → Settings → Secrets and variables → Actions)
 
-| Theater | Scraper / source |
+| Secret | Used for | Notes |
+|---|---|---|
+| `TMDB_TOKEN` | TMDB "API Read Access Token" | In cloud sessions it's a network secret the proxy injects: run with `TMDB_TOKEN=proxy-injected`. |
+| `OMDB_API_KEY` | OMDb (ratings) — currently off | URL-parameter key, so the session proxy can't inject it; test via the PR check. |
+
+Without a token, or when TMDB/Wikipedia error, a run keeps last run's metadata and never fails.
+Tests never touch the network (`tests/conftest.py` unsets tokens and stubs Wikipedia).
+
+### Code map
+
+- `src/movie_scraper/` — `python -m movie_scraper` (`--theater KEY`, `--dry-run`, `--output`,
+  `--summary`, `--compare-trending`, `-v`). Python 3.11+; httpx, pydantic.
+  - `scrapers/` — `sie_eventive.py`, `landmark.py`, `alamo.py`, `fandango.py` (AMC/Regal/Harkins).
+  - `pipeline.py` — cleanup, TMDB standardization, openings, trending, feed, run summary.
+  - `tmdb.py` · `wikipedia.py` · `omdb.py` (off) · `config.py` · `cli.py` · `models.py`.
+- `public/` — `index.html`, `styles.css`, `app.js` (vanilla, no build), `zips.json`,
+  `tmdb-logo.svg`, `preview.png`, `data.json` (written by the workflow).
+- `config.toml` — theaters, cleanup rules, TMDB overrides, feature switches.
+- `tests/` — offline, against saved fixtures in `tests/fixtures/`.
+
+### `data.json`
+
+`theaters` (key, name, color, default_on, lat, lon) · `films` · `events` (`id`, `title`, `start`,
+optional `end`/`allDay`, `extendedProps`: `theater`, `screen`, `fmt`, `ticketUrl`, `poster`,
+`rating`, `runtime`, `year`, `release`) · `film_meta` (displayed title → TMDB data, `trend`,
+`wiki_views`, …) · `tmdb_ids` (local title → TMDB id) · `openings` (title → Denver opening date) ·
+`stale_theaters` · `generated_at` · `timezone`.
+
+## Theaters (`config.toml` `[theaters.*]`)
+
+Ten theaters. Sie, Landmark Mayan and AMC 9+CO 10 start on; the rest have `default_on = false`.
+One scraper can back several theaters via `scraper` + `location`. `lat`/`lon` drive the distance
+filter.
+
+| Theater | Source |
 |---|---|
 | Sie FilmCenter | Eventive public API (`api.eventive.org`, embedded publishable key) |
-| Landmark Mayan | `landmarktheatres.com` boxofficeapi `schedule` endpoint (httpx) |
-| AMC 9+CO 10 | **Fandango** `napi/theaterMovieShowtimes/<id>` (httpx); `location = AAYUA` |
-| AMC Westminster Promenade 24 | same Fandango scraper; `location = AAECN` |
-| Alamo Drafthouse Sloans Lake | `drafthouse.com/s/mother/v2/schedule/venue/sloans-lake` (httpx JSON, no browser) |
-| Regal UA Colorado Center / Denver Pavilions | **Fandango** `napi/theaterMovieShowtimes/<id>` (httpx) |
-| Landmark Greenwood Village | same Landmark scraper; `location = X0873` (the Mayan is X02AK) |
-| Harkins Arvada 14 / Northfield 18 | same Fandango scraper; `location = AAYFG` / `AATYG` |
+| Landmark Mayan / Greenwood Village | landmarktheatres.com boxofficeapi `schedule` endpoint; `location` X02AK / X0873 |
+| AMC 9+CO 10 / Westminster Promenade 24 | **Fandango** `napi/theaterMovieShowtimes/<id>`; AAYUA / AAECN |
+| Regal UA Denver Pavilions / Colorado Center | **Fandango**; AAJJG / AAFXW |
+| Harkins Arvada 14 / Northfield 18 | **Fandango**; AAYFG / AATYG |
+| Alamo Drafthouse Sloans Lake | `drafthouse.com/s/mother/v2/schedule/venue/sloans-lake` (JSON) |
 
-- **AMC & Regal quirk (important):** both chains' own sites block scrapers. regmovies.com is
-  Cloudflare-gated (it only server-renders the *current day* and 403s httpx), and amctheatres.com
-  bot-challenged the old Playwright scraper even from a home IP. Both sell tickets through
-  **Fandango**, whose `napi` JSON is open over plain httpx, so both read from there. `location` is
-  the Fandango theater id (**AAFXW** = Regal Colorado Center, **AAJJG** = Regal Denver Pavilions,
-  **AAYUA** = AMC 9+CO 10, **AAECN** = AMC Westminster, **AAYFG** = Harkins Arvada, **AATYG** = Harkins Northfield). See `scrapers/fandango.py`. Before the
-  switch, Fandango matched 115 of 116 AMC showtimes on title and time for one day; the other was
-  the same showing under a different title tag. AMC ticket links now go to Fandango.
+- **AMC, Regal and Harkins come from Fandango:** amctheatres.com and regmovies.com block scrapers
+  (Cloudflare / bot challenges); Fandango's `napi` JSON is open over plain httpx, and its ticket
+  links work. Fandango silently serves a grey "F" placeholder image when it lacks a poster.
+- **Coverage checked Nov 2026** (within 10 mi of 80206): also on Fandango but not added — AMC Dine-In
+  Cherry Creek 8 (AAADR; 12 of 13 films duplicated elsewhere), Regal River Point, Cinemark Bel Mar
+  16, Cinemark Century Aurora, Regal SouthGlenn. The Esquire closed July 2024. Alamo Westminster and
+  Littleton are beyond 10 mi.
+- **Regal Colorado Center** shrank from ~20 films / ~430 showtimes (July) to ~5–6 / ~115 (Nov 2026)
+  while the feed stayed healthy, so the theater itself is running fewer screens. If it drops to
+  zero, check regmovies.com in a browser before treating it as a scraper failure.
 
-## Title normalization (`config.toml` `[titles]`)
+## Titles
 
-Scraped titles are messy (special editions, cuts, anniversary/festival tags, series labels,
-sponsor tags, member events, live sports). Three **class-based** regex lists keep the film list
-clean as new variants appear each week — prefer *general* patterns over one-offs:
+### Cleanup rules (`config.toml` `[titles]`, mirrored in `config.py` `DEFAULT_*` — keep in sync)
 
-- `strip_prefixes` — series/program labels from the front: "Bleak Week: X" → "X"
-  (also Scream Screen, The Popcorn List, Sci-Fi Film Series, Fan Faves, Staff Pick, Crunchyroll
-  Anime Nights, Sie's "… Dose of Reality [Screening]", and any "<Presenter> Presents:").
-- `strip_suffixes` — trailing tags: release year `(2026)`, `Nth Anniversary` (incl. paren and
-  colon forms), `Director's/Extended/... Cut`, `... Edition`, `Re-release`/`Reissue`/`(RE26)`,
-  `Encore`, `on 35mm[ film]` (the gauge is captured into the format field), `(dir. X)`, Sensory
-  Friendly, sponsor tags (Xfinity), Fan Event / Early Access / Promo / Preview screenings, `w/ ...`.
-- `drop` — non-films removed entirely: mystery / private-rental / members-only screenings,
-  memorial/tribute screenings, watch parties (GOLAZO), live sports and esports (`UFC \d`, Copa
-  Mundial, Apple TV Live, League of Legends). Concerts, opera, NT Live and TV-episode screenings
-  are deliberately **kept** (they're ticketed screenings people look for).
+Prefer **general** patterns over one-offs.
 
-The `[titles]` lists in `config.toml` mirror the `DEFAULT_*` lists in `config.py`; keep both in sync.
+- `strip_prefixes` — series/presenter labels: Bleak Week, Scream Screen, The Popcorn List, Sci-Fi
+  Film Series, Fan Faves, Staff Pick, Crunchyroll Anime Nights, Sie's "… Dose of Reality
+  [Screening]", any "<Presenter> Presents:".
+- `strip_suffixes` — release year `(2026)`, `Nth Anniversary` (paren/colon forms), `… Cut`,
+  `… Edition`, `Re-release`/`Reissue`/`(RE26)`, `Encore`/`(2026 Encore)`, language versions
+  (`(English 2026)`, `(Hindi Dubbed)`), `on 35mm` (gauge kept as the format), `(dir. X)`, Sensory
+  Friendly, sponsor tags, Fan Event / Early Access / Promo / Preview screenings, `w/ …`.
+- `drop` — not films: mystery screenings (Screen Unseen, Mystery Movie, Harkins Secret Cinema),
+  private rentals, members-only, memorials, watch parties, live sports and esports. Concerts, opera,
+  NT Live and TV-episode screenings are **kept**.
+- `normalize_title()` also fixes ALL-CAPS/lowercase titles and dangling `:`/`-`;
+  `merge_case_variants()` merges titles differing only in case.
+- **TOML gotcha:** single-quoted TOML strings can't contain an apostrophe — use `\W?` or double quotes.
 
-`pipeline.normalize_title()` also title-cases fully UPPER/lowercase titles and down-cases 4+
-letter all-caps words (BLEACH→Bleach) so casing variants merge, and drops a dangling `:`/`-` left
-by a stripped tag. `pipeline.merge_case_variants()` then gives titles that differ only in case one
-spelling (the one most showtimes use), e.g. "Pickpocket in/In New York". `Alien` and `Aliens` are
-deliberately kept separate (base titles differ; the picks regex uses a `\b` boundary).
+### TMDB is the standard name (`tmdb.py`, `pipeline.standardize_titles()`, `[tmdb]`)
 
-**TOML gotcha:** single-quoted TOML strings **cannot contain an apostrophe** (breaks parsing) —
-use `\W?` (e.g. `Director\W?s`, not `Director's`) or double quotes for literals without regex
-escapes.
+After cleanup every film is matched to TMDB and **renamed to TMDB's title** (casing cleaned by
+`recase()`), so each theater's variant of a film merges. Two films with the same TMDB title get the
+year appended.
 
-## TMDB: the title standard and the sort data (`src/movie_scraper/tmdb.py`, `config.toml` `[tmdb]`)
+- **Strict matching** (a wrong match renames the film on the site): exact title or TMDB title +
+  ": subtitle", possessive credits dropped, and a year hint — the year Sie/Landmark state beats
+  Fandango's `releaseDate` (a revival's may be the re-release). No fuzzy guessing.
+- Wrong or missing match → `[tmdb.overrides]` (local title → id from themoviedb.org/movie/<id>).
+  Matches are remembered in `tmdb_ids`.
+- **Special events = no TMDB movie match:** TV episodes (Heated Rivalry), double features, shorts
+  programs, one-night events. The site sorts them last, leaves them out of New releases /
+  Repertory, and gives them no "new" tag. A real film missing from TMDB lands here too — fix with
+  an override.
 
-After the cleanup rules, every film is matched to TMDB (themoviedb.org) and **renamed to TMDB's
-title**, so variants of one film from different theaters merge into one entry without new rules
-(`pipeline.standardize_titles()`). TMDB's name gets the same casing cleanup (`recase()`); two
-different films sharing a TMDB title get the year appended. Unmatched titles (events, shorts
-programs, double features) keep their cleaned-up name. The rules still matter: TMDB only finds
-"Bleak Week: Gummo" once the label is stripped, and non-films still need `drop`.
+### New-titles digest
 
-- **Matching is strict on purpose** (a wrong match now renames the film on the site): exact
-  title (or TMDB title = ours + ": subtitle"), possessive credit dropped ("Ken Russell's The
-  Devils"), and a year hint — the year Sie/Landmark state beats Fandango's `releaseDate`, which
-  for a revival can be the re-release date. No fuzzy guessing.
-- **Wrong or missing match → `[tmdb.overrides]`** in `config.toml`: normalized local title → TMDB
-  id (from the film's themoviedb.org URL). The run summary lists titles TMDB didn't match.
-- `data.json` gains `film_meta` (displayed title → `tmdb_id`, `release`, `popularity`,
-  `vote_average`, `vote_count`, `tmdb_poster`) and `tmdb_ids` (local title → id, so next week
-  reuses matches instead of searching again).
-- **Token:** `TMDB_TOKEN` (TMDB "API Read Access Token") — a GitHub Actions repository secret for
-  the workflow; in cloud sessions it's a network secret the proxy injects, so run with
-  `TMDB_TOKEN=proxy-injected`. Without a token, or if TMDB errors, the run keeps last week's
-  metadata and never fails. Tests never call TMDB (`conftest.py` unsets the token).
-- **Terms:** TMDB's free API is non-commercial with attribution (footer text + `tmdb-logo.svg`).
-  **Letterboxd forbids scraping** (terms of use + robots.txt) and its API is by application only,
-  so the site only *links* to Letterboxd (`letterboxd.com/tmdb/<id>/`), never scrapes it. Corey
-  chose not to apply for the Letterboxd API for now.
+Each run lists titles new since the last (tracked in `known_titles.txt`; dry runs don't record), and
+`review_titles()` flags likely rule candidates (labels wrapped around a known title, a shared
+"Label:", event/edition words, stray punctuation). It only flags; rules stay manual.
 
-## Ratings: none on the site (Nov 2026) — OMDb code kept but off (`omdb.py`, `[omdb] enabled = false`)
+## Sorting data
 
-The site shows **no ratings and has no Top rated sort**. Every source was tried and fell short:
+- **Denver opening** (`openings`, `pipeline.denver_openings()`): the first day a film had a showtime
+  at any theater we track; only moves earlier. Used instead of TMDB's date (often a festival or
+  foreign release: Fatherland Jun 19 vs Denver Nov 6) or Fandango's (national / NY-LA limited).
+  Backfilled from `data.json` history from June 2026.
+- **Repertory** = first released more than **two years** before its Denver opening (`REPERTORY_DAYS`
+  in `app.js`). Two, not one: indie films often reach Denver a year+ after a festival premiere.
+- **Trending** (`film_meta.trend`, `pipeline.add_trend()`, `[trending]`): the average of a film's
+  rank by TMDB popularity and by English Wikipedia page views over the last 7 days (TMDB rank alone
+  without an article). Views: Wikidata finds the article by TMDB id (P4947), the Wikimedia pageviews
+  API gives daily counts; free, needs only a descriptive User-Agent. **Why 50/50 (Nov 2026):**
+  against Letterboxd's popular-this-week list (10 overlapping films) rank correlation was TMDB
+  0.59, Wikipedia 0.77, blend 0.90 (40–60% all ~0.88). TMDB alone is worldwide and counts streaming
+  (The Mongoose #3); Wikipedia alone over-weights big international releases (Ramayana #1). There
+  is no free city/state-level source (Wikimedia publishes none; Google Trends has no API). Wikimedia
+  blocks the cloud-session proxy, so check it through the PR check (`--compare-trending` prints a
+  side-by-side table).
 
-- **TMDB** ratings come from a few hundred voters per new release.
-- **IMDb**'s own data is personal-use only (no public display); **Letterboxd** forbids scraping;
-  **Metacritic / Rotten Tomatoes** have no API and forbid scraping.
-- **OMDb** (free key, CC BY-NC) carries IMDb ratings and Metascores, but **leaves most current
-  releases unscored for weeks** (Nov 2026: Wild Horse Nine had no score on OMDb while Metacritic
-  showed 78 from 50 reviews; Resident Evil, out 7 weeks, still blank) and its IMDb ratings lag
-  badly (You Can See Everything 7.9 from 165 votes vs 9.1 from 27K on IMDb). Existing Metascores
-  drift ~1 point from Metacritic's live number.
+## Decisions and what's on hold (don't redo without new information)
 
-Corey chose to drop ratings rather than hand-fill scores. `omdb.py` (looked up by the IMDb id in
-TMDB's full movie record; `OMDB_API_KEY` repository secret, passed by the workflow; 2 workers,
-30 s timeout, one retry) is kept with `[omdb] enabled = false`. Re-enabling it collects
-`imdb_rating`/`imdb_votes`/`metascore`/`rt` into `film_meta`, but the site's display and sort were
-removed and would need putting back — revisit only with a source that covers new releases.
+- **No ratings.** TMDB ratings come from a few hundred voters; IMDb's data is personal-use only;
+  Metacritic / Rotten Tomatoes have no API and forbid scraping; OMDb leaves most current releases
+  unscored for weeks (Wild Horse Nine blank while Metacritic showed 78) and lags on IMDb ratings
+  (You Can See Everything 7.9 from 165 votes vs 9.1 from 27K). `omdb.py` is kept with
+  `[omdb] enabled = false`; turning it back on also needs the site display rebuilt.
+- **Letterboxd:** its terms forbid robots/scrapers (RSS feeds included — not explicitly
+  authorized) and its API is by application (api@letterboxd.com); Corey chose not to apply for
+  now. The site only **links** to `letterboxd.com/tmdb/<id>/`. A member's own data export (CSV) is
+  the one legitimate source if a "Corey's ratings" feature is ever wanted.
+- **Tags on hold:** "Indie" and "International" are computed (`tmdb.classify()`, `film_meta.indie` /
+  `.intl`) but **not shown**. Indie mislabeled classics (TMDB lists producers, not distributors);
+  Corey wants both or neither.
+- **Other trending sources checked:** TMDB weekly trending list (58% coverage), Trakt (streaming),
+  IMDb popularity / box office / Google Trends (no license or API).
+- **Removed:** "Corey's picks" pre-selection (went stale) and "My list" (little use, no sync).
+- **Hosting:** GitHub Pages (~100 GB/month soft limit ≈ 300K visits). A nicer address: a free
+  `denvershowtimes` GitHub organization (denvershowtimes.github.io) or a ~$12/yr domain pointed at
+  Pages, with a redirect from the old link. Not done yet.
 
-## Trending: 50/50 TMDB + Wikipedia (`wikipedia.py`, `pipeline.add_trend()`, `[trending]`)
+## Frontend (`public/`)
 
-Each run fetches 7-day English Wikipedia page views for every matched film (article found through
-Wikidata by TMDB id, P4947; Wikimedia pageviews API; free, needs only a descriptive User-Agent) into
-`film_meta.wiki_views`, falling back to last run's count. `trend` = mean of the TMDB-popularity rank
-and the Wikipedia-views rank. **Why 50/50 (Nov 2026):** against Letterboxd's popular-this-week list
-(Corey's screenshot; the 10 overlapping Denver films), rank correlation was TMDB 0.59, Wikipedia
-0.77, blend 0.90; weights 40–60% Wikipedia all scored 0.87–0.90. TMDB alone is worldwide and counts
-streaming (The Mongoose #3); Wikipedia alone over-weights big international releases (Ramayana #1).
-Wikimedia blocks the cloud-session proxy (403/429), so test it through the PR check. `cli
---compare-trending` (dry runs) prints a TMDB-vs-Wikipedia table (`TREND |` lines) for re-checking.
-Other sources checked: Trakt (streaming-centric), TMDB weekly trending list (58% coverage), Google
-Trends / IMDb popularity / box office (no usable API or license), Letterboxd (API by application).
+Redesigned Nov 2026, Letterboxd-inspired but its own look. Dark warm palette (`--bg #15110e`,
+cream `--paper`, newsletter brick `--brick-fill #C0432B`); Newsreader (titles) + Schibsted Grotesk
+(UI). Title "Denver Movie Showtimes", upright (no italic). Theater colors appear only as dots.
 
-## New-titles digest and cleanup review
-
-Each scrape prints titles that are *new since the last run* (tracked in the committed
-`known_titles.txt`), so Corey only eyeballs new/odd titles instead of re-scanning the whole
-list. They appear in the Action run's summary. See `pipeline.diff_new_titles()`; the workflow commits
-`known_titles.txt`. A `--dry-run` (and so every PR check) reports new titles without recording them.
-
-`pipeline.review_titles()` then flags the new titles most likely to need a rule, with the reason,
-in a "may need a cleanup rule" table at the top of the summary: a label wrapped around another
-title on the list ("Crunchyroll Anime Nights: X" next to "X"), a "Label:" shared by several titles
-(a new series/presenter), or event/edition words and leftover punctuation (`_REVIEW_HINTS`: Live,
-Finals, Reissue, Encore, Presents, Screening, trailing `:` …). It only flags; rules stay manual.
-
-## "Corey's picks" (`config.toml` `[defaults].films`) — retired Nov 2026
-
-The list had gone stale, so `films = []`: every film starts selected and the "Corey's picks" button
-is hidden (it shows only while `default_films` is non-null). To revive, add case-insensitive regexes
-vs the normalized title (e.g. `'Alien\b'`, so "Aliens" doesn't match). If none of the picks plays
-today at a theater that starts on, the page pre-selects all films so the calendar never opens empty
-(`initialFilms()` in `public/app.js`). **Future idea:** generate the list from Corey's Substack RSS.
-
-## Theater notes
-
-- **Regal UA Colorado Center** shrank steadily from ~20 films / ~430 showtimes per scrape (July)
-  to ~5–6 films / ~115 (Nov 2026). The scraper and Fandango feed are healthy (Pavilions, same
-  scraper, is normal), so this looks like the theater itself running far fewer screens. Worth
-  re-checking on regmovies.com in a browser if it drops to zero (a closure would make it "fail").
-
-## Frontend notes (`public/`)
-
-Redesigned Nov 2026 (Letterboxd-inspired, not a copy): **one day at a time**, no calendar library.
-
-- **Day strip** (today … +14 days; the selected day is a brick "ticket stub"), theater chips
-  (default-on theaters from `config.toml`, with that day's counts), search. Sticky on desktop.
-- **Poster cards** for every film playing that day at the selected theaters: poster, title (TMDB
-  name), year · rating · runtime · format tags, then times
-  grouped by theater, and a "View on Letterboxd" link. **Posters: TMDB's first** (official art for
-  every matched film), then other theaters' art, **Fandango last**, then a typeset placeholder.
-  Fandango silently serves a grey "F" placeholder when it lacks art (it loads, so the error
-  fallback never fires — After Hours, The Only Living Pickpocket in New York); the scraper also drops
-  Fandango URLs that *are* the placeholder (`…/default_poster.png`).
-- **Search reaches beyond the selection:** matches at the selected theaters/day show first; any other
-  match (other theaters or days in the window) follows under "Also playing elsewhere" as compact
-  two-week cards (Fjord, only at AMC Westminster).
-- **Denver opening date** (`openings` in `data.json`, title → date; `pipeline.denver_openings()`):
-  the first day a film had a showtime at any theater we track. It's carried over each run and only
-  moves earlier, and entries for films no longer playing are forgotten after 400 days. Backfilled from
-  the `data.json` git history (June 2026 on). Used instead of TMDB's date (often a festival premiere
-  or a foreign release; Fatherland: Jun 19 vs Denver Nov 6) or Fandango's (national/NY-LA limited).
-- **Show: All · New releases · Repertory.** Repertory = the film first came out **more than two
-  years** before its Denver opening (`REPERTORY_DAYS` in `app.js`). Two years, not one: indie films
-  often reach Denver a year+ after a festival premiere (Tight & Nerdy). No release date → new.
-- **Sorts:** Newest (default: new releases by Denver **release week** — Friday-to-Thursday, with
-  Wed/Thu previews counted toward the Friday they lead into (`releaseWeek()`) — latest and upcoming
-  first, and **by Trending within a week**; then repertory by original release; special events last) · **Trending** (`film_meta.trend`: the average of a film's rank by TMDB
-  popularity and by 7-day English Wikipedia page views, `pipeline.add_trend()`; TMDB rank alone when
-  there's no article) · A–Z. Films without the data sort last.
-  No ratings (see above). New releases get an "Opening day" / "New this week" tag.
-- **"Next 2 weeks"** (first button in the day strip; `state.day === "all"`): the same cards for every
-  film with an upcoming showtime in the window, but each theater gets one line ("Nov 6–12 · 14
-  showings") and a "Next …" button for its soonest showing instead of every time. Upcoming
-  openings show "Opens Nov 19" and sit in the "Opening soon" group. No schedule column in this view
-  (`layout[data-mode="span"]`).
-- **Posters** are requested at 600 px (Fandango renderer) / TMDB `w500`: cards are ~220 CSS px, so
-  smaller art looked soft on 2x screens.
-- **Long showtime lists** clamp to ~300 px with a fade and a "Show all N theaters" button, shown
-  only when a card's list actually overflows (`clampVenues()`, re-run on resize).
-- **Toolbar:** Show and Sort sit on one line under the heading, split by a hairline; they wrap on phones.
-- **Schedule** of the day in time order (Morning/Afternoon/Evening/Late; earlier-today rows
-  hidden behind a button). Desktop: sticky right column. Phone: Films / Schedule toggle.
+- **Controls:** day strip ("Next 2 weeks", Today … +14 days; selected day is a brick ticket stub) ·
+  **Near [zip] 1 / 3 / 5 mi / All** (default **80218** — Sie and the Mayan come first and it holds the
+  metro's population-weighted center; **never saved**, so readers aren't tracked; straight-line
+  distance from Census zip centroids in `zips.json`, no travel times) · theater chips sorted by
+  distance with miles and that day's count (choices saved in `localStorage`) · search.
+- **Show:** All · New releases · Repertory. **Sort:** Newest · Trending · A–Z. Films without the
+  data sort last.
+  - **Newest:** new releases by Denver **release week** (Friday–Thursday; Wed/Thu previews count
+    toward the Friday they lead into, `releaseWeek()`), latest and upcoming first, **Trending within
+    a week**; then repertory by original release; special events last.
+- **Cards:** poster, TMDB title, year · rating · runtime · format tags · "Opening day" / "New this
+  week" / "Opens Nov 19", times grouped by theater, "View on Letterboxd". **Posters:** TMDB `w500`
+  first, other theaters' art next, Fandango (600 px renderer) last, then a typeset placeholder; the
+  scraper drops Fandango URLs that are the placeholder itself. Long lists clamp behind "Show all N
+  theaters" (`clampVenues()`).
+- **Schedule:** the day in time order (Morning/Afternoon/Evening/Late; earlier-today rows behind a
+  button). Desktop: sticky right column; phone: Films / Schedule toggle.
+- **Next 2 weeks:** **Now playing** (by the chosen sort) then **Opening soon** (soonest first); each
+  theater gets one line ("Nov 6–12 · 14 showings") and a "Next …" button. No schedule column.
+- **Search** also shows matches beyond the selected theaters/day under "Also playing elsewhere"
+  (e.g. Fjord, only at AMC Westminster).
 - **Tap a time** → sheet with Get tickets, Google, Outlook, Apple/.ics (ICS uses TZID America/Denver).
-- **Times read "h:mm am" / "h:mm pm"** everywhere ("3:00 pm": lowercase, no periods — Corey's
-  house style; `hm12()` in `app.js`). On screen the digits are tabular; "am/pm" sits in `.ap`
-  with normal figures.
-- **Near a zip code:** a zip box (default **80218** — it puts Sie and the Mayan, Denver's main indie
-  houses, first and holds the metro's population-weighted center; never saved — Corey doesn't want readers to
-  feel tracked) and **1 / 3 / 5 mi / All** buttons that switch on exactly the theaters within that
-  straight-line distance. Theater chips sort by distance and show miles. Zip centroids are
-  `public/zips.json` (Census 2024 ZCTA gazetteer, zips within 60 mi of downtown); theater `lat`/`lon`
-  live in `config.toml` and pass through to `data.json`. No travel times by design.
-- **Special events = no TMDB movie match** (`f.event` in `app.js`): TV episodes (Heated Rivalry),
-  double features, shorts programs, one-night events. They sort last under Newest, are excluded from
-  the New releases / Repertory filters (All only), and get no "New this week" tag. No hand list: a
-  real film, new or revival, always matches a TMDB movie with a release date.
-- **Tags on hold (Nov 2026):** "International" (original language isn't English) and "Indie" (English,
-  no major studio among TMDB's producers, budget < $40M or unlisted; `tmdb.classify()`) are still
-  computed into `film_meta` but **not shown**. Indie mislabeled classics (Rocky, The Apartment) and
-  borderline titles (Drummer Boy) because TMDB lists producers, not distributors; Corey wants both
-  tags or neither.
-- **Theater coverage checked Nov 2026 (from 80206):** within 10 mi, Fandango also has AMC Dine-In
-  Cherry Creek 8 (AAADR; skipped: 12 of 13 films duplicated elsewhere), Regal River Point, Cinemark
-  Bel Mar 16, Cinemark Century Aurora, Regal SouthGlenn (first-run multiplexes, not added). The
-  Esquire closed July 2024.
-- **"Next 2 weeks"** splits into **Now playing** (by the chosen sort) and **Opening soon** (soonest first).
-- Theater choices are saved in `localStorage` (try/catch; optional). "My list" was removed (Nov 2026):
-  little use, no sync between devices.
-- "Floating time": the ISO offset is ignored; Denver wall-clock shows for every viewer, and
-  "now" for dimming past showtimes is computed in America/Denver.
-- Dark warm palette (`--bg #15110e`, cream `--paper`, newsletter brick `--brick-fill #C0432B`);
-  Newsreader (titles) + Schibsted Grotesk (UI) from Google Fonts. Theater colors are only dots.
-- **Cache-busting:** `index.html` references `styles.css`/`app.js` with `?v=__ASSET_VERSION__`;
-  the deploy Action replaces `__ASSET_VERSION__` with the commit SHA so frontend changes show
-  immediately. `data.json` is fetched with `cache: "no-store"`. OG tags use a `__SITE_URL__`
-  placeholder the Action fills in.
+- **Times read "3:00 pm"** (lowercase, no periods; `hm12()`); digits tabular, "am/pm" in `.ap`.
+- "Floating time": the ISO offset is ignored, so every viewer sees Denver wall-clock times; "now"
+  (for dimming past showtimes) is computed in America/Denver.
+- **Footer** credits TMDB (logo + required notice) and Wikipedia, and links each theater's site.
+- **Cache-busting:** `index.html` loads `styles.css`/`app.js` with `?v=__ASSET_VERSION__`, replaced
+  with the commit SHA on deploy; `data.json` is fetched `no-store`. OG tags use `__SITE_URL__`.
 
-## Substack integration
+## Substack
 
-Substack can't embed interactive widgets, so the calendar is its own Pages site; the newsletter
-pastes the URL to get a preview card (OG title/description + `public/preview.png`) readers click
-through.
+Substack can't embed interactive widgets, so the site stands alone; the newsletter pastes the URL
+for a preview card (OG title/description + `public/preview.png`).

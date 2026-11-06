@@ -77,7 +77,7 @@ def main(argv: list[str] | None = None) -> int:
             else:
                 print(f"  MATCH | {t} | (not on TMDB)")
         for e in events[:12]:
-            tag = "all-day" if e["allDay"] else e["start"][11:16]
+            tag = "all-day" if e.get("allDay") else e["start"][11:16]
             print(f"  {e['start'][:10]} {tag:>7}  [{e['extendedProps']['theater']:<8}] {e['title']}")
         if len(events) > 12:
             print(f"  … and {len(events) - 12} more")

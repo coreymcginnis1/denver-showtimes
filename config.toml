@@ -166,16 +166,6 @@ drop = [
   '\bE-?sports?\b',
 ]
 
-# "Corey's picks": films pre-checked when the page first loads (others start unchecked but
-# available). Case-insensitive regex matched against the normalized title. An empty list
-# pre-selects ALL films and hides the "Corey's picks" button. If none of the picks plays today
-# at a theater that starts on, the page pre-selects all films so the calendar never opens empty
-# (see initialFilms() in public/app.js).
-# RETIRED for now (Nov 2026): the list had gone stale. To bring it back, put patterns in
-# `films`, e.g. 'Alien\b' (word boundary: matches "Alien" but not "Aliens"), 'Blow Out'.
-[defaults]
-films = []
-
 # Optional filters. Omit/comment out a key to disable that filter.
 # Leaving the whole section empty includes every showtime.
 [filters]

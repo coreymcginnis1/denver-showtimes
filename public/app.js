@@ -312,12 +312,12 @@
         (f.id ? '<a class="lb" href="https://letterboxd.com/tmdb/' + f.id + '/" target="_blank" rel="noopener">View on Letterboxd</a>' : "") +
         "</article>";
     };
-    if (all) {   // two groups: playing today (by the chosen sort), then everything else, soonest first
+    if (all) {   // two groups: now playing = has a showing today (by the chosen sort), then everything else, soonest first
       var firstDay = function (i) { return byFilm.get(i).reduce(function (m, s) { return s.d < m ? s.d : m; }, "9999"); };
       var now = ids.filter(function (i) { return firstDay(i) === days[0]; });
       var soon = ids.filter(function (i) { return firstDay(i) !== days[0]; });
       soon.sort(function (a, b) { return firstDay(a).localeCompare(firstDay(b)) || films[a].t.localeCompare(films[b].t); });
-      $("grid").innerHTML = (now.length ? '<h3 class="group">Playing today <span>' + now.length + "</span></h3>" +
+      $("grid").innerHTML = (now.length ? '<h3 class="group">Now playing <span>' + now.length + "</span></h3>" +
           '<div class="grid">' + now.map(function (i) { return cardHTML(i); }).join("") + "</div>" : "") +
         (soon.length ? '<h3 class="group">Coming soon <span>' + soon.length + "</span></h3>" +
           '<div class="grid">' + soon.map(function (i) { return cardHTML(i); }).join("") + "</div>" : "");

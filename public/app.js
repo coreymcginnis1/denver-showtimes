@@ -287,7 +287,7 @@
         .concat(fmts.map(function (x) { return '<span class="tag">' + esc(x) + "</span>"; })).join("");
       var since = f.opened ? dayDiff(f.opened, asSpan ? days[0] : state.day) : null;
       var fresh = f.rep || f.event || since == null ? "" : since < 0 ? "Opens " + shortDate(f.opened)
-        : since === 0 ? "Opening day" : since <= 6 ? "New this week" : "";
+        : since <= 6 ? "Opening week" : "";
       if (fresh) meta += '<span class="tag fresh">' + fresh + "</span>";
       // "Indie" and "International" tags are on hold (Nov 2026): the Indie guess (TMDB lists
       // producers, not distributors) wasn't reliable, and Corey wants both or neither. The data

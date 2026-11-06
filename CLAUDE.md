@@ -200,8 +200,8 @@ cream `--paper`, newsletter brick `--brick-fill #C0432B`); Newsreader (titles) +
   - **Newest:** new releases by Denver **release week** (Friday–Thursday; Wed/Thu previews count
     toward the Friday they lead into, `releaseWeek()`), latest and upcoming first, **Trending within
     a week**; then repertory by original release; special events last.
-- **Cards:** poster, TMDB title, year · rating · runtime · format tags · "Opening day" / "New this
-  week" / "Opens Nov 19", times grouped by theater, "View on Letterboxd". **Posters:** TMDB `w500`
+- **Cards:** poster, TMDB title, year · rating · runtime · format tags · "Opening week" (first
+  7 days in Denver) / "Opens Nov 19", times grouped by theater, "View on Letterboxd". **Posters:** TMDB `w500`
   first, other theaters' art next, Fandango (600 px renderer) last, then a typeset placeholder; the
   scraper drops Fandango URLs that are the placeholder itself. Long lists clamp behind "Show all N
   theaters" (`clampVenues()`).

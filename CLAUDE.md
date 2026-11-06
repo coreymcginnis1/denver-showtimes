@@ -95,7 +95,9 @@ list. They appear in the Action run's summary. See `pipeline.diff_new_titles()`;
 ## "Corey's picks" (`config.toml` `[defaults].films`)
 
 Films pre-checked on first load (case-insensitive regex vs the normalized title; empty list =
-pre-select all). **Future idea:** auto-generate this allowlist by scraping Corey's Substack
+pre-select all). If none of the picks plays today at a theater that starts on, the page pre-selects
+all films instead, so the calendar never opens empty (`initialFilms()` in `public/app.js`; it runs
+in the browser because "today" moves on all week). **Future idea:** auto-generate this allowlist by scraping Corey's Substack
 newsletter (RSS) rather than hand-editing.
 
 ## Frontend notes (`public/`)

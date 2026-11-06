@@ -29,8 +29,7 @@
         enabledTheaters = new Set(data.theaters
           .filter(function (t) { return t.default_on !== false; })
           .map(function (t) { return t.key; }));
-        // default_films (allowlist) pre-selects a subset; null means select everything.
-        enabledFilms = data.default_films ? new Set(data.default_films) : new Set(data.films);
+        enabledFilms = initialFilms();
         renderUpdated();
         renderTheaterChips();
         renderFilmList();
@@ -40,6 +39,20 @@
       .catch(function (e) {
         $("calendar").innerHTML = "<p style='color:#9a3412'>Couldn't load showtimes: " + e + "</p>";
       });
+  }
+
+  // Corey's picks (default_films; null means every film), unless none of them plays today at a
+  // theater that starts on. The calendar opens on today, so that would leave it empty: start
+  // with every film instead. Checked here, not in the scraper, because "today" moves on all
+  // week while the data is only refreshed on Thursdays. The picks button still selects the picks.
+  function initialFilms() {
+    var picks = new Set(DATA.default_films || DATA.films);
+    var today = ymd(new Date());
+    var playingToday = DATA.events.some(function (e) {
+      return picks.has(e.title) && enabledTheaters.has(e.extendedProps.theater) &&
+        e.start.slice(0, 10) === today;
+    });
+    return playingToday ? picks : new Set(DATA.films);
   }
 
   function theaterMeta(key) {

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-06T09:10:16.296433-07:00",
+  "generated_at": "2026-11-06T10:32:18.751996-07:00",
   "timezone": "America/Denver",
   "theaters": [
     {
@@ -53,7 +53,6 @@
     "American Movie",
     "American Sniper",
     "As Above, So Below",
-    "Big Dose of Reality Screening: Join the Club",
     "Blow Out",
     "Bound",
     "Breeder",
@@ -65,18 +64,16 @@
     "Club Kid",
     "Criss Cross",
     "Crocodile Dose",
-    "Crunchyroll Anime Nights: Dive In Wonderland",
-    "Dive in Wonderland",
+    "Dive In Wonderland",
     "Drive",
     "Drummer Boy",
+    "Dune: Part One",
     "Dune: Part One & Dune: Part Two Double Feature",
-    "Dune: Part One Reissue",
-    "Dune: Part Two Reissue",
+    "Dune: Part Two",
     "Ebenezer",
     "Everest: The Other Side",
     "Fatherland",
     "Festive Fun with Peppa Cinema Experience",
-    "Final Dose of Reality Screening: Human Shield",
     "Fjord",
     "Friday The 13th Part 4",
     "Ghost Soldier",
@@ -91,14 +88,15 @@
     "Heated Rivalry: Episodes 5 & 6",
     "Henry: Portrait of a Serial Killer",
     "How to Rob a Bank",
+    "Human Shield",
     "I Play Rocky",
-    "Initial Dose of Reality: Tight & Nerdy",
     "Jimmy",
+    "Join the Club",
+    "Joshua Live!",
     "Ken Russell's The Devils",
     "Kika",
     "Killer of Sheep",
     "La Bola Negra",
-    "League of Legends Worlds 26 - Finals in Theater",
     "Littermates",
     "Married To The Mob",
     "Mouse",
@@ -121,14 +119,13 @@
     "Sense and Sensibility",
     "Shorts Package: Mirrors",
     "Shorts Package: Truth and Consequences",
-    "Sight & Sound Presents: Joshua Live!",
     "Smokin' Aces",
     "Soul Patrol",
     "Southland Tales",
     "Stray Kids World Tour <RUN IT> Live Viewing",
     "Street Fighter",
     "Summer Holidays",
-    "The Angry Birds Movie:",
+    "The Angry Birds Movie",
     "The Cat in the Hat",
     "The Cook, The Thief, His Wife, & Her Lover",
     "The Deer Hunter",
@@ -140,7 +137,7 @@
     "The Killers",
     "The Last Critic",
     "The Magnificent Ambersons",
-    "The Metropolitan Opera: Carmen Encore",
+    "The Metropolitan Opera: Carmen",
     "The Mongoose",
     "The Mosquito Bowl",
     "The Odyssey",
@@ -148,6 +145,7 @@
     "The Searchers",
     "The Skin I Live In",
     "Thief",
+    "Tight & Nerdy",
     "Under the Skin",
     "Victorian Psycho",
     "Visitor Q",
@@ -161,287 +159,9 @@
     "You Can See Everything",
     "Zathura"
   ],
-  "default_films": [
-    "Blow Out"
-  ],
+  "default_films": null,
   "stale_theaters": [],
   "events": [
-    {
-      "id": "ms_63ba454c5f58fc51",
-      "title": "Drummer Boy",
-      "start": "2026-11-06T09:45:00-07:00",
-      "allDay": false,
-      "backgroundColor": "#6C5CE7",
-      "borderColor": "#6C5CE7",
-      "extendedProps": {
-        "theater": "amc_westminster",
-        "theaterName": "AMC Westminster Promenade 24",
-        "screen": null,
-        "fmt": null,
-        "ticketUrl": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-11-06%2B09%3A45&from=mov_det_showtimes&source=desktop&mid=246728&tid=AAECN&dfam=webbrowser&showtimehashcode=v2-cad2138ec8d9b1dc358414e7a9df2959a827ad46be1e444918e5d991983ce67a",
-        "filmUrl": null,
-        "poster": "https://images.fandango.com/ImageRenderer/300/0/redesign/static/img/default_poster.png/0/images/MasterRepository/fandango/246728/DRB_KEY_AngelStudios_Hero_DIGI_1Sht_27x40_72_138_F6C.jpg",
-        "rating": "PG13",
-        "runtime": 129,
-        "director": null,
-        "year": null,
-        "note": null
-      },
-      "end": "2026-11-06T11:54:00-07:00"
-    },
-    {
-      "id": "ms_0f3e1c0de2628a67",
-      "title": "Godzilla Minus Zero",
-      "start": "2026-11-06T09:45:00-07:00",
-      "allDay": false,
-      "backgroundColor": "#6C5CE7",
-      "borderColor": "#6C5CE7",
-      "extendedProps": {
-        "theater": "amc_westminster",
-        "theaterName": "AMC Westminster Promenade 24",
-        "screen": null,
-        "fmt": "Premium Format",
-        "ticketUrl": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-11-06%2B09%3A45&from=mov_det_showtimes&source=desktop&mid=247802&tid=AAECN&dfam=webbrowser&showtimehashcode=v2-b4da97de211b30b325a5534884a32e2bb898dc1832911826d4a82cacc2aaa606",
-        "filmUrl": null,
-        "poster": "https://images.fandango.com/ImageRenderer/300/0/redesign/static/img/default_poster.png/0/images/MasterRepository/fandango/243973/GMZ_KV-1_GKIDS_Web_1350x2000_EN_01AA.jpg",
-        "rating": "R",
-        "runtime": 135,
-        "director": null,
-        "year": null,
-        "note": null
-      },
-      "end": "2026-11-06T12:00:00-07:00"
-    },
-    {
-      "id": "ms_002e946f866c191c",
-      "title": "The Only Living Pickpocket in New York",
-      "start": "2026-11-06T09:45:00-07:00",
-      "allDay": false,
-      "backgroundColor": "#6C5CE7",
-      "borderColor": "#6C5CE7",
-      "extendedProps": {
-        "theater": "amc_westminster",
-        "theaterName": "AMC Westminster Promenade 24",
-        "screen": null,
-        "fmt": null,
-        "ticketUrl": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-11-06%2B09%3A45&from=mov_det_showtimes&source=desktop&mid=246680&tid=AAECN&dfam=webbrowser&showtimehashcode=v2-9ec042a15c625383846dc27c3d6bd868e5ff7cc746f3a86fc4e425498e4962f5",
-        "filmUrl": null,
-        "poster": "https://images.fandango.com/ImageRenderer/300/0/redesign/static/img/default_poster.png/0/images/MasterRepository/fandango/246680/the%20Only%20Living%20Pickpocket%20in%20New%20York.jpg",
-        "rating": "R",
-        "runtime": 88,
-        "director": null,
-        "year": null,
-        "note": null
-      },
-      "end": "2026-11-06T11:13:00-07:00"
-    },
-    {
-      "id": "ms_f9a9b2cb484eadc5",
-      "title": "You Can See Everything",
-      "start": "2026-11-06T09:45:00-07:00",
-      "allDay": false,
-      "backgroundColor": "#6C5CE7",
-      "borderColor": "#6C5CE7",
-      "extendedProps": {
-        "theater": "amc_westminster",
-        "theaterName": "AMC Westminster Promenade 24",
-        "screen": null,
-        "fmt": null,
-        "ticketUrl": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-11-06%2B09%3A45&from=mov_det_showtimes&source=desktop&mid=247346&tid=AAECN&dfam=webbrowser&showtimehashcode=v2-d80b3135be25d04a20bba4ddd92dd92e96a12f9417921970d3066e772a7444d4",
-        "filmUrl": null,
-        "poster": "https://images.fandango.com/ImageRenderer/300/0/redesign/static/img/default_poster.png/0/images/MasterRepository/fandango/247346/V8_404_DIGITAL%20FINAL_2025x3000_V4.jpg",
-        "rating": "R",
-        "runtime": 174,
-        "director": null,
-        "year": null,
-        "note": null
-      },
-      "end": "2026-11-06T12:39:00-07:00"
-    },
-    {
-      "id": "ms_59d36b24a1d5c22a",
-      "title": "The Cat in the Hat",
-      "start": "2026-11-06T09:50:00-07:00",
-      "allDay": false,
-      "backgroundColor": "#6C5CE7",
-      "borderColor": "#6C5CE7",
-      "extendedProps": {
-        "theater": "amc_westminster",
-        "theaterName": "AMC Westminster Promenade 24",
-        "screen": null,
-        "fmt": "Premium Format",
-        "ticketUrl": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-11-06%2B09%3A50&from=mov_det_showtimes&source=desktop&mid=241291&tid=AAECN&dfam=webbrowser&showtimehashcode=v2-53e6aeb29bcaafdeedf24406771bf04654067c01f885f6e62a29b4bd795ad639",
-        "filmUrl": null,
-        "poster": "https://images.fandango.com/ImageRenderer/300/0/redesign/static/img/default_poster.png/0/images/MasterRepository/fandango/241291/CATHAT_VERT_MAIN_2764x4096_DOM.jpg",
-        "rating": "PG",
-        "runtime": 114,
-        "director": null,
-        "year": null,
-        "note": null
-      },
-      "end": "2026-11-06T11:44:00-07:00"
-    },
-    {
-      "id": "ms_a36493f8ff874a83",
-      "title": "The Mosquito Bowl",
-      "start": "2026-11-06T09:50:00-07:00",
-      "allDay": false,
-      "backgroundColor": "#6C5CE7",
-      "borderColor": "#6C5CE7",
-      "extendedProps": {
-        "theater": "amc_westminster",
-        "theaterName": "AMC Westminster Promenade 24",
-        "screen": null,
-        "fmt": null,
-        "ticketUrl": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-11-06%2B09%3A50&from=mov_det_showtimes&source=desktop&mid=247868&tid=AAECN&dfam=webbrowser&showtimehashcode=v2-c39a3c6f0f840bd3fdd0a7cc38e75312ade919f33d515a9f2ccd9a9d19911995",
-        "filmUrl": null,
-        "poster": "https://images.fandango.com/ImageRenderer/300/0/redesign/static/img/default_poster.png/0/images/MasterRepository/fandango/247868/en_us_tmb-_glory_main_glory_vertical_27x40_rgb_onlyintheaters_1.jpg",
-        "rating": "R",
-        "runtime": 127,
-        "director": null,
-        "year": null,
-        "note": null
-      },
-      "end": "2026-11-06T11:57:00-07:00"
-    },
-    {
-      "id": "ms_d4e4972309054c95",
-      "title": "Wildwood",
-      "start": "2026-11-06T09:50:00-07:00",
-      "allDay": false,
-      "backgroundColor": "#6C5CE7",
-      "borderColor": "#6C5CE7",
-      "extendedProps": {
-        "theater": "amc_westminster",
-        "theaterName": "AMC Westminster Promenade 24",
-        "screen": null,
-        "fmt": null,
-        "ticketUrl": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-11-06%2B09%3A50&from=mov_det_showtimes&source=desktop&mid=246438&tid=AAECN&dfam=webbrowser&showtimehashcode=v2-ac1330646037236b61745faeda62019b7c71b18f62c0ff57ddf4064e2b0c6d0e",
-        "filmUrl": null,
-        "poster": "https://images.fandango.com/ImageRenderer/300/0/redesign/static/img/default_poster.png/0/images/MasterRepository/fandango/246438/WILDWOOD-OneSheet-Courtes-LAIKA.jpg",
-        "rating": "PG13",
-        "runtime": 130,
-        "director": null,
-        "year": null,
-        "note": null
-      },
-      "end": "2026-11-06T12:00:00-07:00"
-    },
-    {
-      "id": "ms_0cc42add84776e76",
-      "title": "The Cat in the Hat",
-      "start": "2026-11-06T10:00:00-07:00",
-      "allDay": false,
-      "backgroundColor": "#2E5EAA",
-      "borderColor": "#2E5EAA",
-      "extendedProps": {
-        "theater": "amc",
-        "theaterName": "AMC 9+CO 10",
-        "screen": null,
-        "fmt": "Premium Format",
-        "ticketUrl": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-11-06%2B10%3A00&from=mov_det_showtimes&source=desktop&mid=241291&tid=AAYUA&dfam=webbrowser&showtimehashcode=v2-70e19cc864a6d32b234354fe447fc7a1105b1a885e3c40280b0d92b3f8dfb57c",
-        "filmUrl": null,
-        "poster": "https://images.fandango.com/ImageRenderer/300/0/redesign/static/img/default_poster.png/0/images/MasterRepository/fandango/241291/CATHAT_VERT_MAIN_2764x4096_DOM.jpg",
-        "rating": "PG",
-        "runtime": 114,
-        "director": null,
-        "year": null,
-        "note": null
-      },
-      "end": "2026-11-06T11:54:00-07:00"
-    },
-    {
-      "id": "ms_8efd80e6a9d47cec",
-      "title": "Wild Horse Nine",
-      "start": "2026-11-06T10:00:00-07:00",
-      "allDay": false,
-      "backgroundColor": "#2E5EAA",
-      "borderColor": "#2E5EAA",
-      "extendedProps": {
-        "theater": "amc",
-        "theaterName": "AMC 9+CO 10",
-        "screen": null,
-        "fmt": null,
-        "ticketUrl": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-11-06%2B10%3A00&from=mov_det_showtimes&source=desktop&mid=247109&tid=AAYUA&dfam=webbrowser&showtimehashcode=v2-5db3a155aa8ffd81f85d6d212c0f13efe3eeebb3962191341ce71d67cef973d7",
-        "filmUrl": null,
-        "poster": "https://images.fandango.com/ImageRenderer/300/0/redesign/static/img/default_poster.png/0/images/MasterRepository/fandango/247109/WH9_1Sheet_27x40_PAYOFF_US_MECH_FIN1_wTYPE.jpg",
-        "rating": "R",
-        "runtime": 118,
-        "director": null,
-        "year": null,
-        "note": null
-      },
-      "end": "2026-11-06T11:58:00-07:00"
-    },
-    {
-      "id": "ms_a7725ce2b9152e6f",
-      "title": "Clayface",
-      "start": "2026-11-06T10:00:00-07:00",
-      "allDay": false,
-      "backgroundColor": "#6C5CE7",
-      "borderColor": "#6C5CE7",
-      "extendedProps": {
-        "theater": "amc_westminster",
-        "theaterName": "AMC Westminster Promenade 24",
-        "screen": null,
-        "fmt": null,
-        "ticketUrl": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-11-06%2B10%3A00&from=mov_det_showtimes&source=desktop&mid=244768&tid=AAECN&dfam=webbrowser&showtimehashcode=v2-d224cf1d6394623a0eca3997660402594ffd1c9d164a9adab04499d6695b2360",
-        "filmUrl": null,
-        "poster": "https://images.fandango.com/ImageRenderer/300/0/redesign/static/img/default_poster.png/0/images/MasterRepository/fandango/244768/CLAY_VERT_MAIN_2764x4096_DOM.jpg",
-        "rating": "R",
-        "runtime": 108,
-        "director": null,
-        "year": null,
-        "note": null
-      },
-      "end": "2026-11-06T11:48:00-07:00"
-    },
-    {
-      "id": "ms_8ed8eeb88c1e7010",
-      "title": "Everest: The Other Side",
-      "start": "2026-11-06T10:00:00-07:00",
-      "allDay": false,
-      "backgroundColor": "#6C5CE7",
-      "borderColor": "#6C5CE7",
-      "extendedProps": {
-        "theater": "amc_westminster",
-        "theaterName": "AMC Westminster Promenade 24",
-        "screen": null,
-        "fmt": null,
-        "ticketUrl": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-11-06%2B10%3A00&from=mov_det_showtimes&source=desktop&mid=246958&tid=AAECN&dfam=webbrowser&showtimehashcode=v2-f6e53e9e64466df8dbdd122192d00eb83e7acc981f983f3441d520c122722e4d",
-        "filmUrl": null,
-        "poster": "https://images.fandango.com/ImageRenderer/300/0/redesign/static/img/default_poster.png/0/images/MasterRepository/fandango/246958/EVEREST-TOS_KA_DIGITAL_1SHT_TSR_NO_IMAX_sRGB_V1.jpg",
-        "rating": "PG13",
-        "runtime": 115,
-        "director": null,
-        "year": null,
-        "note": null
-      },
-      "end": "2026-11-06T11:55:00-07:00"
-    },
-    {
-      "id": "ms_0a3812f245c9e29a",
-      "title": "You Can See Everything",
-      "start": "2026-11-06T10:10:00-07:00",
-      "allDay": false,
-      "backgroundColor": "#2E5EAA",
-      "borderColor": "#2E5EAA",
-      "extendedProps": {
-        "theater": "amc",
-        "theaterName": "AMC 9+CO 10",
-        "screen": null,
-        "fmt": null,
-        "ticketUrl": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-11-06%2B10%3A10&from=mov_det_showtimes&source=desktop&mid=247346&tid=AAYUA&dfam=webbrowser&showtimehashcode=v2-b8f81f797e85168ef79a236c957d13446ba24cd218e4b6949b43a007399181fd",
-        "filmUrl": null,
-        "poster": "https://images.fandango.com/ImageRenderer/300/0/redesign/static/img/default_poster.png/0/images/MasterRepository/fandango/247346/V8_404_DIGITAL%20FINAL_2025x3000_V4.jpg",
-        "rating": "R",
-        "runtime": 174,
-        "director": null,
-        "year": null,
-        "note": null
-      },
-      "end": "2026-11-06T13:04:00-07:00"
-    },
     {
       "id": "ms_c6c59131d708c3fd",
       "title": "La Bola Negra",
@@ -949,8 +669,8 @@
       "end": "2026-11-06T14:15:00-07:00"
     },
     {
-      "id": "ms_feac6c55d22bfedb",
-      "title": "Sight & Sound Presents: Joshua Live!",
+      "id": "ms_d32b253836ded3df",
+      "title": "Joshua Live!",
       "start": "2026-11-06T12:00:00-07:00",
       "allDay": false,
       "backgroundColor": "#6C5CE7",
@@ -7481,8 +7201,8 @@
       "end": "2026-11-07T14:15:00-07:00"
     },
     {
-      "id": "ms_076aca995065e054",
-      "title": "Sight & Sound Presents: Joshua Live!",
+      "id": "ms_29c83dab7cf4a16d",
+      "title": "Joshua Live!",
       "start": "2026-11-07T12:00:00-07:00",
       "allDay": false,
       "backgroundColor": "#6C5CE7",
@@ -13783,8 +13503,8 @@
       "end": "2026-11-08T14:15:00-07:00"
     },
     {
-      "id": "ms_aecafb20ca067ee6",
-      "title": "Sight & Sound Presents: Joshua Live!",
+      "id": "ms_7d34085550bbb072",
+      "title": "Joshua Live!",
       "start": "2026-11-08T12:00:00-07:00",
       "allDay": false,
       "backgroundColor": "#6C5CE7",
@@ -18958,6 +18678,29 @@
       "end": "2026-11-09T14:15:00-07:00"
     },
     {
+      "id": "ms_2cc4e47160f2f485",
+      "title": "Joshua Live!",
+      "start": "2026-11-09T12:00:00-07:00",
+      "allDay": false,
+      "backgroundColor": "#6C5CE7",
+      "borderColor": "#6C5CE7",
+      "extendedProps": {
+        "theater": "amc_westminster",
+        "theaterName": "AMC Westminster Promenade 24",
+        "screen": null,
+        "fmt": null,
+        "ticketUrl": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-11-09%2B12%3A00&from=mov_det_showtimes&source=desktop&mid=247781&tid=AAECN&dfam=webbrowser&showtimehashcode=v2-dc2632dc4ae5b8f3c336862bfd61a4037152da777544f8cc5f2d2735efb9dd23",
+        "filmUrl": null,
+        "poster": "https://images.fandango.com/ImageRenderer/300/0/redesign/static/img/default_poster.png/0/images/MasterRepository/fandango/247781/2027_JOSHLive_Insta-Story-Pre_FINAL.jpg",
+        "rating": "Not Rated",
+        "runtime": 135,
+        "director": null,
+        "year": null,
+        "note": null
+      },
+      "end": "2026-11-09T14:15:00-07:00"
+    },
+    {
       "id": "ms_67b180f1fac94fb3",
       "title": "Resident Evil",
       "start": "2026-11-09T12:00:00-07:00",
@@ -18979,29 +18722,6 @@
         "note": null
       },
       "end": "2026-11-09T13:34:00-07:00"
-    },
-    {
-      "id": "ms_70697238f5b96208",
-      "title": "Sight & Sound Presents: Joshua Live!",
-      "start": "2026-11-09T12:00:00-07:00",
-      "allDay": false,
-      "backgroundColor": "#6C5CE7",
-      "borderColor": "#6C5CE7",
-      "extendedProps": {
-        "theater": "amc_westminster",
-        "theaterName": "AMC Westminster Promenade 24",
-        "screen": null,
-        "fmt": null,
-        "ticketUrl": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-11-09%2B12%3A00&from=mov_det_showtimes&source=desktop&mid=247781&tid=AAECN&dfam=webbrowser&showtimehashcode=v2-dc2632dc4ae5b8f3c336862bfd61a4037152da777544f8cc5f2d2735efb9dd23",
-        "filmUrl": null,
-        "poster": "https://images.fandango.com/ImageRenderer/300/0/redesign/static/img/default_poster.png/0/images/MasterRepository/fandango/247781/2027_JOSHLive_Insta-Story-Pre_FINAL.jpg",
-        "rating": "Not Rated",
-        "runtime": 135,
-        "director": null,
-        "year": null,
-        "note": null
-      },
-      "end": "2026-11-09T14:15:00-07:00"
     },
     {
       "id": "ms_95ab7d9e26b91e04",
@@ -23857,8 +23577,8 @@
       "end": "2026-11-10T14:15:00-07:00"
     },
     {
-      "id": "ms_e01a050d66692605",
-      "title": "Sight & Sound Presents: Joshua Live!",
+      "id": "ms_bc9047067e317d17",
+      "title": "Joshua Live!",
       "start": "2026-11-10T12:00:00-07:00",
       "allDay": false,
       "backgroundColor": "#6C5CE7",
@@ -29032,8 +28752,8 @@
       "end": "2026-11-11T14:15:00-07:00"
     },
     {
-      "id": "ms_de6bdc50b0cdd1bb",
-      "title": "Sight & Sound Presents: Joshua Live!",
+      "id": "ms_1c95f28ba99b2bc0",
+      "title": "Joshua Live!",
       "start": "2026-11-11T12:00:00-07:00",
       "allDay": false,
       "backgroundColor": "#6C5CE7",
@@ -35863,8 +35583,8 @@
       "end": "2026-11-12T20:49:00-07:00"
     },
     {
-      "id": "ms_db60b007e939defd",
-      "title": "Initial Dose of Reality: Tight & Nerdy",
+      "id": "ms_7791f3df83ce4fe6",
+      "title": "Tight & Nerdy",
       "start": "2026-11-12T19:00:00-07:00",
       "allDay": false,
       "backgroundColor": "#E4572E",
@@ -36898,8 +36618,8 @@
       "end": "2026-11-13T14:00:00-07:00"
     },
     {
-      "id": "ms_761cd63d3fd09eb5",
-      "title": "The Angry Birds Movie:",
+      "id": "ms_449555b298438f4a",
+      "title": "The Angry Birds Movie",
       "start": "2026-11-13T12:00:00-07:00",
       "allDay": false,
       "backgroundColor": "#6C5CE7",
@@ -37312,8 +37032,8 @@
       "end": "2026-11-13T16:00:00-07:00"
     },
     {
-      "id": "ms_6af081123a7d9eec",
-      "title": "The Angry Birds Movie:",
+      "id": "ms_d997b2670afd3a7a",
+      "title": "The Angry Birds Movie",
       "start": "2026-11-13T14:40:00-07:00",
       "allDay": false,
       "backgroundColor": "#6C5CE7",
@@ -38876,31 +38596,8 @@
       "end": "2026-11-14T14:00:00-07:00"
     },
     {
-      "id": "ms_51d129295d3393ad",
-      "title": "League of Legends Worlds 26 - Finals in Theater",
-      "start": "2026-11-14T12:00:00-07:00",
-      "allDay": false,
-      "backgroundColor": "#6C5CE7",
-      "borderColor": "#6C5CE7",
-      "extendedProps": {
-        "theater": "amc_westminster",
-        "theaterName": "AMC Westminster Promenade 24",
-        "screen": null,
-        "fmt": null,
-        "ticketUrl": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-11-14%2B12%3A00&from=mov_det_showtimes&source=desktop&mid=247981&tid=AAECN&dfam=webbrowser&showtimehashcode=v2-d43d51542773c492a4285967c9e30dcbfee8c8ce24055994cb0a2b50e365205f",
-        "filmUrl": null,
-        "poster": "https://images.fandango.com/ImageRenderer/300/0/redesign/static/img/default_poster.png/0/images.fandango.com/redesign/static/img/default_poster.png",
-        "rating": "Not Rated",
-        "runtime": 420,
-        "director": null,
-        "year": null,
-        "note": null
-      },
-      "end": "2026-11-14T19:00:00-07:00"
-    },
-    {
-      "id": "ms_ccd7c546ccf9dba1",
-      "title": "The Angry Birds Movie:",
+      "id": "ms_5a112bf6e2a88426",
+      "title": "The Angry Birds Movie",
       "start": "2026-11-14T12:00:00-07:00",
       "allDay": false,
       "backgroundColor": "#6C5CE7",
@@ -39037,8 +38734,8 @@
       "end": "2026-11-14T14:45:00-07:00"
     },
     {
-      "id": "ms_684c5c63dede83a3",
-      "title": "The Metropolitan Opera: Carmen Encore",
+      "id": "ms_95efdf3e6d20c488",
+      "title": "The Metropolitan Opera: Carmen",
       "start": "2026-11-14T13:00:00-07:00",
       "allDay": false,
       "backgroundColor": "#6C5CE7",
@@ -39060,8 +38757,8 @@
       "end": "2026-11-14T16:02:00-07:00"
     },
     {
-      "id": "ms_3b0e1df3b46d0af0",
-      "title": "The Metropolitan Opera: Carmen Encore",
+      "id": "ms_f5e217ebef4fc11d",
+      "title": "The Metropolitan Opera: Carmen",
       "start": "2026-11-14T13:00:00-07:00",
       "allDay": false,
       "backgroundColor": "#4C9F70",
@@ -39405,8 +39102,8 @@
       "end": "2026-11-14T15:55:00-07:00"
     },
     {
-      "id": "ms_6e152bcf53dd20fb",
-      "title": "Dune: Part One Reissue",
+      "id": "ms_a75ee4901e0a088b",
+      "title": "Dune: Part One",
       "start": "2026-11-14T14:30:00-07:00",
       "allDay": false,
       "backgroundColor": "#6C5CE7",
@@ -39428,8 +39125,8 @@
       "end": "2026-11-14T17:05:00-07:00"
     },
     {
-      "id": "ms_9e3064727c3ef782",
-      "title": "The Angry Birds Movie:",
+      "id": "ms_33aab6940a8e9d9e",
+      "title": "The Angry Birds Movie",
       "start": "2026-11-14T14:40:00-07:00",
       "allDay": false,
       "backgroundColor": "#6C5CE7",
@@ -39934,8 +39631,8 @@
       "end": "2026-11-14T20:00:00-07:00"
     },
     {
-      "id": "ms_07529be0d881ce06",
-      "title": "Dune: Part Two Reissue",
+      "id": "ms_39ca2012f7455845",
+      "title": "Dune: Part Two",
       "start": "2026-11-14T18:30:00-07:00",
       "allDay": false,
       "backgroundColor": "#6C5CE7",
@@ -40003,8 +39700,8 @@
       "end": "2026-11-14T20:30:00-07:00"
     },
     {
-      "id": "ms_c4932bcde37cf1f9",
-      "title": "Big Dose of Reality Screening: Join the Club",
+      "id": "ms_902a76efc107efe8",
+      "title": "Join the Club",
       "start": "2026-11-14T18:30:00-07:00",
       "allDay": false,
       "backgroundColor": "#E4572E",
@@ -40808,8 +40505,8 @@
       "end": "2026-11-15T14:00:00-07:00"
     },
     {
-      "id": "ms_dca69c043a286ce3",
-      "title": "The Angry Birds Movie:",
+      "id": "ms_911dee32bba25455",
+      "title": "The Angry Birds Movie",
       "start": "2026-11-15T12:00:00-07:00",
       "allDay": false,
       "backgroundColor": "#6C5CE7",
@@ -41222,8 +40919,8 @@
       "end": "2026-11-15T15:55:00-07:00"
     },
     {
-      "id": "ms_dd3d9bf736f145ad",
-      "title": "Dune: Part Two Reissue",
+      "id": "ms_74af07fb92f70800",
+      "title": "Dune: Part Two",
       "start": "2026-11-15T14:30:00-07:00",
       "allDay": false,
       "backgroundColor": "#6C5CE7",
@@ -41245,8 +40942,8 @@
       "end": "2026-11-15T17:27:00-07:00"
     },
     {
-      "id": "ms_9ad2d081f2e7ec2a",
-      "title": "The Angry Birds Movie:",
+      "id": "ms_fa7b5a5fdcac084e",
+      "title": "The Angry Birds Movie",
       "start": "2026-11-15T14:40:00-07:00",
       "allDay": false,
       "backgroundColor": "#6C5CE7",
@@ -41705,8 +41402,8 @@
       "end": "2026-11-15T19:10:00-07:00"
     },
     {
-      "id": "ms_2c7a8b266b8f7596",
-      "title": "Final Dose of Reality Screening: Human Shield",
+      "id": "ms_8b77f4d0b4f5c914",
+      "title": "Human Shield",
       "start": "2026-11-15T17:10:00-07:00",
       "allDay": false,
       "backgroundColor": "#E4572E",
@@ -41797,8 +41494,8 @@
       "end": "2026-11-15T19:45:00-07:00"
     },
     {
-      "id": "ms_1bd56a031ef47eb1",
-      "title": "Dune: Part One Reissue",
+      "id": "ms_f34ff3211bfc1dc1",
+      "title": "Dune: Part One",
       "start": "2026-11-15T18:30:00-07:00",
       "allDay": false,
       "backgroundColor": "#6C5CE7",
@@ -42487,8 +42184,8 @@
       "end": "2026-11-16T14:55:00-07:00"
     },
     {
-      "id": "ms_c25beaf828592965",
-      "title": "The Angry Birds Movie:",
+      "id": "ms_0f6d14309918496d",
+      "title": "The Angry Birds Movie",
       "start": "2026-11-16T13:00:00-07:00",
       "allDay": false,
       "backgroundColor": "#6C5CE7",
@@ -42694,8 +42391,8 @@
       "end": "2026-11-16T16:00:00-07:00"
     },
     {
-      "id": "ms_583e23661f6841e2",
-      "title": "The Angry Birds Movie:",
+      "id": "ms_2e6624e5d7755cc8",
+      "title": "The Angry Birds Movie",
       "start": "2026-11-16T14:00:00-07:00",
       "allDay": false,
       "backgroundColor": "#6C5CE7",
@@ -42832,8 +42529,8 @@
       "end": "2026-11-16T15:50:00-07:00"
     },
     {
-      "id": "ms_760ef5913bec041a",
-      "title": "Dune: Part One Reissue",
+      "id": "ms_1821e1a935b128a9",
+      "title": "Dune: Part One",
       "start": "2026-11-16T14:30:00-07:00",
       "allDay": false,
       "backgroundColor": "#6C5CE7",
@@ -43246,8 +42943,8 @@
       "end": "2026-11-16T19:45:00-07:00"
     },
     {
-      "id": "ms_ecac6fe50fa98798",
-      "title": "Dune: Part Two Reissue",
+      "id": "ms_75826ac5a36978e7",
+      "title": "Dune: Part Two",
       "start": "2026-11-16T18:30:00-07:00",
       "allDay": false,
       "backgroundColor": "#6C5CE7",
@@ -43338,8 +43035,8 @@
       "end": "2026-11-16T20:00:00-07:00"
     },
     {
-      "id": "ms_70cde9810f7e1273",
-      "title": "Crunchyroll Anime Nights: Dive In Wonderland",
+      "id": "ms_b1f7970196ba49fe",
+      "title": "Dive In Wonderland",
       "start": "2026-11-16T19:00:00-07:00",
       "allDay": false,
       "backgroundColor": "#6C5CE7",
@@ -43430,8 +43127,8 @@
       "end": "2026-11-16T21:10:00-07:00"
     },
     {
-      "id": "ms_bae9e32cfa4dc299",
-      "title": "Dive in Wonderland",
+      "id": "ms_c554644f6afcc9e1",
+      "title": "Dive In Wonderland",
       "start": "2026-11-16T19:15:00-07:00",
       "allDay": false,
       "backgroundColor": "#E0A458",
@@ -43936,8 +43633,8 @@
       "end": "2026-11-17T14:55:00-07:00"
     },
     {
-      "id": "ms_0637314b02811b38",
-      "title": "The Angry Birds Movie:",
+      "id": "ms_8b3f7459fe5c423e",
+      "title": "The Angry Birds Movie",
       "start": "2026-11-17T13:00:00-07:00",
       "allDay": false,
       "backgroundColor": "#6C5CE7",
@@ -44189,8 +43886,8 @@
       "end": "2026-11-17T16:00:00-07:00"
     },
     {
-      "id": "ms_98e2aa8acd7ba0ef",
-      "title": "Dune: Part Two Reissue",
+      "id": "ms_733056287ec263a0",
+      "title": "Dune: Part Two",
       "start": "2026-11-17T14:00:00-07:00",
       "allDay": false,
       "backgroundColor": "#6C5CE7",
@@ -44212,8 +43909,8 @@
       "end": "2026-11-17T16:57:00-07:00"
     },
     {
-      "id": "ms_00ed2ae97efad6b7",
-      "title": "The Angry Birds Movie:",
+      "id": "ms_aa27f287f4dc350d",
+      "title": "The Angry Birds Movie",
       "start": "2026-11-17T14:00:00-07:00",
       "allDay": false,
       "backgroundColor": "#6C5CE7",
@@ -45454,8 +45151,8 @@
       "end": "2026-11-18T15:00:00-07:00"
     },
     {
-      "id": "ms_0dc9acd7058475d6",
-      "title": "The Angry Birds Movie:",
+      "id": "ms_c0a5fcddf9e9a075",
+      "title": "The Angry Birds Movie",
       "start": "2026-11-18T13:00:00-07:00",
       "allDay": false,
       "backgroundColor": "#6C5CE7",
@@ -45661,8 +45358,8 @@
       "end": "2026-11-18T16:00:00-07:00"
     },
     {
-      "id": "ms_77e3472654c4b0ef",
-      "title": "The Angry Birds Movie:",
+      "id": "ms_77be30b3cc62953e",
+      "title": "The Angry Birds Movie",
       "start": "2026-11-18T14:00:00-07:00",
       "allDay": false,
       "backgroundColor": "#6C5CE7",

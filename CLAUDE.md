@@ -188,7 +188,8 @@ Each run lists titles new since the last (tracked in `known_titles.txt`; dry run
 
 Redesigned Nov 2026, Letterboxd-inspired but its own look. Dark warm palette (`--bg #15110e`,
 cream `--paper`, newsletter brick `--brick-fill #C0432B`); Newsreader (titles) + Schibsted Grotesk
-(UI). Title "Denver Movie Showtimes", upright (no italic). Theater colors appear only as dots. Corners: 3px posters (`--r-xs`), 6px buttons/inputs, pills only for filters and toggles.
+(UI), **self-hosted** in `public/fonts/` (latin + latin-ext woff2, OFL licenses alongside) so no visit
+reports to Google. Title "Denver Movie Showtimes", upright (no italic). Theater colors appear only as dots. Corners: 3px posters (`--r-xs`), 6px buttons/inputs, pills only for filters and toggles.
 
 - **Controls:** day strip ("Next 2 weeks", Today … +14 days; selected day is a plain brick fill) ·
   **Near [zip] 1 / 3 / 5 mi / All** (default **80218** — Sie and the Mayan come first and it holds the
@@ -215,6 +216,9 @@ cream `--paper`, newsletter brick `--brick-fill #C0432B`); Newsreader (titles) +
 - **Times read "3:00 pm"** (lowercase, no periods; `hm12()`); digits tabular, "am/pm" in `.ap`.
 - "Floating time": the ISO offset is ignored, so every viewer sees Denver wall-clock times; "now"
   (for dimming past showtimes) is computed in America/Denver.
+- **Privacy:** no cookies, no analytics. The only browser storage is the theater pick
+  (`dst-theaters` in `localStorage`, never sent anywhere); the zip is never saved. Third-party
+  requests are poster images only (TMDB, Fandango, theaters). Keep it that way.
 - **Footer** credits TMDB (logo + required notice) and Wikipedia, and links each theater's site.
 - **Cache-busting:** `index.html` loads `styles.css`/`app.js` with `?v=__ASSET_VERSION__`, replaced
   with the commit SHA on deploy; `data.json` is fetched `no-store`. OG tags use `__SITE_URL__`.

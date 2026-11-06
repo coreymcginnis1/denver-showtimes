@@ -10,13 +10,18 @@ Live at **https://coreymcginnis1.github.io/denver-showtimes/**, linked from the 
 - This is a **personal** project. Deploy ONLY to the personal GitHub account
   **`coreymcginnis1`** (repo `coreymcginnis1/denver-showtimes`). **Never** push to or use the
   DRCOG/work account **`cmcginnisdrcog`** for this project.
-- On Corey's desktop both accounts are logged into `gh`. `git push` uses the *active* account's credential, so
-  **before any push run `gh auth switch --user coreymcginnis1`** (otherwise it 403s
-  "denied to cmcginnisdrcog"). **After pushing, switch back: `gh auth switch --user cmcginnisdrcog`** —
-  Corey does concurrent work that needs the work account active.
-- Pushing to `main` publishes `public/` to GitHub Pages without scraping
-  (`.github/workflows/update.yml`). Non-trivial changes are usually shipped as a **PR on the
-  personal account**, reviewed, then merged (merging to `main` deploys).
+- **The project lives only on GitHub** (no local copy since Nov 2026). Changes are made from
+  **Claude Code cloud sessions** on this repo: work on a branch, push, open a **PR**, and Corey
+  merges it (or asks Claude to). The Claude GitHub App needs write access to this repo for
+  sessions to push; a 403 "Resource not accessible by integration" means that access lapsed
+  (fix: github.com/apps/claude → configure for `coreymcginnis1` → include this repo).
+- PR checks run `pytest` plus a `--dry-run` scrape from GitHub's network (only when `src/`,
+  `tests/`, `config.toml`, `pyproject.toml` or the workflow change). Merging to `main` publishes
+  `public/` to GitHub Pages without scraping; new data comes from the Thursday run or a manual
+  **Actions → Update showtimes → Run workflow** (`.github/workflows/update.yml`).
+- If Corey ever works from his desktop again: both accounts are logged into `gh` there, and
+  `git push` uses the active one, so run `gh auth switch --user coreymcginnis1` before pushing and
+  `gh auth switch --user cmcginnisdrcog` after (the work account must stay active for his job).
 
 ## How it works
 

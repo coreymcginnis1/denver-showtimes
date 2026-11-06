@@ -90,12 +90,6 @@ class TitlesCfg(BaseModel):
     drop: list[str] = Field(default_factory=lambda: list(DEFAULT_DROP))
 
 
-class DefaultsCfg(BaseModel):
-    # Films pre-checked on first page load (regex, case-insensitive, vs the normalized
-    # title). Others start unchecked but available. Empty -> pre-select all films.
-    films: list[str] = Field(default_factory=list)
-
-
 class TmdbCfg(BaseModel):
     # Look films up on TMDB for release dates, popularity and ratings (needs TMDB_TOKEN).
     enabled: bool = True
@@ -122,7 +116,6 @@ class Config(BaseModel):
     theaters: dict[str, TheaterCfg]
     filters: Filters = Field(default_factory=Filters)
     titles: TitlesCfg = Field(default_factory=TitlesCfg)
-    defaults: DefaultsCfg = Field(default_factory=DefaultsCfg)
     tmdb: TmdbCfg = Field(default_factory=TmdbCfg)
     omdb: OmdbCfg = Field(default_factory=OmdbCfg)
     trending: TrendingCfg = Field(default_factory=TrendingCfg)

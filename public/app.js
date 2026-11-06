@@ -90,15 +90,20 @@
     if (!days.length) days = Array.from(new Set(shows.map(function (s) { return s.d; }))).sort();
     state.day = days.indexOf(NOW.day) >= 0 ? NOW.day : days[0];
 
+    // A saved choice holds only while the defaults it was made against are unchanged: when the
+    // default theaters change, every reader starts from the new defaults again.
+    var defaults = theaters.filter(function (t) { return t.default_on !== false; }).map(function (t) { return t.key; });
+    DEFAULTS_SIG = defaults.join(",");
     var saved = store("dst-theaters");
-    var valid = Array.isArray(saved) ? saved.filter(function (k) { return theaterOf(k); }) : [];
-    state.theaters = new Set(valid.length ? valid : theaters.filter(function (t) { return t.default_on !== false; }).map(function (t) { return t.key; }));
+    var valid = saved && saved.d === DEFAULTS_SIG && Array.isArray(saved.on) ? saved.on.filter(function (k) { return theaterOf(k); }) : [];
+    state.theaters = new Set(valid.length ? valid : defaults);
   }
 
   // Repertory: the film first came out more than two years before it opened here (a revival).
   // Two years, not one: indie films often reach Denver a year or more after a festival premiere
   // (TMDB dates them by it). New releases (and events with no release date) are everything else.
   var REPERTORY_DAYS = 730;
+  var RUN_GAP_DAYS = 3;   // a new release off today but back within this many days is still "Now playing"
   function isRepertory(f) {
     var orig = f.rel || (f.year ? f.year + "-07-01" : null);
     return !!(orig && f.opened && dayDiff(orig, f.opened) > REPERTORY_DAYS);
@@ -112,6 +117,9 @@
     return 2 * R * Math.asin(Math.sqrt(h));
   }
   // Choosing a distance turns on exactly the theaters within it ("All" turns them all on).
+  var DEFAULTS_SIG = "";
+  function saveTheaters() { store("dst-theaters", { d: DEFAULTS_SIG, on: Array.from(state.theaters) }); }
+
   function applyRadius() {
     if (state.radius == null) return;
     state.theaters = new Set(theaters.filter(function (t) {
@@ -160,10 +168,7 @@
 
   // ---- Controls ----------------------------------------------------------------
 
-  function renderUpdated() {
-    var g = new Date(D.generated_at);
-    $("updated").textContent = "Updated " + g.toLocaleDateString("en-US", { month: "short", day: "numeric" }) +
-      " · " + D.events.length.toLocaleString() + " showtimes";
+  function renderSources() {
     $("srcLinks").innerHTML = "Theater sites: " + THEATER_SITES.map(function (t) {
       return '<a href="' + t[1] + '" target="_blank" rel="noopener">' + esc(t[0]) + "</a>";
     }).join(" · ");
@@ -279,7 +284,7 @@
         .concat(fmts.map(function (x) { return '<span class="tag">' + esc(x) + "</span>"; })).join("");
       var since = f.opened ? dayDiff(f.opened, asSpan ? days[0] : state.day) : null;
       var fresh = f.rep || f.event || since == null ? "" : since < 0 ? "Opens " + shortDate(f.opened)
-        : since === 0 ? "Opening day" : since <= 6 ? "New this week" : "";
+        : since <= 6 ? "Opening week" : "";
       if (fresh) meta += '<span class="tag fresh">' + fresh + "</span>";
       // "Indie" and "International" tags are on hold (Nov 2026): the Indie guess (TMDB lists
       // producers, not distributors) wasn't reliable, and Corey wants both or neither. The data
@@ -312,13 +317,20 @@
         (f.id ? '<a class="lb" href="https://letterboxd.com/tmdb/' + f.id + '/" target="_blank" rel="noopener">View on Letterboxd</a>' : "") +
         "</article>";
     };
-    if (all) {   // two groups: what you can see now (by the chosen sort), then openings, soonest first
-      var soon = ids.filter(function (i) { return films[i].opened && films[i].opened > days[0] && !films[i].rep; });
-      var now = ids.filter(function (i) { return soon.indexOf(i) < 0; });
-      soon.sort(function (a, b) { return films[a].opened.localeCompare(films[b].opened) || films[a].t.localeCompare(films[b].t); });
+    if (all) {   // two groups: now playing (by the chosen sort), then everything else, soonest first
+      var firstDay = function (i) { return byFilm.get(i).reduce(function (m, s) { return s.d < m ? s.d : m; }, "9999"); };
+      // Now playing: a showing today, or a new release already open in Denver that's only off for a
+      // day or so (a dark day, a gap between theaters). Repertory and special events need today.
+      var isNow = function (i) {
+        var f = films[i], d = firstDay(i);
+        return d === days[0] || (!f.rep && !f.event && !!f.opened && f.opened <= days[0] && dayDiff(days[0], d) <= RUN_GAP_DAYS);
+      };
+      var now = ids.filter(isNow);
+      var soon = ids.filter(function (i) { return !isNow(i); });
+      soon.sort(function (a, b) { return firstDay(a).localeCompare(firstDay(b)) || films[a].t.localeCompare(films[b].t); });
       $("grid").innerHTML = (now.length ? '<h3 class="group">Now playing <span>' + now.length + "</span></h3>" +
           '<div class="grid">' + now.map(function (i) { return cardHTML(i); }).join("") + "</div>" : "") +
-        (soon.length ? '<h3 class="group">Opening soon <span>' + soon.length + "</span></h3>" +
+        (soon.length ? '<h3 class="group">Coming soon <span>' + soon.length + "</span></h3>" +
           '<div class="grid">' + soon.map(function (i) { return cardHTML(i); }).join("") + "</div>" : "");
     } else {
       $("grid").innerHTML = ids.length ? '<div class="grid">' + ids.map(function (i) { return cardHTML(i); }).join("") + "</div>"
@@ -456,10 +468,10 @@
       if (b.dataset.d) { state.day = b.dataset.d; state.showEarlier = false; setMode(); renderDays(); renderAll(); window.scrollTo({ top: 0 }); return; }
       if (b.dataset.k) {
         var k = b.dataset.k; state.theaters.has(k) ? state.theaters.delete(k) : state.theaters.add(k); state.radius = null;
-        store("dst-theaters", Array.from(state.theaters)); renderAll(); return;
+        saveTheaters(); renderAll(); return;
       }
       if (b.dataset.r) {
-        state.radius = b.dataset.r; applyRadius(); store("dst-theaters", Array.from(state.theaters)); renderAll(); return;
+        state.radius = b.dataset.r; applyRadius(); saveTheaters(); renderAll(); return;
       }
       if (b.dataset.kind) {
         state.kind = b.dataset.kind;
@@ -500,7 +512,7 @@
     .then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
     .then(function (data) { return zipTable.then(function (z) { ZIPS = z; return data; }); })
     .then(function (data) {
-      load(data); wire(); setMode(); renderUpdated(); renderDays(); renderAll(); measure();
+      load(data); wire(); setMode(); renderSources(); renderDays(); renderAll(); measure();
       var sel = $("days").querySelector('[aria-pressed="true"]'); if (sel) sel.scrollIntoView({ block: "nearest", inline: "center" });
     })
     .catch(function (e) {

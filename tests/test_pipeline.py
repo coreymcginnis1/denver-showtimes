@@ -190,23 +190,10 @@ def test_build_feed_shape():
     assert {e["extendedProps"]["theater"] for e in feed["events"]} == {"amc", "sie"}
 
 
-def test_build_feed_default_films_allowlist():
-    c = fresh_cfg()
-    c.defaults.films = ["dune", "jaws"]
-    feed = _build_feed(c, [st("Dune: Part Two"), st("Jaws"), st("Barbie")], DEN)
-    assert feed["default_films"] == ["Dune: Part Two", "Jaws"]  # matched, sorted; Barbie excluded
-
-
-def test_build_feed_default_films_empty_means_all():
-    c = fresh_cfg()
-    c.defaults.films = []
-    feed = _build_feed(c, [st("Dune")], DEN)
-    assert feed["default_films"] is None
-
-
 def test_secondary_theaters_config():
     c = fresh_cfg()
-    assert c.theaters["amc"].default_on is True             # primary theaters start on
+    assert c.theaters["sie"].default_on is True             # primary theaters start on
+    assert c.theaters["amc"].default_on is False
     assert c.theaters["amc_westminster"].default_on is False  # secondary start off
     assert c.theaters["amc"].scraper == "fandango"          # AMC reads from Fandango
     assert c.theaters["amc_westminster"].scraper == "fandango"
@@ -220,7 +207,8 @@ def test_build_feed_carries_default_on():
     c = fresh_cfg()
     feed = _build_feed(c, [st("A", 19, "amc")], DEN)
     by_key = {t["key"]: t for t in feed["theaters"]}
-    assert by_key["amc"]["default_on"] is True
+    assert by_key["sie"]["default_on"] is True
+    assert by_key["amc"]["default_on"] is False
     assert by_key["amc_westminster"]["default_on"] is False
     assert by_key["regal_colorado"]["default_on"] is False  # enabled via Fandango, off by default
 
@@ -391,12 +379,6 @@ def test_dry_run_reports_new_titles_without_recording_them(tmp_path):
     known.write_text("Old\n", encoding="utf-8")
     assert diff_new_titles(["Old", "New"], known, update=False) == ["New"]
     assert known.read_text(encoding="utf-8") == "Old\n"
-
-
-def test_no_picks_means_every_film_preselected():
-    cfg = fresh_cfg()
-    feed = _build_feed(cfg, [st("Dune"), st("Jaws")], DEN)
-    assert feed["default_films"] is None     # retired picks: the page selects all, hides the button
 
 
 def test_denver_openings_remember_the_first_showtime_and_forget_old_ones():

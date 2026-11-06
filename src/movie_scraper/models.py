@@ -36,31 +36,28 @@ class Showtime(BaseModel):
         raw = f"{self.theater}|{self.film_title}|{self.start.isoformat()}|{self.all_day}"
         return "ms_" + hashlib.sha1(raw.encode("utf-8")).hexdigest()[:16]
 
-    def to_event(self, color: str) -> dict:
-        """Shape consumed by FullCalendar in the static frontend."""
+    def to_event(self) -> dict:
+        """One showtime as the site reads it (`data.json` events). Only fields the site uses are
+        written, and empty ones are left out, to keep the daily data file and its history lean."""
+        props = {
+            "theater": self.theater,
+            "screen": self.screen,
+            "fmt": self.fmt,
+            "ticketUrl": self.ticket_url,
+            "poster": self.poster,
+            "rating": self.rating,
+            "runtime": self.runtime_minutes,
+            "year": self.year,
+            "release": self.release_date,
+        }
         event = {
             "id": self.uid,
             "title": self.film_title,
             "start": self.start.isoformat(),
-            "allDay": self.all_day,
-            "backgroundColor": color,
-            "borderColor": color,
-            "extendedProps": {
-                "theater": self.theater,
-                "theaterName": self.theater_name,
-                "screen": self.screen,
-                "fmt": self.fmt,
-                "ticketUrl": self.ticket_url,
-                "filmUrl": self.film_url,
-                "poster": self.poster,
-                "rating": self.rating,
-                "runtime": self.runtime_minutes,
-                "director": self.director,
-                "year": self.year,
-                "release": self.release_date,
-                "note": self.note,
-            },
+            "extendedProps": {k: v for k, v in props.items() if v not in (None, "")},
         }
+        if self.all_day:
+            event["allDay"] = True
         if self.end is not None:
             event["end"] = self.end.isoformat()
         return event

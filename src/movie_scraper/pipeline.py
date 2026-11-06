@@ -362,17 +362,9 @@ def _passes(s: Showtime, cfg: Config) -> bool:
 
 def _build_feed(cfg: Config, shows: list[Showtime], tz: ZoneInfo,
                 carried: list[dict] = (), stale: list[str] = ()) -> dict:
-    color_by = {k: t.color for k, t in cfg.theaters.items()}
-    events = [s.to_event(color_by.get(s.theater, "#888888")) for s in shows] + list(carried)
+    events = [s.to_event() for s in shows] + list(carried)
     events.sort(key=lambda e: (e["start"], e["extendedProps"]["theater"], e["title"]))
     films = sorted({e["title"] for e in events}, key=str.lower)
-
-    # Resolve the default-selection allowlist to concrete titles; None => select all.
-    patterns = cfg.defaults.films
-    default_films = None
-    if patterns:
-        rx = [re.compile(p, re.I) for p in patterns]
-        default_films = [f for f in films if any(r.search(f) for r in rx)]
 
     return {
         "generated_at": datetime.now(tz).isoformat(),
@@ -381,7 +373,6 @@ def _build_feed(cfg: Config, shows: list[Showtime], tz: ZoneInfo,
                       "lat": t.lat, "lon": t.lon}
                      for k, t in cfg.theaters.items() if t.enabled],
         "films": films,
-        "default_films": default_films,
         "stale_theaters": list(stale),   # failed this run; their events are from the last feed
         "events": events,
     }

@@ -19,6 +19,7 @@ on:
       - "tests/**"
       - "config.toml"
       - "pyproject.toml"
+      - "public/**"
       - ".github/workflows/**"
 
 permissions:
@@ -43,6 +44,8 @@ jobs:
       - run: pytest
 
       - name: Scrape every theater from GitHub's network (writes nothing)
+        env:
+          TMDB_TOKEN: ${{ secrets.TMDB_TOKEN }}   # release dates, popularity, ratings
         run: python -m movie_scraper --dry-run --summary "$GITHUB_STEP_SUMMARY"
 
   scrape:
@@ -72,6 +75,8 @@ jobs:
       - name: Scrape every theater
         id: scrape
         continue-on-error: true
+        env:
+          TMDB_TOKEN: ${{ secrets.TMDB_TOKEN }}   # release dates, popularity, ratings
         run: python -m movie_scraper --summary "$GITHUB_STEP_SUMMARY"
 
       - name: Commit the refreshed data

@@ -137,3 +137,17 @@ films = []
 # weekdays = ["Fri", "Sat", "Sun"]          # keep only these weekdays
 # earliest = "17:00"                         # keep only showtimes at/after this local time
 # latest = "23:59"                           # keep only showtimes at/before this local time
+
+# TMDB (themoviedb.org) supplies release dates, weekly popularity and ratings for the site's
+# Newest / Popular this week / Top rated sorts, plus a backup poster. The weekly Action reads the
+# token from the TMDB_TOKEN repository secret; without it the scrape still runs and keeps last
+# week's TMDB data. Matching uses the title plus the year the theater gives (Sie, Landmark) or
+# Fandango's release date. When it picks the wrong film, or none, add the normalized title here
+# with the id from the film's themoviedb.org URL (themoviedb.org/movie/<id>-...).
+[tmdb]
+enabled = true
+
+[tmdb.overrides]
+"Ramayana" = 656908                 # 2026 release; a 1976 film has the exact title
+"Dune: Part One" = 438631           # TMDB lists it as just "Dune"
+"Friday The 13th Part 4" = 9730     # "Friday the 13th: The Final Chapter"

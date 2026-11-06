@@ -91,6 +91,13 @@ class DefaultsCfg(BaseModel):
     films: list[str] = Field(default_factory=list)
 
 
+class TmdbCfg(BaseModel):
+    # Look films up on TMDB for release dates, popularity and ratings (needs TMDB_TOKEN).
+    enabled: bool = True
+    # Normalized title -> TMDB movie id, for the few titles the automatic match gets wrong.
+    overrides: dict[str, int] = Field(default_factory=dict)
+
+
 class Config(BaseModel):
     timezone: str = "America/Denver"
     days_ahead: int = 14
@@ -100,6 +107,7 @@ class Config(BaseModel):
     filters: Filters = Field(default_factory=Filters)
     titles: TitlesCfg = Field(default_factory=TitlesCfg)
     defaults: DefaultsCfg = Field(default_factory=DefaultsCfg)
+    tmdb: TmdbCfg = Field(default_factory=TmdbCfg)
 
 
 def load_config(path: str | Path = "config.toml") -> Config:

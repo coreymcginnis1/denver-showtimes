@@ -26,13 +26,13 @@ Live at **https://coreymcginnis1.github.io/denver-showtimes/**, linked from the 
 ## How it works
 
 ```
-scraper (Python, GitHub Actions, weekly)  →  public/data.json  →  static site (FullCalendar)  →  GitHub Pages
+scraper (Python, GitHub Actions, weekly)  →  TMDB match  →  public/data.json  →  static site (vanilla JS)  →  GitHub Pages
 ```
 
 - `src/movie_scraper/` — Python package: per-theater scrapers → normalize/filter/dedupe →
   writes `public/data.json`. Run `python -m movie_scraper` (flags: `--theater KEY` repeatable,
   `--dry-run`, `--output`, `--summary`, `-v`). Python 3.11+; deps: httpx, pydantic.
-- `public/` — dependency-free static site (FullCalendar v6 via CDN + vanilla `app.js`). No build.
+- `public/` — dependency-free static site (`index.html` + `styles.css` + vanilla `app.js`, Google Fonts only). No build.
 - **Scraping runs in GitHub Actions, not on anyone's computer.** `update.yml`: Thursdays 15:00 UTC
   and "Run workflow" scrape → commit `public/data.json` + `known_titles.txt` → publish. Pushes to
   `main` publish without scraping. PRs run `pytest` plus a `--dry-run` scrape from GitHub's network.
@@ -96,6 +96,34 @@ deliberately kept separate (base titles differ; the picks regex uses a `\b` boun
 use `\W?` (e.g. `Director\W?s`, not `Director's`) or double quotes for literals without regex
 escapes.
 
+## TMDB: the title standard and the sort data (`src/movie_scraper/tmdb.py`, `config.toml` `[tmdb]`)
+
+After the cleanup rules, every film is matched to TMDB (themoviedb.org) and **renamed to TMDB's
+title**, so variants of one film from different theaters merge into one entry without new rules
+(`pipeline.standardize_titles()`). TMDB's name gets the same casing cleanup (`recase()`); two
+different films sharing a TMDB title get the year appended. Unmatched titles (events, shorts
+programs, double features) keep their cleaned-up name. The rules still matter: TMDB only finds
+"Bleak Week: Gummo" once the label is stripped, and non-films still need `drop`.
+
+- **Matching is strict on purpose** (a wrong match now renames the film on the site): exact
+  title (or TMDB title = ours + ": subtitle"), possessive credit dropped ("Ken Russell's The
+  Devils"), and a year hint — the year Sie/Landmark state beats Fandango's `releaseDate`, which
+  for a revival can be the re-release date. No fuzzy guessing.
+- **Wrong or missing match → `[tmdb.overrides]`** in `config.toml`: normalized local title → TMDB
+  id (from the film's themoviedb.org URL). The run summary lists titles TMDB didn't match.
+- `data.json` gains `film_meta` (displayed title → `tmdb_id`, `release`, `popularity`,
+  `vote_average`, `vote_count`, `tmdb_poster`) and `tmdb_ids` (local title → id, so next week
+  reuses matches instead of searching again).
+- **Token:** `TMDB_TOKEN` (TMDB "API Read Access Token") — a GitHub Actions repository secret for
+  the workflow; in cloud sessions it's a network secret the proxy injects, so run with
+  `TMDB_TOKEN=proxy-injected`. Without a token, or if TMDB errors, the run keeps last week's
+  metadata and never fails. Tests never call TMDB (`conftest.py` unsets the token).
+- **Terms:** TMDB's free API is non-commercial with attribution (footer text + `tmdb-logo.svg`).
+  **Letterboxd forbids scraping** (terms of use + robots.txt) and its API is by application only,
+  so the site only *links* to Letterboxd (`letterboxd.com/tmdb/<id>/`), never scrapes it. Corey
+  chose not to apply for the Letterboxd API for now. Metacritic: no API and no scraping; OMDb
+  (free key, non-commercial) carries Metascores if a Metacritic sort is wanted later.
+
 ## New-titles digest and cleanup review
 
 Each scrape prints titles that are *new since the last run* (tracked in the committed
@@ -126,13 +154,25 @@ today at a theater that starts on, the page pre-selects all films so the calenda
 
 ## Frontend notes (`public/`)
 
-- Warm palette matching the newsletter: `--bg #fffbeb`, `--ink #5c5537`, `--accent #C0432B`
-  (warm brick), all WCAG AA. System sans-serif. Per-theater colors are in `config.toml`.
-- Views: **Daily** (list; the mobile default), **Week** (grouped by film with theater-color dots
-  + time chips), **Month** (one entry per film/day). "Floating time" — the TZ offset is stripped
-  so Denver wall-clock shows for every viewer.
-- **Mobile:** the filter panel (theater chips + film checklist) collapses behind a "Filters"
-  toggle so the calendar is above the fold.
+Redesigned Nov 2026 (Letterboxd-inspired, not a copy): **one day at a time**, no calendar library.
+
+- **Day strip** (today … +14 days; the selected day is a brick "ticket stub"), theater chips
+  (default-on theaters from `config.toml`, with that day's counts), search. Sticky on desktop.
+- **Poster cards** for every film playing that day at the selected theaters: poster, title (TMDB
+  name), year · rating · runtime · ★ TMDB average (only with ≥20 votes) · format tags, then times
+  grouped by theater, and a "View on Letterboxd" link. Posters try the theater's image (Fandango's
+  first), then TMDB's, then a typeset placeholder.
+- **Sorts:** Newest (default; release date, else year) · Popular this week (TMDB popularity) ·
+  Top rated (TMDB average shrunk toward 6.5 until ~50 votes) · A–Z. Films with no TMDB data sort last.
+- **Schedule** of the day in time order (Morning/Afternoon/Evening/Late; earlier-today rows
+  hidden behind a button). Desktop: sticky right column. Phone: Films / Schedule toggle.
+- **Tap a time** → sheet with Get tickets, Google, Outlook, Apple/.ics (ICS uses TZID America/Denver).
+- **My list** (+ on a poster) and theater choices are saved in `localStorage` (try/catch; optional).
+  The schedule can show only My list.
+- "Floating time": the ISO offset is ignored; Denver wall-clock shows for every viewer, and
+  "now" for dimming past showtimes is computed in America/Denver.
+- Dark warm palette (`--bg #15110e`, cream `--paper`, newsletter brick `--brick-fill #C0432B`);
+  Newsreader (titles) + Schibsted Grotesk (UI) from Google Fonts. Theater colors are only dots.
 - **Cache-busting:** `index.html` references `styles.css`/`app.js` with `?v=__ASSET_VERSION__`;
   the deploy Action replaces `__ASSET_VERSION__` with the commit SHA so frontend changes show
   immediately. `data.json` is fetched with `cache: "no-store"`. OG tags use a `__SITE_URL__`

@@ -60,6 +60,7 @@ def test_fandango_parse(cfg, fandango_showtimes):
     assert all("fandango.com" in (s.ticket_url or "") for s in out)
     assert any("Supergirl" in s.film_title for s in out)
     assert any(s.fmt == "Premium Format" for s in out)     # surfaced; "Standard" is hidden
+    assert any(s.release_date == "2026-06-26" for s in out)  # release date kept for sorting
     assert all(s.fmt != "Standard" for s in out)
 
 

@@ -27,6 +27,7 @@ class Showtime(BaseModel):
     runtime_minutes: Optional[int] = None
     director: Optional[str] = None
     year: Optional[int] = None
+    release_date: Optional[str] = None   # ISO date, when the source gives one (Fandango)
     note: Optional[str] = None
 
     @property
@@ -56,6 +57,7 @@ class Showtime(BaseModel):
                 "runtime": self.runtime_minutes,
                 "director": self.director,
                 "year": self.year,
+                "release": self.release_date,
                 "note": self.note,
             },
         }

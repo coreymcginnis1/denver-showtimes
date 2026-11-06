@@ -74,3 +74,12 @@ def test_fandango_backs_amc_theaters(cfg, fandango_showtimes):
     assert out
     assert all(s.theater == "amc_westminster" for s in out)   # tagged as their own theater
     assert all(s.theater_name == "AMC Westminster Promenade 24" for s in out)
+
+
+def test_fandango_skips_its_placeholder_poster():
+    """Fandango returns its grey "F" image when it has no art; never keep that as a poster."""
+    base = "https://images.fandango.com/ImageRenderer/300/0/redesign/static/img/default_poster.png/0/"
+    none = {"poster": {"size": {"300": base + "images.fandango.com/redesign/static/img/default_poster.png"}}}
+    real = {"poster": {"size": {"300": base + "images/MasterRepository/fandango/1/poster.jpg"}}}
+    assert FandangoScraper._poster(none) is None
+    assert FandangoScraper._poster(real).startswith("https://images.fandango.com/ImageRenderer/600/")

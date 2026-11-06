@@ -44,7 +44,7 @@ scraper (Python, GitHub Actions, weekly)  →  TMDB match  →  public/data.json
 
 ## Theaters & data sources (`config.toml` `[theaters.*]`)
 
-Seven theaters. The first three are on by default; the rest have `default_on = false` (their
+Ten theaters. The first three are on by default; the rest have `default_on = false` (their
 filter chip starts unchecked — opt-in secondary venues). One scraper class can back several
 theaters via `scraper` + `location`.
 
@@ -56,13 +56,15 @@ theaters via `scraper` + `location`.
 | AMC Westminster Promenade 24 | same Fandango scraper; `location = AAECN` |
 | Alamo Drafthouse Sloans Lake | `drafthouse.com/s/mother/v2/schedule/venue/sloans-lake` (httpx JSON, no browser) |
 | Regal UA Colorado Center / Denver Pavilions | **Fandango** `napi/theaterMovieShowtimes/<id>` (httpx) |
+| Landmark Greenwood Village | same Landmark scraper; `location = X0873` (the Mayan is X02AK) |
+| Harkins Arvada 14 / Northfield 18 | same Fandango scraper; `location = AAYFG` / `AATYG` |
 
 - **AMC & Regal quirk (important):** both chains' own sites block scrapers. regmovies.com is
   Cloudflare-gated (it only server-renders the *current day* and 403s httpx), and amctheatres.com
   bot-challenged the old Playwright scraper even from a home IP. Both sell tickets through
   **Fandango**, whose `napi` JSON is open over plain httpx, so both read from there. `location` is
   the Fandango theater id (**AAFXW** = Regal Colorado Center, **AAJJG** = Regal Denver Pavilions,
-  **AAYUA** = AMC 9+CO 10, **AAECN** = AMC Westminster). See `scrapers/fandango.py`. Before the
+  **AAYUA** = AMC 9+CO 10, **AAECN** = AMC Westminster, **AAYFG** = Harkins Arvada, **AATYG** = Harkins Northfield). See `scrapers/fandango.py`. Before the
   switch, Fandango matched 115 of 116 AMC showtimes on title and time for one day; the other was
   the same showing under a different title tag. AMC ticket links now go to Fandango.
 
@@ -142,6 +144,20 @@ TMDB's full movie record; `OMDB_API_KEY` repository secret, passed by the workfl
 `imdb_rating`/`imdb_votes`/`metascore`/`rt` into `film_meta`, but the site's display and sort were
 removed and would need putting back — revisit only with a source that covers new releases.
 
+## Trending: 50/50 TMDB + Wikipedia (`wikipedia.py`, `pipeline.add_trend()`, `[trending]`)
+
+Each run fetches 7-day English Wikipedia page views for every matched film (article found through
+Wikidata by TMDB id, P4947; Wikimedia pageviews API; free, needs only a descriptive User-Agent) into
+`film_meta.wiki_views`, falling back to last run's count. `trend` = mean of the TMDB-popularity rank
+and the Wikipedia-views rank. **Why 50/50 (Nov 2026):** against Letterboxd's popular-this-week list
+(Corey's screenshot; the 10 overlapping Denver films), rank correlation was TMDB 0.59, Wikipedia
+0.77, blend 0.90; weights 40–60% Wikipedia all scored 0.87–0.90. TMDB alone is worldwide and counts
+streaming (The Mongoose #3); Wikipedia alone over-weights big international releases (Ramayana #1).
+Wikimedia blocks the cloud-session proxy (403/429), so test it through the PR check. `cli
+--compare-trending` (dry runs) prints a TMDB-vs-Wikipedia table (`TREND |` lines) for re-checking.
+Other sources checked: Trakt (streaming-centric), TMDB weekly trending list (58% coverage), Google
+Trends / IMDb popularity / box office (no usable API or license), Letterboxd (API by application).
+
 ## New-titles digest and cleanup review
 
 Each scrape prints titles that are *new since the last run* (tracked in the committed
@@ -178,8 +194,14 @@ Redesigned Nov 2026 (Letterboxd-inspired, not a copy): **one day at a time**, no
   (default-on theaters from `config.toml`, with that day's counts), search. Sticky on desktop.
 - **Poster cards** for every film playing that day at the selected theaters: poster, title (TMDB
   name), year · rating · runtime · format tags, then times
-  grouped by theater, and a "View on Letterboxd" link. Posters try the theater's image (Fandango's
-  first), then TMDB's, then a typeset placeholder.
+  grouped by theater, and a "View on Letterboxd" link. **Posters: TMDB's first** (official art for
+  every matched film), then other theaters' art, **Fandango last**, then a typeset placeholder.
+  Fandango silently serves a grey "F" placeholder when it lacks art (it loads, so the error
+  fallback never fires — After Hours, The Only Living Pickpocket in New York); the scraper also drops
+  Fandango URLs that *are* the placeholder (`…/default_poster.png`).
+- **Search reaches beyond the selection:** matches at the selected theaters/day show first; any other
+  match (other theaters or days in the window) follows under "Also playing elsewhere" as compact
+  two-week cards (Fjord, only at AMC Westminster).
 - **Denver opening date** (`openings` in `data.json`, title → date; `pipeline.denver_openings()`):
   the first day a film had a showtime at any theater we track. It's carried over each run and only
   moves earlier, and entries for films no longer playing are forgotten after 400 days. Backfilled from
@@ -188,14 +210,21 @@ Redesigned Nov 2026 (Letterboxd-inspired, not a copy): **one day at a time**, no
 - **Show: All · New releases · Repertory.** Repertory = the film first came out **more than two
   years** before its Denver opening (`REPERTORY_DAYS` in `app.js`). Two years, not one: indie films
   often reach Denver a year+ after a festival premiere (Tight & Nerdy). No release date → new.
-- **Sorts:** Newest (default: new releases by Denver opening, latest and upcoming first, then
-  repertory by original release) · Popular this week (TMDB `popularity`, refreshed at each weekly
-  scrape; a Wikipedia 7-day page-view version is on hold) · A–Z. Films without the data sort last.
+- **Sorts:** Newest (default: new releases by Denver **release week** — Friday-to-Thursday, with
+  Wed/Thu previews counted toward the Friday they lead into (`releaseWeek()`) — latest and upcoming
+  first, and **by Trending within a week**; then repertory by original release; special events last) · **Trending** (`film_meta.trend`: the average of a film's rank by TMDB
+  popularity and by 7-day English Wikipedia page views, `pipeline.add_trend()`; TMDB rank alone when
+  there's no article) · A–Z. Films without the data sort last.
   No ratings (see above). New releases get an "Opening day" / "New this week" tag.
 - **"Next 2 weeks"** (first button in the day strip; `state.day === "all"`): the same cards for every
   film with an upcoming showtime in the window, but each theater gets one line ("Nov 6–12 · 14
   showings") and a "Next …" button for its soonest showing instead of every time. Upcoming
-  openings show "Opens Nov 19". No schedule column in this view (`layout[data-mode="span"]`).
+  openings show "Opens Nov 19" and sit in the "Opening soon" group. No schedule column in this view
+  (`layout[data-mode="span"]`).
+- **Posters** are requested at 600 px (Fandango renderer) / TMDB `w500`: cards are ~220 CSS px, so
+  smaller art looked soft on 2x screens.
+- **Long showtime lists** clamp to ~300 px with a fade and a "Show all N theaters" button, shown
+  only when a card's list actually overflows (`clampVenues()`, re-run on resize).
 - **Toolbar:** Show and Sort sit on one line under the heading, split by a hairline; they wrap on phones.
 - **Schedule** of the day in time order (Morning/Afternoon/Evening/Late; earlier-today rows
   hidden behind a button). Desktop: sticky right column. Phone: Films / Schedule toggle.
@@ -203,8 +232,28 @@ Redesigned Nov 2026 (Letterboxd-inspired, not a copy): **one day at a time**, no
 - **Times read "h:mm am" / "h:mm pm"** everywhere ("3:00 pm": lowercase, no periods — Corey's
   house style; `hm12()` in `app.js`). On screen the digits are tabular; "am/pm" sits in `.ap`
   with normal figures.
-- **My list** (+ on a poster) and theater choices are saved in `localStorage` (try/catch; optional).
-  The schedule can show only My list.
+- **Near a zip code:** a zip box (default **80218** — it puts Sie and the Mayan, Denver's main indie
+  houses, first and holds the metro's population-weighted center; never saved — Corey doesn't want readers to
+  feel tracked) and **1 / 3 / 5 mi / All** buttons that switch on exactly the theaters within that
+  straight-line distance. Theater chips sort by distance and show miles. Zip centroids are
+  `public/zips.json` (Census 2024 ZCTA gazetteer, zips within 60 mi of downtown); theater `lat`/`lon`
+  live in `config.toml` and pass through to `data.json`. No travel times by design.
+- **Special events = no TMDB movie match** (`f.event` in `app.js`): TV episodes (Heated Rivalry),
+  double features, shorts programs, one-night events. They sort last under Newest, are excluded from
+  the New releases / Repertory filters (All only), and get no "New this week" tag. No hand list: a
+  real film, new or revival, always matches a TMDB movie with a release date.
+- **Tags on hold (Nov 2026):** "International" (original language isn't English) and "Indie" (English,
+  no major studio among TMDB's producers, budget < $40M or unlisted; `tmdb.classify()`) are still
+  computed into `film_meta` but **not shown**. Indie mislabeled classics (Rocky, The Apartment) and
+  borderline titles (Drummer Boy) because TMDB lists producers, not distributors; Corey wants both
+  tags or neither.
+- **Theater coverage checked Nov 2026 (from 80206):** within 10 mi, Fandango also has AMC Dine-In
+  Cherry Creek 8 (AAADR; skipped: 12 of 13 films duplicated elsewhere), Regal River Point, Cinemark
+  Bel Mar 16, Cinemark Century Aurora, Regal SouthGlenn (first-run multiplexes, not added). The
+  Esquire closed July 2024.
+- **"Next 2 weeks"** splits into **Now playing** (by the chosen sort) and **Opening soon** (soonest first).
+- Theater choices are saved in `localStorage` (try/catch; optional). "My list" was removed (Nov 2026):
+  little use, no sync between devices.
 - "Floating time": the ISO offset is ignored; Denver wall-clock shows for every viewer, and
   "now" for dimming past showtimes is computed in America/Denver.
 - Dark warm palette (`--bg #15110e`, cream `--paper`, newsletter brick `--brick-fill #C0432B`);

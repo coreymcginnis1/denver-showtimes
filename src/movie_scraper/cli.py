@@ -13,6 +13,24 @@ from .pipeline import diff_new_titles, load_feed, render_summary, review_titles,
 EXIT_THEATER_FAILED = 3
 
 
+def print_trending_comparison(feed: dict) -> None:
+    """Side-by-side "Trending" rankings: TMDB popularity vs 7-day English Wikipedia views."""
+    from datetime import date
+    from .wikipedia import weekly_views
+    meta = feed.get("film_meta") or {}
+    showings = Counter(e["title"] for e in feed["events"])
+    by_id = {m["tmdb_id"]: t for t, m in meta.items() if m.get("tmdb_id")}
+    views = weekly_views(list(by_id), date.today())
+    tmdb_rank = {t: i for i, t in enumerate(sorted(meta, key=lambda t: -(meta[t].get("popularity") or 0)), 1)}
+    wiki = sorted(((v, by_id[i]) for i, v in views.items()), reverse=True)
+    print(f"\nTRENDING COMPARISON: Wikipedia 7-day views found for {len(views)} of {len(by_id)} films")
+    print("TREND | wiki rank | wiki views | tmdb rank | tmdb popularity | Denver showtimes | title")
+    for r, (v, t) in enumerate(wiki, 1):
+        print(f"TREND | {r} | {v} | {tmdb_rank.get(t)} | {meta[t].get('popularity')} | {showings[t]} | {t}")
+    for t in sorted(set(by_id.values()) - {by_id[i] for i in views}):
+        print(f"TREND | - | - | {tmdb_rank.get(t)} | {meta[t].get('popularity')} | {showings[t]} | {t}")
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(
         prog="movie-scraper",
@@ -24,6 +42,8 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--dry-run", action="store_true", help="print a summary; do not write the file")
     ap.add_argument("--summary", metavar="PATH",
                     help="append a Markdown run report to this file (e.g. $GITHUB_STEP_SUMMARY)")
+    ap.add_argument("--compare-trending", action="store_true",
+                    help="dry runs: also rank films by 7-day Wikipedia views next to TMDB popularity")
     ap.add_argument("-v", "--verbose", action="store_true")
     args = ap.parse_args(argv)
 
@@ -45,6 +65,8 @@ def main(argv: list[str] | None = None) -> int:
               f"theaters: {dict(counts)}")
         meta = feed.get("film_meta") or {}
         print(f"TMDB matched {len(meta)} films")
+        if args.compare_trending:
+            print_trending_comparison(feed)
         # Every film's match, so a PR reviewer can spot a wrong TMDB match (fix: [tmdb.overrides]).
         print("\nFilm matches (title | TMDB id | release | IMDb id | IMDb rating/votes (not shown) | Metascore):")
         for t in feed["films"]:

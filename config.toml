@@ -10,11 +10,15 @@ default_runtime_minutes = 120    # fallback event length when a film's runtime i
 enabled = true
 name = "Sie FilmCenter"
 color = "#E4572E"                # used to color events in the calendar
+lat = 39.7397
+lon = -104.957
 
 [theaters.landmark]
 enabled = true
 name = "Landmark Mayan"
 color = "#17BEBB"
+lat = 39.7187
+lon = -104.9871
 
 [theaters.amc]
 enabled = true
@@ -22,6 +26,8 @@ name = "AMC 9+CO 10"
 color = "#2E5EAA"
 scraper = "fandango"
 location = "AAYUA"                # Fandango theater id
+lat = 39.7296
+lon = -104.9412
 
 # --- Secondary theaters: scraped but their filter chip starts OFF (default_on = false). ---
 # They occasionally carry indies/70mm/IMAX you can't find at the three above; readers opt in by
@@ -37,6 +43,8 @@ name = "Regal UA Denver Pavilions"
 color = "#4C9F70"
 scraper = "fandango"
 location = "AAJJG"
+lat = 39.7438
+lon = -104.99
 
 [theaters.alamo_sloans]
 enabled = true
@@ -45,6 +53,8 @@ name = "Alamo Drafthouse Sloans Lake"
 color = "#E0A458"
 scraper = "alamo"
 location = "sloans-lake"
+lat = 39.7409
+lon = -105.0425
 
 [theaters.regal_colorado]
 enabled = true
@@ -53,6 +63,8 @@ name = "Regal UA Colorado Center & IMAX"
 color = "#C44E9D"
 scraper = "fandango"
 location = "AAFXW"
+lat = 39.6802
+lon = -104.94
 
 [theaters.amc_westminster]
 enabled = true
@@ -61,6 +73,38 @@ name = "AMC Westminster Promenade 24"
 color = "#6C5CE7"
 scraper = "fandango"
 location = "AAECN"
+lat = 39.8897
+lon = -105.0723
+
+[theaters.landmark_greenwood]
+enabled = true
+default_on = false
+name = "Landmark Greenwood Village"
+color = "#8FB339"
+scraper = "landmark"
+location = "X0873"                # Landmark's theater id (the Mayan is X02AK)
+lat = 39.6184
+lon = -104.9013
+
+[theaters.harkins_arvada]
+enabled = true
+default_on = false
+name = "Harkins Arvada 14"
+color = "#3FA7D6"
+scraper = "fandango"
+location = "AAYFG"                # Fandango theater id
+lat = 39.7917
+lon = -105.081
+
+[theaters.harkins_northfield]
+enabled = true
+default_on = false
+name = "Harkins Northfield 18"
+color = "#B07AA1"
+scraper = "fandango"
+location = "AATYG"                # Fandango theater id
+lat = 39.7851
+lon = -104.8919
 
 # Title standardization: strip repertory/event series labels from the START of a
 # film title (the label plus its ":" / "–" / "-" separator), so e.g.
@@ -100,6 +144,8 @@ strip_suffixes = [
   '\s*\(dir\.?\s[^)]*\)$',      # director annotation: "Alpha (dir. Rawail)" -> "Alpha"
   '\s*[:–—-]\s*Xfinity\b.*$',   # sponsor tag: "Minions & Monsters: Xfinity" -> "Minions & Monsters"
   '\s*[-–—:]?\s+Encore$',       # rebroadcasts: "The Metropolitan Opera: Carmen Encore" -> "... Carmen"
+  '\s*\((?:\d{4}\s+)?Encore\)$',
+  '\s*\((?:English|Spanish|Hindi|Telugu|Tamil|Malayalam|Kannada|Punjabi|Japanese|Korean)(?:\s+(?:\d{4}|Dub(?:bed)?|Sub(?:titled)?|Version))?\)$',  # language versions: "Ramayana (English 2026)"  # "... Carmen (2026 Encore)" -> "... Carmen"
 ]
 # Titles matching any of these are dropped entirely — events that aren't a specific
 # movie (mystery screenings, watch parties, etc.). Case-insensitive regex.
@@ -113,6 +159,7 @@ drop = [
   'Apple TV Live',            # live sports broadcasts: "F1 on Apple TV Live in IMAX: ..."
   'Memorial Screening',       # tribute events with no film named
   'Mystery Movie',            # surprise screenings, no film named ("REGAL: Monday Mystery Movie")
+  'Secret Cinema',            # Harkins mystery screenings, no film named
   '\bUFC \d',                 # live UFC pay-per-view broadcasts ("UFC 329: ..."), not films
   'Members?\s+Only',          # members-only screenings (public can't attend) — drop them
   'League of Legends',        # live esports broadcasts ("League of Legends Worlds 26 - Finals")

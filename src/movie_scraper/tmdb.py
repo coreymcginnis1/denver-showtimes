@@ -23,7 +23,7 @@ import httpx
 log = logging.getLogger(__name__)
 
 API = "https://api.themoviedb.org/3"
-POSTER = "https://image.tmdb.org/t/p/w342"
+POSTER = "https://image.tmdb.org/t/p/w500"   # sharp on 2x screens; cards are ~220 px wide
 TOKEN_ENV = "TMDB_TOKEN"
 
 
@@ -65,9 +65,41 @@ def pick(title: str, results: list[dict], year: int | None = None) -> dict | Non
 _POSSESSIVE = re.compile(r"^[A-Z][\w.\-]*(?:\s+[A-Z][\w.\-]*){0,3}['’]s\s+(?=\S)")
 
 
+# Production companies that mark a film as a major-studio release (never "Indie"). TMDB lists
+# producers, not US distributors, so specialty labels (A24, Neon, Searchlight, Focus) aren't here:
+# their films are typically independent productions.
+MAJOR_STUDIOS = {
+    "walt disney pictures", "walt disney animation studios", "pixar", "marvel studios", "lucasfilm ltd.",
+    "20th century studios", "twentieth century fox", "warner bros. pictures", "warner bros. pictures animation",
+    "new line cinema", "dc studios", "dc films", "universal pictures", "illumination", "dreamworks animation",
+    "paramount pictures", "paramount animation", "nickelodeon movies", "columbia pictures", "sony pictures",
+    "sony pictures animation", "tristar pictures", "screen gems", "lionsgate", "summit entertainment",
+    "metro-goldwyn-mayer", "amazon mgm studios", "legendary pictures", "skydance media", "netflix",
+    "apple studios", "blumhouse productions", "united artists", "rko radio pictures",
+}
+INDIE_MAX_BUDGET = 40_000_000
+
+
+def classify(m: dict) -> dict:
+    """Tags for the site: "International" (not originally in English) and "Indie" (English-language,
+    no major studio among the producers, and a budget under INDIE_MAX_BUDGET or not listed).
+
+    A rough guide, not a fact: TMDB has producers and budgets, not distributors. Non-English films
+    are only tagged International (a Toho film isn't "indie" in any useful sense).
+    """
+    lang = m.get("original_language") or None
+    companies = [c.get("name", "") for c in m.get("production_companies") or []]
+    budget = m.get("budget") or 0
+    major = any(c.lower() in MAJOR_STUDIOS for c in companies)
+    intl = bool(lang) and lang != "en"
+    indie = not intl and lang == "en" and not major and (budget == 0 or budget < INDIE_MAX_BUDGET)
+    return {"lang": lang, "budget": budget or None, "companies": companies[:6],
+            "intl": intl, "indie": indie}
+
+
 def meta_from(m: dict) -> dict:
-    """The fields the site uses, from a TMDB movie or search result."""
-    return {
+    """The fields the site uses, from a TMDB movie record."""
+    return {**classify(m),
         "title": (m.get("title") or "").strip() or None,
         "tmdb_id": m["id"],
         "release": m.get("release_date") or None,

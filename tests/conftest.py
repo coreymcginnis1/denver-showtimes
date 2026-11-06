@@ -57,3 +57,9 @@ def _no_live_tmdb(monkeypatch):
 @pytest.fixture(autouse=True)
 def _no_live_omdb(monkeypatch):
     monkeypatch.delenv("OMDB_API_KEY", raising=False)
+
+
+@pytest.fixture(autouse=True)
+def _no_live_wikipedia(monkeypatch):
+    """Tests run offline: the pipeline's Wikipedia lookup returns nothing."""
+    monkeypatch.setattr("movie_scraper.pipeline.weekly_views", lambda *a, **k: {})

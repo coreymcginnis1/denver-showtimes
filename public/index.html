@@ -25,8 +25,7 @@
   <div class="wrap">
     <header class="mast">
       <div>
-        <p class="eyebrow">Now showing in Denver</p>
-        <h1>Denver <b>Showtimes</b></h1>
+        <h1>Denver Movie Showtimes</h1>
       </div>
       <p class="from">From <a href="https://coreymcginnis.substack.com/" target="_blank" rel="noopener">The Movie Newsletter</a><br /><span id="updated"></span></p>
     </header>
@@ -35,6 +34,16 @@
   <div class="bar" id="bar">
     <div class="wrap bar-inner">
       <div class="scroller" id="days" role="group" aria-label="Choose a day"></div>
+      <div class="near" role="group" aria-label="Theaters near a zip code">
+        <label for="zip">Near</label>
+        <input id="zip" class="zip" type="text" inputmode="numeric" maxlength="5" value="80218" autocomplete="off" aria-describedby="zipNote" />
+        <span class="lbl">within</span>
+        <button type="button" class="radius" data-r="1" aria-pressed="false">1 mi</button>
+        <button type="button" class="radius" data-r="3" aria-pressed="false">3 mi</button>
+        <button type="button" class="radius" data-r="5" aria-pressed="false">5 mi</button>
+        <button type="button" class="radius" data-r="all" aria-pressed="false">All</button>
+        <span class="zipnote" id="zipNote" hidden>That zip isn't in the Denver area.</span>
+      </div>
       <div class="filters">
         <div class="scroller" id="theaters" role="group" aria-label="Theaters"></div>
         <input class="search" id="q" type="search" placeholder="Search films" aria-label="Search films" autocomplete="off" />
@@ -62,30 +71,25 @@
           <div class="sort" role="group" aria-label="Sort films">
             <span class="lbl" aria-hidden="true">Sort</span>
             <button type="button" data-s="new" aria-pressed="true">Newest</button>
-            <button type="button" data-s="pop" aria-pressed="false">Popular this week</button>
+            <button type="button" data-s="pop" aria-pressed="false" title="What people are looking up this week, on TMDB and Wikipedia">Trending</button>
             <button type="button" data-s="az" aria-pressed="false">A–Z</button>
           </div>
         </div>
-        <div class="grid" id="grid"><p class="empty">Loading showtimes…</p></div>
+        <div id="grid"><p class="empty">Loading showtimes…</p></div>
       </section>
       <aside class="sched" aria-labelledby="schedH">
         <div class="sechead">
           <h2 id="schedH">Schedule</h2>
-          <div class="scope" role="group" aria-label="Schedule shows">
-            <button type="button" data-sc="all" aria-pressed="true">Everything</button>
-            <button type="button" data-sc="list" aria-pressed="false" id="listBtn">My list</button>
-          </div>
         </div>
         <div id="sched"></div>
       </aside>
     </main>
 
     <footer class="foot">
-      <p>Showtimes come from each theater's site and refresh every Thursday. Always confirm on the theater's site before you go.
-        Tap + on a poster to add it to My list; it's saved in this browser.</p>
+      <p>Showtimes come from each theater's site (AMC, Regal and Harkins via Fandango) and refresh every Thursday. Always confirm on the theater's site before you go.</p>
       <p id="srcLinks"></p>
       <p class="tmdb"><a href="https://www.themoviedb.org/" target="_blank" rel="noopener"><img src="tmdb-logo.svg" alt="TMDB" width="110" height="14" /></a>
-        Release dates, popularity and some posters from TMDB. This product uses the TMDB API but is not endorsed or certified by TMDB.</p>
+        Release dates, popularity and posters from TMDB; weekly page views from Wikipedia. This product uses the TMDB API but is not endorsed or certified by TMDB.</p>
     </footer>
   </div>
 

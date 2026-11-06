@@ -118,3 +118,18 @@ def test_tmdb_title_becomes_the_standard_and_merges_variants(monkeypatch, cfg):
     assert set(meta) == {"Friday the 13th: The Final Chapter", "Resident Evil (2026)", "Resident Evil (2002)"}
     assert ids["Friday The 13th Part 4"] == 9730
     assert seen["previous"]["Resident Evil"]["popularity"] == 9               # last week's match reused
+
+
+def test_classify_indie_and_international():
+    from movie_scraper.tmdb import classify
+    co = lambda *names: [{"name": n} for n in names]
+    a24 = classify({"original_language": "en", "budget": 7_000_000, "production_companies": co("A24")})
+    assert a24["indie"] and not a24["intl"]
+    studio = classify({"original_language": "en", "budget": 25_000_000, "production_companies": co("Warner Bros. Pictures")})
+    assert not studio["indie"]                                  # a major studio, even on a small budget
+    big = classify({"original_language": "en", "budget": 100_000_000, "production_companies": co("LAIKA")})
+    assert not big["indie"]                                     # no major, but a studio-size budget
+    toho = classify({"original_language": "ja", "budget": 20_000_000, "production_companies": co("TOHO")})
+    assert toho["intl"] and not toho["indie"]                   # non-English: International only
+    unknown = classify({"original_language": "en", "production_companies": co("Topic Studios")})
+    assert unknown["indie"]                                     # no budget listed, no major

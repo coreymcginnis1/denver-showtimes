@@ -15,6 +15,8 @@ class TheaterCfg(BaseModel):
     color: str = "#888888"
     scraper: Optional[str] = None    # which scraper class to use; defaults to the theater key
     location: Optional[str] = None   # scraper-specific id (Alamo venue / Fandango theater id)
+    lat: Optional[float] = None      # where the theater is, for the site's distance-from-zip filter
+    lon: Optional[float] = None
 
 
 class Filters(BaseModel):
@@ -56,6 +58,8 @@ DEFAULT_STRIP_SUFFIXES = [
     r"\s*\(dir\.?\s[^)]*\)$",     # director annotation: "Alpha (dir. Rawail)" -> "Alpha"
     r"\s*[:–—-]\s*Xfinity\b.*$",  # sponsor tag: "Minions & Monsters: Xfinity" -> "Minions & Monsters"
     r"\s*[-–—:]?\s+Encore$",      # rebroadcasts: "The Metropolitan Opera: Carmen Encore" -> "... Carmen"
+    r"\s*\((?:\d{4}\s+)?Encore\)$",  # "... Carmen (2026 Encore)" -> "... Carmen"
+    r"\s*\((?:English|Spanish|Hindi|Telugu|Tamil|Malayalam|Kannada|Punjabi|Japanese|Korean)(?:\s+(?:\d{4}|Dub(?:bed)?|Sub(?:titled)?|Version))?\)$",  # language versions: "Ramayana (English 2026)"
 ]
 
 # Titles matching these are dropped entirely (not a specific movie).
@@ -68,7 +72,8 @@ DEFAULT_DROP = [
     r"Copa Mundial",              # FIFA World Cup watch parties (Telemundo), not films
     r"Apple TV Live",             # live sports broadcasts: "F1 on Apple TV Live in IMAX: ..."
     r"Memorial Screening",        # tribute events with no film named: "Classic - ... Memorial Screening"
-    r"Mystery Movie",             # surprise screenings, no film named (e.g. "REGAL: Monday Mystery Movie")
+    r"Mystery Movie",
+    r"Secret Cinema",             # Harkins mystery screenings, no film named             # surprise screenings, no film named (e.g. "REGAL: Monday Mystery Movie")
     r"\bUFC \d",                  # live UFC pay-per-view broadcasts ("UFC 329: ..."), not films
     r"Members?\s+Only",           # members-only screenings (public can't attend) — drop them
     r"League of Legends",         # live esports broadcasts ("League of Legends Worlds 26 - Finals")
@@ -104,6 +109,11 @@ class OmdbCfg(BaseModel):
     enabled: bool = False
 
 
+class TrendingCfg(BaseModel):
+    # Blend 7-day English Wikipedia page views into "Trending" (50/50 with TMDB popularity ranks).
+    wikipedia: bool = True
+
+
 class Config(BaseModel):
     timezone: str = "America/Denver"
     days_ahead: int = 14
@@ -115,6 +125,7 @@ class Config(BaseModel):
     defaults: DefaultsCfg = Field(default_factory=DefaultsCfg)
     tmdb: TmdbCfg = Field(default_factory=TmdbCfg)
     omdb: OmdbCfg = Field(default_factory=OmdbCfg)
+    trending: TrendingCfg = Field(default_factory=TrendingCfg)
 
 
 def load_config(path: str | Path = "config.toml") -> Config:

@@ -119,6 +119,14 @@
     }).map(function (t) { return t.key; }));
   }
 
+  // Theaters schedule Friday to Thursday. Wednesday/Thursday previews belong to the Friday they
+  // lead into, so shift two days forward, then step back to that week's Friday.
+  function releaseWeek(d) {
+    var o = new Date(d + "T12:00:00"); o.setDate(o.getDate() + 2);
+    o.setDate(o.getDate() - ((o.getDay() + 2) % 7));   // getDay: Fri=5 -> back 0 days
+    return o.getFullYear() + "-" + String(o.getMonth() + 1).padStart(2, "0") + "-" + String(o.getDate()).padStart(2, "0");
+  }
+
   function theaterOf(k) { for (var i = 0; i < theaters.length; i++) if (theaters[i].key === k) return theaters[i]; return null; }
   function tName(k) { return SHORT[k] || (theaterOf(k) || {}).name || k; }
   function isPast(s) { return s.d === NOW.day && s.hm && s.hm < NOW.hm; }
@@ -210,11 +218,13 @@
 
   function sortFilms(ids) {
     var key = {
-      // Newest: new releases by Denver opening (latest first, upcoming openings on top), then
-      // repertory by original release.
+      // Newest: new releases by Denver release week (latest first, upcoming on top) and, within a
+      // week, by Trending; then repertory by original release; special events last.
       new: function (f) {
         if (f.event) return null;   // events sort after every film
-        if (!f.rep) return f.opened ? 1e13 + Date.parse(f.opened) : null;
+        // A week is never more than 6.048e8 ms apart from the next, and TMDB popularity stays far
+        // below that, so adding it orders films within a week without crossing weeks.
+        if (!f.rep) return f.opened ? 1e13 + Date.parse(releaseWeek(f.opened)) + Math.min(f.pop || 0, 1e7) : null;
         var r = f.rel || (f.year ? f.year + "-07-01" : null); return r ? Date.parse(r) : null;
       },
       pop: function (f) { return f.id ? f.pop : null; }

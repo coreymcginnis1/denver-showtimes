@@ -196,8 +196,9 @@ Redesigned Nov 2026 (Letterboxd-inspired, not a copy): **one day at a time**, no
 - **Show: All · New releases · Repertory.** Repertory = the film first came out **more than two
   years** before its Denver opening (`REPERTORY_DAYS` in `app.js`). Two years, not one: indie films
   often reach Denver a year+ after a festival premiere (Tight & Nerdy). No release date → new.
-- **Sorts:** Newest (default: new releases by Denver opening, latest and upcoming first, then
-  repertory by original release) · Popular this week (TMDB `popularity`, refreshed at each weekly
+- **Sorts:** Newest (default: new releases by Denver **release week** — Friday-to-Thursday, with
+  Wed/Thu previews counted toward the Friday they lead into (`releaseWeek()`) — latest and upcoming
+  first, and **by Trending within a week**; then repertory by original release; special events last) · Popular this week (TMDB `popularity`, refreshed at each weekly
   scrape; labelled **Trending**; a Wikipedia 7-day page-view version is on hold) · A–Z. Films without the data sort last.
   No ratings (see above). New releases get an "Opening day" / "New this week" tag.
 - **"Next 2 weeks"** (first button in the day strip; `state.day === "all"`): the same cards for every

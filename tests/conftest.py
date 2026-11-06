@@ -52,3 +52,8 @@ def fandango_showtimes():
 def _no_live_tmdb(monkeypatch):
     """Tests run offline: never let a real TMDB_TOKEN in the environment reach the network."""
     monkeypatch.delenv("TMDB_TOKEN", raising=False)
+
+
+@pytest.fixture(autouse=True)
+def _no_live_omdb(monkeypatch):
+    monkeypatch.delenv("OMDB_API_KEY", raising=False)

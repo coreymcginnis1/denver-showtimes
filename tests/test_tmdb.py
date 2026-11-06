@@ -53,7 +53,9 @@ def test_lookup_matches_reuses_ids_overrides_and_falls_back():
                          "The Devils": [r(11, "The Devils", "1971-07-16")],
                          "Broken": []},
         movies={20: r(20, "Dune", "2021-09-15", pop=41, votes=15896, avg=7.8),
-                30: r(30, "Wildwood", "2026-10-19", pop=752)},
+                30: r(30, "Wildwood", "2026-10-19", pop=752),
+                10: dict(r(10, "Gozu", "2003-07-11"), imdb_id="tt0361668"),
+                11: r(11, "The Devils", "1971-07-16")},
         fail=("Broken",))
     previous = {"Wildwood": {"tmdb_id": 30, "popularity": 1},
                 "Broken": {"tmdb_id": None, "release": "2020-01-01"}}
@@ -70,6 +72,7 @@ def test_lookup_matches_reuses_ids_overrides_and_falls_back():
     assert "Shorts Package: Mirrors" not in out                  # not a film: left out
     assert out["Broken"] == {"release": "2020-01-01"}            # error: keep last week's
     assert out["Gozu"]["tmdb_poster"].startswith("https://image.tmdb.org/")
+    assert out["Gozu"]["imdb_id"] == "tt0361668"                 # from the full record, for OMDb
 
 
 def test_enrich_without_token_keeps_last_runs_data(monkeypatch):

@@ -49,6 +49,7 @@
       index[t] = i;
       var m = meta[t] || {};
       return { t: t, id: m.tmdb_id || null, rel: m.release || null, pop: m.popularity, va: m.vote_average, vc: m.vote_count || 0,
+        imdb: m.imdb_rating || null, iv: m.imdb_votes || 0, mc: m.metascore || null,
         posters: [], tmdbPoster: m.tmdb_poster || null, rating: null, runtime: null, year: m.release ? +m.release.slice(0, 4) : null };
     });
     data.events.forEach(function (e) {
@@ -61,6 +62,10 @@
       shows.push({ f: index[e.title], th: x.theater, d: e.start.slice(0, 10), hm: e.allDay ? null : e.start.slice(11, 16),
         end: e.end ? e.end.slice(0, 16) : null, fmt: x.fmt, scr: x.screen, url: x.ticketUrl, id: e.id });
     });
+    haveImdb = films.some(function (f) { return f.imdb; });
+    // No Metacritic scores (OMDb unavailable): hide the Critics sort rather than offer an empty one.
+    var critics = document.querySelector('[data-s="critics"]');
+    if (critics) critics.hidden = !films.some(function (f) { return f.mc; });
     films.forEach(function (f) {   // theater art first (Fandango's is the most consistent), then TMDB's
       f.posters.sort(function (a, b) { return (b.indexOf("fandango") >= 0) - (a.indexOf("fandango") >= 0); });
       if (f.tmdbPoster) f.posters.push(f.tmdbPoster);
@@ -100,9 +105,17 @@
   function dayDiff(a, b) { return Math.round((dateObj(b) - dateObj(a)) / 864e5); }
   function runtime(m) { if (!m) return ""; var h = Math.floor(m / 60), r = m % 60; return (h ? h + "h " : "") + (r ? r + "m" : ""); }
 
-  // Top rated: TMDB's average pulled toward 6.5 until a film has about 50 votes, so a 9.0
-  // from three voters can't outrank a 7.9 from thousands.
-  function score(f) { return f.id && f.vc ? (f.va * f.vc + 6.5 * 50) / (f.vc + 50) : null; }
+  // Top rated sorts by exactly the rating printed on the card, and a film only gets one once
+  // enough people have voted (so a 9.0 from a handful of voters doesn't top the list). IMDb's
+  // audience rating via OMDb is the source; if a run has no OMDb data at all, TMDB's is used.
+  var IMDB_MIN_VOTES = 250, TMDB_MIN_VOTES = 25, haveImdb = false;
+  function rated(f) {
+    if (haveImdb) return f.imdb && f.iv >= IMDB_MIN_VOTES ? { label: "IMDb " + f.imdb.toFixed(1), value: f.imdb,
+      title: "IMDb rating from " + f.iv.toLocaleString() + " votes" } : null;
+    return f.vc >= TMDB_MIN_VOTES ? { label: "★ " + f.va.toFixed(1), value: f.va,
+      title: "TMDB average from " + f.vc.toLocaleString() + " votes" } : null;
+  }
+  function score(f) { var r = rated(f); return r ? r.value : null; }
 
   // ---- Controls ----------------------------------------------------------------
 
@@ -157,7 +170,8 @@
     var key = {
       new: function (f) { var r = f.rel || (f.year ? f.year + "-01-01" : null); return r ? Date.parse(r) : null; },
       pop: function (f) { return f.id ? f.pop : null; },
-      top: score
+      top: score,
+      critics: function (f) { return f.mc; }
     }[state.sort];
     return ids.sort(function (a, b) {
       var fa = films[a], fb = films[b], byTitle = fa.t.localeCompare(fb.t);
@@ -188,9 +202,11 @@
       list.sort(function (a, b) { return (a.hm || "").localeCompare(b.hm || ""); })
         .forEach(function (s) { if (!venues.has(s.th)) venues.set(s.th, []); venues.get(s.th).push(s); });
       var fmts = Array.from(new Set(list.map(function (s) { return s.fmt === "Premium Format" ? "Premium" : s.fmt; }).filter(Boolean)));
-      var stars = f.vc >= 20 ? '<span title="TMDB average from ' + f.vc.toLocaleString() + ' votes">★ ' + f.va.toFixed(1) + "</span>" : "";
+      var r = rated(f);
+      var stars = r ? '<span class="score" title="' + r.title + '">' + r.label + "</span>" : "";
+      var critics = f.mc ? '<span class="score" title="Metacritic score">MC ' + f.mc + "</span>" : "";
       var meta = [f.year ? "<span>" + f.year + "</span>" : "", f.rating ? "<span>" + esc(f.rating) + "</span>" : "",
-        f.runtime ? "<span>" + runtime(f.runtime) + "</span>" : "", stars]
+        f.runtime ? "<span>" + runtime(f.runtime) + "</span>" : "", stars, critics]
         .concat(fmts.map(function (x) { return '<span class="tag">' + esc(x) + "</span>"; })).join("");
       var order = theaters.map(function (t) { return t.key; });
       var vhtml = Array.from(venues.entries()).sort(function (a, b) { return order.indexOf(a[0]) - order.indexOf(b[0]); }).map(function (e) {

@@ -43,6 +43,14 @@ def main(argv: list[str] | None = None) -> int:
         counts = Counter(e["extendedProps"]["theater"] for e in events)
         print(f"\n{len(events)} events | {len(feed['films'])} films | "
               f"theaters: {dict(counts)}")
+        meta = feed.get("film_meta") or {}
+        print(f"TMDB matched {len(meta)} films; OMDb: "
+              f"{sum(1 for m in meta.values() if m.get('imdb_rating'))} IMDb ratings, "
+              f"{sum(1 for m in meta.values() if m.get('metascore'))} Metascores")
+        top = sorted((m for m in meta.values() if (m.get("imdb_votes") or 0) >= 250),
+                     key=lambda m: -m["imdb_rating"])[:5]
+        for m in top:
+            print(f"  IMDb {m['imdb_rating']} ({m['imdb_votes']:,} votes) · MC {m.get('metascore')} · {m['title']}")
         for e in events[:12]:
             tag = "all-day" if e["allDay"] else e["start"][11:16]
             print(f"  {e['start'][:10]} {tag:>7}  [{e['extendedProps']['theater']:<8}] {e['title']}")

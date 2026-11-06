@@ -75,6 +75,7 @@ def meta_from(m: dict) -> dict:
         "vote_average": round(m.get("vote_average") or 0, 2),
         "vote_count": m.get("vote_count") or 0,
         "tmdb_poster": POSTER + m["poster_path"] if m.get("poster_path") else None,
+        "imdb_id": m.get("imdb_id") or None,   # only on full movie records, not search results
     }
 
 
@@ -117,8 +118,10 @@ def lookup(hints: dict[str, int | None], previous: dict[str, dict], overrides: d
     def one(title: str):
         known = overrides.get(title) or (previous.get(title) or {}).get("tmdb_id")
         try:
-            m = client.movie(known) if known else client.find(title, hints.get(title))
-            return title, meta_from(m) if m else None
+            if not known:   # new title: search, then fetch the full record (it has the IMDb id)
+                found = client.find(title, hints.get(title))
+                known = found and found["id"]
+            return title, meta_from(client.movie(known)) if known else None
         except Exception as e:   # one bad lookup must not sink the rest
             log.warning("tmdb %r: %s — keeping last run's data", title, e)
             return title, previous.get(title)

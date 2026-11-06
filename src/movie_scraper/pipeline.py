@@ -216,7 +216,8 @@ def run(config_path: str = "config.toml", only: set[str] | None = None) -> dict:
     carried = _carried_events(previous, failed, today)
     feed = _build_feed(cfg, ordered, tz, carried=carried, stale=failed)
     feed["film_meta"] = {t: m for t, m in film_meta.items() if t in set(feed["films"])}
-    add_scores(feed["film_meta"], (previous or {}).get("film_meta"))
+    if cfg.omdb.enabled:   # off: ratings dropped from the site (see CLAUDE.md "Ratings")
+        add_scores(feed["film_meta"], (previous or {}).get("film_meta"))
     feed["tmdb_ids"] = tmdb_ids
     return feed
 
@@ -358,9 +359,8 @@ def render_summary(feed: dict, previous: dict | None, new_titles: list[str] | No
     meta = feed.get("film_meta")
     if meta is not None and feed.get("films"):
         missing = [f for f in feed["films"] if f not in meta]
-        critics = sum(1 for m in meta.values() if m.get("metascore"))
         lines += ["", f"TMDB: matched {len(feed['films']) - len(missing)} of {len(feed['films'])} titles "
-                  f"(release dates, popularity). OMDb: {critics} have a Metascore (Top rated)."]
+                  "(release dates, popularity)."]
         if missing:
             lines += ["Not on TMDB (fine for events and programs; for a real film, add "
                       "`[tmdb.overrides]` in config.toml): " + "; ".join(missing)]

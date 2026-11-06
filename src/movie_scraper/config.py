@@ -98,6 +98,12 @@ class TmdbCfg(BaseModel):
     overrides: dict[str, int] = Field(default_factory=dict)
 
 
+class OmdbCfg(BaseModel):
+    # Metacritic scores via OMDb (needs OMDB_API_KEY). Off since Nov 2026: OMDb leaves most
+    # current releases unscored for weeks, so ratings were dropped from the site (see CLAUDE.md).
+    enabled: bool = False
+
+
 class Config(BaseModel):
     timezone: str = "America/Denver"
     days_ahead: int = 14
@@ -108,6 +114,7 @@ class Config(BaseModel):
     titles: TitlesCfg = Field(default_factory=TitlesCfg)
     defaults: DefaultsCfg = Field(default_factory=DefaultsCfg)
     tmdb: TmdbCfg = Field(default_factory=TmdbCfg)
+    omdb: OmdbCfg = Field(default_factory=OmdbCfg)
 
 
 def load_config(path: str | Path = "config.toml") -> Config:

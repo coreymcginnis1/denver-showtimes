@@ -44,10 +44,7 @@ def main(argv: list[str] | None = None) -> int:
         print(f"\n{len(events)} events | {len(feed['films'])} films | "
               f"theaters: {dict(counts)}")
         meta = feed.get("film_meta") or {}
-        print(f"TMDB matched {len(meta)} films; OMDb: "
-              f"{sum(1 for m in meta.values() if m.get('metascore'))} Metascores")
-        for m in sorted((m for m in meta.values() if m.get("metascore")), key=lambda m: -m["metascore"])[:5]:
-            print(f"  MC {m['metascore']} · {m['title']}")
+        print(f"TMDB matched {len(meta)} films")
         # Every film's match, so a PR reviewer can spot a wrong TMDB match (fix: [tmdb.overrides]).
         print("\nFilm matches (title | TMDB id | release | IMDb id | IMDb rating/votes (not shown) | Metascore):")
         for t in feed["films"]:

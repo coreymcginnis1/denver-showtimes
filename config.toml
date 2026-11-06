@@ -151,3 +151,9 @@ enabled = true
 "Ramayana" = 656908                 # 2026 release; a 1976 film has the exact title
 "Dune: Part One" = 438631           # TMDB lists it as just "Dune"
 "Friday The 13th Part 4" = 9730     # "Friday the 13th: The Final Chapter"
+
+# Ratings (Metacritic via OMDb, key OMDB_API_KEY) are switched off: OMDb leaves most current
+# releases unscored for weeks, so the site has no ratings or Top rated sort for now. Set
+# enabled = true to collect Metascores again (the site would also need its display put back).
+[omdb]
+enabled = false

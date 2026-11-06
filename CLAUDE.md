@@ -26,7 +26,7 @@ Live at **https://coreymcginnis1.github.io/denver-showtimes/**, linked from the 
 ## How it works
 
 ```
-scraper (Python, GitHub Actions, weekly)  →  TMDB match  →  OMDb Metascores  →  public/data.json  →  static site (vanilla JS)  →  GitHub Pages
+scraper (Python, GitHub Actions, weekly)  →  TMDB match  →  public/data.json  →  static site (vanilla JS)  →  GitHub Pages
 ```
 
 - `src/movie_scraper/` — Python package: per-theater scrapers → normalize/filter/dedupe →
@@ -123,24 +123,24 @@ programs, double features) keep their cleaned-up name. The rules still matter: T
   so the site only *links* to Letterboxd (`letterboxd.com/tmdb/<id>/`), never scrapes it. Corey
   chose not to apply for the Letterboxd API for now.
 
-## Ratings: Metacritic only, via OMDb (`src/movie_scraper/omdb.py`)
+## Ratings: none on the site (Nov 2026) — OMDb code kept but off (`omdb.py`, `[omdb] enabled = false`)
 
-The site's only rating is **Metacritic** (Corey trusts critics over audiences): "Metacritic 98" on cards
-and the **Top rated** sort. It comes from **OMDb** (omdbapi.com, free key, CC BY-NC 4.0, credited
-in the footer), looked up by the **IMDb id from TMDB's full movie record**, so there's no title
-matching. A Metascore is fixed once the reviews are in, so OMDb's copy is reliable.
+The site shows **no ratings and has no Top rated sort**. Every source was tried and fell short:
 
-**Audience ratings were tried and dropped (Nov 2026), so don't re-add them without a new source:**
-TMDB's come from a few hundred voters, IMDb's own data can't be shown publicly, Letterboxd forbids
-scraping, and **OMDb's copy of IMDb ratings lags badly for new releases** (You Can See Everything:
-7.9 from 165 votes on OMDb vs 9.1 from 27K on IMDb; 41 of 99 films had none). `film_meta` still
-stores `imdb_rating`/`imdb_votes`/`rt` (Rotten Tomatoes), but the site doesn't show them.
+- **TMDB** ratings come from a few hundred voters per new release.
+- **IMDb**'s own data is personal-use only (no public display); **Letterboxd** forbids scraping;
+  **Metacritic / Rotten Tomatoes** have no API and forbid scraping.
+- **OMDb** (free key, CC BY-NC) carries IMDb ratings and Metascores, but **leaves most current
+  releases unscored for weeks** (Nov 2026: Wild Horse Nine had no score on OMDb while Metacritic
+  showed 78 from 50 reviews; Resident Evil, out 7 weeks, still blank) and its IMDb ratings lag
+  badly (You Can See Everything 7.9 from 165 votes vs 9.1 from 27K on IMDb). Existing Metascores
+  drift ~1 point from Metacritic's live number.
 
-- Key: `OMDB_API_KEY` repository secret. OMDb takes it as a URL parameter, so the cloud-session
-  proxy can't inject it. Test OMDb through the PR check: its dry run prints Metascore coverage and
-  a `MATCH |` line per film (TMDB id, IMDb id, scores) for reviewing matches.
-- Free tier is slow: 2 workers, 30 s timeout, one retry on a timeout. 1,000/day; a run uses ~100.
-- No key, the daily limit, or an error → films keep last run's scores; never fails the run.
+Corey chose to drop ratings rather than hand-fill scores. `omdb.py` (looked up by the IMDb id in
+TMDB's full movie record; `OMDB_API_KEY` repository secret, passed by the workflow; 2 workers,
+30 s timeout, one retry) is kept with `[omdb] enabled = false`. Re-enabling it collects
+`imdb_rating`/`imdb_votes`/`metascore`/`rt` into `film_meta`, but the site's display and sort were
+removed and would need putting back — revisit only with a source that covers new releases.
 
 ## New-titles digest and cleanup review
 
@@ -177,13 +177,11 @@ Redesigned Nov 2026 (Letterboxd-inspired, not a copy): **one day at a time**, no
 - **Day strip** (today … +14 days; the selected day is a brick "ticket stub"), theater chips
   (default-on theaters from `config.toml`, with that day's counts), search. Sticky on desktop.
 - **Poster cards** for every film playing that day at the selected theaters: poster, title (TMDB
-  name), year · rating · runtime · Metacritic score · format tags, then times
+  name), year · rating · runtime · format tags, then times
   grouped by theater, and a "View on Letterboxd" link. Posters try the theater's image (Fandango's
   first), then TMDB's, then a typeset placeholder.
-- **Sorts:** Newest (default; release date, else year) · Popular this week (TMDB popularity) ·
-  Top rated (Metacritic, exactly the number on the card; hidden when no film has one) · A–Z.
-  Films without the data sort last. Keep sort and display identical: an earlier vote-weighted
-  score ranked films out of their visible order and read as a bug.
+- **Sorts:** Newest (default; release date, else year) · Popular this week (TMDB `popularity`,
+  refreshed at each weekly scrape) · A–Z. Films without the data sort last. No ratings (see above).
 - **Schedule** of the day in time order (Morning/Afternoon/Evening/Late; earlier-today rows
   hidden behind a button). Desktop: sticky right column. Phone: Films / Schedule toggle.
 - **Tap a time** → sheet with Get tickets, Google, Outlook, Apple/.ics (ICS uses TZID America/Denver).

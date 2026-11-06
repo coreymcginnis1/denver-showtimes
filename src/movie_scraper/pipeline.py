@@ -15,6 +15,8 @@ from .scrapers.alamo import AlamoScraper
 from .scrapers.fandango import FandangoScraper
 from .scrapers.landmark import LandmarkScraper
 from .scrapers.sie_eventive import SieScraper
+from .omdb import add_scores
+from .tmdb import enrich
 
 log = logging.getLogger(__name__)
 
@@ -49,6 +51,18 @@ def _titlecase(t: str) -> str:
     return " ".join(out)
 
 
+def recase(t: str) -> str:
+    """Even out capitalization so casing variants of a title merge.
+
+    A fully UPPER or lower title becomes Title Case; in a mixed-case title, ALL-CAPS words of 4+
+    letters are down-cased ("BLEACH: ..." -> "Bleach: ..."), while short acronyms (UFC, RRR) and
+    stylized mixed case (GoodFellas) are left alone.
+    """
+    if t and (t == t.upper() or t == t.lower()) and t.upper() != t.lower():
+        return _titlecase(t)
+    return re.sub(r"\b[A-Z]{4,}\b", lambda m: m.group(0).capitalize(), t)
+
+
 def normalize_title(title: str, prefixes: list[str] = (), suffixes: list[str] = ()) -> str:
     """Standardize a film title.
 
@@ -68,14 +82,7 @@ def normalize_title(title: str, prefixes: list[str] = (), suffixes: list[str] = 
     # Safety net: a stripped tag can leave its separator behind ("The Angry Birds Movie:" once
     # the anniversary rule missed the colon form), so drop any dangling ":" / "-" / "–".
     t = re.sub(r"\s*[:–—-]+$", "", t).strip()
-    if t and (t == t.upper() or t == t.lower()) and t.upper() != t.lower():
-        t = _titlecase(t)   # uniformly UPPER or lower -> Title Case
-    elif t:
-        # In a mixed-case title, down-case ALL-CAPS words of 4+ letters so casing variants merge
-        # ("BLEACH: ..." -> "Bleach: ...", "The LEGO ..." -> "The Lego ..."), while short
-        # acronyms (UFC, RRR) and stylized mixed-case are left alone.
-        t = re.sub(r"\b[A-Z]{4,}\b", lambda m: m.group(0).capitalize(), t)
-    return t or (title or "").strip()
+    return recase(t) or (title or "").strip()
 
 
 def is_non_film(title: str, drop: list[str]) -> bool:
@@ -201,10 +208,70 @@ def run(config_path: str = "config.toml", only: set[str] | None = None) -> dict:
         if not s.all_day and s.end is None:
             s.end = s.start + timedelta(minutes=s.runtime_minutes or cfg.default_runtime_minutes)
 
-    deduped = {s.uid: s for s in shows}
+    previous = load_feed(cfg.output)
+    film_meta, tmdb_ids = standardize_titles(shows, previous, cfg)
+
+    deduped = {s.uid: s for s in shows}   # after renaming, so variants of one film dedupe too
     ordered = sorted(deduped.values(), key=lambda s: (s.start, s.theater, s.film_title))
-    carried = _carried_events(load_feed(cfg.output), failed, today)
-    return _build_feed(cfg, ordered, tz, carried=carried, stale=failed)
+    carried = _carried_events(previous, failed, today)
+    feed = _build_feed(cfg, ordered, tz, carried=carried, stale=failed)
+    feed["film_meta"] = {t: m for t, m in film_meta.items() if t in set(feed["films"])}
+    if cfg.omdb.enabled:   # off: ratings dropped from the site (see CLAUDE.md "Ratings")
+        add_scores(feed["film_meta"], (previous or {}).get("film_meta"))
+    feed["tmdb_ids"] = tmdb_ids
+    return feed
+
+
+def standardize_titles(shows: list[Showtime], previous: dict | None, cfg: Config):
+    """Match each film to TMDB, rename it to TMDB's title, and return its metadata.
+
+    The cleanup rules only have to get a title close enough to match; after that TMDB's name is
+    the standard, so every theater's variant of a film ("Friday The 13th Part 4", a stray
+    casing or subtitle difference) merges into one entry. Titles TMDB doesn't have (events,
+    shorts programs) keep their cleaned-up name.
+
+    Returns (metadata by displayed title, TMDB id by local title). The id map is saved in the
+    feed so next week reuses each match instead of searching again.
+    """
+    previous = previous or {}
+    by_id = {m["tmdb_id"]: m for m in (previous.get("film_meta") or {}).values() if m.get("tmdb_id")}
+    known = {local: by_id.get(i) or {"tmdb_id": i} for local, i in (previous.get("tmdb_ids") or {}).items()}
+    found = enrich(year_hints(shows), known, cfg.tmdb.overrides, enabled=cfg.tmdb.enabled)
+
+    # Two different films with the same TMDB title (a revival next to a remake) keep apart by year.
+    ids_by_title: dict[str, set] = {}
+    for m in found.values():
+        if m.get("title"):
+            ids_by_title.setdefault(m["title"], set()).add(m["tmdb_id"])
+
+    def display(m: dict) -> str:
+        name = recase(m["title"].strip())   # same casing cleanup ("LA BOLA NEGRA" -> "La Bola Negra")
+        if len(ids_by_title.get(m["title"], ())) > 1 and m.get("release"):
+            return f"{name} ({m['release'][:4]})"
+        return name
+
+    rename = {local: display(m) for local, m in found.items() if m.get("title")}
+    for s in shows:
+        s.film_title = rename.get(s.film_title, s.film_title)
+    film_meta = {rename[local]: m for local, m in found.items() if local in rename}
+    tmdb_ids = {local: m["tmdb_id"] for local, m in found.items() if m.get("tmdb_id")}
+    return film_meta, tmdb_ids
+
+
+def year_hints(shows: list[Showtime]) -> dict[str, int | None]:
+    """Each title's release year as the theaters give it, to tell same-titled films apart.
+
+    A year a theater states (Sie, Landmark) beats Fandango's release date, which for a revival
+    can be the re-release date. Titles with neither map to None.
+    """
+    stated: dict[str, int] = {}
+    released: dict[str, int] = {}
+    for s in shows:
+        if s.year:
+            stated.setdefault(s.film_title, int(s.year))
+        if (s.release_date or "")[:4].isdigit():
+            released.setdefault(s.film_title, int(s.release_date[:4]))
+    return {s.film_title: stated.get(s.film_title) or released.get(s.film_title) for s in shows}
 
 
 def _carried_events(previous: dict | None, theaters: list[str], today: date) -> list[dict]:
@@ -289,6 +356,14 @@ def render_summary(feed: dict, previous: dict | None, new_titles: list[str] | No
         else:
             status = "✅"
         lines.append(f"| {t['name']} | {before[key]} | {now[key]} | {status} |")
+    meta = feed.get("film_meta")
+    if meta is not None and feed.get("films"):
+        missing = [f for f in feed["films"] if f not in meta]
+        lines += ["", f"TMDB: matched {len(feed['films']) - len(missing)} of {len(feed['films'])} titles "
+                  "(release dates, popularity)."]
+        if missing:
+            lines += ["Not on TMDB (fine for events and programs; for a real film, add "
+                      "`[tmdb.overrides]` in config.toml): " + "; ".join(missing)]
     if review:
         lines += ["", f"### {len(review)} new title(s) that may need a cleanup rule", "",
                   "| Title | Why it was flagged |", "|---|---|"]

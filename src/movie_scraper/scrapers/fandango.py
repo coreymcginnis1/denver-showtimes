@@ -64,6 +64,7 @@ class FandangoScraper(BaseScraper):
             poster = self._poster(m)
             rating = m.get("rating") or None
             runtime = m.get("runtime") or None
+            release = (m.get("releaseDate") or "")[:10] or None
             for v in m.get("variants", []) or []:
                 fmt = self._fmt(v)
                 for ag in v.get("amenityGroups", []) or []:
@@ -83,6 +84,7 @@ class FandangoScraper(BaseScraper):
                             poster=poster,
                             rating=rating,
                             runtime_minutes=runtime or None,
+                            release_date=release,
                         ))
         return out
 

@@ -43,6 +43,17 @@ def main(argv: list[str] | None = None) -> int:
         counts = Counter(e["extendedProps"]["theater"] for e in events)
         print(f"\n{len(events)} events | {len(feed['films'])} films | "
               f"theaters: {dict(counts)}")
+        meta = feed.get("film_meta") or {}
+        print(f"TMDB matched {len(meta)} films")
+        # Every film's match, so a PR reviewer can spot a wrong TMDB match (fix: [tmdb.overrides]).
+        print("\nFilm matches (title | TMDB id | release | IMDb id | IMDb rating/votes (not shown) | Metascore):")
+        for t in feed["films"]:
+            m = meta.get(t)
+            if m:
+                print(f"  MATCH | {t} | {m.get('tmdb_id')} | {m.get('release') or ''} | {m.get('imdb_id') or ''} | "
+                      f"{m.get('imdb_rating') or ''}/{m.get('imdb_votes') or ''} | {m.get('metascore') or ''}")
+            else:
+                print(f"  MATCH | {t} | (not on TMDB)")
         for e in events[:12]:
             tag = "all-day" if e["allDay"] else e["start"][11:16]
             print(f"  {e['start'][:10]} {tag:>7}  [{e['extendedProps']['theater']:<8}] {e['title']}")

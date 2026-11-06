@@ -1,505 +1,353 @@
-/* Denver showtimes interactive calendar.
-   Loads data.json, lets users toggle theaters/films, and add a screening to
-   their own calendar (Google / Outlook / .ics). Times are shown as Denver
-   wall-clock for every viewer by stripping the offset before FullCalendar sees them. */
+/* Denver Showtimes: one day at a time.
+   Poster cards for every film playing on the chosen day (times grouped by theater), plus that
+   day's schedule in time order. Tap a time for tickets or to add it to Google / Outlook / .ics.
+   Times are Denver wall-clock ("floating"): the ISO offset is ignored, so every viewer sees the
+   time printed on the theater's own site. No dependencies. */
 (function () {
   "use strict";
 
-  var DATA = null;
-  var CAL = null;
-  var enabledTheaters = new Set();
-  var enabledFilms = new Set();
-  var query = "";
-  var lastViewType = "listDay";   // tracks view changes so we can force a clean refetch
+  // Short names for chips and rows; the full name is used in the sheet and calendar entries.
+  var SHORT = { sie: "Sie FilmCenter", landmark: "Landmark Mayan", amc: "AMC 9+CO 10", regal_pavilions: "Regal Pavilions",
+    alamo_sloans: "Alamo Sloans Lake", regal_colorado: "Regal Colorado Ctr", amc_westminster: "AMC Westminster" };
+  var THEATER_SITES = [
+    ["Sie FilmCenter", "https://www.denverfilm.org/"],
+    ["Landmark Mayan", "https://www.landmarktheatres.com/denver/mayan-theatre"],
+    ["AMC 9+CO 10", "https://www.amctheatres.com/movie-theatres/denver/amc-9-co-10"],
+    ["AMC Westminster", "https://www.amctheatres.com/movie-theatres/denver/amc-westminster-promenade-24"],
+    ["Alamo Sloans Lake", "https://drafthouse.com/denver/theater/sloans-lake"],
+    ["Regal Colorado Center", "https://www.regmovies.com/theatres/regal-ua-colorado-center-1308"],
+    ["Regal Denver Pavilions", "https://www.regmovies.com/theatres/regal-ua-denver-pavilions-rpx-1315"]
+  ];
+  var FMT_TAG = { "Premium Format": "Prem", "3D": "3D", "Scope": "Scope", "35mm": "35mm", "70mm": "70mm" };
+  var SLOTS = [["Morning", "00:00"], ["Afternoon", "12:00"], ["Evening", "17:00"], ["Late", "21:00"]];
 
-  function $(id) { return document.getElementById(id); }
-  function stripTZ(iso) { return iso.replace(/([+-]\d{2}:\d{2}|Z)$/, ""); }
-  function fmtTime(iso) {   // compact Denver wall-clock from the ISO string, e.g. "4:15p", "12p"
-    var hh = parseInt(iso.slice(11, 13), 10), mm = parseInt(iso.slice(14, 16), 10);
-    var h = hh % 12 || 12;
-    return h + (mm ? ":" + String(mm).padStart(2, "0") : "") + (hh >= 12 ? "p" : "a");
+  var $ = function (id) { return document.getElementById(id); };
+  function esc(s) { return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+  function store(k, v) {   // per-browser conveniences only; the page works without storage
+    try { if (v === undefined) return JSON.parse(localStorage.getItem(k)); localStorage.setItem(k, JSON.stringify(v)); }
+    catch (e) { return null; }
   }
 
-  function init() {
-    fetch("data.json?_=" + Date.now(), { cache: "no-store" })
-      .then(function (r) { return r.json(); })
-      .then(function (data) {
-        DATA = data;
-        // Secondary theaters (default_on === false) start unchecked but available to toggle on.
-        enabledTheaters = new Set(data.theaters
-          .filter(function (t) { return t.default_on !== false; })
-          .map(function (t) { return t.key; }));
-        enabledFilms = initialFilms();
-        renderUpdated();
-        renderTheaterChips();
-        renderFilmList();
-        renderSourceLinks();
-        initCalendar();
-      })
-      .catch(function (e) {
-        $("calendar").innerHTML = "<p style='color:#9a3412'>Couldn't load showtimes: " + e + "</p>";
-      });
-  }
+  // "Now" on a Denver wall clock, so past showtimes dim correctly for viewers anywhere.
+  var NOW = (function () {
+    var P = {};
+    new Intl.DateTimeFormat("en-CA", { timeZone: "America/Denver", year: "numeric", month: "2-digit", day: "2-digit",
+      hour: "2-digit", minute: "2-digit", hour12: false }).formatToParts(new Date()).forEach(function (p) { P[p.type] = p.value; });
+    return { day: P.year + "-" + P.month + "-" + P.day, hm: (P.hour === "24" ? "00" : P.hour) + ":" + P.minute };
+  })();
 
-  // Corey's picks (default_films; null means every film), unless none of them plays today at a
-  // theater that starts on. The calendar opens on today, so that would leave it empty: start
-  // with every film instead. Checked here, not in the scraper, because "today" moves on all
-  // week while the data is only refreshed on Thursdays. The picks button still selects the picks.
-  function initialFilms() {
-    var picks = new Set(DATA.default_films || DATA.films);
-    var today = ymd(new Date());
-    var playingToday = DATA.events.some(function (e) {
-      return picks.has(e.title) && enabledTheaters.has(e.extendedProps.theater) &&
-        e.start.slice(0, 10) === today;
+  var D, films = [], shows = [], days = [], theaters = [];
+  var state = { day: null, q: "", sort: "new", scope: "all", showEarlier: false, theaters: null, list: null };
+
+  // ---- Data ------------------------------------------------------------------
+
+  function load(data) {
+    D = data;
+    theaters = data.theaters;
+    var meta = data.film_meta || {}, index = {};
+    films = data.films.map(function (t, i) {
+      index[t] = i;
+      var m = meta[t] || {};
+      return { t: t, id: m.tmdb_id || null, rel: m.release || null, pop: m.popularity, va: m.vote_average, vc: m.vote_count || 0,
+        posters: [], tmdbPoster: m.tmdb_poster || null, rating: null, runtime: null, year: m.release ? +m.release.slice(0, 4) : null };
     });
-    return playingToday ? picks : new Set(DATA.films);
-  }
-
-  function theaterMeta(key) {
-    return DATA.theaters.find(function (t) { return t.key === key; }) || { name: key, color: "#888" };
-  }
-
-  function passes(e) {
-    var p = e.extendedProps;
-    if (!enabledTheaters.has(p.theater)) return false;
-    if (!enabledFilms.has(e.title)) return false;
-    if (query && e.title.toLowerCase().indexOf(query) === -1) return false;
-    return true;
-  }
-
-  function forCalendar(e) {
-    // No display `end` on purpose: a real end that crosses midnight (e.g. a 10:15pm show
-    // + 2h) makes FullCalendar spill the event onto the NEXT day at 12:00am. We keep the
-    // true start/end in extendedProps for add-to-calendar instead.
-    return {
-      id: e.id,
-      title: e.title,
-      allDay: e.allDay,
-      start: stripTZ(e.start),
-      backgroundColor: e.backgroundColor,
-      borderColor: e.borderColor,
-      extendedProps: Object.assign({}, e.extendedProps, { _start: e.start, _end: e.end || null }),
-    };
-  }
-
-  function filteredEvents() {
-    return DATA.events.filter(passes).map(forCalendar);
-  }
-
-  // Month view collapses to one entry per (day, film) — a clean list of what's playing;
-  // clicking one opens a modal with where & when (every theater + showtime that day).
-  function filmDayEvents() {
-    var groups = {};
-    DATA.events.filter(passes).forEach(function (e) {
-      var dateKey = e.start.slice(0, 10);
-      var key = dateKey + "|" + e.title;
-      if (!groups[key]) groups[key] = { title: e.title, date: dateKey, theaters: {}, showtimes: [] };
-      groups[key].showtimes.push(e);
-      groups[key].theaters[e.extendedProps.theater] = true;
+    data.events.forEach(function (e) {
+      var f = films[index[e.title]], x = e.extendedProps;
+      if (!f) return;
+      if (x.poster && f.posters.indexOf(x.poster) < 0) f.posters.push(x.poster);
+      if (!f.rating && x.rating && x.rating !== "Not Rated") f.rating = x.rating;
+      if (!f.runtime && x.runtime) f.runtime = x.runtime;
+      if (!f.year && x.year) f.year = x.year;
+      shows.push({ f: index[e.title], th: x.theater, d: e.start.slice(0, 10), hm: e.allDay ? null : e.start.slice(11, 16),
+        end: e.end ? e.end.slice(0, 16) : null, fmt: x.fmt, scr: x.screen, url: x.ticketUrl, id: e.id });
     });
-    return Object.keys(groups).map(function (k) {
-      var g = groups[k];
-      var ths = Object.keys(g.theaters);
-      var color = ths.length === 1 ? theaterMeta(ths[0]).color : "#6b7280";
-      return {
-        title: g.title,
-        start: g.date,
-        allDay: true,
-        backgroundColor: color,
-        borderColor: color,
-        extendedProps: { aggregate: true, showtimes: g.showtimes },
-      };
+    films.forEach(function (f) {   // theater art first (Fandango's is the most consistent), then TMDB's
+      f.posters.sort(function (a, b) { return (b.indexOf("fandango") >= 0) - (a.indexOf("fandango") >= 0); });
+      if (f.tmdbPoster) f.posters.push(f.tmdbPoster);
+    });
+    days = Array.from(new Set(shows.map(function (s) { return s.d; }))).sort()
+      .filter(function (d) { return d >= NOW.day; });
+    if (!days.length) days = Array.from(new Set(shows.map(function (s) { return s.d; }))).sort();
+    state.day = days.indexOf(NOW.day) >= 0 ? NOW.day : days[0];
+
+    var saved = store("dst-theaters");
+    var valid = Array.isArray(saved) ? saved.filter(function (k) { return theaterOf(k); }) : [];
+    state.theaters = new Set(valid.length ? valid : theaters.filter(function (t) { return t.default_on !== false; }).map(function (t) { return t.key; }));
+    state.list = new Set((store("dst-list") || []).filter(function (t) { return t in index; }));
+  }
+
+  function theaterOf(k) { for (var i = 0; i < theaters.length; i++) if (theaters[i].key === k) return theaters[i]; return null; }
+  function tName(k) { return SHORT[k] || (theaterOf(k) || {}).name || k; }
+  function isPast(s) { return s.d === NOW.day && s.hm && s.hm < NOW.hm; }
+  function dayShows(d, anyTheater) {
+    var q = state.q.toLowerCase();
+    return shows.filter(function (s) {
+      return s.d === d && (anyTheater || state.theaters.has(s.th)) && (!q || films[s.f].t.toLowerCase().indexOf(q) >= 0);
     });
   }
 
-  // ---- Controls ------------------------------------------------------------
+  // ---- Formatting ------------------------------------------------------------
+
+  function dateObj(d) { return new Date(d + "T12:00:00"); }
+  // Every showtime reads "h:mm am" / "h:mm pm" (Corey's house style), e.g. "3:00 pm".
+  function hm12(hm) { var h = +hm.slice(0, 2); return ((h % 12) || 12) + ":" + hm.slice(3) + " " + (h < 12 ? "am" : "pm"); }
+  var longTime = hm12;   // plain text, for labels and calendar entries
+  // On screen the digits stay tabular (so times line up) but "am"/"pm" uses normal figures.
+  function timeHTML(hm) { var t = hm12(hm), i = t.indexOf(" "); return t.slice(0, i) + ' <span class="ap">' + t.slice(i + 1) + "</span>"; }
+  function longDate(d) { return dateObj(d).toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" }); }
+  function relDay(d) {
+    var i = days.indexOf(d), t = days.indexOf(NOW.day);
+    if (t < 0) return null;
+    return i === t ? "Today" : i === t + 1 && dayDiff(NOW.day, d) === 1 ? "Tomorrow" : null;
+  }
+  function dayDiff(a, b) { return Math.round((dateObj(b) - dateObj(a)) / 864e5); }
+  function runtime(m) { if (!m) return ""; var h = Math.floor(m / 60), r = m % 60; return (h ? h + "h " : "") + (r ? r + "m" : ""); }
+
+
+  // ---- Controls ----------------------------------------------------------------
 
   function renderUpdated() {
-    var d = new Date(DATA.generated_at);
-    $("updated").textContent = "Updated " + d.toLocaleString("en-US", {
-      dateStyle: "medium", timeStyle: "short",
-    }) + " · " + DATA.events.length + " screenings";
+    var g = new Date(D.generated_at);
+    $("updated").textContent = "Updated " + g.toLocaleDateString("en-US", { month: "short", day: "numeric" }) +
+      " · " + D.events.length.toLocaleString() + " showtimes";
+    $("srcLinks").innerHTML = "Theater sites: " + THEATER_SITES.map(function (t) {
+      return '<a href="' + t[1] + '" target="_blank" rel="noopener">' + esc(t[0]) + "</a>";
+    }).join(" · ");
   }
 
-  function countByTheater(key) {
-    return DATA.events.reduce(function (n, e) {
-      return n + (e.extendedProps.theater === key ? 1 : 0);
-    }, 0);
+  function renderDays() {
+    $("days").innerHTML = days.map(function (d) {
+      var rel = relDay(d), o = dateObj(d);
+      return '<button type="button" class="day' + (rel ? " rel" : "") + '" data-d="' + d + '" aria-pressed="' + (d === state.day) + '">' +
+        '<span class="dw">' + (rel || o.toLocaleDateString("en-US", { weekday: "short" })) + "</span>" +
+        '<span class="dn">' + o.toLocaleDateString("en-US", { month: "short", day: "numeric" }) + "</span></button>";
+    }).join("");
   }
 
-  function renderTheaterChips() {
-    var box = $("theaterChips");
-    box.innerHTML = "";
-    DATA.theaters.forEach(function (t) {
-      var chip = document.createElement("span");
-      chip.className = "chip";
-      chip.innerHTML = '<span class="dot" style="background:' + t.color + '"></span>' +
-        t.name + ' <span class="count">' + countByTheater(t.key) + "</span>";
-      if (!enabledTheaters.has(t.key)) chip.classList.add("off");   // secondary theaters start off
-      chip.addEventListener("click", function () {
-        if (enabledTheaters.has(t.key)) enabledTheaters.delete(t.key);
-        else enabledTheaters.add(t.key);
-        chip.classList.toggle("off", !enabledTheaters.has(t.key));
-        renderFilmList();   // available films depend on which theaters are selected
-        refresh();
-      });
-      box.appendChild(chip);
+  function renderTheaters() {
+    var counts = {};
+    dayShows(state.day, true).forEach(function (s) { counts[s.th] = (counts[s.th] || 0) + 1; });
+    $("theaters").innerHTML = theaters.map(function (t) {
+      return '<button type="button" class="chip" style="--c:' + t.color + '" data-k="' + t.key + '" aria-pressed="' + state.theaters.has(t.key) + '">' +
+        '<span class="dot"></span>' + esc(tName(t.key)) + ' <span class="n">' + (counts[t.key] || 0) + "</span></button>";
+    }).join("");
+  }
+
+  // ---- Film cards ----------------------------------------------------------------
+
+  function posterHTML(i, cls) {
+    var f = films[i];
+    if (!f.posters.length) return fallbackHTML(f);
+    return '<img' + (cls ? ' class="' + cls + '"' : "") + ' src="' + esc(f.posters[0]) + '" data-f="' + i + '" data-n="0" alt="' +
+      (cls ? "" : "Poster for " + esc(f.t)) + '" loading="lazy" decoding="async" referrerpolicy="no-referrer">';
+  }
+  function fallbackHTML(f) { return '<div class="fallback" aria-hidden="true">' + esc(f.t) + "<small>No poster</small></div>"; }
+
+  // A broken poster tries the film's next image, then a typeset placeholder.
+  document.addEventListener("error", function (e) {
+    var img = e.target;
+    if (!img || img.tagName !== "IMG" || img.dataset.f === undefined) return;
+    var f = films[+img.dataset.f], n = +img.dataset.n + 1;
+    if (n < f.posters.length) { img.dataset.n = n; img.src = f.posters[n]; return; }
+    if (img.classList.contains("th")) { img.removeAttribute("src"); img.dataset.f = ""; return; }
+    img.outerHTML = fallbackHTML(f);
+  }, true);
+
+  function sortFilms(ids) {
+    var key = {
+      new: function (f) { var r = f.rel || (f.year ? f.year + "-01-01" : null); return r ? Date.parse(r) : null; },
+      pop: function (f) { return f.id ? f.pop : null; }
+    }[state.sort];
+    return ids.sort(function (a, b) {
+      var fa = films[a], fb = films[b], byTitle = fa.t.localeCompare(fb.t);
+      if (!key) return byTitle;
+      var ka = key(fa), kb = key(fb);
+      if (ka == null || kb == null) return (ka == null) - (kb == null) || byTitle;   // no data: last
+      return kb - ka || byTitle;
     });
   }
 
-  function ymd(d) {
-    return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") +
-      "-" + String(d.getDate()).padStart(2, "0");
-  }
+  function renderFilms() {
+    var ds = dayShows(state.day), byFilm = new Map();
+    ds.forEach(function (s) { if (!byFilm.has(s.f)) byFilm.set(s.f, []); byFilm.get(s.f).push(s); });
+    var ids = sortFilms(Array.from(byFilm.keys())), rel = relDay(state.day);
 
-  // Films selectable in the current view = those playing at an enabled theater within the
-  // calendar's visible date range (today for Daily, this week for Week, this month for Month).
-  function availableFilms() {
-    var lo = null, hi = null;
-    if (CAL && CAL.view) { lo = ymd(CAL.view.activeStart); hi = ymd(CAL.view.activeEnd); }
-    var seen = {};
-    DATA.events.forEach(function (e) {
-      if (!enabledTheaters.has(e.extendedProps.theater)) return;
-      if (lo !== null) {
-        var d = e.start.slice(0, 10);
-        if (d < lo || d >= hi) return;
-      }
-      seen[e.title] = true;
-    });
-    return Object.keys(seen).sort(function (a, b) {
-      return a.toLowerCase() < b.toLowerCase() ? -1 : 1;
-    });
-  }
+    $("filmsH").textContent = "Playing " + (rel ? rel.toLowerCase() : longDate(state.day));
+    $("filmsSub").textContent = (rel ? longDate(state.day) + " · " : "") + ids.length + " film" + (ids.length === 1 ? "" : "s") +
+      " · " + state.theaters.size + " theater" + (state.theaters.size === 1 ? "" : "s");
 
-  function renderFilmList() {
-    var list = $("filmList");
-    list.innerHTML = "";
-    availableFilms().forEach(function (title) {
-      var label = document.createElement("label");
-      label.dataset.title = title.toLowerCase();
-      var cb = document.createElement("input");
-      cb.type = "checkbox";
-      cb.checked = enabledFilms.has(title);
-      cb.addEventListener("change", function () {
-        if (cb.checked) enabledFilms.add(title); else enabledFilms.delete(title);
-        refresh();
-      });
-      label.appendChild(cb);
-      label.appendChild(document.createTextNode(" " + title));
-      list.appendChild(label);
-    });
-    applySearch();   // keep any active search filter applied after re-rendering
-  }
-
-  function applySearch() {
-    var any = false;
-    $("filmList").querySelectorAll("label").forEach(function (l) {
-      var hit = !query || l.dataset.title.indexOf(query) !== -1;
-      l.classList.toggle("hidden", !hit);
-      if (hit) any = true;
-    });
-    var existing = $("filmList").querySelector(".empty");
-    if (existing) existing.remove();
-    if (!any) {
-      var e = document.createElement("div");
-      e.className = "empty";
-      e.textContent = "No films match “" + query + "”";
-      $("filmList").appendChild(e);
+    if (!ids.length) {
+      $("grid").innerHTML = '<p class="empty">' + (state.theaters.size
+        ? "Nothing matches on this day. Try another day, more theaters, or clear the search."
+        : "Pick at least one theater above to see films.") + "</p>";
+      return;
     }
+    $("grid").innerHTML = ids.map(function (i) {
+      var f = films[i], list = byFilm.get(i), venues = new Map();
+      list.sort(function (a, b) { return (a.hm || "").localeCompare(b.hm || ""); })
+        .forEach(function (s) { if (!venues.has(s.th)) venues.set(s.th, []); venues.get(s.th).push(s); });
+      var fmts = Array.from(new Set(list.map(function (s) { return s.fmt === "Premium Format" ? "Premium" : s.fmt; }).filter(Boolean)));
+      var meta = [f.year ? "<span>" + f.year + "</span>" : "", f.rating ? "<span>" + esc(f.rating) + "</span>" : "",
+        f.runtime ? "<span>" + runtime(f.runtime) + "</span>" : ""]
+        .concat(fmts.map(function (x) { return '<span class="tag">' + esc(x) + "</span>"; })).join("");
+      var order = theaters.map(function (t) { return t.key; });
+      var vhtml = Array.from(venues.entries()).sort(function (a, b) { return order.indexOf(a[0]) - order.indexOf(b[0]); }).map(function (e) {
+        var t = theaterOf(e[0]) || { color: "#888" };
+        return '<div class="venue" style="--c:' + t.color + '"><div class="vn"><i></i>' + esc(tName(e[0])) + '</div><div class="times">' +
+          e[1].map(function (s) {
+            var tag = FMT_TAG[s.fmt] ? "<sup>" + FMT_TAG[s.fmt] + "</sup>" : "";
+            var label = s.hm ? timeHTML(s.hm) : "Times vary";
+            return '<button type="button" class="time' + (isPast(s) ? " past" : "") + '" data-i="' + shows.indexOf(s) + '" aria-label="' +
+              esc(f.t) + ", " + (s.hm ? longTime(s.hm) : "times vary") + ", " + esc(t.name || "") + '">' + label + tag + "</button>";
+          }).join("") + "</div></div>";
+      }).join("");
+      var on = state.list.has(f.t);
+      return '<article class="card"><div class="poster">' + posterHTML(i) +
+        '<button type="button" class="add" data-t="' + esc(f.t) + '" aria-pressed="' + on + '" aria-label="' +
+        (on ? "Remove " + esc(f.t) + " from" : "Add " + esc(f.t) + " to") + ' My list">' + (on ? "✓" : "+") + "</button></div>" +
+        '<h3 class="title">' + esc(f.t) + "</h3>" + (meta ? '<div class="meta">' + meta + "</div>" : "") +
+        '<div class="venues">' + vhtml + "</div>" +
+        (f.id ? '<a class="lb" href="https://letterboxd.com/tmdb/' + f.id + '/" target="_blank" rel="noopener">View on Letterboxd</a>' : "") +
+        "</article>";
+    }).join("");
   }
 
-  function wireControls() {
-    var ft = $("filtersToggle");   // mobile: expand/collapse the filter panel
-    if (ft) ft.addEventListener("click", function () {
-      var open = $("controls").classList.toggle("open");
-      ft.setAttribute("aria-expanded", open ? "true" : "false");
-    });
-    $("filmSearch").addEventListener("input", function (ev) {
-      query = ev.target.value.trim().toLowerCase();
-      applySearch();
-      refresh();
-    });
-    // Corey's picks button: only shown while config.toml lists picks (default_films is null when
-    // the list is empty, which is "every film" and already what the All films button does).
-    $("picksBtn").hidden = !DATA.default_films;
-    $("picksBtn").addEventListener("click", function () {   // reset to Corey's picks (the default allowlist)
-      enabledFilms = DATA.default_films ? new Set(DATA.default_films) : new Set(DATA.films);
-      syncFilmChecks();
-      refresh();
-    });
-    $("selectAll").addEventListener("click", function () {
-      availableFilms().forEach(function (f) { enabledFilms.add(f); });
-      syncFilmChecks();
-      refresh();
-    });
-    $("clearAll").addEventListener("click", function () {
-      availableFilms().forEach(function (f) { enabledFilms.delete(f); });
-      syncFilmChecks();
-      refresh();
-    });
-  }
+  // ---- Schedule --------------------------------------------------------------------
 
-  function syncFilmChecks() {
-    $("filmList").querySelectorAll("label").forEach(function (l) {
-      var cb = l.querySelector("input");
-      cb.checked = enabledFilms.has(l.childNodes[1].textContent.trim());
-    });
-  }
+  function renderSchedule() {
+    var listBtn = $("listBtn");
+    listBtn.textContent = "My list" + (state.list.size ? " (" + state.list.size + ")" : "");
+    listBtn.disabled = !state.list.size;
+    if (!state.list.size) state.scope = "all";
+    document.querySelectorAll("[data-sc]").forEach(function (b) { b.setAttribute("aria-pressed", b.dataset.sc === state.scope); });
 
-  function renderSourceLinks() {
-    $("srcLinks").innerHTML =
-      '<a href="https://denverfilm.org/sie-filmcenter/" target="_blank" rel="noopener">Sie FilmCenter</a> · ' +
-      '<a href="https://www.landmarktheatres.com/theaters/x02ak-landmark-mayan-theatre-denver/" target="_blank" rel="noopener">Landmark Mayan</a> · ' +
-      '<a href="https://www.amctheatres.com/movie-theatres/denver/amc-9-co-10/showtimes" target="_blank" rel="noopener">AMC 9+CO 10</a> · ' +
-      '<a href="https://www.amctheatres.com/movie-theatres/denver/amc-westminster-promenade-24/showtimes" target="_blank" rel="noopener">AMC Westminster</a> · ' +
-      '<a href="https://drafthouse.com/denver/theater/sloans-lake" target="_blank" rel="noopener">Alamo Sloans Lake</a> · ' +
-      '<a href="https://www.regmovies.com/theatres/regal-ua-colorado-center-1308" target="_blank" rel="noopener">Regal Colorado Center</a> · ' +
-      '<a href="https://www.regmovies.com/theatres/regal-ua-denver-pavilions-rpx-1315" target="_blank" rel="noopener">Regal Denver Pavilions</a>';
-  }
-
-  // ---- Calendar ------------------------------------------------------------
-
-  function initCalendar() {
-    wireControls();
-    CAL = new FullCalendar.Calendar($("calendar"), {
-      initialView: "listDay",
-      firstDay: 5,                               // weeks start Friday — new-release/turnover day
-      headerToolbar: {
-        left: "prev,next today",
-        center: "title",
-        right: "listDay,dayGridWeek,dayGridMonth",
-      },
-      views: {
-        listDay: { buttonText: "Daily" },
-        dayGridWeek: {
-          buttonText: "Week",                    // 7 day-columns; films grouped into title + chips
-          dayMaxEvents: false,
-          eventClassNames: function () { return ["wk-event"]; },
-          eventContent: function (arg) {         // scoped to Week only, so Daily/Month keep defaults
-            var wrap = document.createElement("div");
-            wrap.className = "wk-film";
-            var title = document.createElement("div");
-            title.className = "wk-film-title";
-            title.textContent = arg.event.title;
-            wrap.appendChild(title);
-            var chips = document.createElement("div");
-            chips.className = "wk-chips";
-            (arg.event.extendedProps.showtimes || []).slice()
-              .sort(function (a, b) { return a.start < b.start ? -1 : 1; })
-              .forEach(function (s) {
-                var chip = document.createElement("span");
-                chip.className = "wk-chip";
-                var dot = document.createElement("span");
-                dot.className = "wk-dot";
-                dot.style.background = theaterMeta(s.extendedProps.theater).color;
-                chip.appendChild(dot);
-                chip.appendChild(document.createTextNode(fmtTime(s.start)));
-                chips.appendChild(chip);
-              });
-            wrap.appendChild(chips);
-            return { domNodes: [wrap] };
-          },
-        },
-        dayGridMonth: { dayMaxEvents: true },    // collapse busy days to a "+N more" list
-      },
-      height: "auto",
-      nowIndicator: true,
-      displayEventEnd: false,
-      eventTimeFormat: { hour: "numeric", minute: "2-digit", meridiem: "short" },
-      noEventsContent: "No screenings match your filters",
-      events: function (info, success) {
-        // dayGridMonth spans ~35-42 days; Week=7, Daily=1. Use the fetch range (not the
-        // active view, which can lag mid-switch) to decide whether to aggregate.
-        var spanDays = (new Date(info.end) - new Date(info.start)) / 86400000;
-        success(spanDays > 1 ? filmDayEvents() : filteredEvents());   // Daily individual; Week/Month by film
-      },
-      eventClick: function (arg) { arg.jsEvent.preventDefault(); openModal(arg.event); },
-      datesSet: function (arg) {
-        renderFilmList();   // re-scope the film list to the visible range
-        // Daily/Week show individual showtimes; Month aggregates to one entry per film.
-        // FullCalendar caches events across the widest fetched range, so on a view-type
-        // change we must force a refetch or a narrower view reuses the wrong shape.
-        if (arg.view.type !== lastViewType) {
-          lastViewType = arg.view.type;
-          setTimeout(function () { if (CAL) CAL.refetchEvents(); }, 0);
-        }
-      },
-      eventDidMount: function (arg) {
-        // Daily (list) view has room — append theater + auditorium + format.
-        if (arg.view.type !== "listDay" || arg.event.extendedProps.aggregate) return;
-        var p = arg.event.extendedProps;
-        var titleEl = arg.el.querySelector(".fc-list-event-title");
-        if (!titleEl) return;
-        var bits = [];
-        if (p.theaterName) bits.push(p.theaterName);
-        if (p.screen) bits.push(p.screen);
-        if (p.fmt) bits.push(p.fmt);
-        if (!bits.length) return;
-        var span = document.createElement("span");
-        span.className = "list-meta";
-        span.textContent = bits.join(" · ");
-        titleEl.appendChild(span);
-      },
-    });
-    CAL.render();
-  }
-
-  function refresh() { if (CAL) CAL.refetchEvents(); }
-
-  // ---- Modal + add-to-calendar --------------------------------------------
-
-  function openModal(ev) {
-    if (ev.extendedProps.aggregate) return openFilmDayModal(ev);
-    var p = ev.extendedProps;
-    var m = theaterMeta(p.theater);
-    var when = ev.allDay
-      ? new Date(p._start).toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" })
-      : new Date(p._start).toLocaleString("en-US", { weekday: "long", month: "long", day: "numeric", hour: "numeric", minute: "2-digit" });
-
-    var meta = [];
-    if (p.fmt) meta.push(p.fmt);
-    if (p.runtime) meta.push(Math.floor(p.runtime / 60) + "h " + (p.runtime % 60) + "m");
-    if (p.rating) meta.push(p.rating);
-    if (p.year) meta.push(p.year);
-    if (p.director) meta.push("Dir. " + p.director);
-
-    var html = '<div class="head">';
-    if (p.poster) html += '<img class="poster" src="' + p.poster + '" alt="" />';
-    html += '<div style="flex:1"><span class="theater-badge" style="background:' + m.color + '">' +
-      esc(m.name) + '</span><h2>' + esc(ev.title) + '</h2>' +
-      '<div class="when">' + esc(when) + '</div>';
-    if (meta.length) html += '<div class="meta">' + esc(meta.join(" · ")) + '</div>';
-    html += '</div><button class="close" aria-label="Close">&times;</button></div>';
-
-    html += '<div class="body">';
-    if (ev.allDay && p.note) html += '<div class="note">' + esc(p.note) + '</div>';
-    html += '<div class="actions">';
-    if (p.ticketUrl) html += '<a class="primary" href="' + p.ticketUrl + '" target="_blank" rel="noopener">Get tickets ↗</a>';
-    html += '</div>';
-
-    if (!ev.allDay) {
-      var ics = URL.createObjectURL(icsBlob(ev));
-      html += '<div class="addcal-label">Add this showtime to your calendar</div><div class="actions">' +
-        '<a href="' + googleUrl(ev) + '" target="_blank" rel="noopener">Google</a>' +
-        '<a href="' + outlookUrl(ev) + '" target="_blank" rel="noopener">Outlook</a>' +
-        '<a href="' + ics + '" download="' + slug(ev.title) + '.ics">Apple / .ics</a>' +
-        '</div>';
+    var ds = dayShows(state.day).filter(function (s) { return s.hm && (state.scope === "all" || state.list.has(films[s.f].t)); })
+      .sort(function (a, b) { return a.hm.localeCompare(b.hm) || films[a.f].t.localeCompare(films[b.f].t); });
+    var past = ds.filter(isPast), shown = state.showEarlier ? ds : ds.filter(function (s) { return !isPast(s); });
+    if (!ds.length) {
+      $("sched").innerHTML = '<p class="empty">' + (state.scope === "list" ? "None of your films play on this day at these theaters." : "No showtimes match.") + "</p>";
+      return;
     }
-    html += '</div>';
-
-    var modal = $("modal");
-    modal.innerHTML = html;
-    modal.querySelector(".close").addEventListener("click", closeModal);
-    $("modalBackdrop").classList.add("open");
+    var html = shown.length ? "" : '<p class="empty">Everything has started for today.</p>';
+    SLOTS.forEach(function (sl, n) {
+      var end = n + 1 < SLOTS.length ? SLOTS[n + 1][1] : "99";
+      var rows = shown.filter(function (s) { return s.hm >= sl[1] && s.hm < end; });
+      if (!rows.length) return;
+      html += '<div class="slot"><span>' + sl[0] + "</span><span>" + rows.length + "</span></div>" + rows.map(function (s) {
+        var f = films[s.f], t = theaterOf(s.th) || { color: "#888" }, extra = [s.fmt === "Premium Format" ? "Premium" : s.fmt, s.scr].filter(Boolean).join(" · ");
+        return '<button type="button" class="row' + (isPast(s) ? " past" : "") + '" data-i="' + shows.indexOf(s) + '" style="--c:' + t.color + '">' +
+          '<span class="t">' + timeHTML(s.hm) + "</span>" + (f.posters.length ? posterHTML(s.f, "th") : '<span class="th"></span>') +
+          '<span class="f"><b>' + esc(f.t) + "</b><span><i></i>" + esc(tName(s.th)) + (extra ? " · " + esc(extra) : "") + "</span></span></button>";
+      }).join("");
+    });
+    if (past.length) html += '<button type="button" class="earlier" id="earlier">' + (state.showEarlier ? "Hide " : "Show ") + past.length + " earlier today</button>";
+    $("sched").innerHTML = html;
   }
 
-  // Month-view click: one film on one day -> list every theater + showtime ("where & when").
-  function openFilmDayModal(ev) {
-    var shows = ev.extendedProps.showtimes.slice().sort(function (a, b) {
-      return a.start < b.start ? -1 : 1;
-    });
-    var dateLabel = new Date(shows[0].start).toLocaleDateString("en-US",
-      { weekday: "long", month: "long", day: "numeric" });
-    var poster = (shows[0].extendedProps || {}).poster;
-
-    var html = '<div class="head">';
-    if (poster) html += '<img class="poster" src="' + poster + '" alt="" />';
-    html += '<div style="flex:1"><h2>' + esc(ev.title) + '</h2>' +
-      '<div class="when">' + esc(dateLabel) + '</div>' +
-      '<div class="meta">Where &amp; when to see it</div></div>' +
-      '<button class="close" aria-label="Close">&times;</button></div>';
-
-    html += '<div class="body"><ul class="showings">';
-    shows.forEach(function (e) {
-      var p = e.extendedProps;
-      var m = theaterMeta(p.theater);
-      var time = e.allDay ? "Times vary"
-        : new Date(e.start).toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" });
-      var cev = forCalendar(e);
-      html += '<li class="showing"><span class="dot" style="background:' + m.color + '"></span>' +
-        '<span class="showing-meta"><b>' + esc(time) + "</b> · " + esc(m.name) +
-        (p.fmt ? " · " + esc(p.fmt) : "") + '</span><span class="showing-actions">';
-      if (p.ticketUrl) html += '<a href="' + p.ticketUrl + '" target="_blank" rel="noopener">Tickets ↗</a>';
-      if (!e.allDay) {
-        html += '<a href="' + googleUrl(cev) + '" target="_blank" rel="noopener">+Google</a>' +
-          '<a href="' + URL.createObjectURL(icsBlob(cev)) + '" download="' + slug(ev.title) + '.ics">+.ics</a>';
-      }
-      html += "</span></li>";
-    });
-    html += "</ul></div>";
-
-    var modal = $("modal");
-    modal.innerHTML = html;
-    modal.querySelector(".close").addEventListener("click", closeModal);
-    $("modalBackdrop").classList.add("open");
-  }
-
-  function closeModal() { $("modalBackdrop").classList.remove("open"); }
-
-  $("modalBackdrop") && $("modalBackdrop").addEventListener("click", function (e) {
-    if (e.target === $("modalBackdrop")) closeModal();
-  });
-  document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeModal(); });
+  // ---- Showtime sheet + add to calendar -----------------------------------------------
 
   function pad(n) { return String(n).padStart(2, "0"); }
-  function toUTC(iso) {
-    var d = new Date(iso);
-    return d.getUTCFullYear() + pad(d.getUTCMonth() + 1) + pad(d.getUTCDate()) + "T" +
-      pad(d.getUTCHours()) + pad(d.getUTCMinutes()) + pad(d.getUTCSeconds()) + "Z";
+  function stamp(d, hm) { return d.replace(/-/g, "") + "T" + hm.replace(":", "") + "00"; }
+  function endOf(s) {
+    if (s.end) return { d: s.end.slice(0, 10), hm: s.end.slice(11, 16) };
+    var o = new Date(s.d + "T" + s.hm + ":00"); o.setMinutes(o.getMinutes() + (films[s.f].runtime || 120));
+    return { d: o.getFullYear() + "-" + pad(o.getMonth() + 1) + "-" + pad(o.getDate()), hm: pad(o.getHours()) + ":" + pad(o.getMinutes()) };
   }
-  function esc(s) { var d = document.createElement("div"); d.textContent = s == null ? "" : String(s); return d.innerHTML; }
-  function slug(s) { return s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "") || "showtime"; }
+  function slug(t) { return t.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "") || "showtime"; }
+  function icsEsc(t) { return String(t).replace(/([,;\\])/g, "\\$1").replace(/\n/g, "\\n"); }
 
-  function descText(ev) {
-    var p = ev.extendedProps, parts = [];
-    if (p.fmt) parts.push(p.fmt);
-    if (p.ticketUrl) parts.push("Tickets: " + p.ticketUrl);
-    return parts.join("\n");
-  }
-
-  function dateRange(ev) {
-    var s = ev.extendedProps._start;
-    var e = ev.extendedProps._end || s;
-    return toUTC(s) + "/" + toUTC(e);
-  }
-
-  function googleUrl(ev) {
-    var p = ev.extendedProps;
-    return "https://calendar.google.com/calendar/render?action=TEMPLATE" +
-      "&text=" + encodeURIComponent(ev.title + " — " + p.theaterName) +
-      "&dates=" + dateRange(ev) +
-      "&details=" + encodeURIComponent(descText(ev)) +
-      "&location=" + encodeURIComponent(p.theaterName);
-  }
-
-  function outlookUrl(ev) {
-    var p = ev.extendedProps;
-    return "https://outlook.live.com/calendar/0/deeplink/compose?path=/calendar/action/compose&rru=addevent" +
-      "&subject=" + encodeURIComponent(ev.title + " — " + p.theaterName) +
-      "&startdt=" + encodeURIComponent(p._start) +
-      "&enddt=" + encodeURIComponent(p._end || p._start) +
-      "&location=" + encodeURIComponent(p.theaterName) +
-      "&body=" + encodeURIComponent(descText(ev));
+  function calendarLinks(s) {
+    var f = films[s.f], t = theaterOf(s.th) || { name: s.th }, e = endOf(s);
+    var title = f.t + " at " + t.name, details = (s.url ? "Tickets: " + s.url + "\n" : "") + "From Denver Showtimes";
+    var google = "https://calendar.google.com/calendar/render?action=TEMPLATE&text=" + encodeURIComponent(title) +
+      "&dates=" + stamp(s.d, s.hm) + "/" + stamp(e.d, e.hm) + "&ctz=America/Denver&location=" + encodeURIComponent(t.name) +
+      "&details=" + encodeURIComponent(details);
+    var outlook = "https://outlook.live.com/calendar/0/deeplink/compose?path=/calendar/action/compose&rru=addevent&subject=" +
+      encodeURIComponent(title) + "&startdt=" + s.d + "T" + s.hm + ":00&enddt=" + e.d + "T" + e.hm + ":00&location=" +
+      encodeURIComponent(t.name) + "&body=" + encodeURIComponent(details);
+    var ics = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//denver-showtimes//EN", "CALSCALE:GREGORIAN",
+      "BEGIN:VTIMEZONE", "TZID:America/Denver",
+      "BEGIN:DAYLIGHT", "TZOFFSETFROM:-0700", "TZOFFSETTO:-0600", "TZNAME:MDT", "DTSTART:19700308T020000", "RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=2SU", "END:DAYLIGHT",
+      "BEGIN:STANDARD", "TZOFFSETFROM:-0600", "TZOFFSETTO:-0700", "TZNAME:MST", "DTSTART:19701101T020000", "RRULE:FREQ=YEARLY;BYMONTH=11;BYDAY=1SU", "END:STANDARD",
+      "END:VTIMEZONE", "BEGIN:VEVENT", "UID:" + s.id + "@denver-showtimes",
+      "DTSTAMP:" + new Date().toISOString().replace(/[-:]/g, "").slice(0, 15) + "Z",
+      "DTSTART;TZID=America/Denver:" + stamp(s.d, s.hm), "DTEND;TZID=America/Denver:" + stamp(e.d, e.hm),
+      "SUMMARY:" + icsEsc(title), "LOCATION:" + icsEsc(t.name), "DESCRIPTION:" + icsEsc(details),
+      "END:VEVENT", "END:VCALENDAR"].join("\r\n");
+    return { google: google, outlook: outlook, ics: URL.createObjectURL(new Blob([ics], { type: "text/calendar;charset=utf-8" })), end: e };
   }
 
-  function icsEsc(s) { return String(s).replace(/([,;\\])/g, "\\$1").replace(/\n/g, "\\n"); }
-  function icsBlob(ev) {
-    var p = ev.extendedProps;
-    var lines = [
-      "BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//denver-showtimes//EN", "CALSCALE:GREGORIAN",
-      "BEGIN:VEVENT",
-      "UID:" + ev.id + "@denver-showtimes",
-      "DTSTAMP:" + toUTC(new Date().toISOString()),
-      "DTSTART:" + toUTC(p._start),
-      "DTEND:" + toUTC(p._end || p._start),
-      "SUMMARY:" + icsEsc(ev.title + " — " + p.theaterName),
-      "LOCATION:" + icsEsc(p.theaterName),
-      "DESCRIPTION:" + icsEsc(descText(ev)),
-      "END:VEVENT", "END:VCALENDAR",
-    ];
-    return new Blob([lines.join("\r\n")], { type: "text/calendar;charset=utf-8" });
+  var lastFocus = null, icsUrl = null;
+  function openSheet(i) {
+    var s = shows[i], f = films[s.f], t = theaterOf(s.th) || { name: s.th };
+    var where = [t.name, s.scr, s.fmt].filter(Boolean).join(" · "), links = s.hm ? calendarLinks(s) : null;
+    icsUrl = links && links.ics;
+    var when = dateObj(s.d).toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" }) +
+      (s.hm ? " · " + timeHTML(s.hm) + "–" + timeHTML(links.end.hm) : " · times vary");
+    $("backdrop").innerHTML = '<div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetT">' +
+      (f.posters.length ? posterHTML(s.f, "sheet-poster") : '<div class="ph"></div>') +
+      '<div><h3 id="sheetT">' + esc(f.t) + '</h3><div class="when">' + when + "</div>" +
+      '<div class="where">' + esc(where) + (s.hm && !s.end && !f.runtime ? " · runtime unknown, 2h assumed" : "") + "</div></div>" +
+      '<div class="actions">' + (s.url ? '<a class="btn primary" href="' + esc(s.url) + '" target="_blank" rel="noopener">Get tickets</a>' : "") +
+      (links ? '<div class="btn-row three"><a class="btn" href="' + esc(links.google) + '" target="_blank" rel="noopener">Google</a>' +
+        '<a class="btn" href="' + esc(links.outlook) + '" target="_blank" rel="noopener">Outlook</a>' +
+        '<a class="btn" href="' + links.ics + '" download="' + slug(f.t) + '.ics">Apple / .ics</a></div>' : "") +
+      '<button type="button" class="btn" id="closeSheet">Close</button></div></div>';
+    lastFocus = document.activeElement;
+    $("backdrop").hidden = false;
+    var first = $("backdrop").querySelector("a, button"); if (first) first.focus();
+  }
+  function closeSheet() {
+    $("backdrop").hidden = true; $("backdrop").innerHTML = "";
+    if (icsUrl) { URL.revokeObjectURL(icsUrl); icsUrl = null; }
+    if (lastFocus) lastFocus.focus();
   }
 
-  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
-  else init();
+  // ---- Wiring ------------------------------------------------------------------------
+
+  function renderAll() { renderTheaters(); renderFilms(); renderSchedule(); }
+  function measure() { document.documentElement.style.setProperty("--bar-h", $("bar").offsetHeight + "px"); }
+
+  function wire() {
+    document.addEventListener("click", function (e) {
+      if (e.target.id === "backdrop") return closeSheet();
+      var b = e.target.closest("button"); if (!b) return;
+      if (b.id === "closeSheet") return closeSheet();
+      if (b.dataset.d) { state.day = b.dataset.d; state.showEarlier = false; renderDays(); renderAll(); window.scrollTo({ top: 0 }); return; }
+      if (b.dataset.k) {
+        var k = b.dataset.k; state.theaters.has(k) ? state.theaters.delete(k) : state.theaters.add(k);
+        store("dst-theaters", Array.from(state.theaters)); renderAll(); return;
+      }
+      if (b.dataset.s) {
+        state.sort = b.dataset.s;
+        document.querySelectorAll("[data-s]").forEach(function (x) { x.setAttribute("aria-pressed", x === b); });
+        renderFilms(); return;
+      }
+      if (b.dataset.sc) { state.scope = b.dataset.sc; renderSchedule(); return; }
+      if (b.dataset.v) {
+        $("layout").dataset.view = b.dataset.v;
+        document.querySelectorAll("[data-v]").forEach(function (x) { x.setAttribute("aria-pressed", x === b); });
+        return;
+      }
+      if (b.classList.contains("add")) {
+        var t = b.dataset.t; state.list.has(t) ? state.list.delete(t) : state.list.add(t);
+        store("dst-list", Array.from(state.list)); renderFilms(); renderSchedule(); return;
+      }
+      if (b.id === "earlier") { state.showEarlier = !state.showEarlier; renderSchedule(); return; }
+      if (b.dataset.i) openSheet(+b.dataset.i);
+    });
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !$("backdrop").hidden) closeSheet(); });
+    $("q").addEventListener("input", function (e) { state.q = e.target.value.trim(); renderAll(); });
+    window.addEventListener("resize", measure);
+  }
+
+  fetch("data.json?_=" + Date.now(), { cache: "no-store" })
+    .then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
+    .then(function (data) {
+      load(data); wire(); renderUpdated(); renderDays(); renderAll(); measure();
+      var sel = $("days").querySelector('[aria-pressed="true"]'); if (sel) sel.scrollIntoView({ block: "nearest", inline: "center" });
+    })
+    .catch(function (e) {
+      $("grid").innerHTML = '<p class="empty">Couldn’t load showtimes (' + esc(e.message) + "). Try reloading the page.</p>";
+    });
 })();

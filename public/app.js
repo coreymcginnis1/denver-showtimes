@@ -37,7 +37,7 @@
   })();
 
   var D, films = [], shows = [], days = [], theaters = [];
-  var state = { day: null, q: "", sort: "new", scope: "all", showEarlier: false, theaters: null, list: null };
+  var state = { day: null, q: "", sort: "new", kind: "all", scope: "all", showEarlier: false, theaters: null, list: null };
 
   // ---- Data ------------------------------------------------------------------
 
@@ -61,9 +61,15 @@
       shows.push({ f: index[e.title], th: x.theater, d: e.start.slice(0, 10), hm: e.allDay ? null : e.start.slice(11, 16),
         end: e.end ? e.end.slice(0, 16) : null, fmt: x.fmt, scr: x.screen, url: x.ticketUrl, id: e.id });
     });
-    films.forEach(function (f) {   // theater art first (Fandango's is the most consistent), then TMDB's
+    var openings = data.openings || {};
+    films.forEach(function (f, i) {
+      // theater art first (Fandango's is the most consistent), then TMDB's
       f.posters.sort(function (a, b) { return (b.indexOf("fandango") >= 0) - (a.indexOf("fandango") >= 0); });
       if (f.tmdbPoster) f.posters.push(f.tmdbPoster);
+      // Denver opening: the first day it played at a theater we track (kept by the scraper).
+      f.opened = openings[f.t] || shows.filter(function (s) { return s.f === i; })
+        .map(function (s) { return s.d; }).sort()[0] || null;
+      f.rep = isRepertory(f);
     });
     days = Array.from(new Set(shows.map(function (s) { return s.d; }))).sort()
       .filter(function (d) { return d >= NOW.day; });
@@ -76,13 +82,24 @@
     state.list = new Set((store("dst-list") || []).filter(function (t) { return t in index; }));
   }
 
+  // Repertory: the film first came out more than two years before it opened here (a revival).
+  // Two years, not one: indie films often reach Denver a year or more after a festival premiere
+  // (TMDB dates them by it). New releases (and events with no release date) are everything else.
+  var REPERTORY_DAYS = 730;
+  function isRepertory(f) {
+    var orig = f.rel || (f.year ? f.year + "-07-01" : null);
+    return !!(orig && f.opened && dayDiff(orig, f.opened) > REPERTORY_DAYS);
+  }
+
   function theaterOf(k) { for (var i = 0; i < theaters.length; i++) if (theaters[i].key === k) return theaters[i]; return null; }
   function tName(k) { return SHORT[k] || (theaterOf(k) || {}).name || k; }
   function isPast(s) { return s.d === NOW.day && s.hm && s.hm < NOW.hm; }
   function dayShows(d, anyTheater) {
     var q = state.q.toLowerCase();
     return shows.filter(function (s) {
-      return s.d === d && (anyTheater || state.theaters.has(s.th)) && (!q || films[s.f].t.toLowerCase().indexOf(q) >= 0);
+      var f = films[s.f];
+      return s.d === d && (anyTheater || state.theaters.has(s.th)) && (!q || f.t.toLowerCase().indexOf(q) >= 0) &&
+        (state.kind === "all" || (state.kind === "rep") === f.rep);
     });
   }
 
@@ -155,7 +172,12 @@
 
   function sortFilms(ids) {
     var key = {
-      new: function (f) { var r = f.rel || (f.year ? f.year + "-01-01" : null); return r ? Date.parse(r) : null; },
+      // Newest: new releases by Denver opening (latest first, upcoming openings on top), then
+      // repertory by original release.
+      new: function (f) {
+        if (!f.rep) return f.opened ? 1e13 + Date.parse(f.opened) : null;
+        var r = f.rel || (f.year ? f.year + "-07-01" : null); return r ? Date.parse(r) : null;
+      },
       pop: function (f) { return f.id ? f.pop : null; }
     }[state.sort];
     return ids.sort(function (a, b) {
@@ -190,6 +212,9 @@
       var meta = [f.year ? "<span>" + f.year + "</span>" : "", f.rating ? "<span>" + esc(f.rating) + "</span>" : "",
         f.runtime ? "<span>" + runtime(f.runtime) + "</span>" : ""]
         .concat(fmts.map(function (x) { return '<span class="tag">' + esc(x) + "</span>"; })).join("");
+      var since = f.opened ? dayDiff(f.opened, state.day) : null;
+      var fresh = !f.rep && since === 0 ? "Opening day" : !f.rep && since > 0 && since <= 6 ? "New this week" : "";
+      if (fresh) meta += '<span class="tag fresh">' + fresh + "</span>";
       var order = theaters.map(function (t) { return t.key; });
       var vhtml = Array.from(venues.entries()).sort(function (a, b) { return order.indexOf(a[0]) - order.indexOf(b[0]); }).map(function (e) {
         var t = theaterOf(e[0]) || { color: "#888" };
@@ -317,6 +342,11 @@
       if (b.dataset.k) {
         var k = b.dataset.k; state.theaters.has(k) ? state.theaters.delete(k) : state.theaters.add(k);
         store("dst-theaters", Array.from(state.theaters)); renderAll(); return;
+      }
+      if (b.dataset.kind) {
+        state.kind = b.dataset.kind;
+        document.querySelectorAll("[data-kind]").forEach(function (x) { x.setAttribute("aria-pressed", x === b); });
+        renderAll(); return;
       }
       if (b.dataset.s) {
         state.sort = b.dataset.s;

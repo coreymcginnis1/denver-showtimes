@@ -409,3 +409,24 @@ def test_denver_openings_remember_the_first_showtime_and_forget_old_ones():
     assert out["Club Kid"] == "2026-11-19"          # upcoming opening: its first scheduled day
     assert out["Recently Gone"] == "2026-09-01"     # not playing, but recent enough to keep
     assert "Long Gone" not in out                   # forgotten after OPENINGS_KEEP_DAYS
+
+
+def test_trend_blends_tmdb_and_wikipedia_ranks_50_50():
+    meta = {
+        "A": {"tmdb_id": 1, "popularity": 900, "wiki_views": 10_000},   # tmdb #1, wiki #3 -> 2.0
+        "B": {"tmdb_id": 2, "popularity": 500, "wiki_views": 900_000},  # tmdb #2, wiki #1 -> 1.5
+        "C": {"tmdb_id": 3, "popularity": 100, "wiki_views": 50_000},   # tmdb #3, wiki #2 -> 2.5
+        "D": {"tmdb_id": 4, "popularity": 50},                          # no article: tmdb rank alone
+        "Event": {"title": "x"},                                       # no TMDB match: no score
+    }
+    pipeline.add_trend(meta)
+    assert [meta[k]["trend"] for k in "ABCD"] == [2.0, 1.5, 2.5, 4.0]
+    assert "trend" not in meta["Event"]
+
+
+def test_wiki_views_fall_back_to_last_run(monkeypatch):
+    monkeypatch.setattr(pipeline, "weekly_views", lambda ids, today: {1: 500})
+    meta = {"A": {"tmdb_id": 1}, "B": {"tmdb_id": 2}, "C": {"tmdb_id": 3}}
+    previous = {"Old name": {"tmdb_id": 2, "wiki_views": 77}}
+    pipeline.add_wiki_views(meta, previous, date(2026, 11, 6))
+    assert meta["A"]["wiki_views"] == 500 and meta["B"]["wiki_views"] == 77 and "wiki_views" not in meta["C"]

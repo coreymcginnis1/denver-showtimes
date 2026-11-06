@@ -109,6 +109,11 @@ class OmdbCfg(BaseModel):
     enabled: bool = False
 
 
+class TrendingCfg(BaseModel):
+    # Blend 7-day English Wikipedia page views into "Trending" (50/50 with TMDB popularity ranks).
+    wikipedia: bool = True
+
+
 class Config(BaseModel):
     timezone: str = "America/Denver"
     days_ahead: int = 14
@@ -120,6 +125,7 @@ class Config(BaseModel):
     defaults: DefaultsCfg = Field(default_factory=DefaultsCfg)
     tmdb: TmdbCfg = Field(default_factory=TmdbCfg)
     omdb: OmdbCfg = Field(default_factory=OmdbCfg)
+    trending: TrendingCfg = Field(default_factory=TrendingCfg)
 
 
 def load_config(path: str | Path = "config.toml") -> Config:

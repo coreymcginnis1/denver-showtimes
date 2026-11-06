@@ -144,6 +144,20 @@ TMDB's full movie record; `OMDB_API_KEY` repository secret, passed by the workfl
 `imdb_rating`/`imdb_votes`/`metascore`/`rt` into `film_meta`, but the site's display and sort were
 removed and would need putting back — revisit only with a source that covers new releases.
 
+## Trending: 50/50 TMDB + Wikipedia (`wikipedia.py`, `pipeline.add_trend()`, `[trending]`)
+
+Each run fetches 7-day English Wikipedia page views for every matched film (article found through
+Wikidata by TMDB id, P4947; Wikimedia pageviews API; free, needs only a descriptive User-Agent) into
+`film_meta.wiki_views`, falling back to last run's count. `trend` = mean of the TMDB-popularity rank
+and the Wikipedia-views rank. **Why 50/50 (Nov 2026):** against Letterboxd's popular-this-week list
+(Corey's screenshot; the 10 overlapping Denver films), rank correlation was TMDB 0.59, Wikipedia
+0.77, blend 0.90; weights 40–60% Wikipedia all scored 0.87–0.90. TMDB alone is worldwide and counts
+streaming (The Mongoose #3); Wikipedia alone over-weights big international releases (Ramayana #1).
+Wikimedia blocks the cloud-session proxy (403/429), so test it through the PR check. `cli
+--compare-trending` (dry runs) prints a TMDB-vs-Wikipedia table (`TREND |` lines) for re-checking.
+Other sources checked: Trakt (streaming-centric), TMDB weekly trending list (58% coverage), Google
+Trends / IMDb popularity / box office (no usable API or license), Letterboxd (API by application).
+
 ## New-titles digest and cleanup review
 
 Each scrape prints titles that are *new since the last run* (tracked in the committed
@@ -198,8 +212,9 @@ Redesigned Nov 2026 (Letterboxd-inspired, not a copy): **one day at a time**, no
   often reach Denver a year+ after a festival premiere (Tight & Nerdy). No release date → new.
 - **Sorts:** Newest (default: new releases by Denver **release week** — Friday-to-Thursday, with
   Wed/Thu previews counted toward the Friday they lead into (`releaseWeek()`) — latest and upcoming
-  first, and **by Trending within a week**; then repertory by original release; special events last) · Popular this week (TMDB `popularity`, refreshed at each weekly
-  scrape; labelled **Trending**; a Wikipedia 7-day page-view version is on hold) · A–Z. Films without the data sort last.
+  first, and **by Trending within a week**; then repertory by original release; special events last) · **Trending** (`film_meta.trend`: the average of a film's rank by TMDB
+  popularity and by 7-day English Wikipedia page views, `pipeline.add_trend()`; TMDB rank alone when
+  there's no article) · A–Z. Films without the data sort last.
   No ratings (see above). New releases get an "Opening day" / "New this week" tag.
 - **"Next 2 weeks"** (first button in the day strip; `state.day === "all"`): the same cards for every
   film with an upcoming showtime in the window, but each theater gets one line ("Nov 6–12 · 14

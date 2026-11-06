@@ -55,7 +55,7 @@
     films = data.films.map(function (t, i) {
       index[t] = i;
       var m = meta[t] || {};
-      return { t: t, id: m.tmdb_id || null, rel: m.release || null, pop: m.popularity, va: m.vote_average, vc: m.vote_count || 0,
+      return { t: t, id: m.tmdb_id || null, rel: m.release || null, pop: m.popularity, trend: m.trend != null ? m.trend : null, va: m.vote_average, vc: m.vote_count || 0,
         indie: !!m.indie, intl: !!m.intl,
         posters: [], tmdbPoster: m.tmdb_poster || null, rating: null, runtime: null, year: m.release ? +m.release.slice(0, 4) : null };
     });
@@ -222,12 +222,13 @@
       // week, by Trending; then repertory by original release; special events last.
       new: function (f) {
         if (f.event) return null;   // events sort after every film
-        // A week is never more than 6.048e8 ms apart from the next, and TMDB popularity stays far
-        // below that, so adding it orders films within a week without crossing weeks.
-        if (!f.rep) return f.opened ? 1e13 + Date.parse(releaseWeek(f.opened)) + Math.min(f.pop || 0, 1e7) : null;
+        // Weeks are 6.048e8 ms apart and the Trending bonus stays far below that, so it orders
+        // films within a week without crossing weeks (lower trend score = more trending).
+        if (!f.rep) return f.opened ? 1e13 + Date.parse(releaseWeek(f.opened)) + (f.trend != null ? 1e6 - f.trend : 0) : null;
         var r = f.rel || (f.year ? f.year + "-07-01" : null); return r ? Date.parse(r) : null;
       },
-      pop: function (f) { return f.id ? f.pop : null; }
+      // Trending: the scraper's 50/50 blend of TMDB popularity and 7-day Wikipedia views (by rank).
+      pop: function (f) { return f.trend != null ? -f.trend : f.id && f.pop != null ? -1e6 + f.pop : null; }
     }[state.sort];
     return ids.sort(function (a, b) {
       var fa = films[a], fb = films[b], byTitle = fa.t.localeCompare(fb.t);

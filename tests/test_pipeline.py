@@ -192,7 +192,8 @@ def test_build_feed_shape():
 
 def test_secondary_theaters_config():
     c = fresh_cfg()
-    assert c.theaters["amc"].default_on is True             # primary theaters start on
+    assert c.theaters["sie"].default_on is True             # primary theaters start on
+    assert c.theaters["amc"].default_on is False
     assert c.theaters["amc_westminster"].default_on is False  # secondary start off
     assert c.theaters["amc"].scraper == "fandango"          # AMC reads from Fandango
     assert c.theaters["amc_westminster"].scraper == "fandango"
@@ -206,7 +207,8 @@ def test_build_feed_carries_default_on():
     c = fresh_cfg()
     feed = _build_feed(c, [st("A", 19, "amc")], DEN)
     by_key = {t["key"]: t for t in feed["theaters"]}
-    assert by_key["amc"]["default_on"] is True
+    assert by_key["sie"]["default_on"] is True
+    assert by_key["amc"]["default_on"] is False
     assert by_key["amc_westminster"]["default_on"] is False
     assert by_key["regal_colorado"]["default_on"] is False  # enabled via Fandango, off by default
 

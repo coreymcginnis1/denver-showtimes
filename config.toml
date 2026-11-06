@@ -22,6 +22,7 @@ lon = -104.9871
 
 [theaters.amc]
 enabled = true
+default_on = false
 name = "AMC 9+CO 10"
 color = "#2E5EAA"
 scraper = "fandango"

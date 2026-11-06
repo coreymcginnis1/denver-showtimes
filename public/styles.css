@@ -66,14 +66,7 @@ button { font: inherit; color: inherit; }
 .day .dn { font: 600 19px/1.1 var(--display); font-variant-numeric: lining-nums; }
 .day.rel .dn { font-size: 15.5px; }
 .day:hover { border-color: var(--faint); }
-/* the selected day reads as a torn ticket stub: brick fill with punched notches */
-.day[aria-pressed="true"] {
-  background: var(--brick-fill); border-color: var(--brick-fill); color: #fff7ee;
-  -webkit-mask: radial-gradient(circle 5px at 0 50%, #0000 98%, #000) left / 51% 100% no-repeat,
-                radial-gradient(circle 5px at 100% 50%, #0000 98%, #000) right / 51% 100% no-repeat;
-          mask: radial-gradient(circle 5px at 0 50%, #0000 98%, #000) left / 51% 100% no-repeat,
-                radial-gradient(circle 5px at 100% 50%, #0000 98%, #000) right / 51% 100% no-repeat;
-}
+.day[aria-pressed="true"] { background: var(--brick-fill); border-color: var(--brick-fill); color: #fff7ee; }
 .day[aria-pressed="true"] .dw { color: #ffe6d8; }
 
 /* Near [zip] within 1 / 5 / 10 mi / All: picks the theaters within that distance. */

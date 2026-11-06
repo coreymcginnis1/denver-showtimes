@@ -312,13 +312,14 @@
         (f.id ? '<a class="lb" href="https://letterboxd.com/tmdb/' + f.id + '/" target="_blank" rel="noopener">View on Letterboxd</a>' : "") +
         "</article>";
     };
-    if (all) {   // two groups: what you can see now (by the chosen sort), then openings, soonest first
-      var soon = ids.filter(function (i) { return films[i].opened && films[i].opened > days[0] && !films[i].rep; });
-      var now = ids.filter(function (i) { return soon.indexOf(i) < 0; });
-      soon.sort(function (a, b) { return films[a].opened.localeCompare(films[b].opened) || films[a].t.localeCompare(films[b].t); });
-      $("grid").innerHTML = (now.length ? '<h3 class="group">Now playing <span>' + now.length + "</span></h3>" +
+    if (all) {   // two groups: playing today (by the chosen sort), then everything else, soonest first
+      var firstDay = function (i) { return byFilm.get(i).reduce(function (m, s) { return s.d < m ? s.d : m; }, "9999"); };
+      var now = ids.filter(function (i) { return firstDay(i) === days[0]; });
+      var soon = ids.filter(function (i) { return firstDay(i) !== days[0]; });
+      soon.sort(function (a, b) { return firstDay(a).localeCompare(firstDay(b)) || films[a].t.localeCompare(films[b].t); });
+      $("grid").innerHTML = (now.length ? '<h3 class="group">Playing today <span>' + now.length + "</span></h3>" +
           '<div class="grid">' + now.map(function (i) { return cardHTML(i); }).join("") + "</div>" : "") +
-        (soon.length ? '<h3 class="group">Opening soon <span>' + soon.length + "</span></h3>" +
+        (soon.length ? '<h3 class="group">Coming soon <span>' + soon.length + "</span></h3>" +
           '<div class="grid">' + soon.map(function (i) { return cardHTML(i); }).join("") + "</div>" : "");
     } else {
       $("grid").innerHTML = ids.length ? '<div class="grid">' + ids.map(function (i) { return cardHTML(i); }).join("") + "</div>"

@@ -211,7 +211,7 @@ Redesigned Nov 2026 (Letterboxd-inspired, not a copy): **one day at a time**, no
   house style; `hm12()` in `app.js`). On screen the digits are tabular; "am/pm" sits in `.ap`
   with normal figures.
 - **Near a zip code:** a zip box (default **80206**, never saved — Corey doesn't want readers to
-  feel tracked) and **1 / 5 / 10 mi / All** buttons that switch on exactly the theaters within that
+  feel tracked) and **1 / 3 / 5 mi / All** buttons that switch on exactly the theaters within that
   straight-line distance. Theater chips sort by distance and show miles. Zip centroids are
   `public/zips.json` (Census 2024 ZCTA gazetteer, zips within 60 mi of downtown); theater `lat`/`lon`
   live in `config.toml` and pass through to `data.json`. No travel times by design.

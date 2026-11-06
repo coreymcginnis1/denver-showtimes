@@ -42,7 +42,7 @@
   var D, films = [], shows = [], days = [], theaters = [];
   // Distances are from the centre of a zip code to each theater, as the crow flies. The zip is
   // never saved: it resets to DEFAULT_ZIP on every visit, so nothing about a reader is kept.
-  var DEFAULT_ZIP = "80206", RADII = [1, 5, 10], ZIPS = {};
+  var DEFAULT_ZIP = "80206", ZIPS = {};   // distance buttons (1 / 3 / 5 mi / All) are in index.html
   var state = { day: null, q: "", sort: "new", kind: "all", showEarlier: false, theaters: null, zip: DEFAULT_ZIP, radius: null };
 
   // ---- Data ------------------------------------------------------------------

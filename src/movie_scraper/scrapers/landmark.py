@@ -22,7 +22,7 @@ from ..models import Showtime
 
 log = logging.getLogger(__name__)
 
-THEATER_ID = "X02AK"
+THEATER_ID = "X02AK"   # Mayan; another Landmark sets `location` (Greenwood Village = X0873)
 BASE = "https://www.landmarktheatres.com/api/gatsby-source-boxofficeapi"
 THEATER_PAGE = "https://www.landmarktheatres.com/theaters/x02ak-landmark-mayan-theatre-denver/"
 MOVIE_URL = "https://www.landmarktheatres.com/movies/{mid}-{slug}"
@@ -32,7 +32,8 @@ class LandmarkScraper(BaseScraper):
     key = "landmark"
 
     def fetch(self, start: date, end: date) -> list[Showtime]:
-        theaters_param = '{"id":"%s","timeZone":"%s"}' % (THEATER_ID, self.cfg.timezone)
+        tid = (self.theater_cfg.location or THEATER_ID).upper()
+        theaters_param = '{"id":"%s","timeZone":"%s"}' % (tid, self.cfg.timezone)
         raw: dict[str, list[dict]] = {}
         with http_client() as client:
             client.headers["Referer"] = "https://www.landmarktheatres.com/showtimes/"
@@ -46,7 +47,7 @@ class LandmarkScraper(BaseScraper):
                         "theaters": theaters_param,
                     })
                     resp.raise_for_status()
-                    schedule = (resp.json().get(THEATER_ID) or {}).get("schedule") or {}
+                    schedule = (resp.json().get(tid) or {}).get("schedule") or {}
                 except Exception as exc:
                     log.warning("landmark: schedule for %s failed: %s", day, exc)
                     day = nxt

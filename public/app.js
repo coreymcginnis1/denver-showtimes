@@ -8,15 +8,18 @@
 
   // Short names for chips and rows; the full name is used in the sheet and calendar entries.
   var SHORT = { sie: "Sie FilmCenter", landmark: "Landmark Mayan", amc: "AMC 9+CO 10", regal_pavilions: "Regal Pavilions",
-    alamo_sloans: "Alamo Sloans Lake", regal_colorado: "Regal Colorado Ctr", amc_westminster: "AMC Westminster" };
+    alamo_sloans: "Alamo Sloans Lake", regal_colorado: "Regal Colorado Ctr", amc_westminster: "AMC Westminster",
+    landmark_greenwood: "Landmark Greenwood", harkins_arvada: "Harkins Arvada" };
   var THEATER_SITES = [
     ["Sie FilmCenter", "https://www.denverfilm.org/"],
-    ["Landmark Mayan", "https://www.landmarktheatres.com/denver/mayan-theatre"],
+    ["Landmark Mayan", "https://www.landmarktheatres.com/our-locations/x02ak-landmark-mayan-theatre-denver/"],
     ["AMC 9+CO 10", "https://www.amctheatres.com/movie-theatres/denver/amc-9-co-10"],
     ["AMC Westminster", "https://www.amctheatres.com/movie-theatres/denver/amc-westminster-promenade-24"],
     ["Alamo Sloans Lake", "https://drafthouse.com/denver/theater/sloans-lake"],
     ["Regal Colorado Center", "https://www.regmovies.com/theatres/regal-ua-colorado-center-1308"],
-    ["Regal Denver Pavilions", "https://www.regmovies.com/theatres/regal-ua-denver-pavilions-rpx-1315"]
+    ["Regal Denver Pavilions", "https://www.regmovies.com/theatres/regal-ua-denver-pavilions-rpx-1315"],
+    ["Landmark Greenwood Village", "https://www.landmarktheatres.com/our-locations/x0873-the-landmark-greenwood-village/"],
+    ["Harkins Arvada", "https://www.harkins.com/theatres/arvada-14"]
   ];
   var FMT_TAG = { "Premium Format": "Prem", "3D": "3D", "Scope": "Scope", "35mm": "35mm", "70mm": "70mm" };
   var SLOTS = [["Morning", "00:00"], ["Afternoon", "12:00"], ["Evening", "17:00"], ["Late", "21:00"]];
@@ -250,9 +253,28 @@
         (on ? "Remove " + esc(f.t) + " from" : "Add " + esc(f.t) + " to") + ' My list">' + (on ? "✓" : "+") + "</button></div>" +
         '<h3 class="title">' + esc(f.t) + "</h3>" + (meta ? '<div class="meta">' + meta + "</div>" : "") +
         '<div class="venues">' + vhtml + "</div>" +
+        '<button type="button" class="more" hidden>Show all times</button>' +
         (f.id ? '<a class="lb" href="https://letterboxd.com/tmdb/' + f.id + '/" target="_blank" rel="noopener">View on Letterboxd</a>' : "") +
         "</article>";
     }).join("");
+    clampVenues();
+  }
+
+  // Several theaters can make a card's times run far past its poster: clamp the list and offer
+  // "Show all times" only where it actually overflows (checked after layout).
+  function clampVenues() {
+    document.querySelectorAll("#grid .card").forEach(function (card) {
+      var v = card.querySelector(".venues"), btn = card.querySelector(".more");
+      if (!v || !btn || card.classList.contains("open")) return;
+      v.classList.add("clamp");
+      var over = v.scrollHeight > v.clientHeight + 4;
+      if (!over) v.classList.remove("clamp");
+      btn.hidden = !over;
+      if (over) {
+        var n = v.querySelectorAll(".venue").length;
+        btn.textContent = n > 1 ? "Show all " + n + " theaters" : "Show all times";
+      }
+    });
   }
 
   // ---- Schedule --------------------------------------------------------------------
@@ -386,6 +408,10 @@
         document.querySelectorAll("[data-v]").forEach(function (x) { x.setAttribute("aria-pressed", x === b); });
         return;
       }
+      if (b.classList.contains("more")) {
+        var card = b.closest(".card"); card.classList.add("open");
+        card.querySelector(".venues").classList.remove("clamp"); b.hidden = true; return;
+      }
       if (b.classList.contains("add")) {
         var t = b.dataset.t; state.list.has(t) ? state.list.delete(t) : state.list.add(t);
         store("dst-list", Array.from(state.list)); renderFilms(); renderSchedule(); return;
@@ -395,7 +421,7 @@
     });
     document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !$("backdrop").hidden) closeSheet(); });
     $("q").addEventListener("input", function (e) { state.q = e.target.value.trim(); renderAll(); });
-    window.addEventListener("resize", measure);
+    window.addEventListener("resize", function () { measure(); clampVenues(); });
   }
 
   fetch("data.json?_=" + Date.now(), { cache: "no-store" })

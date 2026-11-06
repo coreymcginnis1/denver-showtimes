@@ -62,6 +62,22 @@ color = "#6C5CE7"
 scraper = "fandango"
 location = "AAECN"
 
+[theaters.landmark_greenwood]
+enabled = true
+default_on = false
+name = "Landmark Greenwood Village"
+color = "#8FB339"
+scraper = "landmark"
+location = "X0873"                # Landmark's theater id (the Mayan is X02AK)
+
+[theaters.harkins_arvada]
+enabled = true
+default_on = false
+name = "Harkins Arvada 14"
+color = "#3FA7D6"
+scraper = "fandango"
+location = "AAYFG"                # Fandango theater id
+
 # Title standardization: strip repertory/event series labels from the START of a
 # film title (the label plus its ":" / "–" / "-" separator), so e.g.
 # "Bleak Week: Gummo" -> "Gummo" and "Fan Faves: Michael" -> "Michael".
@@ -100,6 +116,7 @@ strip_suffixes = [
   '\s*\(dir\.?\s[^)]*\)$',      # director annotation: "Alpha (dir. Rawail)" -> "Alpha"
   '\s*[:–—-]\s*Xfinity\b.*$',   # sponsor tag: "Minions & Monsters: Xfinity" -> "Minions & Monsters"
   '\s*[-–—:]?\s+Encore$',       # rebroadcasts: "The Metropolitan Opera: Carmen Encore" -> "... Carmen"
+  '\s*\((?:\d{4}\s+)?Encore\)$',  # "... Carmen (2026 Encore)" -> "... Carmen"
 ]
 # Titles matching any of these are dropped entirely — events that aren't a specific
 # movie (mystery screenings, watch parties, etc.). Case-insensitive regex.
@@ -113,6 +130,7 @@ drop = [
   'Apple TV Live',            # live sports broadcasts: "F1 on Apple TV Live in IMAX: ..."
   'Memorial Screening',       # tribute events with no film named
   'Mystery Movie',            # surprise screenings, no film named ("REGAL: Monday Mystery Movie")
+  'Secret Cinema',            # Harkins mystery screenings, no film named
   '\bUFC \d',                 # live UFC pay-per-view broadcasts ("UFC 329: ..."), not films
   'Members?\s+Only',          # members-only screenings (public can't attend) — drop them
   'League of Legends',        # live esports broadcasts ("League of Legends Worlds 26 - Finals")

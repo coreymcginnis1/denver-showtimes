@@ -23,7 +23,7 @@ import httpx
 log = logging.getLogger(__name__)
 
 API = "https://api.themoviedb.org/3"
-POSTER = "https://image.tmdb.org/t/p/w342"
+POSTER = "https://image.tmdb.org/t/p/w500"   # sharp on 2x screens; cards are ~220 px wide
 TOKEN_ENV = "TMDB_TOKEN"
 
 

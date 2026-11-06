@@ -56,6 +56,7 @@ DEFAULT_STRIP_SUFFIXES = [
     r"\s*\(dir\.?\s[^)]*\)$",     # director annotation: "Alpha (dir. Rawail)" -> "Alpha"
     r"\s*[:–—-]\s*Xfinity\b.*$",  # sponsor tag: "Minions & Monsters: Xfinity" -> "Minions & Monsters"
     r"\s*[-–—:]?\s+Encore$",      # rebroadcasts: "The Metropolitan Opera: Carmen Encore" -> "... Carmen"
+    r"\s*\((?:\d{4}\s+)?Encore\)$",  # "... Carmen (2026 Encore)" -> "... Carmen"
 ]
 
 # Titles matching these are dropped entirely (not a specific movie).
@@ -68,7 +69,8 @@ DEFAULT_DROP = [
     r"Copa Mundial",              # FIFA World Cup watch parties (Telemundo), not films
     r"Apple TV Live",             # live sports broadcasts: "F1 on Apple TV Live in IMAX: ..."
     r"Memorial Screening",        # tribute events with no film named: "Classic - ... Memorial Screening"
-    r"Mystery Movie",             # surprise screenings, no film named (e.g. "REGAL: Monday Mystery Movie")
+    r"Mystery Movie",
+    r"Secret Cinema",             # Harkins mystery screenings, no film named             # surprise screenings, no film named (e.g. "REGAL: Monday Mystery Movie")
     r"\bUFC \d",                  # live UFC pay-per-view broadcasts ("UFC 329: ..."), not films
     r"Members?\s+Only",           # members-only screenings (public can't attend) — drop them
     r"League of Legends",         # live esports broadcasts ("League of Legends Worlds 26 - Finals")

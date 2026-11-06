@@ -44,7 +44,7 @@ scraper (Python, GitHub Actions, weekly)  →  TMDB match  →  public/data.json
 
 ## Theaters & data sources (`config.toml` `[theaters.*]`)
 
-Seven theaters. The first three are on by default; the rest have `default_on = false` (their
+Nine theaters. The first three are on by default; the rest have `default_on = false` (their
 filter chip starts unchecked — opt-in secondary venues). One scraper class can back several
 theaters via `scraper` + `location`.
 
@@ -56,13 +56,15 @@ theaters via `scraper` + `location`.
 | AMC Westminster Promenade 24 | same Fandango scraper; `location = AAECN` |
 | Alamo Drafthouse Sloans Lake | `drafthouse.com/s/mother/v2/schedule/venue/sloans-lake` (httpx JSON, no browser) |
 | Regal UA Colorado Center / Denver Pavilions | **Fandango** `napi/theaterMovieShowtimes/<id>` (httpx) |
+| Landmark Greenwood Village | same Landmark scraper; `location = X0873` (the Mayan is X02AK) |
+| Harkins Arvada 14 | same Fandango scraper; `location = AAYFG` |
 
 - **AMC & Regal quirk (important):** both chains' own sites block scrapers. regmovies.com is
   Cloudflare-gated (it only server-renders the *current day* and 403s httpx), and amctheatres.com
   bot-challenged the old Playwright scraper even from a home IP. Both sell tickets through
   **Fandango**, whose `napi` JSON is open over plain httpx, so both read from there. `location` is
   the Fandango theater id (**AAFXW** = Regal Colorado Center, **AAJJG** = Regal Denver Pavilions,
-  **AAYUA** = AMC 9+CO 10, **AAECN** = AMC Westminster). See `scrapers/fandango.py`. Before the
+  **AAYUA** = AMC 9+CO 10, **AAECN** = AMC Westminster, **AAYFG** = Harkins Arvada). See `scrapers/fandango.py`. Before the
   switch, Fandango matched 115 of 116 AMC showtimes on title and time for one day; the other was
   the same showing under a different title tag. AMC ticket links now go to Fandango.
 
@@ -190,12 +192,16 @@ Redesigned Nov 2026 (Letterboxd-inspired, not a copy): **one day at a time**, no
   often reach Denver a year+ after a festival premiere (Tight & Nerdy). No release date → new.
 - **Sorts:** Newest (default: new releases by Denver opening, latest and upcoming first, then
   repertory by original release) · Popular this week (TMDB `popularity`, refreshed at each weekly
-  scrape; a Wikipedia 7-day page-view version is on hold) · A–Z. Films without the data sort last.
+  scrape; labelled **Trending**; a Wikipedia 7-day page-view version is on hold) · A–Z. Films without the data sort last.
   No ratings (see above). New releases get an "Opening day" / "New this week" tag.
 - **"Next 2 weeks"** (first button in the day strip; `state.day === "all"`): the same cards for every
   film with an upcoming showtime in the window, but each theater gets one line ("Nov 6–12 · 14
   showings") and a "Next …" button for its soonest showing instead of every time. Upcoming
   openings show "Opens Nov 19". No schedule column in this view (`layout[data-mode="span"]`).
+- **Posters** are requested at 600 px (Fandango renderer) / TMDB `w500`: cards are ~220 CSS px, so
+  smaller art looked soft on 2x screens.
+- **Long showtime lists** clamp to ~300 px with a fade and a "Show all N theaters" button, shown
+  only when a card's list actually overflows (`clampVenues()`, re-run on resize).
 - **Toolbar:** Show and Sort sit on one line under the heading, split by a hairline; they wrap on phones.
 - **Schedule** of the day in time order (Morning/Afternoon/Evening/Late; earlier-today rows
   hidden behind a button). Desktop: sticky right column. Phone: Films / Schedule toggle.

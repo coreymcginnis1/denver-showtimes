@@ -168,10 +168,7 @@
 
   // ---- Controls ----------------------------------------------------------------
 
-  function renderUpdated() {
-    var g = new Date(D.generated_at);
-    $("updated").textContent = "Updated " + g.toLocaleDateString("en-US", { month: "short", day: "numeric" }) +
-      " · " + D.events.length.toLocaleString() + " showtimes";
+  function renderSources() {
     $("srcLinks").innerHTML = "Theater sites: " + THEATER_SITES.map(function (t) {
       return '<a href="' + t[1] + '" target="_blank" rel="noopener">' + esc(t[0]) + "</a>";
     }).join(" · ");
@@ -515,7 +512,7 @@
     .then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
     .then(function (data) { return zipTable.then(function (z) { ZIPS = z; return data; }); })
     .then(function (data) {
-      load(data); wire(); setMode(); renderUpdated(); renderDays(); renderAll(); measure();
+      load(data); wire(); setMode(); renderSources(); renderDays(); renderAll(); measure();
       var sel = $("days").querySelector('[aria-pressed="true"]'); if (sel) sel.scrollIntoView({ block: "nearest", inline: "center" });
     })
     .catch(function (e) {

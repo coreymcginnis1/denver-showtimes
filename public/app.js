@@ -37,7 +37,7 @@
   })();
 
   var D, films = [], shows = [], days = [], theaters = [];
-  var state = { day: null, q: "", sort: "new", scope: "all", showEarlier: false, theaters: null, list: null };
+  var state = { day: null, q: "", sort: "new", kind: "all", scope: "all", showEarlier: false, theaters: null, list: null };
 
   // ---- Data ------------------------------------------------------------------
 
@@ -61,9 +61,15 @@
       shows.push({ f: index[e.title], th: x.theater, d: e.start.slice(0, 10), hm: e.allDay ? null : e.start.slice(11, 16),
         end: e.end ? e.end.slice(0, 16) : null, fmt: x.fmt, scr: x.screen, url: x.ticketUrl, id: e.id });
     });
-    films.forEach(function (f) {   // theater art first (Fandango's is the most consistent), then TMDB's
+    var openings = data.openings || {};
+    films.forEach(function (f, i) {
+      // theater art first (Fandango's is the most consistent), then TMDB's
       f.posters.sort(function (a, b) { return (b.indexOf("fandango") >= 0) - (a.indexOf("fandango") >= 0); });
       if (f.tmdbPoster) f.posters.push(f.tmdbPoster);
+      // Denver opening: the first day it played at a theater we track (kept by the scraper).
+      f.opened = openings[f.t] || shows.filter(function (s) { return s.f === i; })
+        .map(function (s) { return s.d; }).sort()[0] || null;
+      f.rep = isRepertory(f);
     });
     days = Array.from(new Set(shows.map(function (s) { return s.d; }))).sort()
       .filter(function (d) { return d >= NOW.day; });
@@ -76,13 +82,24 @@
     state.list = new Set((store("dst-list") || []).filter(function (t) { return t in index; }));
   }
 
+  // Repertory: the film first came out more than two years before it opened here (a revival).
+  // Two years, not one: indie films often reach Denver a year or more after a festival premiere
+  // (TMDB dates them by it). New releases (and events with no release date) are everything else.
+  var REPERTORY_DAYS = 730;
+  function isRepertory(f) {
+    var orig = f.rel || (f.year ? f.year + "-07-01" : null);
+    return !!(orig && f.opened && dayDiff(orig, f.opened) > REPERTORY_DAYS);
+  }
+
   function theaterOf(k) { for (var i = 0; i < theaters.length; i++) if (theaters[i].key === k) return theaters[i]; return null; }
   function tName(k) { return SHORT[k] || (theaterOf(k) || {}).name || k; }
   function isPast(s) { return s.d === NOW.day && s.hm && s.hm < NOW.hm; }
   function dayShows(d, anyTheater) {
     var q = state.q.toLowerCase();
     return shows.filter(function (s) {
-      return s.d === d && (anyTheater || state.theaters.has(s.th)) && (!q || films[s.f].t.toLowerCase().indexOf(q) >= 0);
+      var f = films[s.f];
+      return (d === ALL ? days.indexOf(s.d) >= 0 && !isPast(s) : s.d === d) && (anyTheater || state.theaters.has(s.th)) && (!q || f.t.toLowerCase().indexOf(q) >= 0) &&
+        (state.kind === "all" || (state.kind === "rep") === f.rep);
     });
   }
 
@@ -96,6 +113,7 @@
   function timeHTML(hm) { var t = hm12(hm), i = t.indexOf(" "); return t.slice(0, i) + ' <span class="ap">' + t.slice(i + 1) + "</span>"; }
   function longDate(d) { return dateObj(d).toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" }); }
   function relDay(d) {
+    if (d === ALL) return null;
     var i = days.indexOf(d), t = days.indexOf(NOW.day);
     if (t < 0) return null;
     return i === t ? "Today" : i === t + 1 && dayDiff(NOW.day, d) === 1 ? "Tomorrow" : null;
@@ -115,8 +133,13 @@
     }).join(" · ");
   }
 
+  var ALL = "all";   // state.day for the "Next 2 weeks" view
+  function shortDate(d) { return dateObj(d).toLocaleDateString("en-US", { month: "short", day: "numeric" }); }
+  function dayName(d) { return relDay(d) || dateObj(d).toLocaleDateString("en-US", { weekday: "short" }) + " " + shortDate(d); }
+
   function renderDays() {
-    $("days").innerHTML = days.map(function (d) {
+    $("days").innerHTML = '<button type="button" class="day rel span" data-d="' + ALL + '" aria-pressed="' + (state.day === ALL) + '">' +
+      '<span class="dw">Next</span><span class="dn">2 weeks</span></button>' + days.map(function (d) {
       var rel = relDay(d), o = dateObj(d);
       return '<button type="button" class="day' + (rel ? " rel" : "") + '" data-d="' + d + '" aria-pressed="' + (d === state.day) + '">' +
         '<span class="dw">' + (rel || o.toLocaleDateString("en-US", { weekday: "short" })) + "</span>" +
@@ -155,7 +178,12 @@
 
   function sortFilms(ids) {
     var key = {
-      new: function (f) { var r = f.rel || (f.year ? f.year + "-01-01" : null); return r ? Date.parse(r) : null; },
+      // Newest: new releases by Denver opening (latest first, upcoming openings on top), then
+      // repertory by original release.
+      new: function (f) {
+        if (!f.rep) return f.opened ? 1e13 + Date.parse(f.opened) : null;
+        var r = f.rel || (f.year ? f.year + "-07-01" : null); return r ? Date.parse(r) : null;
+      },
       pop: function (f) { return f.id ? f.pop : null; }
     }[state.sort];
     return ids.sort(function (a, b) {
@@ -172,27 +200,42 @@
     ds.forEach(function (s) { if (!byFilm.has(s.f)) byFilm.set(s.f, []); byFilm.get(s.f).push(s); });
     var ids = sortFilms(Array.from(byFilm.keys())), rel = relDay(state.day);
 
-    $("filmsH").textContent = "Playing " + (rel ? rel.toLowerCase() : longDate(state.day));
-    $("filmsSub").textContent = (rel ? longDate(state.day) + " · " : "") + ids.length + " film" + (ids.length === 1 ? "" : "s") +
+    var all = state.day === ALL;
+    $("filmsH").textContent = all ? "Playing the next two weeks" : "Playing " + (rel ? rel.toLowerCase() : longDate(state.day));
+    $("filmsSub").textContent = (all ? shortDate(days[0]) + "–" + shortDate(days[days.length - 1]) + " · "
+      : rel ? longDate(state.day) + " · " : "") + ids.length + " film" + (ids.length === 1 ? "" : "s") +
       " · " + state.theaters.size + " theater" + (state.theaters.size === 1 ? "" : "s");
 
     if (!ids.length) {
       $("grid").innerHTML = '<p class="empty">' + (state.theaters.size
-        ? "Nothing matches on this day. Try another day, more theaters, or clear the search."
+        ? "Nothing matches" + (all ? "" : " on this day") + ". Try " + (all ? "" : "another day, ") + "more theaters, or clear the search."
         : "Pick at least one theater above to see films.") + "</p>";
       return;
     }
     $("grid").innerHTML = ids.map(function (i) {
       var f = films[i], list = byFilm.get(i), venues = new Map();
-      list.sort(function (a, b) { return (a.hm || "").localeCompare(b.hm || ""); })
+      list.sort(function (a, b) { return (a.d + (a.hm || "")).localeCompare(b.d + (b.hm || "")); })
         .forEach(function (s) { if (!venues.has(s.th)) venues.set(s.th, []); venues.get(s.th).push(s); });
       var fmts = Array.from(new Set(list.map(function (s) { return s.fmt === "Premium Format" ? "Premium" : s.fmt; }).filter(Boolean)));
       var meta = [f.year ? "<span>" + f.year + "</span>" : "", f.rating ? "<span>" + esc(f.rating) + "</span>" : "",
         f.runtime ? "<span>" + runtime(f.runtime) + "</span>" : ""]
         .concat(fmts.map(function (x) { return '<span class="tag">' + esc(x) + "</span>"; })).join("");
+      var since = f.opened ? dayDiff(f.opened, all ? days[0] : state.day) : null;
+      var fresh = f.rep || since == null ? "" : since < 0 ? "Opens " + shortDate(f.opened)
+        : since === 0 ? "Opening day" : since <= 6 ? "New this week" : "";
+      if (fresh) meta += '<span class="tag fresh">' + fresh + "</span>";
       var order = theaters.map(function (t) { return t.key; });
       var vhtml = Array.from(venues.entries()).sort(function (a, b) { return order.indexOf(a[0]) - order.indexOf(b[0]); }).map(function (e) {
         var t = theaterOf(e[0]) || { color: "#888" };
+        if (all) {   // one line per theater: when it plays, how often, and the next showing
+          var first = e[1][0], last = e[1][e[1].length - 1], n = e[1].length;
+          var span = first.d === last.d ? dayName(first.d) : shortDate(first.d) + "–" + shortDate(last.d);
+          return '<div class="venue" style="--c:' + t.color + '"><div class="vn"><i></i>' + esc(tName(e[0])) + "</div>" +
+            '<div class="span-line">' + span + " · " + n + " showing" + (n === 1 ? "" : "s") + "</div>" +
+            '<div class="times"><button type="button" class="time next" data-i="' + shows.indexOf(first) + '" aria-label="' +
+            esc(f.t) + ", next showing " + dayName(first.d) + " " + (first.hm ? longTime(first.hm) : "") + ", " + esc(t.name || "") + '"><span class="ap">Next</span> ' +
+            dayName(first.d) + (first.hm ? " · " + timeHTML(first.hm) : "") + "</button></div></div>";
+        }
         return '<div class="venue" style="--c:' + t.color + '"><div class="vn"><i></i>' + esc(tName(e[0])) + '</div><div class="times">' +
           e[1].map(function (s) {
             var tag = FMT_TAG[s.fmt] ? "<sup>" + FMT_TAG[s.fmt] + "</sup>" : "";
@@ -305,7 +348,16 @@
 
   // ---- Wiring ------------------------------------------------------------------------
 
-  function renderAll() { renderTheaters(); renderFilms(); renderSchedule(); }
+  function setMode() {   // the two-week view has no schedule column
+    var all = state.day === ALL;
+    $("layout").dataset.mode = all ? "span" : "day";
+    var seg = document.querySelector(".seg"); if (seg) seg.hidden = all;
+    if (all) {
+      $("layout").dataset.view = "films";
+      document.querySelectorAll("[data-v]").forEach(function (x) { x.setAttribute("aria-pressed", x.dataset.v === "films"); });
+    }
+  }
+  function renderAll() { renderTheaters(); renderFilms(); if (state.day !== ALL) renderSchedule(); }
   function measure() { document.documentElement.style.setProperty("--bar-h", $("bar").offsetHeight + "px"); }
 
   function wire() {
@@ -313,10 +365,15 @@
       if (e.target.id === "backdrop") return closeSheet();
       var b = e.target.closest("button"); if (!b) return;
       if (b.id === "closeSheet") return closeSheet();
-      if (b.dataset.d) { state.day = b.dataset.d; state.showEarlier = false; renderDays(); renderAll(); window.scrollTo({ top: 0 }); return; }
+      if (b.dataset.d) { state.day = b.dataset.d; state.showEarlier = false; setMode(); renderDays(); renderAll(); window.scrollTo({ top: 0 }); return; }
       if (b.dataset.k) {
         var k = b.dataset.k; state.theaters.has(k) ? state.theaters.delete(k) : state.theaters.add(k);
         store("dst-theaters", Array.from(state.theaters)); renderAll(); return;
+      }
+      if (b.dataset.kind) {
+        state.kind = b.dataset.kind;
+        document.querySelectorAll("[data-kind]").forEach(function (x) { x.setAttribute("aria-pressed", x === b); });
+        renderAll(); return;
       }
       if (b.dataset.s) {
         state.sort = b.dataset.s;
@@ -344,7 +401,7 @@
   fetch("data.json?_=" + Date.now(), { cache: "no-store" })
     .then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
     .then(function (data) {
-      load(data); wire(); renderUpdated(); renderDays(); renderAll(); measure();
+      load(data); wire(); setMode(); renderUpdated(); renderDays(); renderAll(); measure();
       var sel = $("days").querySelector('[aria-pressed="true"]'); if (sel) sel.scrollIntoView({ block: "nearest", inline: "center" });
     })
     .catch(function (e) {

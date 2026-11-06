@@ -180,8 +180,23 @@ Redesigned Nov 2026 (Letterboxd-inspired, not a copy): **one day at a time**, no
   name), year · rating · runtime · format tags, then times
   grouped by theater, and a "View on Letterboxd" link. Posters try the theater's image (Fandango's
   first), then TMDB's, then a typeset placeholder.
-- **Sorts:** Newest (default; release date, else year) · Popular this week (TMDB `popularity`,
-  refreshed at each weekly scrape) · A–Z. Films without the data sort last. No ratings (see above).
+- **Denver opening date** (`openings` in `data.json`, title → date; `pipeline.denver_openings()`):
+  the first day a film had a showtime at any theater we track. It's carried over each run and only
+  moves earlier, and entries for films no longer playing are forgotten after 400 days. Backfilled from
+  the `data.json` git history (June 2026 on). Used instead of TMDB's date (often a festival premiere
+  or a foreign release; Fatherland: Jun 19 vs Denver Nov 6) or Fandango's (national/NY-LA limited).
+- **Show: All · New releases · Repertory.** Repertory = the film first came out **more than two
+  years** before its Denver opening (`REPERTORY_DAYS` in `app.js`). Two years, not one: indie films
+  often reach Denver a year+ after a festival premiere (Tight & Nerdy). No release date → new.
+- **Sorts:** Newest (default: new releases by Denver opening, latest and upcoming first, then
+  repertory by original release) · Popular this week (TMDB `popularity`, refreshed at each weekly
+  scrape; a Wikipedia 7-day page-view version is on hold) · A–Z. Films without the data sort last.
+  No ratings (see above). New releases get an "Opening day" / "New this week" tag.
+- **"Next 2 weeks"** (first button in the day strip; `state.day === "all"`): the same cards for every
+  film with an upcoming showtime in the window, but each theater gets one line ("Nov 6–12 · 14
+  showings") and a "Next …" button for its soonest showing instead of every time. Upcoming
+  openings show "Opens Nov 19". No schedule column in this view (`layout[data-mode="span"]`).
+- **Toolbar:** Show and Sort sit on one line under the heading, split by a hairline; they wrap on phones.
 - **Schedule** of the day in time order (Morning/Afternoon/Evening/Late; earlier-today rows
   hidden behind a button). Desktop: sticky right column. Phone: Films / Schedule toggle.
 - **Tap a time** → sheet with Get tickets, Google, Outlook, Apple/.ics (ICS uses TZID America/Denver).

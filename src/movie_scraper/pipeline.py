@@ -219,7 +219,30 @@ def run(config_path: str = "config.toml", only: set[str] | None = None) -> dict:
     if cfg.omdb.enabled:   # off: ratings dropped from the site (see CLAUDE.md "Ratings")
         add_scores(feed["film_meta"], (previous or {}).get("film_meta"))
     feed["tmdb_ids"] = tmdb_ids
+    feed["openings"] = denver_openings(feed["events"], (previous or {}).get("openings"), today)
     return feed
+
+
+OPENINGS_KEEP_DAYS = 400   # remember a film's opening this long after it stops playing
+
+
+def denver_openings(events: list[dict], previous: dict[str, str] | None, today: date) -> dict[str, str]:
+    """Each film's Denver opening: the first day it had a showtime at any theater we track.
+
+    This drives the site's Newest sort and its New releases / Repertory filter, instead of
+    TMDB's date (often a festival premiere or another country's release) or Fandango's (the
+    national, often NY/LA-limited date). A film's opening is the earliest showtime ever seen,
+    so it's carried over from the last feed (`previous`, title -> ISO date) and only moves
+    earlier. Films no longer playing are forgotten OPENINGS_KEEP_DAYS after they opened.
+    """
+    out = dict(previous or {})
+    for e in events:
+        t, d = e["title"], e["start"][:10]
+        if t not in out or d < out[t]:
+            out[t] = d
+    playing = {e["title"] for e in events}
+    cutoff = (today - timedelta(days=OPENINGS_KEEP_DAYS)).isoformat()
+    return {t: d for t, d in sorted(out.items()) if t in playing or d >= cutoff}
 
 
 def standardize_titles(shows: list[Showtime], previous: dict | None, cfg: Config):

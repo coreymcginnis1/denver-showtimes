@@ -51,7 +51,16 @@
       <section class="films" aria-labelledby="filmsH">
         <div class="sechead">
           <div><h2 id="filmsH">Playing today</h2><div class="sub" id="filmsSub"></div></div>
+        </div>
+        <div class="toolbar">
+          <div class="sort" role="group" aria-label="Show">
+            <span class="lbl" aria-hidden="true">Show</span>
+            <button type="button" data-kind="all" aria-pressed="true">All</button>
+            <button type="button" data-kind="new" aria-pressed="false">New releases</button>
+            <button type="button" data-kind="rep" aria-pressed="false">Repertory</button>
+          </div>
           <div class="sort" role="group" aria-label="Sort films">
+            <span class="lbl" aria-hidden="true">Sort</span>
             <button type="button" data-s="new" aria-pressed="true">Newest</button>
             <button type="button" data-s="pop" aria-pressed="false">Popular this week</button>
             <button type="button" data-s="az" aria-pressed="false">A–Z</button>

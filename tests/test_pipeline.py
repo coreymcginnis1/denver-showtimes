@@ -397,3 +397,15 @@ def test_no_picks_means_every_film_preselected():
     cfg = fresh_cfg()
     feed = _build_feed(cfg, [st("Dune"), st("Jaws")], DEN)
     assert feed["default_films"] is None     # retired picks: the page selects all, hides the button
+
+
+def test_denver_openings_remember_the_first_showtime_and_forget_old_ones():
+    today = date(2026, 11, 6)
+    ev = lambda t, day: {"title": t, "start": f"{day}T19:00:00-07:00", "extendedProps": {}}
+    previous = {"Wildwood": "2026-10-22", "Long Gone": "2025-06-01", "Recently Gone": "2026-09-01"}
+    out = pipeline.denver_openings([ev("Wildwood", "2026-11-06"), ev("Club Kid", "2026-11-19"),
+                                    ev("Club Kid", "2026-11-20")], previous, today)
+    assert out["Wildwood"] == "2026-10-22"          # opening never moves later
+    assert out["Club Kid"] == "2026-11-19"          # upcoming opening: its first scheduled day
+    assert out["Recently Gone"] == "2026-09-01"     # not playing, but recent enough to keep
+    assert "Long Gone" not in out                   # forgotten after OPENINGS_KEEP_DAYS

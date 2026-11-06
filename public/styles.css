@@ -102,6 +102,18 @@ button { font: inherit; color: inherit; }
 .sechead h2 { font: 600 24px/1.15 var(--display); margin: 0; text-wrap: balance; }
 .sechead .sub { color: var(--muted); font-size: 13.5px; }
 .sort { display: inline-flex; gap: 4px; font-size: 13px; }
+/* Show and Sort sit on one line under the heading, split by a hairline; they wrap on phones. */
+.films .sechead { margin-bottom: 10px; }
+.toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 22px; margin-bottom: 18px; }
+.toolbar .sort + .sort { padding-left: 22px; border-left: 1px solid var(--line); }
+@media (max-width: 600px) { .toolbar { gap: 6px; } .toolbar .sort + .sort { padding-left: 0; border-left: 0; } }
+/* "Next 2 weeks": no schedule column; each theater gets a date span and its next showing. */
+.layout[data-mode="span"] { grid-template-columns: minmax(0, 1fr); }
+.layout[data-mode="span"] .sched { display: none; }
+.span-line { font-size: 13px; color: var(--muted); margin: -2px 0 6px; font-variant-numeric: tabular-nums; }
+.time.next { font-weight: 500; }
+.day.span { min-width: 84px; }
+.sort .lbl { align-self: center; margin-right: 4px; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--faint); }
 .sort button {
   background: none; border: 0; padding: 6px 8px; border-radius: var(--r-sm); color: var(--faint); cursor: pointer;
 }
@@ -130,6 +142,7 @@ button { font: inherit; color: inherit; }
 .add[aria-pressed="true"] { background: var(--brick-fill); border-color: var(--brick-fill); }
 .title { font: 600 19px/1.15 var(--display); margin: 0; text-wrap: balance; overflow-wrap: anywhere; }
 .meta { display: flex; flex-wrap: wrap; gap: 4px 10px; color: var(--muted); font-size: 12.5px; }
+.tag.fresh { color: var(--brick); border-color: var(--brick); }
 .tag { font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--paper); border: 1px solid var(--line); border-radius: 4px; padding: 0 5px; }
 .venues { display: grid; gap: 9px; }
 .venue .vn { display: flex; align-items: center; gap: 6px; font-size: 11.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: 5px; }

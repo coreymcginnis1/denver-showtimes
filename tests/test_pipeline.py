@@ -330,3 +330,70 @@ def test_summary_flags_big_drops_and_lists_new_titles():
     assert "| Theater A | 10 | 1 | ⚠️ dropped by more than half |" in out
     assert "| Theater B | 1 | 1 | ✅ |" in out
     assert "- Brand New Film" in out
+
+
+# ---- Nov 2026 cleanup rules and the "may need a rule" review ----------------------------------
+
+def test_normalize_title_nov_2026_variants():
+    t = fresh_cfg().titles
+    for raw, want in [
+        ("The Angry Birds Movie: 10th Anniversary (2026)", "The Angry Birds Movie"),
+        ("Dune: Part One Reissue", "Dune: Part One"),
+        ("Dune: Part Two Reissue (2026)", "Dune: Part Two"),
+        ("Crunchyroll Anime Nights: Dive In Wonderland", "Dive In Wonderland"),
+        ("Big Dose of Reality Screening: Join the Club", "Join the Club"),
+        ("Initial Dose of Reality: Tight & Nerdy", "Tight & Nerdy"),
+        ("Sight & Sound Presents: Joshua Live!", "Joshua Live!"),
+        ("The Metropolitan Opera: Carmen Encore", "The Metropolitan Opera: Carmen"),
+        ("Some Film:", "Some Film"),                       # dangling separator
+        ("Heated Rivalry: Episodes 1 & 2", "Heated Rivalry: Episodes 1 & 2"),   # real subtitle
+        ("Mission: Impossible", "Mission: Impossible"),
+    ]:
+        assert normalize_title(raw, t.strip_prefixes, t.strip_suffixes) == want
+
+
+def test_is_non_film_drops_esports():
+    drop = fresh_cfg().titles.drop
+    assert is_non_film("League of Legends Worlds 26 - Finals in Theater", drop)
+    assert not is_non_film("Rammstein - Live in Mexico City", drop)   # concert films stay
+
+
+def test_merge_case_variants_uses_most_common_spelling():
+    shows = [st("The Only Living Pickpocket in New York"), st("The Only Living Pickpocket in New York"),
+             st("The Only Living Pickpocket In New York"), st("Dive In Wonderland"),
+             st("Dive in Wonderland")]
+    pipeline.merge_case_variants(shows)
+    assert {s.film_title for s in shows} == {"The Only Living Pickpocket in New York",
+                                             "Dive In Wonderland"}   # tie -> alphabetical first
+
+
+def test_review_titles_flags_likely_rule_candidates():
+    films = ["Dive in Wonderland", "Crunchyroll Anime Nights: Dive In Wonderland",
+             "Shorts Package: Mirrors", "Shorts Package: Truth", "Rammstein - Live in Mexico City",
+             "Wildwood", "Rocky", "I Play Rocky"]
+    new = ["Crunchyroll Anime Nights: Dive In Wonderland", "Shorts Package: Mirrors",
+           "Rammstein - Live in Mexico City", "Wildwood", "I Play Rocky"]
+    flagged = dict(pipeline.review_titles(new, films))
+    assert "variant of “Dive in Wonderland”" in flagged["Crunchyroll Anime Nights: Dive In Wonderland"]
+    assert "several titles" in flagged["Shorts Package: Mirrors"]
+    assert "Live" in flagged["Rammstein - Live in Mexico City"]
+    assert "Wildwood" not in flagged and "I Play Rocky" not in flagged
+
+
+def test_summary_lists_review_flags():
+    feed = {"theaters": [], "stale_theaters": [], "events": []}
+    out = render_summary(feed, None, ["X: Y"], [("X: Y", "contains “Live”")])
+    assert "| X: Y | contains “Live” |" in out
+
+
+def test_dry_run_reports_new_titles_without_recording_them(tmp_path):
+    known = tmp_path / "known.txt"
+    known.write_text("Old\n", encoding="utf-8")
+    assert diff_new_titles(["Old", "New"], known, update=False) == ["New"]
+    assert known.read_text(encoding="utf-8") == "Old\n"
+
+
+def test_no_picks_means_every_film_preselected():
+    cfg = fresh_cfg()
+    feed = _build_feed(cfg, [st("Dune"), st("Jaws")], DEN)
+    assert feed["default_films"] is None     # retired picks: the page selects all, hides the button

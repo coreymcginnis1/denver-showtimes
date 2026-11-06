@@ -76,6 +76,9 @@ strip_prefixes = [
   'Fan Faves',
   'Staff Pick',
   'The Popcorn List',          # "The Popcorn List: The Fisherman" -> "The Fisherman"
+  'Crunchyroll(?:\s+Anime\s+Nights?)?',   # "Crunchyroll Anime Nights: Dive In Wonderland"
+  '(?:\w+\s+)?Dose of Reality(?:\s+Screening)?',  # Sie doc series: "Big Dose of Reality Screening: X"
+  '[^:]{2,40}?\s+Presents',   # presenter labels: "Sight & Sound Presents: Joshua Live!"
 ]
 # Event descriptors stripped from the END of a title (label + separator).
 # e.g. "Sleepaway Camp: The Midnight Mass Experience" -> "Sleepaway Camp".
@@ -84,18 +87,19 @@ strip_suffixes = [
   ':\s+.*\bExperience$',
   '\s+Fan First Screenings?$',
   '\s*\(\d{4}\)$',                                       # release year: "Moana (2026)" -> "Moana"
-  '\s*[-–—]?\s*\(?\d{1,3}(?:st|nd|rd|th)\s+Anniversary\)?$',  # "85th Anniversary" / "(40th Anniversary)"
+  '\s*[-–—:]?\s*\(?\d{1,3}(?:st|nd|rd|th)\s+Anniversary\)?$',  # "85th Anniversary" / ": 10th Anniversary"
   '\s*[-–—:]?\s*(?:Director\W?s|Extended|Theatrical|Final|Uncut)\s+Cut$',  # "- Directors Cut" -> base film
   '\s*[:–—-]\s*[^:]*\bEdition$',   # "Backrooms: Everything Must Go Edition" -> "Backrooms"
   '\s*[-–—]\s*(?:Promo|Preview|Sneak(?:\s+Preview)?)\s+Screenings?$',   # "... - Promo Screening"
   '\s*[-–—]\s*Studio Ghibli Fest(?:ival)?(?:\s+\d{4})?$',  # "... - Studio Ghibli Fest 2026"
   '\s+(?:IMAX\s+)?(?:Opening Night\s+)?Fan Event$',      # "MOANA IMAX Opening Night Fan Event"
   '\s+(?:IMAX\s+)?(?:Early Access(?:\s+Screenings?)?|Advance\s+Screenings?)$',  # "... Early Access [Screening]"
-  '\s*[-–—:]?\s*\(?\b(?:Re-?release|RE\d{2})\)?$',       # "Coraline Re-release" / "Coraline (RE26)"
+  '\s*[-–—:]?\s*\(?\b(?:Re-?release|Re-?issue|RE\d{2})\)?$',  # "Coraline Re-release" / "Dune: Part One Reissue" / "(RE26)"
   '\s+on\s+\d{2,3}\s?mm(?:\s+film)?$',   # "Interstellar on 35mm" / "The Odyssey on 35mm film"
   '\s*[:–—-]\s*Sensory[- ]?Friendly\b.*$',  # "Supergirl: Sensory Friendly Screening" -> "Supergirl"
   '\s*\(dir\.?\s[^)]*\)$',      # director annotation: "Alpha (dir. Rawail)" -> "Alpha"
   '\s*[:–—-]\s*Xfinity\b.*$',   # sponsor tag: "Minions & Monsters: Xfinity" -> "Minions & Monsters"
+  '\s*[-–—:]?\s+Encore$',       # rebroadcasts: "The Metropolitan Opera: Carmen Encore" -> "... Carmen"
 ]
 # Titles matching any of these are dropped entirely — events that aren't a specific
 # movie (mystery screenings, watch parties, etc.). Case-insensitive regex.
@@ -111,36 +115,19 @@ drop = [
   'Mystery Movie',            # surprise screenings, no film named ("REGAL: Monday Mystery Movie")
   '\bUFC \d',                 # live UFC pay-per-view broadcasts ("UFC 329: ..."), not films
   'Members?\s+Only',          # members-only screenings (public can't attend) — drop them
+  'League of Legends',        # live esports broadcasts ("League of Legends Worlds 26 - Finals")
+  '\bE-?sports?\b',
 ]
 
-# Which films are pre-checked when the page first loads (others start unchecked but
-# available to toggle on). Case-insensitive regex matched against the normalized title.
-# Leave the list empty to pre-select ALL films (the long default). Edit to taste.
-# If none of these plays today at a theater that starts on, the page pre-selects all films
-# so the calendar never opens empty (see initialFilms() in public/app.js).
+# "Corey's picks": films pre-checked when the page first loads (others start unchecked but
+# available). Case-insensitive regex matched against the normalized title. An empty list
+# pre-selects ALL films and hides the "Corey's picks" button. If none of the picks plays today
+# at a theater that starts on, the page pre-selects all films so the calendar never opens empty
+# (see initialFilms() in public/app.js).
+# RETIRED for now (Nov 2026): the list had gone stale. To bring it back, put patterns in
+# `films`, e.g. 'Alien\b' (word boundary: matches "Alien" but not "Aliens"), 'Blow Out'.
 [defaults]
-films = [
-  'Alien\b',                  # word boundary: matches "Alien ..." but not "Aliens ..."
-  'American Psycho',
-  'Backrooms',
-  'Blow Out',
-  'Citizen Kane',
-  'Disclosure Day',
-  'Inception',
-  'Interstellar',
-  'Jaws',
-  'Lawrence of Arabia',
-  "Maddie's Secret",
-  'Mikey and Nicky',
-  'Moonlight',
-  'My Neighbor Totoro',
-  'Obsession',
-  'Project Hail Mary',
-  'Scarface',
-  'Shortbus',
-  'Talladega Nights: The Ballad of Ricky Bobby',
-  'The Invite'
-]
+films = []
 
 # Optional filters. Omit/comment out a key to disable that filter.
 # Leaving the whole section empty includes every showtime.

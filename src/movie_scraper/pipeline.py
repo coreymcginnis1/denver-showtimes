@@ -65,6 +65,9 @@ def normalize_title(title: str, prefixes: list[str] = (), suffixes: list[str] = 
             t = t[m.end():].strip()
     for suffix in suffixes or ():
         t = re.sub(suffix, "", t, flags=re.I).strip()
+    # Safety net: a stripped tag can leave its separator behind ("The Angry Birds Movie:" once
+    # the anniversary rule missed the colon form), so drop any dangling ":" / "-" / "–".
+    t = re.sub(r"\s*[:–—-]+$", "", t).strip()
     if t and (t == t.upper() or t == t.lower()) and t.upper() != t.lower():
         t = _titlecase(t)   # uniformly UPPER or lower -> Title Case
     elif t:
@@ -78,6 +81,69 @@ def normalize_title(title: str, prefixes: list[str] = (), suffixes: list[str] = 
 def is_non_film(title: str, drop: list[str]) -> bool:
     """True if the title is a non-film event (mystery screening, watch party, …)."""
     return bool(drop) and any(re.search(p, title, re.I) for p in drop)
+
+
+def merge_case_variants(shows: list[Showtime]) -> None:
+    """Give titles that differ only in letter case one spelling, in place.
+
+    Theaters disagree on small words ("Pickpocket in New York" vs "Pickpocket In New York"),
+    which would otherwise list one film twice. The spelling most showtimes use wins (ties go to
+    the alphabetically first, so the choice is stable from run to run).
+    """
+    spellings: dict[str, Counter] = {}
+    for s in shows:
+        spellings.setdefault(s.film_title.casefold(), Counter())[s.film_title] += 1
+    canon = {k: sorted(c.items(), key=lambda kv: (-kv[1], kv[0]))[0][0]
+             for k, c in spellings.items() if len(c) > 1}
+    for s in shows:
+        s.film_title = canon.get(s.film_title.casefold(), s.film_title)
+
+
+# Words that usually mark an event, a broadcast or a special edition rather than a plain film
+# title. A new title containing one is flagged for review in the run summary; it is a prompt to
+# look, not a rule (plenty of real films contain these words).
+_REVIEW_HINTS = re.compile(
+    r"\b(?:live|concert|tour|finals?|championship|worlds|vs\.?|screening|presents?|"
+    r"reissue|re-?release|remaster(?:ed)?|restor(?:ed|ation)|encore|anniversary|"
+    r"edition|cut|episodes?|season|marathon|double feature|triple feature|q\s*&\s*a|"
+    r"fan event|sing-?along|quote-?along|experience|in theaters?|nights?)\b"
+    r"|[:–—-]\s*$|\(\d{4}\)|<[^>]*>", re.I)
+
+
+def _plain(t: str) -> str:
+    return re.sub(r"[^\w]+", " ", t.casefold()).strip()
+
+
+def review_titles(new_titles: list[str], films: list[str]) -> list[tuple[str, str]]:
+    """New titles worth a look for a cleanup rule, each with the reason, for the run summary.
+
+    Catches the shapes that have needed rules before, so the next one is spotted the week it
+    appears instead of after it has cluttered the film list:
+      * a label wrapped around another title on the list ("Series: Film" next to "Film"),
+      * the same label in front of two or more titles (a new series or presenter label),
+      * event/edition words or leftover punctuation (see _REVIEW_HINTS).
+    """
+    plain = {f: _plain(f) for f in films}
+    labels = Counter(f.split(":", 1)[0].strip().casefold() for f in films if ":" in f)
+    out = []
+    for t in new_titles:
+        reasons = []
+        pt = plain.get(t, _plain(t))
+        for other, po in plain.items():
+            if other == t or len(po) < 4:
+                continue
+            if pt.endswith(" " + po) or pt.startswith(po + " ") or po.endswith(" " + pt) \
+                    or po.startswith(pt + " "):
+                if re.search(r"[:–—-]", t) or re.search(r"[:–—-]", other):
+                    reasons.append(f"variant of “{other}”")
+        if ":" in t and labels[t.split(":", 1)[0].strip().casefold()] > 1:
+            reasons.append(f"label “{t.split(':', 1)[0].strip()}:” is on several titles")
+        m = _REVIEW_HINTS.search(t)
+        if m:
+            reasons.append(f"contains “{m.group(0).strip() or m.group(0)}”")
+        if reasons:
+            out.append((t, "; ".join(reasons)))
+    return out
 
 
 _TITLE_FORMAT_RE = re.compile(r"\bon\s+(\d{2,3})\s?mm\b", re.I)
@@ -128,6 +194,7 @@ def run(config_path: str = "config.toml", only: set[str] | None = None) -> dict:
         s.film_title = normalize_title(s.film_title, tcfg.strip_prefixes, tcfg.strip_suffixes)
         if not is_non_film(s.film_title, tcfg.drop):
             normalized.append(s)
+    merge_case_variants(normalized)
 
     shows = [s for s in normalized if _passes(s, cfg)]
     for s in shows:  # give timed events an end so add-to-calendar has a duration
@@ -206,7 +273,8 @@ def theater_counts(feed: dict | None) -> Counter:
     return Counter(e["extendedProps"]["theater"] for e in (feed or {}).get("events", []))
 
 
-def render_summary(feed: dict, previous: dict | None, new_titles: list[str] | None = None) -> str:
+def render_summary(feed: dict, previous: dict | None, new_titles: list[str] | None = None,
+                   review: list[tuple[str, str]] | None = None) -> str:
     """Markdown run report: showtimes per theater vs the last feed, failures, new titles."""
     now, before = theater_counts(feed), theater_counts(previous)
     stale = set(feed.get("stale_theaters", ()))
@@ -221,6 +289,10 @@ def render_summary(feed: dict, previous: dict | None, new_titles: list[str] | No
         else:
             status = "✅"
         lines.append(f"| {t['name']} | {before[key]} | {now[key]} | {status} |")
+    if review:
+        lines += ["", f"### {len(review)} new title(s) that may need a cleanup rule", "",
+                  "| Title | Why it was flagged |", "|---|---|"]
+        lines += [f"| {t} | {why} |" for t, why in review]
     if new_titles:
         lines += ["", f"### {len(new_titles)} new title(s) to check for cleanup rules", ""]
         lines += [f"- {t}" for t in new_titles]
@@ -233,12 +305,13 @@ def write_feed(feed: dict, output: str | Path) -> None:
     path.write_text(json.dumps(feed, indent=2, ensure_ascii=False), encoding="utf-8")
 
 
-def diff_new_titles(films: list[str], known_path: str | Path = "known_titles.txt") -> list[str]:
+def diff_new_titles(films: list[str], known_path: str | Path = "known_titles.txt",
+                    update: bool = True) -> list[str]:
     """Titles in `films` not seen before (per known_path), for the weekly "what's new" digest.
 
     Reads the running list of previously-seen titles, returns the ones that are new (so a
     reviewer only eyeballs new/odd titles instead of the whole list), then folds the current
-    titles into the file so they won't be reported again.
+    titles into the file so they won't be reported again (unless update=False, for dry runs).
     """
     path = Path(known_path)
     known: set[str] = set()
@@ -246,7 +319,7 @@ def diff_new_titles(films: list[str], known_path: str | Path = "known_titles.txt
         known = {ln.strip() for ln in path.read_text(encoding="utf-8").splitlines()
                  if ln.strip() and not ln.lstrip().startswith("#")}
     new = sorted(set(films) - known, key=str.lower)
-    if new:  # only rewrite when something changed
+    if new and update:  # only rewrite when something changed
         allk = sorted(known | set(films), key=str.lower)
         path.write_text(
             "# Titles the scraper has already seen — powers the new-title digest.\n"

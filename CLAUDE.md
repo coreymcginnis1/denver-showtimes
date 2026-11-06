@@ -10,30 +10,32 @@ Live at **https://coreymcginnis1.github.io/denver-showtimes/**, linked from the 
 - This is a **personal** project. Deploy ONLY to the personal GitHub account
   **`coreymcginnis1`** (repo `coreymcginnis1/denver-showtimes`). **Never** push to or use the
   DRCOG/work account **`cmcginnisdrcog`** for this project.
-- Both accounts are logged into `gh`. `git push` uses the *active* account's credential, so
+- On Corey's desktop both accounts are logged into `gh`. `git push` uses the *active* account's credential, so
   **before any push run `gh auth switch --user coreymcginnis1`** (otherwise it 403s
   "denied to cmcginnisdrcog"). **After pushing, switch back: `gh auth switch --user cmcginnisdrcog`** —
   Corey does concurrent work that needs the work account active.
-- Pushing to `main` triggers a **deploy-only** GitHub Action (`.github/workflows/update.yml`)
-  that publishes `public/` to GitHub Pages. Non-trivial changes are usually shipped as a **PR on
-  the personal account**, reviewed, then merged (merging to `main` deploys).
+- Pushing to `main` publishes `public/` to GitHub Pages without scraping
+  (`.github/workflows/update.yml`). Non-trivial changes are usually shipped as a **PR on the
+  personal account**, reviewed, then merged (merging to `main` deploys).
 
 ## How it works
 
 ```
-scraper (Python, run locally, ~weekly)  →  public/data.json  →  static site (FullCalendar)  →  GitHub Pages
+scraper (Python, GitHub Actions, weekly)  →  public/data.json  →  static site (FullCalendar)  →  GitHub Pages
 ```
 
 - `src/movie_scraper/` — Python package: per-theater scrapers → normalize/filter/dedupe →
   writes `public/data.json`. Run `python -m movie_scraper` (flags: `--theater KEY` repeatable,
-  `--dry-run`, `--output`, `-v`). Python 3.11+; deps: httpx, playwright, beautifulsoup4, pydantic.
+  `--dry-run`, `--output`, `--summary`, `-v`). Python 3.11+; deps: httpx, pydantic.
 - `public/` — dependency-free static site (FullCalendar v6 via CDN + vanilla `app.js`). No build.
-- **Scraping runs on Corey's machine, not CI** — AMC (and others) block cloud/datacenter IPs; a
-  home IP works. Weekly is enough (showtimes turn over Wed/Thu). `scripts/update.ps1` scrapes →
-  commits `public/data.json` (+ `known_titles.txt`) if changed → switches the gh account →
-  pushes. A Windows Task Scheduler job ("Denver Showtimes Update", Thursdays 9am, run-if-missed)
-  runs it weekly.
-- `pytest` runs offline against saved fixtures in `tests/fixtures/` (~33 tests).
+- **Scraping runs in GitHub Actions, not on anyone's computer.** `update.yml`: Thursdays 15:00 UTC
+  and "Run workflow" scrape → commit `public/data.json` + `known_titles.txt` → publish. Pushes to
+  `main` publish without scraping. PRs run `pytest` plus a `--dry-run` scrape from GitHub's network.
+- **When a theater fails** (an exception or zero rows) it keeps its upcoming rows from the last feed
+  and is listed in `stale_theaters` in `data.json`. The CLI exits 3, the site still publishes, then
+  the run is marked failed so GitHub emails Corey. Each run's summary has a per-theater table
+  (flags drops of more than half) and the new titles.
+- `pytest` runs offline against saved fixtures in `tests/fixtures/`.
 
 ## Theaters & data sources (`config.toml` `[theaters.*]`)
 
@@ -45,17 +47,19 @@ theaters via `scraper` + `location`.
 |---|---|
 | Sie FilmCenter | Eventive public API (`api.eventive.org`, embedded publishable key) |
 | Landmark Mayan | `landmarktheatres.com` boxofficeapi `schedule` endpoint (httpx) |
-| AMC 9+CO 10 | rendered showtimes page via Playwright + DOM parse; `location = denver/amc-9-co-10` |
-| AMC Westminster Promenade 24 | same AMC scraper; `location = denver/amc-westminster-promenade-24` (the `denver/` segment is required) |
+| AMC 9+CO 10 | **Fandango** `napi/theaterMovieShowtimes/<id>` (httpx); `location = AAYUA` |
+| AMC Westminster Promenade 24 | same Fandango scraper; `location = AAECN` |
 | Alamo Drafthouse Sloans Lake | `drafthouse.com/s/mother/v2/schedule/venue/sloans-lake` (httpx JSON, no browser) |
 | Regal UA Colorado Center / Denver Pavilions | **Fandango** `napi/theaterMovieShowtimes/<id>` (httpx) |
 
-- **Regal quirk (important):** regmovies.com is Cloudflare-gated — it only server-renders the
-  *current day* and 403s httpx. Regal sells tickets through **Fandango**, whose `napi` JSON is
-  open over plain httpx, so Regal reads from Fandango. `location` is the Fandango theater id
-  (**AAFXW** = Colorado Center, **AAJJG** = Denver Pavilions). See `scrapers/fandango.py`.
-- **AMC** is bot-protected → why scraping is local. An `AMC_PROXY` env var (residential proxy)
-  path exists but isn't used by the local-weekly flow.
+- **AMC & Regal quirk (important):** both chains' own sites block scrapers. regmovies.com is
+  Cloudflare-gated (it only server-renders the *current day* and 403s httpx), and amctheatres.com
+  bot-challenged the old Playwright scraper even from a home IP. Both sell tickets through
+  **Fandango**, whose `napi` JSON is open over plain httpx, so both read from there. `location` is
+  the Fandango theater id (**AAFXW** = Regal Colorado Center, **AAJJG** = Regal Denver Pavilions,
+  **AAYUA** = AMC 9+CO 10, **AAECN** = AMC Westminster). See `scrapers/fandango.py`. Before the
+  switch, Fandango matched 115 of 116 AMC showtimes on title and time for one day; the other was
+  the same showing under a different title tag. AMC ticket links now go to Fandango.
 
 ## Title normalization (`config.toml` `[titles]`)
 
@@ -85,7 +89,8 @@ escapes.
 
 Each scrape prints titles that are *new since the last run* (tracked in the committed
 `known_titles.txt`), so Corey only eyeballs new/odd titles instead of re-scanning the whole
-list. See `pipeline.diff_new_titles()`; `update.ps1` commits `known_titles.txt`.
+list. They appear in the Action run's summary. See `pipeline.diff_new_titles()`; the workflow commits
+`known_titles.txt`.
 
 ## "Corey's picks" (`config.toml` `[defaults].films`)
 

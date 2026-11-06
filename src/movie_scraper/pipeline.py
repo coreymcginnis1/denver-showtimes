@@ -4,14 +4,14 @@ from __future__ import annotations
 import json
 import logging
 import re
-from datetime import datetime, timedelta
+from collections import Counter
+from datetime import date, datetime, timedelta
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
 from .config import Config, load_config
 from .models import Showtime
 from .scrapers.alamo import AlamoScraper
-from .scrapers.amc import AmcScraper
 from .scrapers.fandango import FandangoScraper
 from .scrapers.landmark import LandmarkScraper
 from .scrapers.sie_eventive import SieScraper
@@ -19,12 +19,11 @@ from .scrapers.sie_eventive import SieScraper
 log = logging.getLogger(__name__)
 
 # Scraper classes by name. A theater entry uses its key as the scraper name unless it sets
-# `scraper = "..."` (so several theaters can share one class, e.g. two AMCs, or the two Regal
-# locations both reading from Fandango).
+# `scraper = "..."` (so several theaters can share one class, e.g. the AMC and Regal locations
+# all reading from Fandango).
 SCRAPERS = {
     "sie": SieScraper,
     "landmark": LandmarkScraper,
-    "amc": AmcScraper,
     "alamo": AlamoScraper,
     "fandango": FandangoScraper,
 }
@@ -101,6 +100,7 @@ def run(config_path: str = "config.toml", only: set[str] | None = None) -> dict:
     end = today + timedelta(days=cfg.days_ahead)
 
     collected: list[Showtime] = []
+    failed: list[str] = []
     for key, tc in cfg.theaters.items():
         if not tc.enabled or (only and key not in only):
             continue
@@ -109,9 +109,15 @@ def run(config_path: str = "config.toml", only: set[str] | None = None) -> dict:
             log.warning("theater %s: no scraper %r — skipping", key, tc.scraper or key)
             continue
         try:
-            collected.extend(cls(cfg, tc, key=key).fetch(today, end))
+            rows = cls(cfg, tc, key=key).fetch(today, end)
         except Exception:
-            log.exception("scraper %s failed — skipping it", key)
+            log.exception("scraper %s failed", key)
+            rows = []
+        if rows:
+            collected.extend(rows)
+        else:  # no theater is empty for two straight weeks, so treat this as a failure
+            log.error("theater %s returned no showtimes — keeping its last published rows", key)
+            failed.append(key)
 
     tcfg = cfg.titles
     normalized: list[Showtime] = []
@@ -130,7 +136,16 @@ def run(config_path: str = "config.toml", only: set[str] | None = None) -> dict:
 
     deduped = {s.uid: s for s in shows}
     ordered = sorted(deduped.values(), key=lambda s: (s.start, s.theater, s.film_title))
-    return _build_feed(cfg, ordered, tz)
+    carried = _carried_events(load_feed(cfg.output), failed, today)
+    return _build_feed(cfg, ordered, tz, carried=carried, stale=failed)
+
+
+def _carried_events(previous: dict | None, theaters: list[str], today: date) -> list[dict]:
+    """A failed theater's still-upcoming events from the last feed, so it stays on the site."""
+    if not previous or not theaters:
+        return []
+    return [e for e in previous.get("events", [])
+            if e["extendedProps"]["theater"] in theaters and e["start"][:10] >= today.isoformat()]
 
 
 def _passes(s: Showtime, cfg: Config) -> bool:
@@ -153,9 +168,12 @@ def _passes(s: Showtime, cfg: Config) -> bool:
     return True
 
 
-def _build_feed(cfg: Config, shows: list[Showtime], tz: ZoneInfo) -> dict:
+def _build_feed(cfg: Config, shows: list[Showtime], tz: ZoneInfo,
+                carried: list[dict] = (), stale: list[str] = ()) -> dict:
     color_by = {k: t.color for k, t in cfg.theaters.items()}
-    films = sorted({s.film_title for s in shows}, key=str.lower)
+    events = [s.to_event(color_by.get(s.theater, "#888888")) for s in shows] + list(carried)
+    events.sort(key=lambda e: (e["start"], e["extendedProps"]["theater"], e["title"]))
+    films = sorted({e["title"] for e in events}, key=str.lower)
 
     # Resolve the default-selection allowlist to concrete titles; None => select all.
     patterns = cfg.defaults.films
@@ -171,8 +189,42 @@ def _build_feed(cfg: Config, shows: list[Showtime], tz: ZoneInfo) -> dict:
                      for k, t in cfg.theaters.items() if t.enabled],
         "films": films,
         "default_films": default_films,
-        "events": [s.to_event(color_by.get(s.theater, "#888888")) for s in shows],
+        "stale_theaters": list(stale),   # failed this run; their events are from the last feed
+        "events": events,
     }
+
+
+def load_feed(path: str | Path) -> dict | None:
+    """The feed already on disk, or None if it's missing or unreadable."""
+    try:
+        return json.loads(Path(path).read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return None
+
+
+def theater_counts(feed: dict | None) -> Counter:
+    return Counter(e["extendedProps"]["theater"] for e in (feed or {}).get("events", []))
+
+
+def render_summary(feed: dict, previous: dict | None, new_titles: list[str] | None = None) -> str:
+    """Markdown run report: showtimes per theater vs the last feed, failures, new titles."""
+    now, before = theater_counts(feed), theater_counts(previous)
+    stale = set(feed.get("stale_theaters", ()))
+    lines = ["### Showtimes by theater", "",
+             "| Theater | Last feed | This run | Status |", "|---|--:|--:|---|"]
+    for t in feed["theaters"]:
+        key = t["key"]
+        if key in stale:
+            status = f"❌ failed, kept {now[key]} from the last feed"
+        elif now[key] < before[key] / 2:
+            status = "⚠️ dropped by more than half"
+        else:
+            status = "✅"
+        lines.append(f"| {t['name']} | {before[key]} | {now[key]} | {status} |")
+    if new_titles:
+        lines += ["", f"### {len(new_titles)} new title(s) to check for cleanup rules", ""]
+        lines += [f"- {t}" for t in new_titles]
+    return "\n".join(lines) + "\n"
 
 
 def write_feed(feed: dict, output: str | Path) -> None:

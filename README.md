@@ -9,15 +9,13 @@ calendar (Google / Outlook / Apple `.ics`). Built to be linked from a Substack p
 ## How it works
 
 ```
-scraper (Python, local)  ──►  public/data.json  ──►  static site (FullCalendar)  ──►  GitHub Pages
-   you run it weekly             the data feed         filter + add-to-calendar       deploy via Actions
+scraper (GitHub Actions)  ──►  public/data.json  ──►  static site (FullCalendar)  ──►  GitHub Pages
+   runs every Thursday           the data feed         filter + add-to-calendar        published by the same run
 ```
 
-- A Python scraper pulls showtimes from each theater and writes `public/data.json`.
+- A scheduled **GitHub Action** scrapes each theater, commits `public/data.json`, and publishes
+  `public/` to **GitHub Pages**. Nothing runs on a personal computer.
 - `public/` is a dependency-free static site (FullCalendar + vanilla JS) that renders the feed.
-- You run the scraper **on your machine** (weekly — showtimes turn over Wed/Thu) and push
-  `data.json`; a **GitHub Action** then publishes `public/` to **GitHub Pages**. Scraping is local
-  because AMC blocks cloud datacenter IPs (your home IP works).
 - You paste the Pages URL into Substack; it renders a preview card that readers click through.
   (Substack can't embed interactive widgets inline — only a fixed allowlist — so the calendar
   lives on its own page and Substack links to it.)
@@ -27,24 +25,38 @@ scraper (Python, local)  ──►  public/data.json  ──►  static site (Fu
 | Theater | Source | Detail |
 |---|---|---|
 | Sie FilmCenter | Eventive public API (`api.eventive.org`) | Exact showtimes |
-| AMC 9+CO 10 | Rendered showtimes page (Playwright) | Exact showtimes, ~2 weeks |
+| AMC 9+CO 10 | Fandango napi (theater id `AAYUA`) | Exact showtimes + formats, ~2 weeks; tickets link to Fandango |
 | Landmark Mayan | `boxofficeapi` `schedule` endpoint | Exact showtimes, screen + format, direct booking links |
-| AMC Westminster Promenade 24 | Same AMC scraper, different `location` slug | Exact showtimes; **off by default** |
+| AMC Westminster Promenade 24 | Fandango napi (theater id `AAECN`) | Exact showtimes + formats; tickets link to Fandango; **off by default** |
 | Alamo Drafthouse Sloans Lake | "mother" schedule API (`drafthouse.com/s/mother/v2`) | Exact showtimes, screen, special formats (35/70mm); **off by default** |
 | Regal Colorado Center / Denver Pavilions | Fandango napi (`fandango.com/napi/theaterMovieShowtimes`) | Exact showtimes + formats (IMAX/RPX), via plain httpx; **off by default** |
 
 "Off by default" theaters are scraped and available, but their filter chip starts unchecked —
-readers click it to add them. **Regal** reads from **Fandango** (one JSON call per date, no
-browser) because Regal's own site is Cloudflare-gated and only server-renders the current day —
-Regal sells tickets through Fandango, whose `napi` endpoints are open (see `scrapers/fandango.py`).
+readers click it to add them. **AMC and Regal** read from **Fandango** (one JSON call per date, no
+browser) because both chains' own sites block scrapers. Both sell tickets through Fandango, whose
+`napi` endpoints are open (see `scrapers/fandango.py`).
 
-## Quick start (local)
+## Running and troubleshooting
+
+No local setup is needed for any of this:
+
+- **Refresh now:** on GitHub, **Actions → Update showtimes → Run workflow**.
+- **See what happened:** open the run. Its summary has a table of showtimes per theater compared
+  with the last feed, plus any new titles to check for a cleanup rule in `config.toml` (`[titles]`).
+- **When a theater fails:** it keeps its upcoming showtimes from the last feed instead of vanishing,
+  the site still publishes, and the run is marked failed so GitHub emails you. The summary shows
+  which theater, and `stale_theaters` in `data.json` lists it too. Check that failed-workflow emails
+  are on under GitHub **Settings → Notifications → Actions**.
+- **Change something:** use a Claude Code session at [claude.ai/code](https://claude.ai/code), or
+  GitHub's web editor, and open a pull request. The PR check runs the tests and a scrape that writes
+  nothing, from GitHub's network.
+
+## Running it on a computer (optional)
 
 ```bash
 python -m venv .venv
 .venv\Scripts\activate              # Windows;  source .venv/bin/activate on macOS/Linux
 pip install -e ".[dev]"
-python -m playwright install chromium
 
 python -m movie_scraper --dry-run   # preview what would be scraped
 python -m movie_scraper             # write public/data.json
@@ -52,7 +64,8 @@ python -m movie_scraper             # write public/data.json
 python -m http.server 8765 --directory public   # then open http://localhost:8765/
 ```
 
-Useful flags: `--theater sie|landmark|amc` (repeatable), `--dry-run`, `--output PATH`, `-v`.
+Useful flags: `--theater KEY` (repeatable), `--dry-run`, `--output PATH`, `--summary PATH`, `-v`.
+The command exits with code 3 if any theater failed.
 
 ## Configuration — `config.toml`
 
@@ -60,7 +73,7 @@ Useful flags: `--theater sie|landmark|amc` (repeatable), `--dry-run`, `--output 
 - `[theaters.*]` — `enabled` (scrape + include), `default_on` (whether its filter chip starts
   ON; set `false` for secondary venues), display `name`, calendar `color`, and optionally
   `scraper` (reuse another theater's scraper class) + `location` (that scraper's theatre id —
-  an AMC slug path, an Alamo venue, or a Fandango theater id)
+  an Alamo venue or a Fandango theater id)
 - `[filters]` (optional) — `title_include` / `title_exclude` (regex), `weekdays`,
   `earliest` / `latest` (local `HH:MM`). Empty = include everything.
 
@@ -68,32 +81,16 @@ Useful flags: `--theater sie|landmark|amc` (repeatable), `--dry-run`, `--output 
 
 1. Push this repo to GitHub.
 2. **Settings → Pages → Build and deployment → Source: GitHub Actions.**
-3. The workflow [`.github/workflows/update.yml`](.github/workflows/update.yml) is **deploy-only**:
-   on every push to `main` (and via **Run workflow**) it injects the Pages URL into the Open Graph
-   tags and publishes `public/`. It does **not** scrape — see *Updating showtimes* below.
+3. The workflow [`.github/workflows/update.yml`](.github/workflows/update.yml) does the rest:
 
-Your calendar will be at `https://<user>.github.io/<repo>/`.
+| Trigger | What it does |
+|---|---|
+| Thursdays at 9am Denver time (8am in winter), or **Run workflow** | Scrape → commit `public/data.json` and `known_titles.txt` → publish |
+| Push to `main` | Publish without scraping |
+| Pull request touching code or config | Tests, plus a scrape that writes nothing |
 
-## Updating showtimes
-
-Scraping runs **on your machine**, not in the cloud (AMC blocks GitHub's datacenter IPs; your home
-IP works). Showtimes turn over Wed/Thu, so once a week is plenty:
-
-```powershell
-powershell -ExecutionPolicy Bypass -File scripts\update.ps1
-```
-
-It scrapes the enabled theaters, commits `public/data.json` (and `known_titles.txt`) if they
-changed, and pushes — the deploy-only Action republishes. Each run also prints a **new-titles
-digest** — the titles that are new since the last run — so you can spot any that need a cleanup
-rule in `config.toml` (`[titles]`) before it publishes, instead of re-scanning the whole list.
-To automate it, add a weekly Windows Task Scheduler job (adjust the
-path):
-
-```powershell
-schtasks /create /tn "Denver Showtimes Update" /sc weekly /d THU /st 09:00 ^
-  /tr "powershell -ExecutionPolicy Bypass -File C:\Users\CMcGinnis\PythonProjects\movie-scraper\scripts\update.ps1"
-```
+Showtimes turn over Wed/Thu, so once a week is plenty. Your calendar will be at
+`https://<user>.github.io/<repo>/`.
 
 ## Link it from Substack
 
@@ -106,8 +103,7 @@ Paste the Pages URL on its own line in a post and press Enter — Substack rende
 src/movie_scraper/        scraper package (models, config, pipeline, cli, scrapers/)
 public/                   static site (index.html, app.js, styles.css, data.json, preview.png)
 tests/                    offline tests + saved fixtures
-.github/workflows/        Pages deploy (deploy-only)
-scripts/update.ps1        local weekly scrape + push
+.github/workflows/        weekly scrape, publish, and PR checks
 config.toml               settings
 ```
 
@@ -119,13 +115,11 @@ pytest                    # runs offline against saved fixtures in tests/fixture
 
 ## Notes & limitations
 
-- All three theaters carry exact showtimes. Landmark's come from a live `schedule` endpoint
+- All theaters carry exact showtimes. Landmark's come from a live `schedule` endpoint
   the site calls only after a theater is selected (`from`/`to` cinema-day window +
   `theaters={"id":"X02AK",...}`) — see `src/movie_scraper/scrapers/landmark.py`.
-- **AMC** is bot-protected and blocks datacenter IPs, so it can't be scraped from GitHub's runners —
-  which is why scraping runs locally (your home IP works). The scraper still supports an `AMC_PROXY`
-  env var (a residential proxy) if you ever want AMC scraped from CI, but the local-weekly flow
-  doesn't need it.
+- Four of the seven theaters depend on Fandango's undocumented `napi` endpoint, so a change there
+  affects all four at once. If that happens they keep their last showtimes and the run fails loudly.
 - The Sie/Eventive request uses Eventive's public publishable read key embedded in their site; if
   it ever rotates, re-extract it (see `src/movie_scraper/scrapers/sie_eventive.py`).
 - Scraping is for personal/community convenience — times can change; always confirm on the

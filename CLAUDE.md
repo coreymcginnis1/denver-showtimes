@@ -44,7 +44,7 @@ scraper (Python, GitHub Actions, weekly)  →  TMDB match  →  public/data.json
 
 ## Theaters & data sources (`config.toml` `[theaters.*]`)
 
-Nine theaters. The first three are on by default; the rest have `default_on = false` (their
+Ten theaters. The first three are on by default; the rest have `default_on = false` (their
 filter chip starts unchecked — opt-in secondary venues). One scraper class can back several
 theaters via `scraper` + `location`.
 
@@ -57,14 +57,14 @@ theaters via `scraper` + `location`.
 | Alamo Drafthouse Sloans Lake | `drafthouse.com/s/mother/v2/schedule/venue/sloans-lake` (httpx JSON, no browser) |
 | Regal UA Colorado Center / Denver Pavilions | **Fandango** `napi/theaterMovieShowtimes/<id>` (httpx) |
 | Landmark Greenwood Village | same Landmark scraper; `location = X0873` (the Mayan is X02AK) |
-| Harkins Arvada 14 | same Fandango scraper; `location = AAYFG` |
+| Harkins Arvada 14 / Northfield 18 | same Fandango scraper; `location = AAYFG` / `AATYG` |
 
 - **AMC & Regal quirk (important):** both chains' own sites block scrapers. regmovies.com is
   Cloudflare-gated (it only server-renders the *current day* and 403s httpx), and amctheatres.com
   bot-challenged the old Playwright scraper even from a home IP. Both sell tickets through
   **Fandango**, whose `napi` JSON is open over plain httpx, so both read from there. `location` is
   the Fandango theater id (**AAFXW** = Regal Colorado Center, **AAJJG** = Regal Denver Pavilions,
-  **AAYUA** = AMC 9+CO 10, **AAECN** = AMC Westminster, **AAYFG** = Harkins Arvada). See `scrapers/fandango.py`. Before the
+  **AAYUA** = AMC 9+CO 10, **AAECN** = AMC Westminster, **AAYFG** = Harkins Arvada, **AATYG** = Harkins Northfield). See `scrapers/fandango.py`. Before the
   switch, Fandango matched 115 of 116 AMC showtimes on title and time for one day; the other was
   the same showing under a different title tag. AMC ticket links now go to Fandango.
 
@@ -216,10 +216,19 @@ Redesigned Nov 2026 (Letterboxd-inspired, not a copy): **one day at a time**, no
   straight-line distance. Theater chips sort by distance and show miles. Zip centroids are
   `public/zips.json` (Census 2024 ZCTA gazetteer, zips within 60 mi of downtown); theater `lat`/`lon`
   live in `config.toml` and pass through to `data.json`. No travel times by design.
-- **Tags:** "International" (TMDB original language isn't English) is shown. "Indie" (English-language,
-  no major studio among TMDB's producers, budget < $40M or unlisted; `tmdb.classify()`, `MAJOR_STUDIOS`)
-  is still computed into `film_meta.indie` but **not shown — on hold (Nov 2026)**: TMDB lists producers,
-  not distributors, so it mislabeled classics (Rocky, The Apartment) and borderline titles (Drummer Boy).
+- **Special events = no TMDB movie match** (`f.event` in `app.js`): TV episodes (Heated Rivalry),
+  double features, shorts programs, one-night events. They sort last under Newest, are excluded from
+  the New releases / Repertory filters (All only), and get no "New this week" tag. No hand list: a
+  real film, new or revival, always matches a TMDB movie with a release date.
+- **Tags on hold (Nov 2026):** "International" (original language isn't English) and "Indie" (English,
+  no major studio among TMDB's producers, budget < $40M or unlisted; `tmdb.classify()`) are still
+  computed into `film_meta` but **not shown**. Indie mislabeled classics (Rocky, The Apartment) and
+  borderline titles (Drummer Boy) because TMDB lists producers, not distributors; Corey wants both
+  tags or neither.
+- **Theater coverage checked Nov 2026 (from 80206):** within 10 mi, Fandango also has AMC Dine-In
+  Cherry Creek 8 (AAADR; skipped: 12 of 13 films duplicated elsewhere), Regal River Point, Cinemark
+  Bel Mar 16, Cinemark Century Aurora, Regal SouthGlenn (first-run multiplexes, not added). The
+  Esquire closed July 2024.
 - **"Next 2 weeks"** splits into **Now playing** (by the chosen sort) and **Opening soon** (soonest first).
 - Theater choices are saved in `localStorage` (try/catch; optional). "My list" was removed (Nov 2026):
   little use, no sync between devices.

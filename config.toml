@@ -96,6 +96,16 @@ location = "AAYFG"                # Fandango theater id
 lat = 39.7917
 lon = -105.081
 
+[theaters.harkins_northfield]
+enabled = true
+default_on = false
+name = "Harkins Northfield 18"
+color = "#B07AA1"
+scraper = "fandango"
+location = "AATYG"                # Fandango theater id
+lat = 39.7851
+lon = -104.8919
+
 # Title standardization: strip repertory/event series labels from the START of a
 # film title (the label plus its ":" / "–" / "-" separator), so e.g.
 # "Bleak Week: Gummo" -> "Gummo" and "Fan Faves: Michael" -> "Michael".
@@ -134,7 +144,8 @@ strip_suffixes = [
   '\s*\(dir\.?\s[^)]*\)$',      # director annotation: "Alpha (dir. Rawail)" -> "Alpha"
   '\s*[:–—-]\s*Xfinity\b.*$',   # sponsor tag: "Minions & Monsters: Xfinity" -> "Minions & Monsters"
   '\s*[-–—:]?\s+Encore$',       # rebroadcasts: "The Metropolitan Opera: Carmen Encore" -> "... Carmen"
-  '\s*\((?:\d{4}\s+)?Encore\)$',  # "... Carmen (2026 Encore)" -> "... Carmen"
+  '\s*\((?:\d{4}\s+)?Encore\)$',
+  '\s*\((?:English|Spanish|Hindi|Telugu|Tamil|Malayalam|Kannada|Punjabi|Japanese|Korean)(?:\s+(?:\d{4}|Dub(?:bed)?|Sub(?:titled)?|Version))?\)$',  # language versions: "Ramayana (English 2026)"  # "... Carmen (2026 Encore)" -> "... Carmen"
 ]
 # Titles matching any of these are dropped entirely — events that aren't a specific
 # movie (mystery screenings, watch parties, etc.). Case-insensitive regex.

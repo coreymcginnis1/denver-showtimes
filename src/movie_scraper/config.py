@@ -59,6 +59,7 @@ DEFAULT_STRIP_SUFFIXES = [
     r"\s*[:–—-]\s*Xfinity\b.*$",  # sponsor tag: "Minions & Monsters: Xfinity" -> "Minions & Monsters"
     r"\s*[-–—:]?\s+Encore$",      # rebroadcasts: "The Metropolitan Opera: Carmen Encore" -> "... Carmen"
     r"\s*\((?:\d{4}\s+)?Encore\)$",  # "... Carmen (2026 Encore)" -> "... Carmen"
+    r"\s*\((?:English|Spanish|Hindi|Telugu|Tamil|Malayalam|Kannada|Punjabi|Japanese|Korean)(?:\s+(?:\d{4}|Dub(?:bed)?|Sub(?:titled)?|Version))?\)$",  # language versions: "Ramayana (English 2026)"
 ]
 
 # Titles matching these are dropped entirely (not a specific movie).

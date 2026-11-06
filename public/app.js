@@ -9,7 +9,7 @@
   // Short names for chips and rows; the full name is used in the sheet and calendar entries.
   var SHORT = { sie: "Sie FilmCenter", landmark: "Landmark Mayan", amc: "AMC 9+CO 10", regal_pavilions: "Regal Pavilions",
     alamo_sloans: "Alamo Sloans Lake", regal_colorado: "Regal Colorado Ctr", amc_westminster: "AMC Westminster",
-    landmark_greenwood: "Landmark Greenwood", harkins_arvada: "Harkins Arvada" };
+    landmark_greenwood: "Landmark Greenwood", harkins_arvada: "Harkins Arvada", harkins_northfield: "Harkins Northfield" };
   var THEATER_SITES = [
     ["Sie FilmCenter", "https://www.denverfilm.org/"],
     ["Landmark Mayan", "https://www.landmarktheatres.com/our-locations/x02ak-landmark-mayan-theatre-denver/"],
@@ -19,7 +19,8 @@
     ["Regal Colorado Center", "https://www.regmovies.com/theatres/regal-ua-colorado-center-1308"],
     ["Regal Denver Pavilions", "https://www.regmovies.com/theatres/regal-ua-denver-pavilions-rpx-1315"],
     ["Landmark Greenwood Village", "https://www.landmarktheatres.com/our-locations/x0873-the-landmark-greenwood-village/"],
-    ["Harkins Arvada", "https://www.harkins.com/theatres/arvada-14"]
+    ["Harkins Arvada", "https://www.harkins.com/theatres/arvada-14"],
+    ["Harkins Northfield", "https://www.harkins.com/theatres/northfield-18"]
   ];
   var FMT_TAG = { "Premium Format": "Prem", "3D": "3D", "Scope": "Scope", "35mm": "35mm", "70mm": "70mm" };
   var SLOTS = [["Morning", "00:00"], ["Afternoon", "12:00"], ["Evening", "17:00"], ["Late", "21:00"]];
@@ -77,6 +78,9 @@
       f.opened = openings[f.t] || shows.filter(function (s) { return s.f === i; })
         .map(function (s) { return s.d; }).sort()[0] || null;
       f.rep = isRepertory(f);
+      // A special event: anything TMDB doesn't know as a movie (TV episodes like Heated Rivalry,
+      // double features, shorts programs, one-night events). Not a new release or repertory.
+      f.event = !f.id;
     });
     days = Array.from(new Set(shows.map(function (s) { return s.d; }))).sort()
       .filter(function (d) { return d >= NOW.day; });
@@ -120,7 +124,7 @@
     return shows.filter(function (s) {
       var f = films[s.f];
       return (d === ALL ? days.indexOf(s.d) >= 0 && !isPast(s) : s.d === d) && (anyTheater || state.theaters.has(s.th)) && (!q || f.t.toLowerCase().indexOf(q) >= 0) &&
-        (state.kind === "all" || (state.kind === "rep") === f.rep);
+        (state.kind === "all" || (!f.event && (state.kind === "rep") === f.rep));
     });
   }
 
@@ -206,6 +210,7 @@
       // Newest: new releases by Denver opening (latest first, upcoming openings on top), then
       // repertory by original release.
       new: function (f) {
+        if (f.event) return null;   // events sort after every film
         if (!f.rep) return f.opened ? 1e13 + Date.parse(f.opened) : null;
         var r = f.rel || (f.year ? f.year + "-07-01" : null); return r ? Date.parse(r) : null;
       },
@@ -246,12 +251,12 @@
         f.runtime ? "<span>" + runtime(f.runtime) + "</span>" : ""]
         .concat(fmts.map(function (x) { return '<span class="tag">' + esc(x) + "</span>"; })).join("");
       var since = f.opened ? dayDiff(f.opened, all ? days[0] : state.day) : null;
-      var fresh = f.rep || since == null ? "" : since < 0 ? "Opens " + shortDate(f.opened)
+      var fresh = f.rep || f.event || since == null ? "" : since < 0 ? "Opens " + shortDate(f.opened)
         : since === 0 ? "Opening day" : since <= 6 ? "New this week" : "";
       if (fresh) meta += '<span class="tag fresh">' + fresh + "</span>";
-      if (f.intl) meta += '<span class="tag kind">International</span>';
-      // "Indie" is on hold (Nov 2026): TMDB lists producers, not distributors, so the guess
-      // wasn't reliable enough to show. The data (f.indie) is still in data.json.
+      // "Indie" and "International" tags are on hold (Nov 2026): the Indie guess (TMDB lists
+      // producers, not distributors) wasn't reliable, and Corey wants both or neither. The data
+      // (film_meta.indie / .intl) is still in data.json.
       var order = theaters.map(function (t) { return t.key; });
       var vhtml = Array.from(venues.entries()).sort(function (a, b) { return order.indexOf(a[0]) - order.indexOf(b[0]); }).map(function (e) {
         var t = theaterOf(e[0]) || { color: "#888" };

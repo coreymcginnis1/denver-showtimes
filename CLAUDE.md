@@ -125,7 +125,7 @@ programs, double features) keep their cleaned-up name. The rules still matter: T
 
 ## Ratings: Metacritic only, via OMDb (`src/movie_scraper/omdb.py`)
 
-The site's only rating is **Metacritic** (Corey trusts critics over audiences): "MC 98" on cards
+The site's only rating is **Metacritic** (Corey trusts critics over audiences): "Metacritic 98" on cards
 and the **Top rated** sort. It comes from **OMDb** (omdbapi.com, free key, CC BY-NC 4.0, credited
 in the footer), looked up by the **IMDb id from TMDB's full movie record**, so there's no title
 matching. A Metascore is fixed once the reviews are in, so OMDb's copy is reliable.
@@ -177,11 +177,11 @@ Redesigned Nov 2026 (Letterboxd-inspired, not a copy): **one day at a time**, no
 - **Day strip** (today … +14 days; the selected day is a brick "ticket stub"), theater chips
   (default-on theaters from `config.toml`, with that day's counts), search. Sticky on desktop.
 - **Poster cards** for every film playing that day at the selected theaters: poster, title (TMDB
-  name), year · rating · runtime · MC (Metacritic) · format tags, then times
+  name), year · rating · runtime · Metacritic score · format tags, then times
   grouped by theater, and a "View on Letterboxd" link. Posters try the theater's image (Fandango's
   first), then TMDB's, then a typeset placeholder.
 - **Sorts:** Newest (default; release date, else year) · Popular this week (TMDB popularity) ·
-  Top rated (Metacritic, exactly the "MC" number on the card; hidden when no film has one) · A–Z.
+  Top rated (Metacritic, exactly the number on the card; hidden when no film has one) · A–Z.
   Films without the data sort last. Keep sort and display identical: an earlier vote-weighted
   score ranked films out of their visible order and read as a bug.
 - **Schedule** of the day in time order (Morning/Afternoon/Evening/Late; earlier-today rows

@@ -189,7 +189,7 @@
       list.sort(function (a, b) { return (a.hm || "").localeCompare(b.hm || ""); })
         .forEach(function (s) { if (!venues.has(s.th)) venues.set(s.th, []); venues.get(s.th).push(s); });
       var fmts = Array.from(new Set(list.map(function (s) { return s.fmt === "Premium Format" ? "Premium" : s.fmt; }).filter(Boolean)));
-      var critics = f.mc ? '<span class="score" title="Metacritic score (critics)">MC ' + f.mc + "</span>" : "";
+      var critics = f.mc ? '<span class="score" title="Metacritic score (critics)">Metacritic ' + f.mc + "</span>" : "";
       var meta = [f.year ? "<span>" + f.year + "</span>" : "", f.rating ? "<span>" + esc(f.rating) + "</span>" : "",
         f.runtime ? "<span>" + runtime(f.runtime) + "</span>" : "", critics]
         .concat(fmts.map(function (x) { return '<span class="tag">' + esc(x) + "</span>"; })).join("");

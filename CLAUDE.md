@@ -26,7 +26,7 @@ Live at **https://coreymcginnis1.github.io/denver-showtimes/**, linked from the 
 ## How it works
 
 ```
-scraper (Python, GitHub Actions, weekly)  →  TMDB match  →  OMDb scores  →  public/data.json  →  static site (vanilla JS)  →  GitHub Pages
+scraper (Python, GitHub Actions, weekly)  →  TMDB match  →  OMDb Metascores  →  public/data.json  →  static site (vanilla JS)  →  GitHub Pages
 ```
 
 - `src/movie_scraper/` — Python package: per-theater scrapers → normalize/filter/dedupe →
@@ -123,18 +123,23 @@ programs, double features) keep their cleaned-up name. The rules still matter: T
   so the site only *links* to Letterboxd (`letterboxd.com/tmdb/<id>/`), never scrapes it. Corey
   chose not to apply for the Letterboxd API for now.
 
-## Ratings: IMDb + Metacritic via OMDb (`src/movie_scraper/omdb.py`)
+## Ratings: Metacritic only, via OMDb (`src/movie_scraper/omdb.py`)
 
-TMDB's own ratings come from a small community (a few hundred votes for most new releases), so
-ratings come from **OMDb** (omdbapi.com, free key, CC BY-NC 4.0, credited in the footer), looked
-up by the **IMDb id from TMDB's full movie record** — exact, no title matching. Each film in
-`film_meta` gains `imdb_id`, `imdb_rating`, `imdb_votes`, `metascore` and `rt` (Rotten Tomatoes,
-stored but deliberately **not shown**: Corey finds its percent-positive score less useful).
-IMDb's own datasets are personal-use only (no public display), hence OMDb.
+The site's only rating is **Metacritic** (Corey trusts critics over audiences): "MC 98" on cards
+and the **Top rated** sort. It comes from **OMDb** (omdbapi.com, free key, CC BY-NC 4.0, credited
+in the footer), looked up by the **IMDb id from TMDB's full movie record**, so there's no title
+matching. A Metascore is fixed once the reviews are in, so OMDb's copy is reliable.
+
+**Audience ratings were tried and dropped (Nov 2026), so don't re-add them without a new source:**
+TMDB's come from a few hundred voters, IMDb's own data can't be shown publicly, Letterboxd forbids
+scraping, and **OMDb's copy of IMDb ratings lags badly for new releases** (You Can See Everything:
+7.9 from 165 votes on OMDb vs 9.1 from 27K on IMDb; 41 of 99 films had none). `film_meta` still
+stores `imdb_rating`/`imdb_votes`/`rt` (Rotten Tomatoes), but the site doesn't show them.
 
 - Key: `OMDB_API_KEY` repository secret. OMDb takes it as a URL parameter, so the cloud-session
-  proxy can't inject it — test OMDb through the PR check (its dry run prints OMDb coverage and the
-  top-rated films) rather than from a session. Free tier: 1,000/day; a run uses ~110.
+  proxy can't inject it. Test OMDb through the PR check: its dry run prints Metascore coverage and
+  a `MATCH |` line per film (TMDB id, IMDb id, scores) for reviewing matches.
+- Free tier is slow: 2 workers, 30 s timeout, one retry on a timeout. 1,000/day; a run uses ~100.
 - No key, the daily limit, or an error → films keep last run's scores; never fails the run.
 
 ## New-titles digest and cleanup review
@@ -172,15 +177,13 @@ Redesigned Nov 2026 (Letterboxd-inspired, not a copy): **one day at a time**, no
 - **Day strip** (today … +14 days; the selected day is a brick "ticket stub"), theater chips
   (default-on theaters from `config.toml`, with that day's counts), search. Sticky on desktop.
 - **Poster cards** for every film playing that day at the selected theaters: poster, title (TMDB
-  name), year · rating · runtime · IMDb rating · MC (Metacritic) · format tags, then times
+  name), year · rating · runtime · MC (Metacritic) · format tags, then times
   grouped by theater, and a "View on Letterboxd" link. Posters try the theater's image (Fandango's
   first), then TMDB's, then a typeset placeholder.
 - **Sorts:** Newest (default; release date, else year) · Popular this week (TMDB popularity) ·
-  Top rated · Critics (Metacritic; hidden when no film has one) · A–Z. Films without the data sort last.
-- **Top rated sorts by exactly the rating printed on the card**, and a film only shows (and ranks
-  by) a rating once enough people voted: IMDb with ≥250 votes, or, if a run has no OMDb data at
-  all, TMDB ★ with ≥25. (An earlier vote-weighted score ranked films out of visible order and
-  confused readers — keep sort and display identical.)
+  Top rated (Metacritic, exactly the "MC" number on the card; hidden when no film has one) · A–Z.
+  Films without the data sort last. Keep sort and display identical: an earlier vote-weighted
+  score ranked films out of their visible order and read as a bug.
 - **Schedule** of the day in time order (Morning/Afternoon/Evening/Late; earlier-today rows
   hidden behind a button). Desktop: sticky right column. Phone: Films / Schedule toggle.
 - **Tap a time** → sheet with Get tickets, Google, Outlook, Apple/.ics (ICS uses TZID America/Denver).

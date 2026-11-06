@@ -358,10 +358,9 @@ def render_summary(feed: dict, previous: dict | None, new_titles: list[str] | No
     meta = feed.get("film_meta")
     if meta is not None and feed.get("films"):
         missing = [f for f in feed["films"] if f not in meta]
-        rated = sum(1 for m in meta.values() if m.get("imdb_rating"))
         critics = sum(1 for m in meta.values() if m.get("metascore"))
         lines += ["", f"TMDB: matched {len(feed['films']) - len(missing)} of {len(feed['films'])} titles "
-                  f"(release dates, popularity). OMDb: {rated} have an IMDb rating, {critics} a Metascore."]
+                  f"(release dates, popularity). OMDb: {critics} have a Metascore (Top rated)."]
         if missing:
             lines += ["Not on TMDB (fine for events and programs; for a real film, add "
                       "`[tmdb.overrides]` in config.toml): " + "; ".join(missing)]

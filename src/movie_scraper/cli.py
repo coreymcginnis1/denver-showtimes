@@ -45,14 +45,11 @@ def main(argv: list[str] | None = None) -> int:
               f"theaters: {dict(counts)}")
         meta = feed.get("film_meta") or {}
         print(f"TMDB matched {len(meta)} films; OMDb: "
-              f"{sum(1 for m in meta.values() if m.get('imdb_rating'))} IMDb ratings, "
               f"{sum(1 for m in meta.values() if m.get('metascore'))} Metascores")
-        top = sorted((m for m in meta.values() if (m.get("imdb_votes") or 0) >= 250),
-                     key=lambda m: -m["imdb_rating"])[:5]
-        for m in top:
-            print(f"  IMDb {m['imdb_rating']} ({m['imdb_votes']:,} votes) · MC {m.get('metascore')} · {m['title']}")
+        for m in sorted((m for m in meta.values() if m.get("metascore")), key=lambda m: -m["metascore"])[:5]:
+            print(f"  MC {m['metascore']} · {m['title']}")
         # Every film's match, so a PR reviewer can spot a wrong TMDB match (fix: [tmdb.overrides]).
-        print("\nFilm matches (title | TMDB id | release | IMDb id | IMDb rating/votes | Metascore):")
+        print("\nFilm matches (title | TMDB id | release | IMDb id | IMDb rating/votes (not shown) | Metascore):")
         for t in feed["films"]:
             m = meta.get(t)
             if m:

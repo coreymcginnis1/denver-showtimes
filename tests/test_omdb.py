@@ -21,7 +21,7 @@ def test_add_scores_looks_up_by_imdb_id_and_keeps_last_run_on_error():
             raise RuntimeError("Request limit reached!")
         return RECORD
 
-    assert add_scores(meta, previous, fetch=fetch, workers=1) == 2
+    assert add_scores(meta, previous, fetch=fetch, workers=1) == 1   # films with a Metascore
     assert meta["Good"]["metascore"] == 82
     assert meta["Broken"]["imdb_rating"] == 7.0       # matched by IMDb id, even after a rename
     assert "imdb_rating" not in meta["Event"]          # no IMDb id: nothing to look up
@@ -31,3 +31,18 @@ def test_add_scores_without_key_keeps_last_runs_scores():
     meta = {"Jaws": {"imdb_id": "tt0073195"}}
     add_scores(meta, {"Jaws": {"imdb_id": "tt0073195", "imdb_rating": 8.1, "metascore": 87}})
     assert meta["Jaws"]["imdb_rating"] == 8.1 and meta["Jaws"]["metascore"] == 87
+
+
+def test_add_scores_retries_a_timeout_once():
+    import httpx
+    calls = []
+
+    def fetch(imdb_id):
+        calls.append(imdb_id)
+        if len(calls) == 1:
+            raise httpx.ReadTimeout("The read operation timed out")
+        return RECORD
+
+    meta = {"Slow": {"imdb_id": "tt9"}}
+    assert add_scores(meta, {}, fetch=fetch, workers=1) == 1
+    assert calls == ["tt9", "tt9"] and meta["Slow"]["metascore"] == 82

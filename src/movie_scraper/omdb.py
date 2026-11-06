@@ -1,10 +1,12 @@
-"""IMDb ratings and critic scores via OMDb (omdbapi.com), keyed by the IMDb id TMDB gives.
+"""Metacritic scores via OMDb (omdbapi.com), keyed by the IMDb id TMDB gives.
 
-TMDB's own ratings come from a small community (a few hundred votes for most new releases), so
-the site's Top rated sort uses IMDb's audience rating instead, and the Critics sort uses
-Metacritic. IMDb's own data files are licensed for personal use only and Letterboxd forbids
-scraping, so OMDb is the source: one lookup per film returns the IMDb rating and vote count,
-Metascore and Rotten Tomatoes. Its content is CC BY-NC 4.0 (non-commercial, credit on the site).
+The site's only rating is Metacritic (the Top rated sort and "MC 98" on cards). Audience ratings
+were tried and dropped: TMDB's come from a few hundred voters, IMDb's own data can't be shown
+publicly, Letterboxd forbids scraping, and OMDb's copy of IMDb ratings lags badly for new
+releases (Nov 2026: You Can See Everything 7.9 from 165 votes on OMDb vs 9.1 from 27K on IMDb;
+41 of 99 films had none). A Metascore is fixed once the reviews are in, so OMDb's copy is
+reliable. The IMDb rating and Rotten Tomatoes are still stored, not shown.
+OMDb's content is CC BY-NC 4.0 (non-commercial, credited on the site).
 
 The key is the OMDB_API_KEY secret. OMDb takes it as a URL parameter, not a header. Lookups are
 by exact IMDb id, so there is no title matching here. Like TMDB, nothing here can fail the
@@ -49,11 +51,11 @@ def scores(record: dict) -> dict:
 
 
 def add_scores(film_meta: dict[str, dict], previous: dict[str, dict] | None = None,
-               fetch=None, workers: int = 6) -> int:
+               fetch=None, workers: int = 2) -> int:
     """Add IMDb/critic scores to each film in `film_meta` that has an IMDb id, in place.
 
     `previous` is last run's film_meta; a film whose lookup fails (or every film, when there is
-    no key) keeps its scores from there. Returns how many films have an IMDb rating.
+    no key) keeps its scores from there. Returns how many films have a Metascore.
     """
     old = {m.get("imdb_id"): m for m in (previous or {}).values() if m.get("imdb_id")}
 
@@ -68,11 +70,11 @@ def add_scores(film_meta: dict[str, dict], previous: dict[str, dict] | None = No
         log.warning("%s is not set — skipping OMDb, keeping last run's ratings", KEY_ENV)
         for m in films:
             keep(m)
-        return sum(1 for m in film_meta.values() if m.get("imdb_rating"))
+        return sum(1 for m in film_meta.values() if m.get("metascore"))
 
     client = None
     if fetch is None:
-        client = httpx.Client(timeout=20)
+        client = httpx.Client(timeout=30)   # the free tier is slow; few workers, one retry
 
         def fetch(imdb_id):
             r = client.get(API, params={"i": imdb_id, "apikey": key})
@@ -84,7 +86,11 @@ def add_scores(film_meta: dict[str, dict], previous: dict[str, dict] | None = No
 
     def one(m):
         try:
-            m.update(scores(fetch(m["imdb_id"])))
+            try:
+                data = fetch(m["imdb_id"])
+            except httpx.TransportError:   # timeouts and dropped connections: try once more
+                data = fetch(m["imdb_id"])
+            m.update(scores(data))
         except Exception as e:   # one bad lookup (or the daily limit) must not sink the rest
             log.warning("omdb %s: %s — keeping last run's ratings", m["imdb_id"], str(e)[:80])
             keep(m)
@@ -95,4 +101,4 @@ def add_scores(film_meta: dict[str, dict], previous: dict[str, dict] | None = No
     finally:
         if client is not None:
             client.close()
-    return sum(1 for m in film_meta.values() if m.get("imdb_rating"))
+    return sum(1 for m in film_meta.values() if m.get("metascore"))

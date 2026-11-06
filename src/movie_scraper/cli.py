@@ -7,7 +7,7 @@ import sys
 from collections import Counter
 
 from .config import load_config
-from .pipeline import diff_new_titles, load_feed, render_summary, run, write_feed
+from .pipeline import diff_new_titles, load_feed, render_summary, review_titles, run, write_feed
 
 # The feed was built, but at least one theater failed and kept its last published showtimes.
 EXIT_THEATER_FAILED = 3
@@ -35,7 +35,9 @@ def main(argv: list[str] | None = None) -> int:
     previous = load_feed(cfg.output)
     feed = run(args.config, only=set(args.theater) if args.theater else None)
     events = feed["events"]
-    new = None
+    # A dry run reports which titles would be new without recording them as seen.
+    new = diff_new_titles(feed["films"], update=not args.dry_run)
+    review = review_titles(new, feed["films"])
 
     if args.dry_run:
         counts = Counter(e["extendedProps"]["theater"] for e in events)
@@ -51,18 +53,22 @@ def main(argv: list[str] | None = None) -> int:
         write_feed(feed, output)
         print(f"Wrote {len(events)} events to {output}")
 
-        new = diff_new_titles(feed["films"])
-        if new:
-            print(f"\n{len(new)} new title(s) since last run — eyeball these for cleanup:")
-            for t in new:
-                print(f"  • {t}")
+    if new:
+        print(f"\n{len(new)} new title(s) since last run — eyeball these for cleanup:")
+        for t in new:
+            print(f"  • {t}")
+        if not args.dry_run:
             print("(added to known_titles.txt; they won't be flagged again next week)")
-        else:
-            print("\nNo new titles since last run.")
+    else:
+        print("\nNo new titles since last run.")
+    if review:
+        print(f"\n{len(review)} of them may need a cleanup rule:")
+        for t, why in review:
+            print(f"  • {t} — {why}")
 
     if args.summary:
         with open(args.summary, "a", encoding="utf-8") as f:
-            f.write(render_summary(feed, previous, new))
+            f.write(render_summary(feed, previous, new, review))
 
     if feed["stale_theaters"]:
         print(f"\nFAILED: {', '.join(feed['stale_theaters'])} returned no showtimes; "

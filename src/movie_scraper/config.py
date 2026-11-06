@@ -33,6 +33,9 @@ DEFAULT_STRIP_PREFIXES = [
     r"Fan Faves",
     r"Staff Pick",
     r"The Popcorn List",          # "The Popcorn List: The Fisherman" -> "The Fisherman"
+    r"Crunchyroll(?:\s+Anime\s+Nights?)?",   # "Crunchyroll Anime Nights: Dive In Wonderland"
+    r"(?:\w+\s+)?Dose of Reality(?:\s+Screening)?",  # Sie doc series: "Big Dose of Reality Screening: X"
+    r"[^:]{2,40}?\s+Presents",    # presenter labels: "Sight & Sound Presents: Joshua Live!"
 ]
 
 DEFAULT_STRIP_SUFFIXES = [
@@ -40,18 +43,19 @@ DEFAULT_STRIP_SUFFIXES = [
     r":\s+.*\bExperience$",        # "Sleepaway Camp: The Midnight Mass Experience"
     r"\s+Fan First Screenings?$",  # "Supergirl Fan First Screenings"
     r"\s*\(\d{4}\)$",              # trailing release year: "Moana (2026)" -> "Moana"
-    r"\s*[-–—]?\s*\(?\d{1,3}(?:st|nd|rd|th)\s+Anniversary\)?$",  # "85th Anniversary" / "(40th Anniversary)"
+    r"\s*[-–—:]?\s*\(?\d{1,3}(?:st|nd|rd|th)\s+Anniversary\)?$",  # "85th Anniversary" / ": 10th Anniversary"
     r"\s*[-–—:]?\s*(?:Director\W?s|Extended|Theatrical|Final|Uncut)\s+Cut$",  # "- Directors Cut" -> base film
     r"\s*[:–—-]\s*[^:]*\bEdition$",   # "Backrooms: Everything Must Go Edition" -> "Backrooms"
     r"\s*[-–—]\s*(?:Promo|Preview|Sneak(?:\s+Preview)?)\s+Screenings?$",   # "... - Promo Screening"
     r"\s*[-–—]\s*Studio Ghibli Fest(?:ival)?(?:\s+\d{4})?$",  # "... - Studio Ghibli Fest 2026"
     r"\s+(?:IMAX\s+)?(?:Opening Night\s+)?Fan Event$",        # "MOANA IMAX Opening Night Fan Event"
     r"\s+(?:IMAX\s+)?(?:Early Access(?:\s+Screenings?)?|Advance\s+Screenings?)$",  # "... Early Access [Screening]"
-    r"\s*[-–—:]?\s*\(?\b(?:Re-?release|RE\d{2})\)?$",  # "Coraline Re-release" / "Coraline (RE26)"
+    r"\s*[-–—:]?\s*\(?\b(?:Re-?release|Re-?issue|RE\d{2})\)?$",  # "Coraline Re-release" / "Dune: Part One Reissue" / "(RE26)"
     r"\s+on\s+\d{2,3}\s?mm(?:\s+film)?$",   # "Interstellar on 35mm" / "The Odyssey on 35mm film"
     r"\s*[:–—-]\s*Sensory[- ]?Friendly\b.*$",  # "Supergirl: Sensory Friendly Screening" -> "Supergirl"
     r"\s*\(dir\.?\s[^)]*\)$",     # director annotation: "Alpha (dir. Rawail)" -> "Alpha"
     r"\s*[:–—-]\s*Xfinity\b.*$",  # sponsor tag: "Minions & Monsters: Xfinity" -> "Minions & Monsters"
+    r"\s*[-–—:]?\s+Encore$",      # rebroadcasts: "The Metropolitan Opera: Carmen Encore" -> "... Carmen"
 ]
 
 # Titles matching these are dropped entirely (not a specific movie).
@@ -67,6 +71,8 @@ DEFAULT_DROP = [
     r"Mystery Movie",             # surprise screenings, no film named (e.g. "REGAL: Monday Mystery Movie")
     r"\bUFC \d",                  # live UFC pay-per-view broadcasts ("UFC 329: ..."), not films
     r"Members?\s+Only",           # members-only screenings (public can't attend) — drop them
+    r"League of Legends",         # live esports broadcasts ("League of Legends Worlds 26 - Finals")
+    r"\bE-?sports?\b",
 ]
 
 

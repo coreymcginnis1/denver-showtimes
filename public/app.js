@@ -219,6 +219,9 @@
       applySearch();
       refresh();
     });
+    // Corey's picks button: only shown while config.toml lists picks (default_films is null when
+    // the list is empty, which is "every film" and already what the All films button does).
+    $("picksBtn").hidden = !DATA.default_films;
     $("picksBtn").addEventListener("click", function () {   // reset to Corey's picks (the default allowlist)
       enabledFilms = DATA.default_films ? new Set(DATA.default_films) : new Set(DATA.films);
       syncFilmChecks();

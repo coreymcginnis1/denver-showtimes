@@ -68,37 +68,56 @@ sponsor tags, member events, live sports). Three **class-based** regex lists kee
 clean as new variants appear each week — prefer *general* patterns over one-offs:
 
 - `strip_prefixes` — series/program labels from the front: "Bleak Week: X" → "X"
-  (also Scream Screen, The Popcorn List, Sci-Fi Film Series, Fan Faves, Staff Pick).
-- `strip_suffixes` — trailing tags: release year `(2026)`, `Nth Anniversary` (incl. paren form
-  `(40th Anniversary)`), `Director's/Extended/... Cut`, `... Edition`, `on 35mm[ film]` (the gauge
-  is captured into the format field), `(dir. X)`, Sensory Friendly, sponsor tags (Xfinity),
-  Fan Event / Early Access / Promo / Preview screenings, `w/ ...`.
+  (also Scream Screen, The Popcorn List, Sci-Fi Film Series, Fan Faves, Staff Pick, Crunchyroll
+  Anime Nights, Sie's "… Dose of Reality [Screening]", and any "<Presenter> Presents:").
+- `strip_suffixes` — trailing tags: release year `(2026)`, `Nth Anniversary` (incl. paren and
+  colon forms), `Director's/Extended/... Cut`, `... Edition`, `Re-release`/`Reissue`/`(RE26)`,
+  `Encore`, `on 35mm[ film]` (the gauge is captured into the format field), `(dir. X)`, Sensory
+  Friendly, sponsor tags (Xfinity), Fan Event / Early Access / Promo / Preview screenings, `w/ ...`.
 - `drop` — non-films removed entirely: mystery / private-rental / members-only screenings,
-  memorial/tribute screenings, watch parties (GOLAZO), live sports (`UFC \d`, Copa Mundial,
-  Apple TV Live).
+  memorial/tribute screenings, watch parties (GOLAZO), live sports and esports (`UFC \d`, Copa
+  Mundial, Apple TV Live, League of Legends). Concerts, opera, NT Live and TV-episode screenings
+  are deliberately **kept** (they're ticketed screenings people look for).
+
+The `[titles]` lists in `config.toml` mirror the `DEFAULT_*` lists in `config.py`; keep both in sync.
 
 `pipeline.normalize_title()` also title-cases fully UPPER/lowercase titles and down-cases 4+
-letter all-caps words (BLEACH→Bleach) so casing variants merge. `Alien` and `Aliens` are
+letter all-caps words (BLEACH→Bleach) so casing variants merge, and drops a dangling `:`/`-` left
+by a stripped tag. `pipeline.merge_case_variants()` then gives titles that differ only in case one
+spelling (the one most showtimes use), e.g. "Pickpocket in/In New York". `Alien` and `Aliens` are
 deliberately kept separate (base titles differ; the picks regex uses a `\b` boundary).
 
 **TOML gotcha:** single-quoted TOML strings **cannot contain an apostrophe** (breaks parsing) —
 use `\W?` (e.g. `Director\W?s`, not `Director's`) or double quotes for literals without regex
 escapes.
 
-## New-titles digest
+## New-titles digest and cleanup review
 
 Each scrape prints titles that are *new since the last run* (tracked in the committed
 `known_titles.txt`), so Corey only eyeballs new/odd titles instead of re-scanning the whole
 list. They appear in the Action run's summary. See `pipeline.diff_new_titles()`; the workflow commits
-`known_titles.txt`.
+`known_titles.txt`. A `--dry-run` (and so every PR check) reports new titles without recording them.
 
-## "Corey's picks" (`config.toml` `[defaults].films`)
+`pipeline.review_titles()` then flags the new titles most likely to need a rule, with the reason,
+in a "may need a cleanup rule" table at the top of the summary: a label wrapped around another
+title on the list ("Crunchyroll Anime Nights: X" next to "X"), a "Label:" shared by several titles
+(a new series/presenter), or event/edition words and leftover punctuation (`_REVIEW_HINTS`: Live,
+Finals, Reissue, Encore, Presents, Screening, trailing `:` …). It only flags; rules stay manual.
 
-Films pre-checked on first load (case-insensitive regex vs the normalized title; empty list =
-pre-select all). If none of the picks plays today at a theater that starts on, the page pre-selects
-all films instead, so the calendar never opens empty (`initialFilms()` in `public/app.js`; it runs
-in the browser because "today" moves on all week). **Future idea:** auto-generate this allowlist by scraping Corey's Substack
-newsletter (RSS) rather than hand-editing.
+## "Corey's picks" (`config.toml` `[defaults].films`) — retired Nov 2026
+
+The list had gone stale, so `films = []`: every film starts selected and the "Corey's picks" button
+is hidden (it shows only while `default_films` is non-null). To revive, add case-insensitive regexes
+vs the normalized title (e.g. `'Alien\b'`, so "Aliens" doesn't match). If none of the picks plays
+today at a theater that starts on, the page pre-selects all films so the calendar never opens empty
+(`initialFilms()` in `public/app.js`). **Future idea:** generate the list from Corey's Substack RSS.
+
+## Theater notes
+
+- **Regal UA Colorado Center** shrank steadily from ~20 films / ~430 showtimes per scrape (July)
+  to ~5–6 films / ~115 (Nov 2026). The scraper and Fandango feed are healthy (Pavilions, same
+  scraper, is normal), so this looks like the theater itself running far fewer screens. Worth
+  re-checking on regmovies.com in a browser if it drops to zero (a closure would make it "fail").
 
 ## Frontend notes (`public/`)
 

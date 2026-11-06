@@ -342,7 +342,8 @@ def _build_feed(cfg: Config, shows: list[Showtime], tz: ZoneInfo,
     return {
         "generated_at": datetime.now(tz).isoformat(),
         "timezone": cfg.timezone,
-        "theaters": [{"key": k, "name": t.name, "color": t.color, "default_on": t.default_on}
+        "theaters": [{"key": k, "name": t.name, "color": t.color, "default_on": t.default_on,
+                      "lat": t.lat, "lon": t.lon}
                      for k, t in cfg.theaters.items() if t.enabled],
         "films": films,
         "default_films": default_films,

@@ -40,7 +40,10 @@
   })();
 
   var D, films = [], shows = [], days = [], theaters = [];
-  var state = { day: null, q: "", sort: "new", kind: "all", scope: "all", showEarlier: false, theaters: null, list: null };
+  // Distances are from the centre of a zip code to each theater, as the crow flies. The zip is
+  // never saved: it resets to DEFAULT_ZIP on every visit, so nothing about a reader is kept.
+  var DEFAULT_ZIP = "80206", RADII = [1, 5, 10], ZIPS = {};
+  var state = { day: null, q: "", sort: "new", kind: "all", showEarlier: false, theaters: null, zip: DEFAULT_ZIP, radius: null };
 
   // ---- Data ------------------------------------------------------------------
 
@@ -52,6 +55,7 @@
       index[t] = i;
       var m = meta[t] || {};
       return { t: t, id: m.tmdb_id || null, rel: m.release || null, pop: m.popularity, va: m.vote_average, vc: m.vote_count || 0,
+        indie: !!m.indie, intl: !!m.intl,
         posters: [], tmdbPoster: m.tmdb_poster || null, rating: null, runtime: null, year: m.release ? +m.release.slice(0, 4) : null };
     });
     data.events.forEach(function (e) {
@@ -82,7 +86,6 @@
     var saved = store("dst-theaters");
     var valid = Array.isArray(saved) ? saved.filter(function (k) { return theaterOf(k); }) : [];
     state.theaters = new Set(valid.length ? valid : theaters.filter(function (t) { return t.default_on !== false; }).map(function (t) { return t.key; }));
-    state.list = new Set((store("dst-list") || []).filter(function (t) { return t in index; }));
   }
 
   // Repertory: the film first came out more than two years before it opened here (a revival).
@@ -92,6 +95,21 @@
   function isRepertory(f) {
     var orig = f.rel || (f.year ? f.year + "-07-01" : null);
     return !!(orig && f.opened && dayDiff(orig, f.opened) > REPERTORY_DAYS);
+  }
+
+  function miles(t) {
+    var z = ZIPS[state.zip];
+    if (!z || t.lat == null || t.lon == null) return null;
+    var R = 3958.8, r = Math.PI / 180, dLa = (t.lat - z[0]) * r, dLo = (t.lon - z[1]) * r;
+    var h = Math.pow(Math.sin(dLa / 2), 2) + Math.cos(z[0] * r) * Math.cos(t.lat * r) * Math.pow(Math.sin(dLo / 2), 2);
+    return 2 * R * Math.asin(Math.sqrt(h));
+  }
+  // Choosing a distance turns on exactly the theaters within it ("All" turns them all on).
+  function applyRadius() {
+    if (state.radius == null) return;
+    state.theaters = new Set(theaters.filter(function (t) {
+      var mi = miles(t); return state.radius === "all" || (mi != null && mi <= +state.radius);
+    }).map(function (t) { return t.key; }));
   }
 
   function theaterOf(k) { for (var i = 0; i < theaters.length; i++) if (theaters[i].key === k) return theaters[i]; return null; }
@@ -153,10 +171,14 @@
   function renderTheaters() {
     var counts = {};
     dayShows(state.day, true).forEach(function (s) { counts[s.th] = (counts[s.th] || 0) + 1; });
-    $("theaters").innerHTML = theaters.map(function (t) {
+    var near = theaters.slice().sort(function (a, b) { return (miles(a) || 0) - (miles(b) || 0); });
+    $("theaters").innerHTML = near.map(function (t) {
+      var mi = miles(t);
       return '<button type="button" class="chip" style="--c:' + t.color + '" data-k="' + t.key + '" aria-pressed="' + state.theaters.has(t.key) + '">' +
-        '<span class="dot"></span>' + esc(tName(t.key)) + ' <span class="n">' + (counts[t.key] || 0) + "</span></button>";
+        '<span class="dot"></span>' + esc(tName(t.key)) + (mi != null ? ' <span class="mi">' + mi.toFixed(1) + " mi</span>" : "") +
+        ' <span class="n">' + (counts[t.key] || 0) + "</span></button>";
     }).join("");
+    document.querySelectorAll("[data-r]").forEach(function (x) { x.setAttribute("aria-pressed", String(x.dataset.r === String(state.radius))); });
   }
 
   // ---- Film cards ----------------------------------------------------------------
@@ -215,7 +237,7 @@
         : "Pick at least one theater above to see films.") + "</p>";
       return;
     }
-    $("grid").innerHTML = ids.map(function (i) {
+    var cardHTML = function (i) {
       var f = films[i], list = byFilm.get(i), venues = new Map();
       list.sort(function (a, b) { return (a.d + (a.hm || "")).localeCompare(b.d + (b.hm || "")); })
         .forEach(function (s) { if (!venues.has(s.th)) venues.set(s.th, []); venues.get(s.th).push(s); });
@@ -227,6 +249,10 @@
       var fresh = f.rep || since == null ? "" : since < 0 ? "Opens " + shortDate(f.opened)
         : since === 0 ? "Opening day" : since <= 6 ? "New this week" : "";
       if (fresh) meta += '<span class="tag fresh">' + fresh + "</span>";
+      if (f.intl) meta += '<span class="tag kind">International</span>';
+      // "Indie" only on new releases: for classics TMDB lists producers, not the studio that
+      // released them, and the label means little for a 1960 film.
+      else if (f.indie && !f.rep) meta += '<span class="tag kind">Indie</span>';
       var order = theaters.map(function (t) { return t.key; });
       var vhtml = Array.from(venues.entries()).sort(function (a, b) { return order.indexOf(a[0]) - order.indexOf(b[0]); }).map(function (e) {
         var t = theaterOf(e[0]) || { color: "#888" };
@@ -247,16 +273,25 @@
               esc(f.t) + ", " + (s.hm ? longTime(s.hm) : "times vary") + ", " + esc(t.name || "") + '">' + label + tag + "</button>";
           }).join("") + "</div></div>";
       }).join("");
-      var on = state.list.has(f.t);
       return '<article class="card"><div class="poster">' + posterHTML(i) +
-        '<button type="button" class="add" data-t="' + esc(f.t) + '" aria-pressed="' + on + '" aria-label="' +
-        (on ? "Remove " + esc(f.t) + " from" : "Add " + esc(f.t) + " to") + ' My list">' + (on ? "✓" : "+") + "</button></div>" +
+        "</div>" +
         '<h3 class="title">' + esc(f.t) + "</h3>" + (meta ? '<div class="meta">' + meta + "</div>" : "") +
         '<div class="venues">' + vhtml + "</div>" +
         '<button type="button" class="more" hidden>Show all times</button>' +
         (f.id ? '<a class="lb" href="https://letterboxd.com/tmdb/' + f.id + '/" target="_blank" rel="noopener">View on Letterboxd</a>' : "") +
         "</article>";
-    }).join("");
+    };
+    if (all) {   // two groups: what you can see now (by the chosen sort), then openings, soonest first
+      var soon = ids.filter(function (i) { return films[i].opened && films[i].opened > days[0] && !films[i].rep; });
+      var now = ids.filter(function (i) { return soon.indexOf(i) < 0; });
+      soon.sort(function (a, b) { return films[a].opened.localeCompare(films[b].opened) || films[a].t.localeCompare(films[b].t); });
+      $("grid").innerHTML = (now.length ? '<h3 class="group">Now playing <span>' + now.length + "</span></h3>" +
+          '<div class="grid">' + now.map(cardHTML).join("") + "</div>" : "") +
+        (soon.length ? '<h3 class="group">Opening soon <span>' + soon.length + "</span></h3>" +
+          '<div class="grid">' + soon.map(cardHTML).join("") + "</div>" : "");
+    } else {
+      $("grid").innerHTML = '<div class="grid">' + ids.map(cardHTML).join("") + "</div>";
+    }
     clampVenues();
   }
 
@@ -280,17 +315,11 @@
   // ---- Schedule --------------------------------------------------------------------
 
   function renderSchedule() {
-    var listBtn = $("listBtn");
-    listBtn.textContent = "My list" + (state.list.size ? " (" + state.list.size + ")" : "");
-    listBtn.disabled = !state.list.size;
-    if (!state.list.size) state.scope = "all";
-    document.querySelectorAll("[data-sc]").forEach(function (b) { b.setAttribute("aria-pressed", b.dataset.sc === state.scope); });
-
-    var ds = dayShows(state.day).filter(function (s) { return s.hm && (state.scope === "all" || state.list.has(films[s.f].t)); })
+    var ds = dayShows(state.day).filter(function (s) { return s.hm; })
       .sort(function (a, b) { return a.hm.localeCompare(b.hm) || films[a.f].t.localeCompare(films[b.f].t); });
     var past = ds.filter(isPast), shown = state.showEarlier ? ds : ds.filter(function (s) { return !isPast(s); });
     if (!ds.length) {
-      $("sched").innerHTML = '<p class="empty">' + (state.scope === "list" ? "None of your films play on this day at these theaters." : "No showtimes match.") + "</p>";
+      $("sched").innerHTML = '<p class="empty">' + "No showtimes match." + "</p>";
       return;
     }
     var html = shown.length ? "" : '<p class="empty">Everything has started for today.</p>';
@@ -389,8 +418,11 @@
       if (b.id === "closeSheet") return closeSheet();
       if (b.dataset.d) { state.day = b.dataset.d; state.showEarlier = false; setMode(); renderDays(); renderAll(); window.scrollTo({ top: 0 }); return; }
       if (b.dataset.k) {
-        var k = b.dataset.k; state.theaters.has(k) ? state.theaters.delete(k) : state.theaters.add(k);
+        var k = b.dataset.k; state.theaters.has(k) ? state.theaters.delete(k) : state.theaters.add(k); state.radius = null;
         store("dst-theaters", Array.from(state.theaters)); renderAll(); return;
+      }
+      if (b.dataset.r) {
+        state.radius = b.dataset.r; applyRadius(); store("dst-theaters", Array.from(state.theaters)); renderAll(); return;
       }
       if (b.dataset.kind) {
         state.kind = b.dataset.kind;
@@ -402,7 +434,6 @@
         document.querySelectorAll("[data-s]").forEach(function (x) { x.setAttribute("aria-pressed", x === b); });
         renderFilms(); return;
       }
-      if (b.dataset.sc) { state.scope = b.dataset.sc; renderSchedule(); return; }
       if (b.dataset.v) {
         $("layout").dataset.view = b.dataset.v;
         document.querySelectorAll("[data-v]").forEach(function (x) { x.setAttribute("aria-pressed", x === b); });
@@ -412,20 +443,25 @@
         var card = b.closest(".card"); card.classList.add("open");
         card.querySelector(".venues").classList.remove("clamp"); b.hidden = true; return;
       }
-      if (b.classList.contains("add")) {
-        var t = b.dataset.t; state.list.has(t) ? state.list.delete(t) : state.list.add(t);
-        store("dst-list", Array.from(state.list)); renderFilms(); renderSchedule(); return;
-      }
       if (b.id === "earlier") { state.showEarlier = !state.showEarlier; renderSchedule(); return; }
       if (b.dataset.i) openSheet(+b.dataset.i);
     });
     document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !$("backdrop").hidden) closeSheet(); });
     $("q").addEventListener("input", function (e) { state.q = e.target.value.trim(); renderAll(); });
+    $("zip").addEventListener("input", function (e) {
+      var z = e.target.value.replace(/\D/g, "").slice(0, 5);
+      if (z !== e.target.value) e.target.value = z;
+      var ok = z.length === 5 && ZIPS[z];
+      $("zipNote").hidden = !(z.length === 5 && !ok);
+      if (ok) { state.zip = z; applyRadius(); renderAll(); }
+    });
     window.addEventListener("resize", function () { measure(); clampVenues(); });
   }
 
+  var zipTable = fetch("zips.json").then(function (r) { return r.ok ? r.json() : {}; }).catch(function () { return {}; });
   fetch("data.json?_=" + Date.now(), { cache: "no-store" })
     .then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
+    .then(function (data) { return zipTable.then(function (z) { ZIPS = z; return data; }); })
     .then(function (data) {
       load(data); wire(); setMode(); renderUpdated(); renderDays(); renderAll(); measure();
       var sel = $("days").querySelector('[aria-pressed="true"]'); if (sel) sel.scrollIntoView({ block: "nearest", inline: "center" });

@@ -77,6 +77,21 @@ button { font: inherit; color: inherit; }
 }
 .day[aria-pressed="true"] .dw { color: #ffe6d8; }
 
+/* Near [zip] within 1 / 5 / 10 mi / All: picks the theaters within that distance. */
+.near { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; font-size: 13.5px; color: var(--muted); }
+.near label, .near .lbl { color: var(--faint); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; }
+.zip { width: 4.6em; box-sizing: content-box; max-width: 72px; height: 34px; border-radius: var(--r-sm); border: 1px solid var(--line); background: var(--surface);
+  color: var(--paper); font: inherit; font-variant-numeric: tabular-nums; text-align: center; padding: 0 6px; }
+.radius { min-height: 34px; padding: 0 12px; border-radius: 999px; border: 1px solid var(--line); background: transparent;
+  color: var(--muted); cursor: pointer; font-size: 13px; }
+.radius[aria-pressed="true"] { background: var(--raised); color: var(--paper); border-color: var(--faint); }
+.zipnote { color: var(--brick); font-size: 12.5px; }
+.chip .mi { font-size: 12px; color: var(--faint); }
+/* "Next 2 weeks" groups */
+.group { font: 600 20px/1.2 var(--display); margin: 8px 0 14px; }
+.group span { font: 500 13px var(--ui); color: var(--faint); margin-left: 6px; }
+#grid > .grid + .group { margin-top: 36px; }
+.tag.kind { color: var(--muted); }
 .filters { display: flex; gap: 10px; align-items: center; min-width: 0; }
 .filters .scroller { flex: 1 1 auto; min-width: 0; }
 .chip {
@@ -105,7 +120,7 @@ button { font: inherit; color: inherit; }
 .films .sechead { margin-bottom: 10px; }
 .toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 22px; margin-bottom: 18px; }
 .toolbar .sort + .sort { padding-left: 22px; border-left: 1px solid var(--line); }
-@media (max-width: 600px) { .toolbar { gap: 6px; } .toolbar .sort + .sort { padding-left: 0; border-left: 0; } }
+@media (max-width: 600px) { .near { gap: 6px; } .near .lbl { display: none; } .radius { padding: 0 10px; } .toolbar { gap: 6px; } .toolbar .sort + .sort { padding-left: 0; border-left: 0; } }
 /* "Next 2 weeks": no schedule column; each theater gets a date span and its next showing. */
 .layout[data-mode="span"] { grid-template-columns: minmax(0, 1fr); }
 .layout[data-mode="span"] .sched { display: none; }
@@ -132,13 +147,6 @@ button { font: inherit; color: inherit; }
   background: linear-gradient(160deg, #3a2c22, #1c1612 70%); font: 500 italic 22px/1.1 var(--display);
 }
 .poster .fallback small { display: block; font: 11px/1.3 var(--ui); font-style: normal; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-top: 8px; }
-.add {
-  position: absolute; top: 8px; right: 8px; width: 36px; height: 36px; border-radius: 50%;
-  border: 1px solid rgba(255,255,255,.25); background: var(--scrim); color: var(--paper);
-  display: grid; place-items: center; cursor: pointer; font-size: 20px; line-height: 1;
-  backdrop-filter: blur(4px);
-}
-.add[aria-pressed="true"] { background: var(--brick-fill); border-color: var(--brick-fill); }
 .title { font: 600 19px/1.15 var(--display); margin: 0; text-wrap: balance; overflow-wrap: anywhere; }
 .meta { display: flex; flex-wrap: wrap; gap: 4px 10px; color: var(--muted); font-size: 12.5px; }
 .tag.fresh { color: var(--brick); border-color: var(--brick); }
@@ -173,10 +181,6 @@ button { font: inherit; color: inherit; }
   padding: 16px 16px 8px; overscroll-behavior: contain;
 }
 .sched .sechead h2 { font-size: 21px; }
-.scope { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; padding: 2px; font-size: 12.5px; }
-.scope button { border: 0; background: none; border-radius: 999px; padding: 4px 10px; color: var(--faint); cursor: pointer; }
-.scope button[aria-pressed="true"] { background: var(--raised); color: var(--paper); }
-.scope button:disabled { cursor: default; opacity: .5; }
 .slot { margin: 14px 0 4px; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--faint); display: flex; justify-content: space-between; }
 .row {
   display: grid; grid-template-columns: 74px 30px minmax(0, 1fr); gap: 10px; align-items: center;
@@ -234,7 +238,6 @@ button { font: inherit; color: inherit; }
   .grid { grid-template-columns: minmax(0, 1fr); gap: 22px; }
   .card { grid-template-columns: 124px minmax(0, 1fr); grid-template-rows: repeat(4, auto) 1fr; align-items: start; column-gap: 14px; row-gap: 8px; }
   .card .poster { grid-row: 1 / -1; }
-  .add { width: 32px; height: 32px; top: 6px; right: 6px; font-size: 18px; }
   .filters { flex-wrap: wrap; }
   .search { flex: 1 1 100%; }
   .bar { position: static; }

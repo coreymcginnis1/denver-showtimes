@@ -197,7 +197,8 @@ Redesigned Nov 2026 (Letterboxd-inspired, not a copy): **one day at a time**, no
 - **"Next 2 weeks"** (first button in the day strip; `state.day === "all"`): the same cards for every
   film with an upcoming showtime in the window, but each theater gets one line ("Nov 6–12 · 14
   showings") and a "Next …" button for its soonest showing instead of every time. Upcoming
-  openings show "Opens Nov 19". No schedule column in this view (`layout[data-mode="span"]`).
+  openings show "Opens Nov 19" and sit in the "Opening soon" group. No schedule column in this view
+  (`layout[data-mode="span"]`).
 - **Posters** are requested at 600 px (Fandango renderer) / TMDB `w500`: cards are ~220 CSS px, so
   smaller art looked soft on 2x screens.
 - **Long showtime lists** clamp to ~300 px with a fade and a "Show all N theaters" button, shown
@@ -209,8 +210,18 @@ Redesigned Nov 2026 (Letterboxd-inspired, not a copy): **one day at a time**, no
 - **Times read "h:mm am" / "h:mm pm"** everywhere ("3:00 pm": lowercase, no periods — Corey's
   house style; `hm12()` in `app.js`). On screen the digits are tabular; "am/pm" sits in `.ap`
   with normal figures.
-- **My list** (+ on a poster) and theater choices are saved in `localStorage` (try/catch; optional).
-  The schedule can show only My list.
+- **Near a zip code:** a zip box (default **80206**, never saved — Corey doesn't want readers to
+  feel tracked) and **1 / 5 / 10 mi / All** buttons that switch on exactly the theaters within that
+  straight-line distance. Theater chips sort by distance and show miles. Zip centroids are
+  `public/zips.json` (Census 2024 ZCTA gazetteer, zips within 60 mi of downtown); theater `lat`/`lon`
+  live in `config.toml` and pass through to `data.json`. No travel times by design.
+- **Tags:** "International" (TMDB original language isn't English) and "Indie" (English-language, no
+  major studio among TMDB's producers, budget < $40M or unlisted; `tmdb.classify()`, `MAJOR_STUDIOS`).
+  "Indie" shows on **new releases only**: for classics TMDB lists producers, not the releasing studio
+  (Rocky, The Apartment came out "indie"). A rough guide; Corey spot-checks.
+- **"Next 2 weeks"** splits into **Now playing** (by the chosen sort) and **Opening soon** (soonest first).
+- Theater choices are saved in `localStorage` (try/catch; optional). "My list" was removed (Nov 2026):
+  little use, no sync between devices.
 - "Floating time": the ISO offset is ignored; Denver wall-clock shows for every viewer, and
   "now" for dimming past showtimes is computed in America/Denver.
 - Dark warm palette (`--bg #15110e`, cream `--paper`, newsletter brick `--brick-fill #C0432B`);

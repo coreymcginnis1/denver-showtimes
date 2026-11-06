@@ -15,6 +15,8 @@ class TheaterCfg(BaseModel):
     color: str = "#888888"
     scraper: Optional[str] = None    # which scraper class to use; defaults to the theater key
     location: Optional[str] = None   # scraper-specific id (Alamo venue / Fandango theater id)
+    lat: Optional[float] = None      # where the theater is, for the site's distance-from-zip filter
+    lon: Optional[float] = None
 
 
 class Filters(BaseModel):

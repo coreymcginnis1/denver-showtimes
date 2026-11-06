@@ -116,6 +116,8 @@ drop = [
 # Which films are pre-checked when the page first loads (others start unchecked but
 # available to toggle on). Case-insensitive regex matched against the normalized title.
 # Leave the list empty to pre-select ALL films (the long default). Edit to taste.
+# If none of these plays today at a theater that starts on, the page pre-selects all films
+# so the calendar never opens empty (see initialFilms() in public/app.js).
 [defaults]
 films = [
   'Alien\b',                  # word boundary: matches "Alien ..." but not "Aliens ..."

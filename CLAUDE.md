@@ -210,15 +210,16 @@ Redesigned Nov 2026 (Letterboxd-inspired, not a copy): **one day at a time**, no
 - **Times read "h:mm am" / "h:mm pm"** everywhere ("3:00 pm": lowercase, no periods — Corey's
   house style; `hm12()` in `app.js`). On screen the digits are tabular; "am/pm" sits in `.ap`
   with normal figures.
-- **Near a zip code:** a zip box (default **80206**, never saved — Corey doesn't want readers to
+- **Near a zip code:** a zip box (default **80218** — it puts Sie and the Mayan, Denver's main indie
+  houses, first and holds the metro's population-weighted center; never saved — Corey doesn't want readers to
   feel tracked) and **1 / 3 / 5 mi / All** buttons that switch on exactly the theaters within that
   straight-line distance. Theater chips sort by distance and show miles. Zip centroids are
   `public/zips.json` (Census 2024 ZCTA gazetteer, zips within 60 mi of downtown); theater `lat`/`lon`
   live in `config.toml` and pass through to `data.json`. No travel times by design.
-- **Tags:** "International" (TMDB original language isn't English) and "Indie" (English-language, no
-  major studio among TMDB's producers, budget < $40M or unlisted; `tmdb.classify()`, `MAJOR_STUDIOS`).
-  "Indie" shows on **new releases only**: for classics TMDB lists producers, not the releasing studio
-  (Rocky, The Apartment came out "indie"). A rough guide; Corey spot-checks.
+- **Tags:** "International" (TMDB original language isn't English) is shown. "Indie" (English-language,
+  no major studio among TMDB's producers, budget < $40M or unlisted; `tmdb.classify()`, `MAJOR_STUDIOS`)
+  is still computed into `film_meta.indie` but **not shown — on hold (Nov 2026)**: TMDB lists producers,
+  not distributors, so it mislabeled classics (Rocky, The Apartment) and borderline titles (Drummer Boy).
 - **"Next 2 weeks"** splits into **Now playing** (by the chosen sort) and **Opening soon** (soonest first).
 - Theater choices are saved in `localStorage` (try/catch; optional). "My list" was removed (Nov 2026):
   little use, no sync between devices.

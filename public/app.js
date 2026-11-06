@@ -42,7 +42,7 @@
   var D, films = [], shows = [], days = [], theaters = [];
   // Distances are from the centre of a zip code to each theater, as the crow flies. The zip is
   // never saved: it resets to DEFAULT_ZIP on every visit, so nothing about a reader is kept.
-  var DEFAULT_ZIP = "80206", ZIPS = {};   // distance buttons (1 / 3 / 5 mi / All) are in index.html
+  var DEFAULT_ZIP = "80218", ZIPS = {};   // distance buttons (1 / 3 / 5 mi / All) are in index.html
   var state = { day: null, q: "", sort: "new", kind: "all", showEarlier: false, theaters: null, zip: DEFAULT_ZIP, radius: null };
 
   // ---- Data ------------------------------------------------------------------
@@ -250,9 +250,8 @@
         : since === 0 ? "Opening day" : since <= 6 ? "New this week" : "";
       if (fresh) meta += '<span class="tag fresh">' + fresh + "</span>";
       if (f.intl) meta += '<span class="tag kind">International</span>';
-      // "Indie" only on new releases: for classics TMDB lists producers, not the studio that
-      // released them, and the label means little for a 1960 film.
-      else if (f.indie && !f.rep) meta += '<span class="tag kind">Indie</span>';
+      // "Indie" is on hold (Nov 2026): TMDB lists producers, not distributors, so the guess
+      // wasn't reliable enough to show. The data (f.indie) is still in data.json.
       var order = theaters.map(function (t) { return t.key; });
       var vhtml = Array.from(venues.entries()).sort(function (a, b) { return order.indexOf(a[0]) - order.indexOf(b[0]); }).map(function (e) {
         var t = theaterOf(e[0]) || { color: "#888" };

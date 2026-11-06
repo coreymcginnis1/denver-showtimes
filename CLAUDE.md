@@ -194,7 +194,7 @@ cream `--paper`, newsletter brick `--brick-fill #C0432B`); Newsreader (titles) +
   **Near [zip] 1 / 3 / 5 mi / All** (default **80218** — Sie and the Mayan come first and it holds the
   metro's population-weighted center; **never saved**, so readers aren't tracked; straight-line
   distance from Census zip centroids in `zips.json`, no travel times) · theater chips sorted by
-  distance with miles and that day's count (choices saved in `localStorage`) · search.
+  distance with miles and that day's count (choices saved in `localStorage` with the default set they were made against; changing `default_on` resets everyone to the new defaults) · search.
 - **Show:** All · New releases · Repertory. **Sort:** Newest · Trending · A–Z. Films without the
   data sort last.
   - **Newest:** new releases by Denver **release week** (Friday–Thursday; Wed/Thu previews count
@@ -207,7 +207,7 @@ cream `--paper`, newsletter brick `--brick-fill #C0432B`); Newsreader (titles) +
   theaters" (`clampVenues()`).
 - **Schedule:** the day in time order (Morning/Afternoon/Evening/Late; earlier-today rows behind a
   button). Desktop: sticky right column; phone: Films / Schedule toggle.
-- **Next 2 weeks:** **Now playing** (films with a showing today at the selected theaters, by the chosen sort) then **Coming soon** (everything else, repertory included, by its next showing); each
+- **Next 2 weeks:** **Now playing** (a showing today at the selected theaters, or a new release already open in Denver whose next showing is within `RUN_GAP_DAYS` = 3 days; repertory and events need today; by the chosen sort) then **Coming soon** (everything else, repertory included, by its next showing); each
   theater gets one line ("Nov 6–12 · 14 showings") and a "Next …" button. No schedule column.
 - **Search** also shows matches beyond the selected theaters/day under "Also playing elsewhere"
   (e.g. Fjord, only at AMC Westminster).

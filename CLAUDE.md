@@ -227,3 +227,29 @@ reports to Google. Title "Denver Movie Showtimes", upright (no italic). Theater 
 
 Substack can't embed interactive widgets, so the site stands alone; the newsletter pastes the URL
 for a preview card (OG title/description + `public/preview.png`).
+
+## Next up (Corey's list, Nov 6 2026)
+
+Small fixes:
+- **Date boxes** look cluttered: more space between weekday and date, smaller weekday, drop the
+  box borders so only the selected day is a color block.
+- **Footer theater links**: one per company (AMC, Regal, Landmark, Harkins, Alamo, Sie), not one
+  per location.
+- **Search**: a clear (×) button; close the phone keyboard on Enter (blur the input).
+
+Bigger questions:
+- **Cleaner address**: a free `denvershowtimes` GitHub organization (denvershowtimes.github.io),
+  with a redirect from the old link so newsletter links keep working.
+- **Private code, public site**: Pages from a private repo needs GitHub Pro (~$4/mo). Free route:
+  private source repo; the workflow pushes only the built `public/` to a public repo (e.g. the
+  org's `denvershowtimes.github.io`) with a deploy token secret. `data.json` stays public either
+  way. Also trim the README to a few lines.
+- **Less "AI-built" look** (Corey wants individuality over polish; small readability tradeoffs
+  OK). Tells to remove: tiny all-caps labels (SHOW, SORT, NEAR), pill chips with dots and count
+  badges, "·" separators everywhere, warm-dark + terracotta + serif/grotesk defaults, thin rounded
+  bordered boxes and soft shadows, hover-zoom posters, a uniform card grid, helper sub-lines, every
+  showtime as a button. Directions to try: print film listings and rep-house calendars (plain-text
+  time runs, dense type, heavy rules instead of boxes, big day numerals); a real masthead
+  (condensed / marquee / letterboard); brick in bold blocks or a less expected second color; uneven
+  layout (a big poster for a featured film); a line of Corey's own notes. Start with 2–3 mockups
+  to compare before touching the live site; Corey has ideas of his own too.

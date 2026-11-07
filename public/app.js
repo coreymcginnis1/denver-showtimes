@@ -184,8 +184,9 @@
       '<span class="dw">Next</span><span class="dn">2 wks</span></button>' + days.map(function (d, n) {
       var rel = relDay(d), o = dateObj(d), wd = o.toLocaleDateString("en-US", { weekday: "short" });
       var mon = o.getDate() === 1 ? " " + o.toLocaleDateString("en-US", { month: "short" }) : "";   // "Tue Dec" on the 1st
-      return '<button type="button" class="day" data-d="' + d + '" aria-pressed="' + (d === state.day) + '" aria-label="' + longDate(d) + '">' +
-        '<span class="dw">' + (rel || wd) + mon + '</span><span class="dn">' + o.getDate() + "</span></button>";
+      // Always the weekday ("Sat"), never "Today"/"Tomorrow": every day keeps the same width.
+      return '<button type="button" class="day" data-d="' + d + '" aria-pressed="' + (d === state.day) + '" aria-label="' + (rel ? rel + ", " : "") + longDate(d) + '">' +
+        '<span class="dw">' + wd + mon + '</span><span class="dn">' + o.getDate() + "</span></button>";
     }).join("");
     $("when").textContent = state.day === ALL ? "The next two weeks, " + shortDate(days[0]) + " to " + shortDate(days[days.length - 1])
       : longDate(state.day);

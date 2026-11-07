@@ -196,7 +196,7 @@ Posters keep 3px corners; nothing else is rounded. Mockups: claude.ai canvas "De
 redesign directions" (A listings + C program won; B marquee rejected).
 
 - **Controls:** masthead "Denver Movie Showtimes" with the chosen date under it · sticky day strip
-  ("Next 2 wks", then weekday over a big numeral; the selected day is a brick block) · **Theaters**:
+  ("Next 2 wks", then the weekday, never "Today", over a big numeral, every day the same width; the selected day is a brick block) · **Theaters**:
   "Theaters near [zip] within 1 mi / 3 mi / 5 mi / any distance" and a checklist of all ten nearest first
   with miles (no counts, no theater colors). Phones fold it to "At Sie and Mayan · Change". Zip default
   **80218**, **never saved**; straight-line distance from Census zip centroids in `zips.json`. Theater

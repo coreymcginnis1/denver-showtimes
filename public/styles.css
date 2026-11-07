@@ -52,7 +52,8 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .days { position: sticky; top: 0; z-index: 20; background: var(--paper); border-bottom: 1px solid var(--ink);
   display: flex; overflow-x: auto; scrollbar-width: none; margin: 0 -16px; padding: 0 16px; }
 .days::-webkit-scrollbar { display: none; }
-.day { flex: none; min-width: 56px; padding: 10px 12px 11px; }
+.day { flex: none; width: 58px; padding: 10px 0 11px 12px; }
+.day[data-d="all"] { width: auto; padding-right: 14px; }
 .day .dw { display: block; font-size: 12px; margin-bottom: 5px; white-space: nowrap; }
 .day .dn { display: block; font-weight: 900; font-stretch: 70%; font-size: 30px; line-height: 1; white-space: nowrap; }
 .day:hover { color: var(--brick); }

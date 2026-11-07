@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-07T08:15:34.669488-07:00",
+  "generated_at": "2026-11-07T10:48:04.147562-07:00",
   "timezone": "America/Denver",
   "theaters": [
     {
@@ -214,134 +214,6 @@
   "stale_theaters": [],
   "events": [
     {
-      "id": "ms_7c9e3f63b8cd1fb8",
-      "title": "Drummer Boy",
-      "start": "2026-11-07T09:45:00-07:00",
-      "extendedProps": {
-        "theater": "amc_westminster",
-        "ticketUrl": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-11-07%2B09%3A45&from=mov_det_showtimes&source=desktop&mid=246728&tid=AAECN&dfam=webbrowser&showtimehashcode=v2-cf30fcaf657307aef1743930c510122b3a5b1f6e71e81a36b16856dfc4f1be6b",
-        "poster": "https://images.fandango.com/ImageRenderer/600/0/redesign/static/img/default_poster.png/0/images/MasterRepository/fandango/246728/DRB_KEY_AngelStudios_Hero_DIGI_1Sht_27x40_72_138_F6C.jpg",
-        "rating": "PG13",
-        "runtime": 129,
-        "release": "2026-11-06"
-      },
-      "end": "2026-11-07T11:54:00-07:00"
-    },
-    {
-      "id": "ms_d89b4c037f91c2eb",
-      "title": "Godzilla Minus Zero",
-      "start": "2026-11-07T09:45:00-07:00",
-      "extendedProps": {
-        "theater": "amc_westminster",
-        "fmt": "Premium Format",
-        "ticketUrl": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-11-07%2B09%3A45&from=mov_det_showtimes&source=desktop&mid=247802&tid=AAECN&dfam=webbrowser&showtimehashcode=v2-f97d2640b58247864f71ab10b73dd346f219f061a3cefc887f1f84a640de69d4",
-        "poster": "https://images.fandango.com/ImageRenderer/600/0/redesign/static/img/default_poster.png/0/images/MasterRepository/fandango/243973/GMZ_KV-1_GKIDS_Web_1350x2000_EN_01AA.jpg",
-        "rating": "R",
-        "runtime": 135,
-        "release": "2026-11-06"
-      },
-      "end": "2026-11-07T12:00:00-07:00"
-    },
-    {
-      "id": "ms_801161077c8e9ca1",
-      "title": "Sense and Sensibility",
-      "start": "2026-11-07T09:45:00-07:00",
-      "extendedProps": {
-        "theater": "amc_westminster",
-        "ticketUrl": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-11-07%2B09%3A45&from=mov_det_showtimes&source=desktop&mid=244998&tid=AAECN&dfam=webbrowser&showtimehashcode=v2-1e2850d130df27dce1c027ea3d62f333488c994cc784157620af50f4f74d5ed0",
-        "poster": "https://images.fandango.com/ImageRenderer/600/0/redesign/static/img/default_poster.png/0/images/MasterRepository/fandango/244998/SandS_Poster_3.jpg",
-        "rating": "PG",
-        "runtime": 131,
-        "release": "2026-10-16"
-      },
-      "end": "2026-11-07T11:56:00-07:00"
-    },
-    {
-      "id": "ms_3190e461a94b68fc",
-      "title": "The Cat in the Hat",
-      "start": "2026-11-07T09:50:00-07:00",
-      "extendedProps": {
-        "theater": "amc_westminster",
-        "fmt": "Premium Format",
-        "ticketUrl": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-11-07%2B09%3A50&from=mov_det_showtimes&source=desktop&mid=241291&tid=AAECN&dfam=webbrowser&showtimehashcode=v2-20a86462adfb05424609037800b6ee688bcae74d2c82286fa10907b9fb652012",
-        "poster": "https://images.fandango.com/ImageRenderer/600/0/redesign/static/img/default_poster.png/0/images/MasterRepository/fandango/241291/CATHAT_VERT_MAIN_2764x4096_DOM.jpg",
-        "rating": "PG",
-        "runtime": 114,
-        "release": "2026-11-06"
-      },
-      "end": "2026-11-07T11:44:00-07:00"
-    },
-    {
-      "id": "ms_cdf7062d7b89d7d0",
-      "title": "Wildwood",
-      "start": "2026-11-07T09:50:00-07:00",
-      "extendedProps": {
-        "theater": "amc_westminster",
-        "ticketUrl": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-11-07%2B09%3A50&from=mov_det_showtimes&source=desktop&mid=246438&tid=AAECN&dfam=webbrowser&showtimehashcode=v2-c0f1e79ce4c426c13c94e51544d83d93a50017c0df8366344b213374ae8193ec",
-        "poster": "https://images.fandango.com/ImageRenderer/600/0/redesign/static/img/default_poster.png/0/images/MasterRepository/fandango/246438/WILDWOOD-OneSheet-Courtes-LAIKA.jpg",
-        "rating": "PG13",
-        "runtime": 130,
-        "release": "2026-10-23"
-      },
-      "end": "2026-11-07T12:00:00-07:00"
-    },
-    {
-      "id": "ms_fbcd9629bb022f07",
-      "title": "You Can See Everything",
-      "start": "2026-11-07T09:50:00-07:00",
-      "extendedProps": {
-        "theater": "amc_westminster",
-        "ticketUrl": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-11-07%2B09%3A50&from=mov_det_showtimes&source=desktop&mid=247346&tid=AAECN&dfam=webbrowser&showtimehashcode=v2-d3639f2f34e1754dc17e1e509e346cee875569bc7b4328fe12600b4bbda0fa7d",
-        "poster": "https://images.fandango.com/ImageRenderer/600/0/redesign/static/img/default_poster.png/0/images/MasterRepository/fandango/247346/V8_404_DIGITAL%20FINAL_2025x3000_V4.jpg",
-        "rating": "R",
-        "runtime": 174,
-        "release": "2026-10-16"
-      },
-      "end": "2026-11-07T12:44:00-07:00"
-    },
-    {
-      "id": "ms_0e322bf9bc2f7d0d",
-      "title": "Godzilla Minus Zero",
-      "start": "2026-11-07T10:00:00-07:00",
-      "extendedProps": {
-        "theater": "amc",
-        "ticketUrl": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-11-07%2B10%3A00&from=mov_det_showtimes&source=desktop&mid=243973&tid=AAYUA&dfam=webbrowser&showtimehashcode=v2-34d3c6ddafbfc360cd5b9cde289e866f148b49c4eafacc85cf1413cb1a5416ad",
-        "poster": "https://images.fandango.com/ImageRenderer/600/0/redesign/static/img/default_poster.png/0/images/MasterRepository/fandango/243973/GMZ_KV-1_GKIDS_Web_1350x2000_EN_01AA.jpg",
-        "rating": "R",
-        "runtime": 135,
-        "release": "2026-11-06"
-      },
-      "end": "2026-11-07T12:15:00-07:00"
-    },
-    {
-      "id": "ms_37a645791817073c",
-      "title": "Clayface",
-      "start": "2026-11-07T10:00:00-07:00",
-      "extendedProps": {
-        "theater": "amc_westminster",
-        "ticketUrl": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-11-07%2B10%3A00&from=mov_det_showtimes&source=desktop&mid=244768&tid=AAECN&dfam=webbrowser&showtimehashcode=v2-0ba38f015aee81a32e52c328ddff793f7002ac6f219cef4a7d856db95265fef3",
-        "poster": "https://images.fandango.com/ImageRenderer/600/0/redesign/static/img/default_poster.png/0/images/MasterRepository/fandango/244768/CLAY_VERT_MAIN_2764x4096_DOM.jpg",
-        "rating": "R",
-        "runtime": 108,
-        "release": "2026-10-23"
-      },
-      "end": "2026-11-07T11:48:00-07:00"
-    },
-    {
-      "id": "ms_404ec2c2ed887021",
-      "title": "Everest: The Other Side",
-      "start": "2026-11-07T10:10:00-07:00",
-      "extendedProps": {
-        "theater": "amc_westminster",
-        "ticketUrl": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-11-07%2B10%3A10&from=mov_det_showtimes&source=desktop&mid=246958&tid=AAECN&dfam=webbrowser&showtimehashcode=v2-4ed42fb5388688252c57dd30e9fcba9f5b92b5055a29b1407d9e2a2065bc7a49",
-        "poster": "https://images.fandango.com/ImageRenderer/600/0/redesign/static/img/default_poster.png/0/images/MasterRepository/fandango/246958/EVEREST-TOS_KA_DIGITAL_1SHT_TSR_NO_IMAX_sRGB_V1.jpg",
-        "rating": "PG13",
-        "runtime": 115,
-        "release": "2026-10-30"
-      },
-      "end": "2026-11-07T12:05:00-07:00"
-    },
-    {
       "id": "ms_6177406fd2181210",
       "title": "La Bola Negra",
       "start": "2026-11-07T10:15:00-07:00",
@@ -353,91 +225,6 @@
         "rating": "R"
       },
       "end": "2026-11-07T12:15:00-07:00"
-    },
-    {
-      "id": "ms_e0e7c820bacd23e7",
-      "title": "The Cat in the Hat",
-      "start": "2026-11-07T10:15:00-07:00",
-      "extendedProps": {
-        "theater": "amc",
-        "fmt": "Premium Format",
-        "ticketUrl": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-11-07%2B10%3A15&from=mov_det_showtimes&source=desktop&mid=241291&tid=AAYUA&dfam=webbrowser&showtimehashcode=v2-956f5dbbe6772be1d2b0dd2207f4829f0b4c3b7054809941395ff8d29ce2855c",
-        "poster": "https://images.fandango.com/ImageRenderer/600/0/redesign/static/img/default_poster.png/0/images/MasterRepository/fandango/241291/CATHAT_VERT_MAIN_2764x4096_DOM.jpg",
-        "rating": "PG",
-        "runtime": 114,
-        "release": "2026-11-06"
-      },
-      "end": "2026-11-07T12:09:00-07:00"
-    },
-    {
-      "id": "ms_551785ba1fe7d51b",
-      "title": "Wicker",
-      "start": "2026-11-07T10:15:00-07:00",
-      "extendedProps": {
-        "theater": "amc",
-        "ticketUrl": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-11-07%2B10%3A15&from=mov_det_showtimes&source=desktop&mid=246507&tid=AAYUA&dfam=webbrowser&showtimehashcode=v2-1fc330fc79e040fb0389907f560c3f38e792dc1735c61647d3769dd87edacca9",
-        "poster": "https://images.fandango.com/ImageRenderer/600/0/redesign/static/img/default_poster.png/0/images/MasterRepository/fandango/246507/wicker_poster_new.jpg",
-        "rating": "R",
-        "runtime": 105,
-        "release": "2026-10-23"
-      },
-      "end": "2026-11-07T12:00:00-07:00"
-    },
-    {
-      "id": "ms_9cd24978f7882a23",
-      "title": "La Bola Negra",
-      "start": "2026-11-07T10:15:00-07:00",
-      "extendedProps": {
-        "theater": "amc_westminster",
-        "ticketUrl": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-11-07%2B10%3A15&from=mov_det_showtimes&source=desktop&mid=247136&tid=AAECN&dfam=webbrowser&showtimehashcode=v2-587c384e307c34eb046db7c388dc6873f98d7cc3f1edd544a78c17748b568c05",
-        "poster": "https://images.fandango.com/ImageRenderer/600/0/redesign/static/img/default_poster.png/0/images/MasterRepository/fandango/247136/en_us_lbn_main_key_art_-_main_embrace_vertical_27x40_rgb_custom_1.jpg",
-        "rating": "R",
-        "runtime": 155,
-        "release": "2026-10-16"
-      },
-      "end": "2026-11-07T12:50:00-07:00"
-    },
-    {
-      "id": "ms_dc006eef1732d816",
-      "title": "Ramayana: Rise of a Legend",
-      "start": "2026-11-07T10:15:00-07:00",
-      "extendedProps": {
-        "theater": "amc_westminster",
-        "ticketUrl": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-11-07%2B10%3A15&from=mov_det_showtimes&source=desktop&mid=245446&tid=AAECN&dfam=webbrowser&showtimehashcode=v2-5addab892475a48431bb6db27ef5b8ea4a29ab7e04d1c4aa5d98cdea2373e3e2",
-        "poster": "https://images.fandango.com/ImageRenderer/600/0/redesign/static/img/default_poster.png/0/images/MasterRepository/fandango/245446/ramayana-posterart.jpg",
-        "rating": "PG13",
-        "runtime": 195,
-        "release": "2026-11-05"
-      },
-      "end": "2026-11-07T13:30:00-07:00"
-    },
-    {
-      "id": "ms_003f47837ddb4d81",
-      "title": "Whalefall",
-      "start": "2026-11-07T10:15:00-07:00",
-      "extendedProps": {
-        "theater": "amc_westminster",
-        "ticketUrl": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-11-07%2B10%3A15&from=mov_det_showtimes&source=desktop&mid=246280&tid=AAECN&dfam=webbrowser&showtimehashcode=v2-039a86e59b06e506943c331f5683de23ad7069b0c1878514aecee15f58564b7f",
-        "poster": "https://images.fandango.com/ImageRenderer/600/0/redesign/static/img/default_poster.png/0/images/MasterRepository/fandango/246280/WHALEFALL_KA_DIGITAL_1SHT_TSR_DATED_sRGB_V2.jpg",
-        "rating": "PG13",
-        "runtime": 106,
-        "release": "2026-10-16"
-      },
-      "end": "2026-11-07T12:01:00-07:00"
-    },
-    {
-      "id": "ms_f019fa64fc7943b7",
-      "title": "Wicker",
-      "start": "2026-11-07T10:15:00-07:00",
-      "extendedProps": {
-        "theater": "amc_westminster",
-        "ticketUrl": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-11-07%2B10%3A15&from=mov_det_showtimes&source=desktop&mid=246507&tid=AAECN&dfam=webbrowser&showtimehashcode=v2-424890f797cc7eec271ebd1f16d25b07a1c6fbe13272c2fbf7e7d3e02d634219",
-        "poster": "https://images.fandango.com/ImageRenderer/600/0/redesign/static/img/default_poster.png/0/images/MasterRepository/fandango/246507/wicker_poster_new.jpg",
-        "rating": "R",
-        "runtime": 105,
-        "release": "2026-10-23"
-      },
-      "end": "2026-11-07T12:00:00-07:00"
     },
     {
       "id": "ms_f3aa78ac93895d90",
@@ -45566,7 +45353,7 @@
       "release": "2014-12-25",
       "popularity": 10.7,
       "vote_average": 7.41,
-      "vote_count": 14011,
+      "vote_count": 14012,
       "tmdb_poster": "https://image.tmdb.org/t/p/w500/i1U46OwMc6vlm7OoSUKfqUH615e.jpg",
       "imdb_id": "tt2179136",
       "wiki_views": 10637,
@@ -46190,8 +45977,8 @@
       "tmdb_id": 1381071,
       "release": "2026-11-03",
       "popularity": 145.9,
-      "vote_average": 8.13,
-      "vote_count": 57,
+      "vote_average": 8.1,
+      "vote_count": 64,
       "tmdb_poster": "https://image.tmdb.org/t/p/w500/hSmIJluOJmTWvJs4d7kHRxjc8s8.jpg",
       "imdb_id": "tt34384661",
       "wiki_views": 381406,
@@ -46211,7 +45998,7 @@
       "release": "1990-09-12",
       "popularity": 21.0,
       "vote_average": 8.45,
-      "vote_count": 14990,
+      "vote_count": 14992,
       "tmdb_poster": "https://image.tmdb.org/t/p/w500/9OkCLM73MIU2CrKZbqiT8Ln1wY2.jpg",
       "imdb_id": "tt0099685",
       "wiki_views": 19336,
@@ -46295,8 +46082,8 @@
       "tmdb_id": 1437511,
       "release": "2026-11-11",
       "popularity": 12.7,
-      "vote_average": 0,
-      "vote_count": 0,
+      "vote_average": 8.0,
+      "vote_count": 1,
       "tmdb_poster": "https://image.tmdb.org/t/p/w500/ifYDZkr2qkHFz87TNVvlxajOxl5.jpg",
       "imdb_id": "tt35866986",
       "wiki_views": 29669,
@@ -46334,8 +46121,8 @@
       "tmdb_id": 1286656,
       "release": "2026-11-06",
       "popularity": 14.5,
-      "vote_average": 8.9,
-      "vote_count": 8,
+      "vote_average": 8.89,
+      "vote_count": 9,
       "tmdb_poster": "https://image.tmdb.org/t/p/w500/xE5tY3lppZUyG7WKKThsuYHuAHr.jpg",
       "imdb_id": "tt11995650",
       "wiki_views": 109381,
@@ -46411,7 +46198,7 @@
       "release": "1971-07-16",
       "popularity": 11.5,
       "vote_average": 7.5,
-      "vote_count": 501,
+      "vote_count": 502,
       "tmdb_poster": "https://image.tmdb.org/t/p/w500/y1k7eiOFc6fzm8XeTa1kNGx6JIs.jpg",
       "imdb_id": "tt0066993",
       "wiki_views": 139071,
@@ -46687,7 +46474,7 @@
     },
     "Ramayana: Rise of a Legend": {
       "lang": "hi",
-      "budget": 250000000,
+      "budget": 260000000,
       "companies": [
         "Monster Mind Creations",
         "Prime Focus Studios",
@@ -46699,8 +46486,8 @@
       "tmdb_id": 656908,
       "release": "2026-11-05",
       "popularity": 126.1,
-      "vote_average": 7.5,
-      "vote_count": 14,
+      "vote_average": 7.74,
+      "vote_count": 17,
       "tmdb_poster": "https://image.tmdb.org/t/p/w500/hz2Hv8tPToHvQ7HaxzqeLvahmcJ.jpg",
       "imdb_id": "tt27988879",
       "wiki_views": 1738671,
@@ -46761,7 +46548,7 @@
       "release": "2026-09-16",
       "popularity": 494.1,
       "vote_average": 7.45,
-      "vote_count": 1660,
+      "vote_count": 1675,
       "tmdb_poster": "https://image.tmdb.org/t/p/w500/gAgWJhUSQWCgtKR8170nMkYlBda.jpg",
       "imdb_id": "tt35538033",
       "wiki_views": 282704,
@@ -46881,7 +46668,7 @@
       "tmdb_id": 1503762,
       "release": "2026-09-23",
       "popularity": 59.3,
-      "vote_average": 7.24,
+      "vote_average": 7.2,
       "vote_count": 148,
       "tmdb_poster": "https://image.tmdb.org/t/p/w500/czsyPHosFNbh4PPqXfqWu1aBXnA.jpg",
       "imdb_id": "tt13609648",
@@ -46985,7 +46772,7 @@
       "tmdb_id": 1153576,
       "release": "2026-10-13",
       "popularity": 63.9,
-      "vote_average": 6.33,
+      "vote_average": 6.3,
       "vote_count": 220,
       "tmdb_poster": "https://image.tmdb.org/t/p/w500/ccxdepKqORLwccbzvO4eAGkN0IC.jpg",
       "imdb_id": "tt27419420",
@@ -47006,7 +46793,7 @@
       "popularity": 2.0,
       "vote_average": 0,
       "vote_count": 0,
-      "tmdb_poster": null,
+      "tmdb_poster": "https://image.tmdb.org/t/p/w500/hUeIDfVjwiTKUOVHE95IoTd04bh.jpg",
       "imdb_id": "tt43089752",
       "trend": 89.0
     },
@@ -47385,8 +47172,8 @@
       "release": "2026-07-15",
       "popularity": 188.1,
       "vote_average": 8.0,
-      "vote_count": 4363,
-      "tmdb_poster": "https://image.tmdb.org/t/p/w500/5rhTDKUhPYvpdQIijFIs5VoWsON.jpg",
+      "vote_count": 4371,
+      "tmdb_poster": "https://image.tmdb.org/t/p/w500/krVa7rKCQb4OBfsr2LTJv4rTz5q.jpg",
       "imdb_id": "tt33764258",
       "wiki_views": 146559,
       "trend": 8.0
@@ -47708,7 +47495,7 @@
       "release": "2026-10-19",
       "popularity": 441.9,
       "vote_average": 8.49,
-      "vote_count": 208,
+      "vote_count": 209,
       "tmdb_poster": "https://image.tmdb.org/t/p/w500/snFM00mpNAfUzUtkdEW0uDEvXA0.jpg",
       "imdb_id": "tt2056785",
       "wiki_views": 406864,

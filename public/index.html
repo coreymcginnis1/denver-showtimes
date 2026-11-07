@@ -45,7 +45,10 @@
       </div>
       <div class="filters">
         <div class="scroller" id="theaters" role="group" aria-label="Theaters"></div>
-        <input class="search" id="q" type="search" placeholder="Search films" aria-label="Search films" autocomplete="off" />
+        <span class="searchbox">
+          <input class="search" id="q" type="search" enterkeyhint="search" placeholder="Search films" aria-label="Search films" autocomplete="off" />
+          <button type="button" class="clear" id="qClear" aria-label="Clear search" hidden>×</button>
+        </span>
       </div>
       <div class="seg" role="group" aria-label="View">
         <button type="button" data-v="films" aria-pressed="true">Films</button>

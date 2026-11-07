@@ -191,11 +191,11 @@ cream `--paper`, newsletter brick `--brick-fill #C0432B`); Newsreader (titles) +
 (UI), **self-hosted** in `public/fonts/` (latin + latin-ext woff2, OFL licenses alongside) so no visit
 reports to Google. Title "Denver Movie Showtimes", upright (no italic). Theater colors appear only as dots. Corners: 3px posters (`--r-xs`), 6px buttons/inputs, pills only for filters and toggles.
 
-- **Controls:** day strip ("Next 2 weeks", Today … +14 days; selected day is a plain brick fill) ·
+- **Controls:** day strip ("Next 2 weeks", Today … +14 days; no boxes, only the selected day is a brick block) ·
   **Near [zip] 1 / 3 / 5 mi / All** (default **80218** — Sie and the Mayan come first and it holds the
   metro's population-weighted center; **never saved**, so readers aren't tracked; straight-line
   distance from Census zip centroids in `zips.json`, no travel times) · theater chips sorted by
-  distance with miles and that day's count (choices saved in `localStorage` with the default set they were made against; changing `default_on` resets everyone to the new defaults) · search.
+  distance with miles and that day's count (choices saved in `localStorage` with the default set they were made against; changing `default_on` resets everyone to the new defaults) · search (× clears it; Enter closes the phone keyboard).
 - **Show:** All · New releases · Repertory. **Sort:** Newest · Trending · A–Z. Films without the
   data sort last.
   - **Newest:** new releases by Denver **release week** (Friday–Thursday; Wed/Thu previews count
@@ -219,7 +219,7 @@ reports to Google. Title "Denver Movie Showtimes", upright (no italic). Theater 
 - **Privacy:** no cookies, no analytics. The only browser storage is the theater pick
   (`dst-theaters` in `localStorage`, never sent anywhere); the zip is never saved. Third-party
   requests are poster images only (TMDB, Fandango, theaters). Keep it that way.
-- **Footer** credits TMDB (logo + required notice) and Wikipedia, and links each theater's site.
+- **Footer** credits TMDB (logo + required notice) and Wikipedia, and links each theater company's site (one link per company).
 - **Cache-busting:** `index.html` loads `styles.css`/`app.js` with `?v=__ASSET_VERSION__`, replaced
   with the commit SHA on deploy; `data.json` is fetched `no-store`. OG tags use `__SITE_URL__`.
 
@@ -229,13 +229,6 @@ Substack can't embed interactive widgets, so the site stands alone; the newslett
 for a preview card (OG title/description + `public/preview.png`).
 
 ## Next up (Corey's list, Nov 6 2026)
-
-Small fixes:
-- **Date boxes** look cluttered: more space between weekday and date, smaller weekday, drop the
-  box borders so only the selected day is a color block.
-- **Footer theater links**: one per company (AMC, Regal, Landmark, Harkins, Alamo, Sie), not one
-  per location.
-- **Search**: a clear (×) button; close the phone keyboard on Enter (blur the input).
 
 Bigger questions:
 - **Cleaner address**: a free `denvershowtimes` GitHub organization (denvershowtimes.github.io),

@@ -108,16 +108,17 @@ button { font: inherit; color: inherit; }
 .scroller::-webkit-scrollbar { display: none; }
 #theaters { -webkit-mask: linear-gradient(90deg, #000 calc(100% - 28px), #0000); mask: linear-gradient(90deg, #000 calc(100% - 28px), #0000); padding-right: 24px; }
 
+/* Days: no boxes, only the selected day is a block of color. Weekday small, with room above the date. */
 .day {
-  flex: 0 0 auto; min-width: 68px; min-height: 52px; padding: 6px 12px; border-radius: var(--r-sm);
-  background: var(--surface); border: 1px solid var(--line); cursor: pointer; text-align: center;
-  display: grid; align-content: center; line-height: 1.15; position: relative;
+  flex: 0 0 auto; min-width: 64px; min-height: 54px; padding: 7px 10px; border-radius: var(--r-sm);
+  background: transparent; border: 0; color: var(--paper); cursor: pointer; text-align: center;
+  display: grid; align-content: center; gap: 5px; line-height: 1; position: relative;
 }
-.day .dw { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
-.day .dn { font: 600 19px/1.1 var(--display); font-variant-numeric: lining-nums; }
-.day.rel .dn { font-size: 15.5px; }
-.day:hover { border-color: var(--faint); }
-.day[aria-pressed="true"] { background: var(--brick-fill); border-color: var(--brick-fill); color: #fff7ee; }
+.day .dw { font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: var(--faint); }
+.day .dn { font: 600 17px/1 var(--display); font-variant-numeric: lining-nums; }
+.day.rel .dn { font-size: 15px; }
+.day:hover { background: var(--surface); }
+.day[aria-pressed="true"] { background: var(--brick-fill); color: #fff7ee; }
 .day[aria-pressed="true"] .dw { color: #ffe6d8; }
 
 /* Near [zip] within 1 / 5 / 10 mi / All: picks the theaters within that distance. */
@@ -147,11 +148,19 @@ button { font: inherit; color: inherit; }
 .chip .n { font-size: 12px; color: var(--faint); font-variant-numeric: tabular-nums; }
 .chip[aria-pressed="true"] { background: var(--raised); color: var(--paper); border-color: var(--faint); }
 .chip[aria-pressed="true"] .dot { opacity: 1; }
+.searchbox { position: relative; flex: 0 0 210px; display: flex; }
 .search {
-  flex: 0 1 220px; min-width: 120px; height: 36px; border-radius: 999px; border: 1px solid var(--line);
-  background: var(--surface); color: var(--paper); padding: 0 14px; font: inherit; font-size: 14px;
+  width: 100%; height: 36px; border-radius: 999px; border: 1px solid var(--line);
+  background: var(--surface); color: var(--paper); padding: 0 34px 0 14px; font: inherit; font-size: 14px;
 }
 .search::placeholder { color: var(--faint); }
+.search::-webkit-search-cancel-button { -webkit-appearance: none; appearance: none; }   /* our own × instead */
+.clear {
+  position: absolute; right: 4px; top: 50%; transform: translateY(-50%); width: 28px; height: 28px;
+  border: 0; border-radius: 50%; background: transparent; color: var(--muted); font-size: 18px; line-height: 1; cursor: pointer;
+}
+.clear:hover { color: var(--paper); background: var(--raised); }
+.clear[hidden] { display: none; }
 
 /* ---- Main layout ------------------------------------------------------- */
 .layout { display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: 28px; padding-block: 20px 60px; align-items: start; }
@@ -283,7 +292,7 @@ button { font: inherit; color: inherit; }
   .card { grid-template-columns: 124px minmax(0, 1fr); grid-template-rows: repeat(4, auto) 1fr; align-items: start; column-gap: 14px; row-gap: 8px; }
   .card .poster { grid-row: 1 / -1; }
   .filters { flex-wrap: wrap; }
-  .search { flex: 1 1 100%; }
+  .searchbox { flex: 1 1 100%; }
   .bar { position: static; }
   .mast { padding-block: 18px 12px; }
   .backdrop { place-items: end center; padding: 0; }

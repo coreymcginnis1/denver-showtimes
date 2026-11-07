@@ -177,6 +177,12 @@
 
   var ALL = "all";   // state.day for the "Next 2 weeks" view
   function shortDate(d) { return dateObj(d).toLocaleDateString("en-US", { month: "short", day: "numeric" }); }
+  // "Nov 12 to 18", or "Nov 28 to Dec 3" across a month; one day reads as that day.
+  function spanDates(a, b) {
+    if (a === b) return dayName(a);
+    var A = dateObj(a), B = dateObj(b);
+    return shortDate(a) + " to " + (A.getMonth() === B.getMonth() ? B.getDate() : shortDate(b));
+  }
   function dayName(d) { return relDay(d) || dateObj(d).toLocaleDateString("en-US", { weekday: "short" }) + " " + shortDate(d); }
 
   function renderDays() {
@@ -316,13 +322,15 @@
       var order = theaters.map(function (t) { return t.key; });
       var vhtml = Array.from(venues.entries()).sort(function (a, b) { return order.indexOf(a[0]) - order.indexOf(b[0]); }).map(function (e) {
         var t = theaterOf(e[0]) || {};
-        if (asSpan) {   // one line per theater: when it plays, how often, and the next showing
-          var first = e[1][0], last = e[1][e[1].length - 1], n = e[1].length;
-          var span = first.d === last.d ? dayName(first.d) : shortDate(first.d) + " to " + shortDate(last.d);
-          return '<div class="venue"><span class="vn">' + esc(TINY[e[0]] || tName(e[0])) + ", " + span + ", " + n + " showing" + (n === 1 ? "" : "s") + "</span>" +
-            '<div class="times"><button type="button" class="time next" data-i="' + shows.indexOf(first) + '" aria-label="' +
-            esc(f.t) + ", next showing " + dayName(first.d) + " " + (first.hm ? longTime(first.hm) : "") + ", " + esc(t.name || "") + '">Next ' +
-            dayName(first.d) + (first.hm ? ", " + timeHTML(first.hm) : "") + "</button></div></div>";
+        if (asSpan) {   // one line per theater: when it plays, then the next showing to tap
+          var first = e[1][0], last = e[1][e[1].length - 1], n = e[1].length, name = esc(TINY[e[0]] || tName(e[0]));
+          var wk = dateObj(first.d).toLocaleDateString("en-US", { weekday: "short" }) + " " + shortDate(first.d);   // "Sun Nov 8", never "Tomorrow"
+          var when = wk + (first.hm ? ', <span class="nw">' + timeHTML(first.hm) + "</span>" : "");
+          var aria = ' aria-label="' + esc(f.t) + ", " + (n > 1 ? "next showing " : "") + dayName(first.d) + " " + (first.hm ? longTime(first.hm) : "") + ", " + esc(t.name || "") + '"';
+          // One showing: just its day and time. Several: the run ("Nov 12 to 18, 29 showings"), then the next one.
+          var run = n === 1 ? "" : ", " + spanDates(first.d, last.d) + ", " + n + " showings";
+          return '<div class="venue"><span class="vn">' + name + run + '</span><div class="times"><button type="button" class="time next" data-i="' +
+            shows.indexOf(first) + '"' + aria + ">" + (n > 1 ? "Next " : "") + when + "</button></div></div>";
         }
         // A format every showing here shares ("Mayan, Scope") goes with the theater, not on each time.
         var fm = e[1].map(function (s) { return s.fmt || ""; }), one = fm.every(function (x) { return x === fm[0]; }) ? fm[0] : null;

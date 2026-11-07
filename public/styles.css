@@ -129,7 +129,8 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .time .ap { font-weight: 500; font-size: 14px; }
 .time sup { font-size: 10px; color: var(--brick); margin-left: 2px; font-weight: 700; }
 .time.past { color: #a39b8c; }
-.time.next { font-weight: 700; }
+.nw { white-space: nowrap; }
+.time.next { white-space: normal; text-align: left; line-height: 1.25; padding: 4px 0; }   /* long "Next Thu Nov 12, 7:00 pm" wraps */
 .span-line { color: var(--muted); font-size: 14px; }
 .venues.clamp { max-height: 210px; overflow: hidden; -webkit-mask: linear-gradient(#000 70%, #0000); mask: linear-gradient(#000 70%, #0000); }
 .more { margin-top: 6px; text-decoration: underline; font-size: 14px; }

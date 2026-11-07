@@ -218,7 +218,7 @@ redesign directions" (A listings + C program won; B marquee rejected).
 - **By the hour:** the day in time order under big brick hour numerals (earlier-today rows behind a
   button). Desktop: sticky right column; phone: Films / By the hour tabs.
 - **Next 2 weeks:** **Now playing** (a showing today at the selected theaters, or a new release already open in Denver whose next showing is within `RUN_GAP_DAYS` = 3 days; repertory and events need today; by the chosen sort) then **Coming soon** (everything else, repertory included, by its next showing); each
-  theater gets one line ("Regal Pavilions, Nov 12 to 18, 29 showings") and a "Next Thu Nov 12, 4:00 pm" button (one showing: just "Sie" and its day and time). No By the hour.
+  theater gets one line with its next showing ("Alamo Sat 7, 5:00 pm"), soonest first; three show, the rest behind "Show all N theaters" (`SPAN_SHOWN`). Search's "Also playing elsewhere" cards work the same way. No By the hour.
 - **Search** also shows matches beyond the selected theaters/day under "Also playing elsewhere"
   (e.g. Fjord, only at AMC Westminster).
 - **Tap a time** → sheet with Get tickets, Google, Outlook, Apple/.ics (ICS uses TZID America/Denver).

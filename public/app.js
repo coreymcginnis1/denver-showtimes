@@ -104,7 +104,8 @@
   // Two years, not one: indie films often reach Denver a year or more after a festival premiere
   // (TMDB dates them by it). New releases (and events with no release date) are everything else.
   var REPERTORY_DAYS = 730;
-  var RUN_GAP_DAYS = 3;   // a new release off today but back within this many days is still "Now playing"
+  var RUN_GAP_DAYS = 3;
+  var SPAN_SHOWN = 3;   // two weeks / search: theaters listed before "Show all N theaters"   // a new release off today but back within this many days is still "Now playing"
   function isRepertory(f) {
     var orig = f.rel || (f.year ? f.year + "-07-01" : null);
     return !!(orig && f.opened && dayDiff(orig, f.opened) > REPERTORY_DAYS);
@@ -177,12 +178,6 @@
 
   var ALL = "all";   // state.day for the "Next 2 weeks" view
   function shortDate(d) { return dateObj(d).toLocaleDateString("en-US", { month: "short", day: "numeric" }); }
-  // "Nov 12 to 18", or "Nov 28 to Dec 3" across a month; one day reads as that day.
-  function spanDates(a, b) {
-    if (a === b) return dayName(a);
-    var A = dateObj(a), B = dateObj(b);
-    return shortDate(a) + " to " + (A.getMonth() === B.getMonth() ? B.getDate() : shortDate(b));
-  }
   function dayName(d) { return relDay(d) || dateObj(d).toLocaleDateString("en-US", { weekday: "short" }) + " " + shortDate(d); }
 
   function renderDays() {
@@ -320,17 +315,17 @@
       // producers, not distributors) wasn't reliable, and Corey wants both or neither. The data
       // (film_meta.indie / .intl) is still in data.json.
       var order = theaters.map(function (t) { return t.key; });
-      var vhtml = Array.from(venues.entries()).sort(function (a, b) { return order.indexOf(a[0]) - order.indexOf(b[0]); }).map(function (e) {
+      // Two weeks / search: theaters by their next showing, soonest first; otherwise in the usual order.
+      var vlist = Array.from(venues.entries()).sort(asSpan ? function (a, b) { return (a[1][0].d + a[1][0].hm).localeCompare(b[1][0].d + b[1][0].hm); }
+        : function (a, b) { return order.indexOf(a[0]) - order.indexOf(b[0]); });
+      var vhtml = vlist.map(function (e, k) {
         var t = theaterOf(e[0]) || {};
-        if (asSpan) {   // one line per theater: when it plays, then the next showing to tap
-          var first = e[1][0], last = e[1][e[1].length - 1], n = e[1].length, name = esc(TINY[e[0]] || tName(e[0]));
-          var wk = dateObj(first.d).toLocaleDateString("en-US", { weekday: "short" }) + " " + shortDate(first.d);   // "Sun Nov 8", never "Tomorrow"
-          var when = wk + (first.hm ? ', <span class="nw">' + timeHTML(first.hm) + "</span>" : "");
-          var aria = ' aria-label="' + esc(f.t) + ", " + (n > 1 ? "next showing " : "") + dayName(first.d) + " " + (first.hm ? longTime(first.hm) : "") + ", " + esc(t.name || "") + '"';
-          // One showing: just its day and time. Several: the run ("Nov 12 to 18, 29 showings"), then the next one.
-          var run = n === 1 ? "" : ", " + spanDates(first.d, last.d) + ", " + n + " showings";
-          return '<div class="venue"><span class="vn">' + name + run + '</span><div class="times"><button type="button" class="time next" data-i="' +
-            shows.indexOf(first) + '"' + aria + ">" + (n > 1 ? "Next " : "") + when + "</button></div></div>";
+        if (asSpan) {   // one line per theater, "Alamo  Sat 7, 5:00 pm": its next showing; the first 3, then "Show all"
+          var first = e[1][0], o = dateObj(first.d), name = esc(TINY[e[0]] || tName(e[0]));
+          var day = o.toLocaleDateString("en-US", { weekday: "short" }) + " " + o.getDate();
+          return '<div class="venue line' + (k >= SPAN_SHOWN ? " extra" : "") + '"><span class="vn">' + name + '</span><button type="button" class="time next" data-i="' +
+            shows.indexOf(first) + '" aria-label="' + esc(f.t) + ", next showing " + longDate(first.d) + " " + (first.hm ? longTime(first.hm) : "") + ", " + esc(t.name || "") + '">' +
+            day + (first.hm ? ', <span class="nw">' + timeHTML(first.hm) + "</span>" : "") + "</button></div>";
         }
         // A format every showing here shares ("Mayan, Scope") goes with the theater, not on each time.
         var fm = e[1].map(function (s) { return s.fmt || ""; }), one = fm.every(function (x) { return x === fm[0]; }) ? fm[0] : null;
@@ -341,6 +336,7 @@
         (flag ? '<p class="flag">' + esc(flag) + "</p>" : "") +
         '<h3 class="title">' + esc(f.t) + "</h3>" +
         '<div class="venues">' + vhtml + "</div>" +
+        (asSpan && vlist.length > SPAN_SHOWN ? '<button type="button" class="more all">Show all ' + vlist.length + " theaters</button>" : "") +
         '<button type="button" class="more" hidden>Show all times</button></article>';
     };
     if (all) {   // two groups: now playing (by the chosen sort), then everything else, soonest first
@@ -380,7 +376,7 @@
   // "Show all times" only where it actually overflows (checked after layout).
   function clampVenues() {
     document.querySelectorAll("#grid .card").forEach(function (card) {
-      var v = card.querySelector(".venues"), btn = card.querySelector(".more");
+      var v = card.querySelector(".venues"), btn = card.querySelector(".more:not(.all)");
       if (!v || !btn || card.classList.contains("open")) return;
       v.classList.add("clamp");
       var over = v.scrollHeight > v.clientHeight + 4;
@@ -533,6 +529,7 @@
         document.querySelectorAll("[data-v]").forEach(function (x) { x.setAttribute("aria-pressed", x === b); });
         return;
       }
+      if (b.classList.contains("all")) { b.closest(".card").classList.add("all-th"); b.hidden = true; return; }
       if (b.classList.contains("more")) {
         var card = b.closest(".card"); card.classList.add("open");
         card.querySelector(".venues").classList.remove("clamp"); b.hidden = true; return;

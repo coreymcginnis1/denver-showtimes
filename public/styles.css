@@ -131,7 +131,11 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .time.past { color: #a39b8c; }
 .nw { white-space: nowrap; }
 .time.next { white-space: normal; text-align: left; line-height: 1.25; padding: 4px 0; }   /* long "Next Thu Nov 12, 7:00 pm" wraps */
-.span-line { color: var(--muted); font-size: 14px; }
+/* Two weeks / search: "Alamo  Sat 7, 5:00 pm", one line per theater, three before "Show all". */
+.venue.line { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 8px; }
+.venue.line .vn { display: inline; }
+.venue.line .time.next { font-size: 15px; min-height: 26px; }
+.card:not(.all-th) .venue.extra { display: none; }
 .venues.clamp { max-height: 210px; overflow: hidden; -webkit-mask: linear-gradient(#000 70%, #0000); mask: linear-gradient(#000 70%, #0000); }
 .more { margin-top: 6px; text-decoration: underline; font-size: 14px; }
 

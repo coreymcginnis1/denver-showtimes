@@ -10,17 +10,13 @@
   var SHORT = { sie: "Sie FilmCenter", landmark: "Landmark Mayan", amc: "AMC 9+CO 10", regal_pavilions: "Regal Pavilions",
     alamo_sloans: "Alamo Sloans Lake", regal_colorado: "Regal Colorado Ctr", amc_westminster: "AMC Westminster",
     landmark_greenwood: "Landmark Greenwood", harkins_arvada: "Harkins Arvada", harkins_northfield: "Harkins Northfield" };
-  var THEATER_SITES = [
+  var THEATER_SITES = [   // one link per company; each site lists its own locations
     ["Sie FilmCenter", "https://www.denverfilm.org/"],
-    ["Landmark Mayan", "https://www.landmarktheatres.com/our-locations/x02ak-landmark-mayan-theatre-denver/"],
-    ["AMC 9+CO 10", "https://www.amctheatres.com/movie-theatres/denver/amc-9-co-10"],
-    ["AMC Westminster", "https://www.amctheatres.com/movie-theatres/denver/amc-westminster-promenade-24"],
-    ["Alamo Sloans Lake", "https://drafthouse.com/denver/theater/sloans-lake"],
-    ["Regal Colorado Center", "https://www.regmovies.com/theatres/regal-ua-colorado-center-1308"],
-    ["Regal Denver Pavilions", "https://www.regmovies.com/theatres/regal-ua-denver-pavilions-rpx-1315"],
-    ["Landmark Greenwood Village", "https://www.landmarktheatres.com/our-locations/x0873-the-landmark-greenwood-village/"],
-    ["Harkins Arvada", "https://www.harkins.com/theatres/arvada-14"],
-    ["Harkins Northfield", "https://www.harkins.com/theatres/northfield-18"]
+    ["Landmark", "https://www.landmarktheatres.com/"],
+    ["AMC", "https://www.amctheatres.com/"],
+    ["Regal", "https://www.regmovies.com/"],
+    ["Harkins", "https://www.harkins.com/"],
+    ["Alamo Drafthouse", "https://drafthouse.com/denver"]
   ];
   var FMT_TAG = { "Premium Format": "Prem", "3D": "3D", "Scope": "Scope", "35mm": "35mm", "70mm": "70mm" };
   var SLOTS = [["Morning", "00:00"], ["Afternoon", "12:00"], ["Evening", "17:00"], ["Late", "21:00"]];
@@ -496,7 +492,11 @@
       if (b.dataset.i) openSheet(+b.dataset.i);
     });
     document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !$("backdrop").hidden) closeSheet(); });
-    $("q").addEventListener("input", function (e) { state.q = e.target.value.trim(); renderAll(); });
+    var q = $("q"), clear = $("qClear");
+    var setQ = function () { state.q = q.value.trim(); clear.hidden = !q.value; renderAll(); };
+    q.addEventListener("input", setQ);
+    q.addEventListener("keydown", function (e) { if (e.key === "Enter") { e.preventDefault(); q.blur(); } });   // closes the phone keyboard
+    clear.addEventListener("click", function () { q.value = ""; setQ(); q.focus(); });
     $("zip").addEventListener("input", function (e) {
       var z = e.target.value.replace(/\D/g, "").slice(0, 5);
       if (z !== e.target.value) e.target.value = z;

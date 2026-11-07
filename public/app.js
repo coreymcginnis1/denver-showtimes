@@ -1,12 +1,13 @@
-/* Denver Showtimes: one day at a time.
-   Poster cards for every film playing on the chosen day (times grouped by theater), plus that
-   day's schedule in time order. Tap a time for tickets or to add it to Google / Outlook / .ics.
+/* Denver Showtimes: one day at a time, set like a printed listings page.
+   Poster cards for every film playing on the chosen day (times grouped by theater; tap a poster for
+   the director and synopsis), plus the day "By the hour". Tap a time for tickets or to add it to
+   Google / Outlook / .ics.
    Times are Denver wall-clock ("floating"): the ISO offset is ignored, so every viewer sees the
    time printed on the theater's own site. No dependencies. */
 (function () {
   "use strict";
 
-  // Short names for chips and rows; the full name is used in the sheet and calendar entries.
+  // Names for the theater checklist; the full name is used in the sheet and calendar entries.
   var SHORT = { sie: "Sie FilmCenter", landmark: "Landmark Mayan", amc: "AMC 9+CO 10", regal_pavilions: "Regal Pavilions",
     alamo_sloans: "Alamo Sloans Lake", regal_colorado: "Regal Colorado Ctr", amc_westminster: "AMC Westminster",
     landmark_greenwood: "Landmark Greenwood", harkins_arvada: "Harkins Arvada", harkins_northfield: "Harkins Northfield" };
@@ -18,8 +19,12 @@
     ["Harkins", "https://www.harkins.com/"],
     ["Alamo Drafthouse", "https://drafthouse.com/denver"]
   ];
+  // Shortest names, for the times under a poster, the hour list and the "At Sie and Mayan" line.
+  var TINY = { sie: "Sie", landmark: "Mayan", amc: "AMC 9+CO 10", regal_pavilions: "Regal Pavilions",
+    alamo_sloans: "Alamo", regal_colorado: "Regal Colorado", amc_westminster: "AMC Westminster",
+    landmark_greenwood: "Landmark Greenwood", harkins_arvada: "Harkins Arvada", harkins_northfield: "Harkins Northfield" };
   var FMT_TAG = { "Premium Format": "Prem", "3D": "3D", "Scope": "Scope", "35mm": "35mm", "70mm": "70mm" };
-  var SLOTS = [["Morning", "00:00"], ["Afternoon", "12:00"], ["Evening", "17:00"], ["Late", "21:00"]];
+  var COUNTRY = (function () { try { return new Intl.DisplayNames(["en"], { type: "region" }); } catch (e) { return null; } })();
 
   var $ = function (id) { return document.getElementById(id); };
   function esc(s) { return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
@@ -40,7 +45,7 @@
   // Distances are from the centre of a zip code to each theater, as the crow flies. The zip is
   // never saved: it resets to DEFAULT_ZIP on every visit, so nothing about a reader is kept.
   var DEFAULT_ZIP = "80218", ZIPS = {};   // distance buttons (1 / 3 / 5 mi / All) are in index.html
-  var state = { day: null, q: "", sort: "new", kind: "all", showEarlier: false, theaters: null, zip: DEFAULT_ZIP, radius: null };
+  var state = { day: null, q: "", sort: "new", kind: "all", showEarlier: false, theaters: null, zip: DEFAULT_ZIP, radius: null, open: null };
 
   // ---- Data ------------------------------------------------------------------
 
@@ -52,7 +57,7 @@
       index[t] = i;
       var m = meta[t] || {};
       return { t: t, id: m.tmdb_id || null, rel: m.release || null, pop: m.popularity, trend: m.trend != null ? m.trend : null, va: m.vote_average, vc: m.vote_count || 0,
-        indie: !!m.indie, intl: !!m.intl,
+        indie: !!m.indie, intl: !!m.intl, dirs: m.directors || [], countries: m.countries || [], about: m.overview || "",
         posters: [], tmdbPoster: m.tmdb_poster || null, rating: null, runtime: null, year: m.release ? +m.release.slice(0, 4) : null };
     });
     data.events.forEach(function (e) {
@@ -167,7 +172,7 @@
   function renderSources() {
     $("srcLinks").innerHTML = "Theater sites: " + THEATER_SITES.map(function (t) {
       return '<a href="' + t[1] + '" target="_blank" rel="noopener">' + esc(t[0]) + "</a>";
-    }).join(" · ");
+    }).join(", ");
   }
 
   var ALL = "all";   // state.day for the "Next 2 weeks" view
@@ -175,26 +180,28 @@
   function dayName(d) { return relDay(d) || dateObj(d).toLocaleDateString("en-US", { weekday: "short" }) + " " + shortDate(d); }
 
   function renderDays() {
-    $("days").innerHTML = '<button type="button" class="day rel span" data-d="' + ALL + '" aria-pressed="' + (state.day === ALL) + '">' +
-      '<span class="dw">Next</span><span class="dn">2 weeks</span></button>' + days.map(function (d) {
-      var rel = relDay(d), o = dateObj(d);
-      return '<button type="button" class="day' + (rel ? " rel" : "") + '" data-d="' + d + '" aria-pressed="' + (d === state.day) + '">' +
-        '<span class="dw">' + (rel || o.toLocaleDateString("en-US", { weekday: "short" })) + "</span>" +
-        '<span class="dn">' + o.toLocaleDateString("en-US", { month: "short", day: "numeric" }) + "</span></button>";
+    $("days").innerHTML = '<button type="button" class="day" data-d="' + ALL + '" aria-pressed="' + (state.day === ALL) + '">' +
+      '<span class="dw">Next</span><span class="dn">2 wks</span></button>' + days.map(function (d, n) {
+      var rel = relDay(d), o = dateObj(d), wd = o.toLocaleDateString("en-US", { weekday: "short" });
+      var mon = o.getDate() === 1 ? " " + o.toLocaleDateString("en-US", { month: "short" }) : "";   // "Tue Dec" on the 1st
+      return '<button type="button" class="day" data-d="' + d + '" aria-pressed="' + (d === state.day) + '" aria-label="' + longDate(d) + '">' +
+        '<span class="dw">' + (rel || wd) + mon + '</span><span class="dn">' + o.getDate() + "</span></button>";
     }).join("");
+    $("when").textContent = state.day === ALL ? "The next two weeks, " + shortDate(days[0]) + " to " + shortDate(days[days.length - 1])
+      : longDate(state.day);
   }
 
   function renderTheaters() {
-    var counts = {};
-    dayShows(state.day, true).forEach(function (s) { counts[s.th] = (counts[s.th] || 0) + 1; });
     var near = theaters.slice().sort(function (a, b) { return (miles(a) || 0) - (miles(b) || 0); });
-    $("theaters").innerHTML = near.map(function (t) {
+    $("tlist").innerHTML = near.map(function (t) {
       var mi = miles(t);
-      return '<button type="button" class="chip" style="--c:' + t.color + '" data-k="' + t.key + '" aria-pressed="' + state.theaters.has(t.key) + '">' +
-        '<span class="dot"></span>' + esc(tName(t.key)) + (mi != null ? ' <span class="mi">' + mi.toFixed(1) + " mi</span>" : "") +
-        ' <span class="n">' + (counts[t.key] || 0) + "</span></button>";
+      return '<button type="button" class="tk" data-k="' + t.key + '" aria-pressed="' + state.theaters.has(t.key) + '">' +
+        '<span class="box" aria-hidden="true"></span><span><span class="nm">' + esc(tName(t.key)) + "</span>" +
+        (mi != null ? '<span class="mi">' + mi.toFixed(1) + " mi</span>" : "") + "</span></button>";
     }).join("");
     document.querySelectorAll("[data-r]").forEach(function (x) { x.setAttribute("aria-pressed", String(x.dataset.r === String(state.radius))); });
+    var on = near.filter(function (t) { return state.theaters.has(t.key); }).map(function (t) { return TINY[t.key] || t.name; });
+    $("tsum").textContent = !on.length ? "No theaters picked" : on.length <= 2 ? "At " + on.join(" and ") : "At " + on.length + " theaters";
   }
 
   // ---- Film cards ----------------------------------------------------------------
@@ -205,7 +212,7 @@
     return '<img' + (cls ? ' class="' + cls + '"' : "") + ' src="' + esc(f.posters[0]) + '" data-f="' + i + '" data-n="0" alt="' +
       (cls ? "" : "Poster for " + esc(f.t)) + '" loading="lazy" decoding="async" referrerpolicy="no-referrer">';
   }
-  function fallbackHTML(f) { return '<div class="fallback" aria-hidden="true">' + esc(f.t) + "<small>No poster</small></div>"; }
+  function fallbackHTML(f) { return '<span class="fallback" aria-hidden="true">' + esc(f.t) + "</span>"; }
 
   // A broken poster tries the film's next image, then a typeset placeholder.
   document.addEventListener("error", function (e) {
@@ -216,6 +223,35 @@
     if (img.classList.contains("th")) { img.removeAttribute("src"); img.dataset.f = ""; return; }
     img.outerHTML = fallbackHTML(f);
   }, true);
+
+  // The poster is a button: tapping it lays the director, facts and synopsis over the art.
+  // Special events (no TMDB match) have none of that, so their poster is just a picture.
+  function posterBlock(i) {
+    var f = films[i], img = f.posters.length ? posterHTML(i) : fallbackHTML(f);
+    if (f.event) return '<span class="still">' + img + "</span>";
+    var where = f.countries.filter(function (c) { return c !== "US"; }).slice(0, 1).map(function (c) { return COUNTRY ? COUNTRY.of(c) : c; });
+    var facts = where.concat([f.year, f.runtime ? runtime(f.runtime) : "", f.rating]).filter(Boolean).join(", ");
+    var open = state.open === i;
+    return '<button type="button" data-p="' + i + '" aria-expanded="' + open + '" aria-label="' + esc(f.t) + (open ? ", hide details" : ", show details") + '">' + img + "</button>" +
+      (open ? '<div class="info" data-p="' + i + '">' + (f.dirs.length ? '<p class="dir">' + esc(f.dirs.join(", ")) + "</p>" : "") +
+        (facts ? '<p class="facts">' + esc(facts) + "</p>" : "") + (f.about ? "<p>" + esc(f.about) + "</p>" : "") +
+        (f.id ? '<a href="https://letterboxd.com/tmdb/' + f.id + '/" target="_blank" rel="noopener">View on Letterboxd</a>' : "") + "</div>" : "");
+  }
+
+  // A run of times in plain text, "11:50 am 1:45 pm 4:30 7:15": am/pm only where it changes.
+  function timesHTML(list, f, t, sameFmt) {
+    var half = null;
+    return list.map(function (s) {
+      var tag = !sameFmt && FMT_TAG[s.fmt] ? "<sup>" + FMT_TAG[s.fmt] + "</sup>" : "", label = "Times vary";
+      if (s.hm) {
+        var h = +s.hm.slice(0, 2), ap = h < 12 ? "am" : "pm";
+        label = ((h % 12) || 12) + ":" + s.hm.slice(3) + (ap !== half ? ' <span class="ap">' + ap + "</span>" : "");
+        half = ap;
+      }
+      return '<button type="button" class="time' + (isPast(s) ? " past" : "") + '" data-i="' + shows.indexOf(s) + '" aria-label="' +
+        esc(f.t) + ", " + (s.hm ? longTime(s.hm) : "times vary") + ", " + esc(t.name || "") + '">' + label + tag + "</button>";
+    }).join("");
+  }
 
   function sortFilms(ids) {
     var key = {
@@ -243,7 +279,7 @@
   function renderFilms() {
     var ds = dayShows(state.day), byFilm = new Map();
     ds.forEach(function (s) { if (!byFilm.has(s.f)) byFilm.set(s.f, []); byFilm.get(s.f).push(s); });
-    var ids = sortFilms(Array.from(byFilm.keys())), rel = relDay(state.day);
+    var ids = sortFilms(Array.from(byFilm.keys()));
 
     var all = state.day === ALL;
     // Searching also finds a film beyond the chosen theaters/day ("Fjord" only at AMC Westminster):
@@ -259,10 +295,6 @@
       });
     }
     var extraIds = sortFilms(Array.from(elsewhere.keys()));
-    $("filmsH").textContent = all ? "Playing the next two weeks" : "Playing " + (rel ? rel.toLowerCase() : longDate(state.day));
-    $("filmsSub").textContent = (all ? shortDate(days[0]) + "–" + shortDate(days[days.length - 1]) + " · "
-      : rel ? longDate(state.day) + " · " : "") + ids.length + " film" + (ids.length === 1 ? "" : "s") +
-      " · " + state.theaters.size + " theater" + (state.theaters.size === 1 ? "" : "s");
 
     if (!ids.length && !extraIds.length) {
       $("grid").innerHTML = '<p class="empty">' + (state.theaters.size
@@ -274,44 +306,33 @@
       var f = films[i], list = (other ? elsewhere : byFilm).get(i), venues = new Map(), asSpan = all || !!other;
       list.sort(function (a, b) { return (a.d + (a.hm || "")).localeCompare(b.d + (b.hm || "")); })
         .forEach(function (s) { if (!venues.has(s.th)) venues.set(s.th, []); venues.get(s.th).push(s); });
-      var fmts = Array.from(new Set(list.map(function (s) { return s.fmt === "Premium Format" ? "Premium" : s.fmt; }).filter(Boolean)));
-      var meta = [f.year ? "<span>" + f.year + "</span>" : "", f.rating ? "<span>" + esc(f.rating) + "</span>" : "",
-        f.runtime ? "<span>" + runtime(f.runtime) + "</span>" : ""]
-        .concat(fmts.map(function (x) { return '<span class="tag">' + esc(x) + "</span>"; })).join("");
       var since = f.opened ? dayDiff(f.opened, asSpan ? days[0] : state.day) : null;
-      var fresh = f.rep || f.event || since == null ? "" : since < 0 ? "Opens " + shortDate(f.opened)
-        : since <= 6 ? "Opening week" : "";
-      if (fresh) meta += '<span class="tag fresh">' + fresh + "</span>";
+      var fresh = f.rep || f.event || since == null ? "" : since < 0 ? "Opens " + shortDate(f.opened) : since <= 6 ? "Opening week" : "";
+      var flag = fresh;
       // "Indie" and "International" tags are on hold (Nov 2026): the Indie guess (TMDB lists
       // producers, not distributors) wasn't reliable, and Corey wants both or neither. The data
       // (film_meta.indie / .intl) is still in data.json.
       var order = theaters.map(function (t) { return t.key; });
       var vhtml = Array.from(venues.entries()).sort(function (a, b) { return order.indexOf(a[0]) - order.indexOf(b[0]); }).map(function (e) {
-        var t = theaterOf(e[0]) || { color: "#888" };
+        var t = theaterOf(e[0]) || {};
         if (asSpan) {   // one line per theater: when it plays, how often, and the next showing
           var first = e[1][0], last = e[1][e[1].length - 1], n = e[1].length;
-          var span = first.d === last.d ? dayName(first.d) : shortDate(first.d) + "–" + shortDate(last.d);
-          return '<div class="venue" style="--c:' + t.color + '"><div class="vn"><i></i>' + esc(tName(e[0])) + "</div>" +
-            '<div class="span-line">' + span + " · " + n + " showing" + (n === 1 ? "" : "s") + "</div>" +
+          var span = first.d === last.d ? dayName(first.d) : shortDate(first.d) + " to " + shortDate(last.d);
+          return '<div class="venue"><span class="vn">' + esc(TINY[e[0]] || tName(e[0])) + ", " + span + ", " + n + " showing" + (n === 1 ? "" : "s") + "</span>" +
             '<div class="times"><button type="button" class="time next" data-i="' + shows.indexOf(first) + '" aria-label="' +
-            esc(f.t) + ", next showing " + dayName(first.d) + " " + (first.hm ? longTime(first.hm) : "") + ", " + esc(t.name || "") + '"><span class="ap">Next</span> ' +
-            dayName(first.d) + (first.hm ? " · " + timeHTML(first.hm) : "") + "</button></div></div>";
+            esc(f.t) + ", next showing " + dayName(first.d) + " " + (first.hm ? longTime(first.hm) : "") + ", " + esc(t.name || "") + '">Next ' +
+            dayName(first.d) + (first.hm ? ", " + timeHTML(first.hm) : "") + "</button></div></div>";
         }
-        return '<div class="venue" style="--c:' + t.color + '"><div class="vn"><i></i>' + esc(tName(e[0])) + '</div><div class="times">' +
-          e[1].map(function (s) {
-            var tag = FMT_TAG[s.fmt] ? "<sup>" + FMT_TAG[s.fmt] + "</sup>" : "";
-            var label = s.hm ? timeHTML(s.hm) : "Times vary";
-            return '<button type="button" class="time' + (isPast(s) ? " past" : "") + '" data-i="' + shows.indexOf(s) + '" aria-label="' +
-              esc(f.t) + ", " + (s.hm ? longTime(s.hm) : "times vary") + ", " + esc(t.name || "") + '">' + label + tag + "</button>";
-          }).join("") + "</div></div>";
+        // A format every showing here shares ("Mayan, Scope") goes with the theater, not on each time.
+        var fm = e[1].map(function (s) { return s.fmt || ""; }), one = fm.every(function (x) { return x === fm[0]; }) ? fm[0] : null;
+        var label = (TINY[e[0]] || tName(e[0])) + (one ? ", " + (one === "Premium Format" ? "Premium" : one) : "");
+        return '<div class="venue"><span class="vn">' + esc(label) + '</span><div class="times">' + timesHTML(e[1], f, t, one != null) + "</div></div>";
       }).join("");
-      return '<article class="card"><div class="poster">' + posterHTML(i) +
-        "</div>" +
-        '<h3 class="title">' + esc(f.t) + "</h3>" + (meta ? '<div class="meta">' + meta + "</div>" : "") +
+      return '<article class="card"><div class="poster">' + posterBlock(i) + "</div>" +
+        (flag ? '<p class="flag">' + esc(flag) + "</p>" : "") +
+        '<h3 class="title">' + esc(f.t) + "</h3>" +
         '<div class="venues">' + vhtml + "</div>" +
-        '<button type="button" class="more" hidden>Show all times</button>' +
-        (f.id ? '<a class="lb" href="https://letterboxd.com/tmdb/' + f.id + '/" target="_blank" rel="noopener">View on Letterboxd</a>' : "") +
-        "</article>";
+        '<button type="button" class="more" hidden>Show all times</button></article>';
     };
     if (all) {   // two groups: now playing (by the chosen sort), then everything else, soonest first
       var firstDay = function (i) { return byFilm.get(i).reduce(function (m, s) { return s.d < m ? s.d : m; }, "9999"); };
@@ -324,16 +345,22 @@
       var now = ids.filter(isNow);
       var soon = ids.filter(function (i) { return !isNow(i); });
       soon.sort(function (a, b) { return firstDay(a).localeCompare(firstDay(b)) || films[a].t.localeCompare(films[b].t); });
-      $("grid").innerHTML = (now.length ? '<h3 class="group">Now playing <span>' + now.length + "</span></h3>" +
+      $("grid").innerHTML = (now.length ? '<h3 class="group">Now playing</h3>' +
           '<div class="grid">' + now.map(function (i) { return cardHTML(i); }).join("") + "</div>" : "") +
-        (soon.length ? '<h3 class="group">Coming soon <span>' + soon.length + "</span></h3>" +
+        (soon.length ? '<h3 class="group">Coming soon</h3>' +
           '<div class="grid">' + soon.map(function (i) { return cardHTML(i); }).join("") + "</div>" : "");
+    } else if (state.sort === "new" && state.kind === "all") {   // Newest: new releases, then repertory, then one-offs
+      $("grid").innerHTML = [["New releases", function (f) { return !f.rep && !f.event; }], ["Repertory", function (f) { return f.rep && !f.event; }],
+        ["One night only", function (f) { return f.event; }]].map(function (g) {
+        var part = ids.filter(function (i) { return g[1](films[i]); });
+        return part.length ? '<h3 class="group">' + g[0] + '</h3><div class="grid">' + part.map(function (i) { return cardHTML(i); }).join("") + "</div>" : "";
+      }).join("") || '<p class="empty">No match at these theaters on this day.</p>';
     } else {
       $("grid").innerHTML = ids.length ? '<div class="grid">' + ids.map(function (i) { return cardHTML(i); }).join("") + "</div>"
         : '<p class="empty">No match at these theaters' + (all ? "" : " on this day") + ".</p>";
     }
     if (extraIds.length) {
-      $("grid").innerHTML += '<h3 class="group">Also playing elsewhere <span>' + extraIds.length + "</span></h3>" +
+      $("grid").innerHTML += '<h3 class="group">Also playing elsewhere</h3>' +
         '<p class="group-note">Other theaters or days in the next two weeks.</p>' +
         '<div class="grid">' + extraIds.map(function (i) { return cardHTML(i, true); }).join("") + "</div>";
     }
@@ -363,21 +390,19 @@
     var ds = dayShows(state.day).filter(function (s) { return s.hm; })
       .sort(function (a, b) { return a.hm.localeCompare(b.hm) || films[a.f].t.localeCompare(films[b.f].t); });
     var past = ds.filter(isPast), shown = state.showEarlier ? ds : ds.filter(function (s) { return !isPast(s); });
-    if (!ds.length) {
-      $("sched").innerHTML = '<p class="empty">' + "No showtimes match." + "</p>";
-      return;
-    }
-    var html = shown.length ? "" : '<p class="empty">Everything has started for today.</p>';
-    SLOTS.forEach(function (sl, n) {
-      var end = n + 1 < SLOTS.length ? SLOTS[n + 1][1] : "99";
-      var rows = shown.filter(function (s) { return s.hm >= sl[1] && s.hm < end; });
-      if (!rows.length) return;
-      html += '<div class="slot"><span>' + sl[0] + "</span><span>" + rows.length + "</span></div>" + rows.map(function (s) {
-        var f = films[s.f], t = theaterOf(s.th) || { color: "#888" }, extra = [s.fmt === "Premium Format" ? "Premium" : s.fmt, s.scr].filter(Boolean).join(" · ");
-        return '<button type="button" class="row' + (isPast(s) ? " past" : "") + '" data-i="' + shows.indexOf(s) + '" style="--c:' + t.color + '">' +
-          '<span class="t">' + timeHTML(s.hm) + "</span>" + (f.posters.length ? posterHTML(s.f, "th") : '<span class="th"></span>') +
-          '<span class="f"><b>' + esc(f.t) + "</b><span><i></i>" + esc(tName(s.th)) + (extra ? " · " + esc(extra) : "") + "</span></span></button>";
-      }).join("");
+    if (!ds.length) { $("sched").innerHTML = '<p class="empty">No showtimes match.</p>'; return; }
+    var hours = new Map();
+    shown.forEach(function (s) { var h = s.hm.slice(0, 2); if (!hours.has(h)) hours.set(h, []); hours.get(h).push(s); });
+    var html = shown.length ? "" : '<p class="empty">Everything has started for today.</p>', lastHalf = null;
+    hours.forEach(function (rows, h) {
+      var n = +h, half = n < 12 ? "am" : "pm";
+      html += '<div class="hour"><p class="h">' + ((n % 12) || 12) + (half !== lastHalf ? "<small>" + half + "</small>" : "") + '</p><div class="rows">' +
+        rows.map(function (s) {
+          var f = films[s.f], extra = [s.fmt === "Premium Format" ? "Premium" : s.fmt].filter(Boolean).join("");
+          return '<button type="button" class="row' + (isPast(s) ? " past" : "") + '" data-i="' + shows.indexOf(s) + '"><b>' + hm12(s.hm).replace(" ", "\u2009") +
+            '</b> <span class="ft">' + esc(f.t) + '</span> <span class="th">' + esc(TINY[s.th] || tName(s.th)) + (extra ? ", " + esc(extra) : "") + "</span></button>";
+        }).join("") + "</div></div>";
+      lastHalf = half;
     });
     if (past.length) html += '<button type="button" class="earlier" id="earlier">' + (state.showEarlier ? "Hide " : "Show ") + past.length + " earlier today</button>";
     $("sched").innerHTML = html;
@@ -419,16 +444,16 @@
   var lastFocus = null, icsUrl = null;
   function openSheet(i) {
     var s = shows[i], f = films[s.f], t = theaterOf(s.th) || { name: s.th };
-    var where = [t.name, s.scr, s.fmt].filter(Boolean).join(" · "), links = s.hm ? calendarLinks(s) : null;
+    var where = [t.name, s.scr, s.fmt].filter(Boolean).join(", "), links = s.hm ? calendarLinks(s) : null;
     icsUrl = links && links.ics;
     var when = dateObj(s.d).toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" }) +
-      (s.hm ? " · " + timeHTML(s.hm) + "–" + timeHTML(links.end.hm) : " · times vary");
+      (s.hm ? ", " + timeHTML(s.hm) + " to " + timeHTML(links.end.hm) : ", times vary");
     $("backdrop").innerHTML = '<div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetT">' +
       (f.posters.length ? posterHTML(s.f, "sheet-poster") : '<div class="ph"></div>') +
       '<div><h3 id="sheetT">' + esc(f.t) + '</h3><div class="when">' + when + "</div>" +
-      '<div class="where">' + esc(where) + (s.hm && !s.end && !f.runtime ? " · runtime unknown, 2h assumed" : "") + "</div></div>" +
+      '<div class="where">' + esc(where) + (s.hm && !s.end && !f.runtime ? ", runtime unknown, 2h assumed" : "") + "</div></div>" +
       '<div class="actions">' + (s.url ? '<a class="btn primary" href="' + esc(s.url) + '" target="_blank" rel="noopener">Get tickets</a>' : "") +
-      (links ? '<div class="btn-row three"><a class="btn" href="' + esc(links.google) + '" target="_blank" rel="noopener">Google</a>' +
+      (links ? '<div class="btn-row"><a class="btn" href="' + esc(links.google) + '" target="_blank" rel="noopener">Google</a>' +
         '<a class="btn" href="' + esc(links.outlook) + '" target="_blank" rel="noopener">Outlook</a>' +
         '<a class="btn" href="' + links.ics + '" download="' + slug(f.t) + '.ics">Apple / .ics</a></div>' : "") +
       '<button type="button" class="btn" id="closeSheet">Close</button></div></div>';
@@ -444,7 +469,7 @@
 
   // ---- Wiring ------------------------------------------------------------------------
 
-  function setMode() {   // the two-week view has no schedule column
+  function setMode() {   // the two-week view has no "By the hour"
     var all = state.day === ALL;
     $("layout").dataset.mode = all ? "span" : "day";
     var seg = document.querySelector(".seg"); if (seg) seg.hidden = all;
@@ -454,14 +479,29 @@
     }
   }
   function renderAll() { renderTheaters(); renderFilms(); if (state.day !== ALL) renderSchedule(); }
-  function measure() { document.documentElement.style.setProperty("--bar-h", $("bar").offsetHeight + "px"); }
+  // A new day from far down the page: come back up to the top of the films (under the sticky days).
+  function toFilms() {
+    var top = $("layout").getBoundingClientRect().top + window.scrollY - $("days").offsetHeight - 12;
+    if (window.scrollY > top) window.scrollTo({ top: top });
+  }
+  // After a re-render, keep keyboard focus on the poster that was just opened or closed.
+  function focusPoster(i) { var el = document.querySelector('#grid button[data-p="' + i + '"]'); if (el) el.focus({ preventScroll: true }); }
+  function measure() { document.documentElement.style.setProperty("--days-h", $("days").offsetHeight + "px"); }
 
   function wire() {
     document.addEventListener("click", function (e) {
       if (e.target.id === "backdrop") return closeSheet();
+      var info = e.target.closest(".info");
+      if (info && !e.target.closest("a")) { state.open = null; renderFilms(); focusPoster(+info.dataset.p); return; }
       var b = e.target.closest("button"); if (!b) return;
+      if (b.dataset.p) { var p = +b.dataset.p; state.open = state.open === p ? null : p; renderFilms(); focusPoster(p); return; }
+      if (b.id === "tToggle") {
+        var open = !$("theaters").classList.contains("open");
+        $("theaters").classList.toggle("open", open); b.setAttribute("aria-expanded", open); b.textContent = open ? "Done" : "Change";
+        measure(); return;
+      }
       if (b.id === "closeSheet") return closeSheet();
-      if (b.dataset.d) { state.day = b.dataset.d; state.showEarlier = false; setMode(); renderDays(); renderAll(); window.scrollTo({ top: 0 }); return; }
+      if (b.dataset.d) { state.day = b.dataset.d; state.showEarlier = false; state.open = null; setMode(); renderDays(); renderAll(); toFilms(); return; }
       if (b.dataset.k) {
         var k = b.dataset.k; state.theaters.has(k) ? state.theaters.delete(k) : state.theaters.add(k); state.radius = null;
         saveTheaters(); renderAll(); return;
@@ -491,7 +531,11 @@
       if (b.id === "earlier") { state.showEarlier = !state.showEarlier; renderSchedule(); return; }
       if (b.dataset.i) openSheet(+b.dataset.i);
     });
-    document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !$("backdrop").hidden) closeSheet(); });
+    document.addEventListener("keydown", function (e) {
+      if (e.key !== "Escape") return;
+      if (!$("backdrop").hidden) return closeSheet();
+      if (state.open != null) { var p = state.open; state.open = null; renderFilms(); focusPoster(p); }
+    });
     var q = $("q"), clear = $("qClear");
     var setQ = function () { state.q = q.value.trim(); clear.hidden = !q.value; renderAll(); };
     q.addEventListener("input", setQ);

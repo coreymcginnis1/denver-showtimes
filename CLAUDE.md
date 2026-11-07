@@ -186,30 +186,39 @@ Each run lists titles new since the last (tracked in `known_titles.txt`; dry run
 
 ## Frontend (`public/`)
 
-Redesigned Nov 2026, Letterboxd-inspired but its own look. Dark warm palette (`--bg #15110e`,
-cream `--paper`, newsletter brick `--brick-fill #C0432B`); Newsreader (titles) + Schibsted Grotesk
-(UI), **self-hosted** in `public/fonts/` (latin + latin-ext woff2, OFL licenses alongside) so no visit
-reports to Google. Title "Denver Movie Showtimes", upright (no italic). Theater colors appear only as dots. Corners: 3px posters (`--r-xs`), 6px buttons/inputs, pills only for filters and toggles.
+Redesigned again Nov 2026 to look less generic ("less AI-built"; Corey prefers character over polish):
+a printed listings page, not an app. Near-white paper `--paper #f7f5f0`, black ink, newsletter brick
+`--brick #b83a22` as the one accent. **One typeface, Archivo** (variable weight + width, condensed caps
+for the masthead, section heads, film titles, day and hour numerals), **self-hosted** in
+`public/fonts/` (latin + latin-ext woff2, OFL alongside) so no visit reports to Google. Heavy black
+rules instead of boxes; no pills, dots, count badges, tiny all-caps labels, shadows or "·" separators.
+Posters keep 3px corners; nothing else is rounded. Mockups: claude.ai canvas "Denver Showtimes
+redesign directions" (A listings + C program won; B marquee rejected).
 
-- **Controls:** day strip ("Next 2 weeks", Today … +14 days; no boxes, only the selected day is a brick block) ·
-  **Near [zip] 1 / 3 / 5 mi / All** (default **80218** — Sie and the Mayan come first and it holds the
-  metro's population-weighted center; **never saved**, so readers aren't tracked; straight-line
-  distance from Census zip centroids in `zips.json`, no travel times) · theater chips sorted by
-  distance with miles and that day's count (choices saved in `localStorage` with the default set they were made against; changing `default_on` resets everyone to the new defaults) · search (× clears it; Enter closes the phone keyboard).
-- **Show:** All · New releases · Repertory. **Sort:** Newest · Trending · A–Z. Films without the
-  data sort last.
+- **Controls:** masthead "Denver Movie Showtimes" with the chosen date under it · sticky day strip
+  ("Next 2 wks", then weekday over a big numeral; the selected day is a brick block) · **Theaters**:
+  "Theaters near [zip] within 1 mi / 3 mi / 5 mi / any distance" and a checklist of all ten nearest first
+  with miles (no counts, no theater colors). Phones fold it to "At Sie and Mayan · Change". Zip default
+  **80218**, **never saved**; straight-line distance from Census zip centroids in `zips.json`. Theater
+  choices are saved in `localStorage` with the default set they were made against (changing `default_on`
+  resets everyone) · a sentence: "Showing everything / new releases / repertory by newest / trending /
+  title" · "Find a film" search (× clears it; Enter closes the phone keyboard).
   - **Newest:** new releases by Denver **release week** (Friday–Thursday; Wed/Thu previews count
     toward the Friday they lead into, `releaseWeek()`), latest and upcoming first, **Trending within
-    a week**; then repertory by original release; special events last.
-- **Cards:** poster, TMDB title, year · rating · runtime · format tags · "Opening week" (first
-  7 days in Denver) / "Opens Nov 19", times grouped by theater, "View on Letterboxd". **Posters:** TMDB `w500`
-  first, other theaters' art next, Fandango (600 px renderer) last, then a typeset placeholder; the
-  scraper drops Fandango URLs that are the placeholder itself. Long lists clamp behind "Show all N
-  theaters" (`clampVenues()`).
-- **Schedule:** the day in time order (Morning/Afternoon/Evening/Late; earlier-today rows behind a
-  button). Desktop: sticky right column; phone: Films / Schedule toggle.
+    a week**; then repertory by original release; special events last. With "everything" + newest,
+    a day splits into **New releases / Repertory / One night only**. Films without the data sort last.
+- **Cards:** poster, "Opening week" (first 7 days in Denver) / "Opens Nov 19", the title in condensed
+  caps, then times by theater as plain text ("11:50 am 1:45 pm 4:30 7:15": am/pm only where it changes;
+  a format all of a theater's showings share goes on the theater line, "Mayan, Scope"). **Tap the
+  poster** for the details over it: director(s), country (non-US), year, runtime, rating, TMDB synopsis,
+  Letterboxd link (`film_meta.directors` / `.countries` / `.overview`, from the same TMDB request with
+  `append_to_response=credits`). Special events have no details, so their poster isn't a button.
+  **Posters:** TMDB `w500` first, other theaters' art next, Fandango (600 px renderer) last, then the
+  title set white on black. Long lists clamp behind "Show all times" (`clampVenues()`).
+- **By the hour:** the day in time order under big brick hour numerals (earlier-today rows behind a
+  button). Desktop: sticky right column; phone: Films / By the hour tabs.
 - **Next 2 weeks:** **Now playing** (a showing today at the selected theaters, or a new release already open in Denver whose next showing is within `RUN_GAP_DAYS` = 3 days; repertory and events need today; by the chosen sort) then **Coming soon** (everything else, repertory included, by its next showing); each
-  theater gets one line ("Nov 6–12 · 14 showings") and a "Next …" button. No schedule column.
+  theater gets one line ("Sie, Nov 6 to Nov 12, 14 showings") and a "Next …" button. No By the hour.
 - **Search** also shows matches beyond the selected theaters/day under "Also playing elsewhere"
   (e.g. Fjord, only at AMC Westminster).
 - **Tap a time** → sheet with Get tickets, Google, Outlook, Apple/.ics (ICS uses TZID America/Denver).
@@ -219,7 +228,7 @@ reports to Google. Title "Denver Movie Showtimes", upright (no italic). Theater 
 - **Privacy:** no cookies, no analytics. The only browser storage is the theater pick
   (`dst-theaters` in `localStorage`, never sent anywhere); the zip is never saved. Third-party
   requests are poster images only (TMDB, Fandango, theaters). Keep it that way.
-- **Footer** credits TMDB (logo + required notice) and Wikipedia, and links each theater company's site (one link per company).
+- **Footer** credits TMDB (logo + required notice; posters, directors and synopses) and Wikipedia, and links each theater company's site (one link per company).
 - **Cache-busting:** `index.html` loads `styles.css`/`app.js` with `?v=__ASSET_VERSION__`, replaced
   with the commit SHA on deploy; `data.json` is fetched `no-store`. OG tags use `__SITE_URL__`.
 
@@ -237,12 +246,3 @@ Bigger questions:
   private source repo; the workflow pushes only the built `public/` to a public repo (e.g. the
   org's `denvershowtimes.github.io`) with a deploy token secret. `data.json` stays public either
   way. Also trim the README to a few lines.
-- **Less "AI-built" look** (Corey wants individuality over polish; small readability tradeoffs
-  OK). Tells to remove: tiny all-caps labels (SHOW, SORT, NEAR), pill chips with dots and count
-  badges, "·" separators everywhere, warm-dark + terracotta + serif/grotesk defaults, thin rounded
-  bordered boxes and soft shadows, hover-zoom posters, a uniform card grid, helper sub-lines, every
-  showtime as a button. Directions to try: print film listings and rep-house calendars (plain-text
-  time runs, dense type, heavy rules instead of boxes, big day numerals); a real masthead
-  (condensed / marquee / letterboard); brick in bold blocks or a less expected second color; uneven
-  layout (a big poster for a featured film); a line of Corey's own notes. Start with 2–3 mockups
-  to compare before touching the live site; Corey has ideas of his own too.

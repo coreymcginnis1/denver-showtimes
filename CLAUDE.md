@@ -319,6 +319,8 @@ redesign directions" (A listings + C program won; B marquee rejected).
   data has no chain showtime ids). AMC and Regal block automated checks, so their pages came from search
   results; where none confirmed a theater's page (seven AMCs, Regal River Point, Harkins' JavaScript-only
   site) `site` is the chain's Denver / theater list. Swap in the real page when one is confirmed.
+- **No zoom on tap:** iOS zooms into any text field under 16px, so the search and zip fields are
+  16px on touch screens. Pinch-zoom is never disabled (no `maximum-scale`).
 - **Times read "3:00 pm"** (lowercase, no periods; `hm12()`); digits tabular, "am/pm" in `.ap`.
 - "Floating time": the ISO offset is ignored, so every viewer sees Denver wall-clock times; "now"
   (for dimming past showtimes) is computed in America/Denver. A tab left open overnight reloads when

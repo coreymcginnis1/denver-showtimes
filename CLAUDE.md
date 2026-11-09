@@ -75,7 +75,7 @@ Tests never touch the network (`tests/conftest.py` unsets tokens and stubs Wikip
 
 ### `data.json`
 
-`theaters` (key, name, color, default_on, lat, lon) · `films` · `events` (`id`, `title`, `start`,
+`theaters` (key, name, color, default_on, lat, lon, optional `site`) · `films` · `events` (`id`, `title`, `start`,
 optional `end`/`allDay`, `extendedProps`: `theater`, `screen`, `fmt`, `ticketUrl`, `poster`,
 `lang`, `rating`, `runtime`, `year`, `release`) · `film_meta` (displayed title → TMDB data:
 `directors`, `cast` (top five billed), `genres`, `countries`, `overview`, `trend`, `wiki_views`, …) · `tmdb_ids` (local title → TMDB id) · `openings` (title → Denver opening date) ·
@@ -301,7 +301,12 @@ redesign directions" (A listings + C program won; B marquee rejected).
   selected day and theaters, split into "Playing on other dates" (your theaters) and "Playing at
   other theaters" (e.g. Fjord, only at AMC Westminster).
 - **Tap a time** → sheet with Get tickets and one "Add to calendar" button that opens Google, Outlook,
-  Apple/.ics (ICS uses TZID America/Denver).
+  Apple/.ics (ICS uses TZID America/Denver). Fandango showings read "Get tickets on Fandango" (straight to
+  the seats) with "Or buy from AMC directly" under it: the theater's own page (`site` in config.toml;
+  skips Fandango's fee and earns the chain's rewards, but the reader picks the time again, as Fandango's
+  data has no chain showtime ids). AMC and Regal block automated checks, so their pages came from search
+  results; where none confirmed a theater's page (seven AMCs, Regal River Point, Harkins' JavaScript-only
+  site) `site` is the chain's Denver / theater list. Swap in the real page when one is confirmed.
 - **Times read "3:00 pm"** (lowercase, no periods; `hm12()`); digits tabular, "am/pm" in `.ap`.
 - "Floating time": the ISO offset is ignored, so every viewer sees Denver wall-clock times; "now"
   (for dimming past showtimes) is computed in America/Denver. A tab left open overnight reloads when

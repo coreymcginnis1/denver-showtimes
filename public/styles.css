@@ -211,6 +211,8 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .btn.primary { background: var(--ink); color: var(--paper); }
 @media (hover: hover) { .btn.primary:hover { background: var(--brick); border-color: var(--brick); color: var(--paper); } }
 .btn-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+.actions .alt { display: flex; align-items: center; justify-content: center; min-height: 36px; margin-top: -4px; font-size: 14px;
+  text-decoration: underline; text-underline-offset: 3px; }
 .btn-row[hidden] { display: none; }
 
 /* ---- Footer ------------------------------------------------------------ */

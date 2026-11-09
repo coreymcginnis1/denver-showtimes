@@ -629,6 +629,17 @@
     return { google: google, outlook: outlook, ics: URL.createObjectURL(new Blob([ics], { type: "text/calendar;charset=utf-8" })), end: e };
   }
 
+  // Fandango's links go straight to the seats; the theater's own site skips Fandango's fee and earns
+  // the chain's rewards, but needs the time picked again (Fandango's data has no chain showtime ids).
+  var CHAINS = [["amctheatres.com", "AMC"], ["regmovies.com", "Regal"], ["harkins.com", "Harkins"], ["cinemark.com", "Cinemark"],
+    ["emagine-entertainment.com", "Emagine"], ["marcustheatres.com", "Movie Tavern"]];
+  function chainOf(url) {
+    var host = ""; try { host = new URL(url).hostname; } catch (e) { return "the theater"; }
+    for (var n = 0; n < CHAINS.length; n++) if (host === CHAINS[n][0] || host.slice(-CHAINS[n][0].length - 1) === "." + CHAINS[n][0]) return CHAINS[n][1];
+    return "the theater";
+  }
+  function isFandango(url) { try { return /(^|\.)fandango\.com$/.test(new URL(url).hostname); } catch (e) { return false; } }
+
   var lastFocus = null, icsUrl = null;
   function openSheet(i) {
     var s = shows[i], f = films[s.f], t = theaterOf(s.th) || { name: s.th };
@@ -640,7 +651,8 @@
       (f.posters.length ? posterHTML(s.f, "sheet-poster") : '<div class="ph"></div>') +
       '<div><h3 id="sheetT">' + esc(f.t) + '</h3><div class="when">' + when + "</div>" +
       '<div class="where">' + esc(where) + (s.hm && !s.end && !f.runtime ? ", runtime unknown, 2h assumed" : "") + "</div></div>" +
-      '<div class="actions">' + (s.url ? '<a class="btn primary" href="' + esc(s.url) + '" target="_blank" rel="noopener">Get tickets</a>' : "") +
+      '<div class="actions">' + (s.url ? '<a class="btn primary" href="' + esc(s.url) + '" target="_blank" rel="noopener">Get tickets' + (isFandango(s.url) ? " on Fandango" : "") + "</a>" : "") +
+      (s.url && isFandango(s.url) && t.site ? '<a class="alt" href="' + esc(t.site) + '" target="_blank" rel="noopener">Or buy from ' + esc(chainOf(t.site)) + " directly</a>" : "") +
       // One "Add to calendar" button; its three choices open under it, so tickets stay the big button.
       (links ? '<button type="button" class="btn" id="calToggle" aria-expanded="false" aria-controls="calOpts">Add to calendar</button>' +
         '<div class="btn-row" id="calOpts" hidden><a class="btn" href="' + esc(links.google) + '" target="_blank" rel="noopener">Google</a>' +

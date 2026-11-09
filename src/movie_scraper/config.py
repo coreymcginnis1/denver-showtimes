@@ -17,6 +17,7 @@ class TheaterCfg(BaseModel):
     location: Optional[str] = None   # scraper-specific id (Alamo venue / Fandango theater id)
     lat: Optional[float] = None      # where the theater is, for the site's distance-from-zip filter
     lon: Optional[float] = None
+    site: Optional[str] = None       # the theater's own page, for "Or buy from AMC directly" (Fandango theaters)
 
 
 class Filters(BaseModel):

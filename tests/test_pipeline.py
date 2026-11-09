@@ -255,6 +255,17 @@ def test_every_theater_within_15_miles_is_configured():
     assert [k for k, t in c.theaters.items() if t.default_on] == ["sie", "landmark"]
 
 
+def test_fandango_theaters_link_their_own_site():
+    c = fresh_cfg()
+    fandango = {k: t for k, t in c.theaters.items() if t.scraper == "fandango"}
+    assert fandango and all((t.site or "").startswith("https://") for t in fandango.values())
+    assert c.theaters["amc_highlands_ranch"].site.endswith("/amc-highlands-ranch-24")
+    feed = _build_feed(c, [st("A", 19, "amc")], DEN)
+    by_key = {t["key"]: t for t in feed["theaters"]}
+    assert by_key["amc_highlands_ranch"]["site"].startswith("https://www.amctheatres.com/")
+    assert "site" not in by_key["sie"]                        # sells its own tickets: nothing to add
+
+
 def test_build_feed_carries_default_on():
     c = fresh_cfg()
     feed = _build_feed(c, [st("A", 19, "amc")], DEN)

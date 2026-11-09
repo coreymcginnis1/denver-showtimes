@@ -30,7 +30,11 @@ scraper = "fandango"
 location = "AAYUA"                # Fandango theater id
 lat = 39.7296
 lon = -104.9412
+site = "https://www.amctheatres.com/movie-theatres/denver"
 
+# `site`: the theater's own page, offered as "Or buy from AMC directly" next to Fandango's link. Where
+# the chain blocks automated checks and no search result confirmed the theater's page (several AMCs,
+# Regal River Point, Harkins' JavaScript-only site), it's the chain's Denver / theater list instead.
 # --- Secondary theaters: scraped but their filter chip starts OFF (default_on = false). ---
 # They occasionally carry indies/70mm/IMAX you can't find at the three above; readers opt in by
 # clicking the chip. `scraper` reuses another class; `location` is that scraper's theatre id.
@@ -47,6 +51,7 @@ scraper = "fandango"
 location = "AAJJG"
 lat = 39.7438
 lon = -104.99
+site = "https://www.regmovies.com/theatres/regal-ua-denver-pavilions-rpx-1315"
 
 [theaters.alamo_sloans]
 enabled = true
@@ -87,6 +92,7 @@ scraper = "fandango"
 location = "AAFXW"
 lat = 39.6802
 lon = -104.94
+site = "https://www.regmovies.com/theatres/regal-ua-colorado-center-1308"
 
 [theaters.amc_westminster]
 enabled = true
@@ -97,6 +103,7 @@ scraper = "fandango"
 location = "AAECN"
 lat = 39.8897
 lon = -105.0723
+site = "https://www.amctheatres.com/movie-theatres/denver/amc-westminster-promenade-24"
 
 [theaters.landmark_greenwood]
 enabled = true
@@ -117,6 +124,7 @@ scraper = "fandango"
 location = "AAYFG"                # Fandango theater id
 lat = 39.7917
 lon = -105.081
+site = "https://www.harkins.com/theatres"
 
 [theaters.harkins_northfield]
 enabled = true
@@ -127,6 +135,7 @@ scraper = "fandango"
 location = "AATYG"                # Fandango theater id
 lat = 39.7851
 lon = -104.8919
+site = "https://www.harkins.com/theatres"
 
 # --- Every other theater within 15 mi of 80218 (Fandango, checked Nov 2026), added so readers
 # can find the ones nearest them; all start unchecked. Just past 15 mi: AMC Orchard 12,
@@ -141,6 +150,7 @@ scraper = "fandango"
 location = "AAADR"
 lat = 39.7157
 lon = -104.9526
+site = "https://www.amctheatres.com/movie-theatres/denver/amc-dine-in-cherry-creek-8"
 
 [theaters.cinemark_belmar]
 enabled = true
@@ -151,6 +161,7 @@ scraper = "fandango"
 location = "AARMQ"
 lat = 39.7088
 lon = -105.0764
+site = "https://www.cinemark.com/theatres/co-lakewood/cinemark-century-bel-mar-16-and-xd"
 
 [theaters.regal_river_point]
 enabled = true
@@ -161,6 +172,7 @@ scraper = "fandango"
 location = "AAVKZ"
 lat = 39.652
 lon = -105.0099
+site = "https://www.regmovies.com/"
 
 [theaters.cinemark_aurora]
 enabled = true
@@ -171,6 +183,7 @@ scraper = "fandango"
 location = "AAJNI"
 lat = 39.706
 lon = -104.8207
+site = "https://www.cinemark.com/theatres/co-aurora/cinemark-century-aurora-and-xd"
 
 [theaters.regal_southglenn]
 enabled = true
@@ -181,6 +194,7 @@ scraper = "fandango"
 location = "AAVRY"
 lat = 39.5904
 lon = -104.9638
+site = "https://www.regmovies.com/theatres/regal-southglenn-1610"
 
 [theaters.regal_colorado_mills]
 enabled = true
@@ -191,6 +205,7 @@ scraper = "fandango"
 location = "AAQQK"
 lat = 39.7342
 lon = -105.1594
+site = "https://www.regmovies.com/theatres/regal-ua-colorado-mills-1550"
 
 [theaters.amc_bowles]
 enabled = true
@@ -201,6 +216,7 @@ scraper = "fandango"
 location = "AABAT"
 lat = 39.6098
 lon = -105.0912
+site = "https://www.amctheatres.com/movie-theatres/denver"
 
 [theaters.amc_highlands_ranch]
 enabled = true
@@ -211,6 +227,7 @@ scraper = "fandango"
 location = "AAECM"
 lat = 39.5603
 lon = -104.9911
+site = "https://www.amctheatres.com/movie-theatres/denver/amc-highlands-ranch-24"
 
 [theaters.movie_tavern_aurora]
 enabled = true
@@ -221,6 +238,7 @@ scraper = "fandango"
 location = "AAUFX"
 lat = 39.6547
 lon = -104.7703
+site = "https://www.marcustheatres.com/theatre-locations/movie-tavern-aurora"
 
 [theaters.amc_arapahoe]
 enabled = true
@@ -231,6 +249,7 @@ scraper = "fandango"
 location = "AAEWN"
 lat = 39.5943
 lon = -104.8008
+site = "https://www.amctheatres.com/movie-theatres/denver"
 
 # --- Out to 30 mi (Nov 2026): Boulder's two film venues and every chain theater between 15 and
 # 30 mi, Longmont's Regal right on the line. All start unchecked. ---
@@ -263,6 +282,7 @@ scraper = "fandango"
 location = "AAUUN"
 lat = 39.958
 lon = -104.9937
+site = "https://www.amctheatres.com/movie-theatres/denver"
 
 [theaters.amc_flatiron]
 enabled = true
@@ -273,6 +293,7 @@ scraper = "fandango"
 location = "AAQBW"
 lat = 39.9296
 lon = -105.1371
+site = "https://www.amctheatres.com/movie-theatres/denver/amc-flatiron-crossing-14"
 
 [theaters.amc_southlands]
 enabled = true
@@ -283,6 +304,7 @@ scraper = "fandango"
 location = "AATXU"
 lat = 39.6067
 lon = -104.709
+site = "https://www.amctheatres.com/movie-theatres/denver"
 
 [theaters.emagine_parker]
 enabled = true
@@ -293,6 +315,7 @@ scraper = "fandango"
 location = "AAQPS"
 lat = 39.5202
 lon = -104.7726
+site = "https://www.emagine-entertainment.com/theatres/emagine-parker/"
 
 [theaters.amc_brighton]
 enabled = true
@@ -303,6 +326,7 @@ scraper = "fandango"
 location = "AATIQ"
 lat = 39.9826
 lon = -104.8234
+site = "https://www.amctheatres.com/movie-theatres/denver"
 
 [theaters.amc_castle_rock]
 enabled = true
@@ -313,6 +337,7 @@ scraper = "fandango"
 location = "AATTI"
 lat = 39.4031
 lon = -104.8797
+site = "https://www.amctheatres.com/movie-theatres/denver"
 
 [theaters.cinemark_boulder]
 enabled = true
@@ -323,6 +348,7 @@ scraper = "fandango"
 location = "AAUNI"
 lat = 40.0166
 lon = -105.2561
+site = "https://www.cinemark.com/theatres/co-boulder/cinemark-century-boulder"
 
 [theaters.regal_longmont]
 enabled = true
@@ -333,6 +359,7 @@ scraper = "fandango"
 location = "AAHTU"
 lat = 40.1481
 lon = -105.1281
+site = "https://www.regmovies.com/theatres/regal-village-at-the-peaks-rpx-1673"
 
 # Title standardization: strip repertory/event series labels from the START of a
 # film title (the label plus its ":" / "–" / "-" separator), so e.g.

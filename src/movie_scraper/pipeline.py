@@ -423,7 +423,7 @@ def _build_feed(cfg: Config, shows: list[Showtime], tz: ZoneInfo,
         "generated_at": datetime.now(tz).isoformat(),
         "timezone": cfg.timezone,
         "theaters": [{"key": k, "name": t.name, "color": t.color, "default_on": t.default_on,
-                      "lat": t.lat, "lon": t.lon}
+                      "lat": t.lat, "lon": t.lon, **({"site": t.site} if t.site else {})}
                      for k, t in cfg.theaters.items() if t.enabled],
         "films": films,
         "stale_theaters": list(stale),   # failed this run; their events are from the last feed

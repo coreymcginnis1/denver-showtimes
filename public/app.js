@@ -182,12 +182,12 @@
 
   function renderDays() {
     $("days").innerHTML = '<button type="button" class="day" data-d="' + ALL + '" aria-pressed="' + (state.day === ALL) + '">' +
-      '<span class="dw">Next</span><span class="dn">2 wks</span></button>' + days.map(function (d, n) {
+      '<span class="dm">Next</span><span class="dn">2</span><span class="dw">weeks</span></button>' + days.map(function (d, n) {
       var rel = relDay(d), o = dateObj(d), wd = o.toLocaleDateString("en-US", { weekday: "short" });
-      // "Tue Nov" over a big "10": always the weekday, never "Today"/"Tomorrow", so every day keeps the
-      // same width; the month on every day so the strip reads right across Nov into Dec.
+      // Like a tear-off calendar: "Nov" over a big "10" over "Tue". Always the weekday, never "Today",
+      // so every day keeps the same width; the month on every day reads right across Nov into Dec.
       return '<button type="button" class="day" data-d="' + d + '" aria-pressed="' + (d === state.day) + '" aria-label="' + (rel ? rel + ", " : "") + longDate(d) + '">' +
-        '<span class="dw">' + wd + " " + o.toLocaleDateString("en-US", { month: "short" }) + '</span><span class="dn">' + o.getDate() + "</span></button>";
+        '<span class="dm">' + o.toLocaleDateString("en-US", { month: "short" }) + '</span><span class="dn">' + o.getDate() + '</span><span class="dw">' + wd + "</span></button>";
     }).join("");
     $("when").textContent = state.day === ALL ? "The next two weeks, " + shortDate(days[0]) + " to " + shortDate(days[days.length - 1])
       : longDate(state.day);
@@ -310,7 +310,7 @@
         .forEach(function (s) { if (!venues.has(s.th)) venues.set(s.th, []); venues.get(s.th).push(s); });
       var since = f.opened ? dayDiff(f.opened, asSpan ? days[0] : state.day) : null;
       var fresh = f.rep || f.event || since == null ? "" : since < 0 ? "Opens " + shortDate(f.opened) : since <= 6 ? "Opening week" : "";
-      var flag = fresh;
+      var flag = f.event ? "Special event" : fresh;   // events (no TMDB match) say so; they sort and behave differently
       // "Indie" and "International" tags are on hold (Nov 2026): the Indie guess (TMDB lists
       // producers, not distributors) wasn't reliable, and Corey wants both or neither. The data
       // (film_meta.indie / .intl) is still in data.json.
@@ -359,7 +359,7 @@
           '<div class="grid">' + soon.map(function (i) { return cardHTML(i); }).join("") + "</div>" : "");
     } else if (state.kind === "all") {   // everything: new releases, then repertory, then one-offs, each in the chosen sort
       $("grid").innerHTML = [["New releases", function (f) { return !f.rep && !f.event; }], ["Repertory", function (f) { return f.rep && !f.event; }],
-        ["One night only", function (f) { return f.event; }]].map(function (g) {
+        ["Special events", function (f) { return f.event; }]].map(function (g) {
         var part = ids.filter(function (i) { return g[1](films[i]); });
         return part.length ? '<h3 class="group">' + g[0] + '</h3><div class="grid">' + part.map(function (i) { return cardHTML(i); }).join("") + "</div>" : "";
       }).join("") || '<p class="empty">No match at these theaters on this day.</p>';
@@ -401,16 +401,15 @@
     if (!ds.length) { $("sched").innerHTML = '<p class="empty">No showtimes match.</p>'; return; }
     var hours = new Map();
     shown.forEach(function (s) { var h = s.hm.slice(0, 2); if (!hours.has(h)) hours.set(h, []); hours.get(h).push(s); });
-    var html = shown.length ? "" : '<p class="empty">Everything has started for today.</p>', lastHalf = null;
+    var html = shown.length ? "" : '<p class="empty">Everything has started for today.</p>';
     hours.forEach(function (rows, h) {
       var n = +h, half = n < 12 ? "am" : "pm";
-      html += '<div class="hour"><p class="h">' + ((n % 12) || 12) + (half !== lastHalf ? "<small>" + half + "</small>" : "") + '</p><div class="rows">' +
+      html += '<div class="hour"><p class="h">' + ((n % 12) || 12) + "<small>" + half + "</small>" + '</p><div class="rows">' +
         rows.map(function (s) {
           var f = films[s.f], extra = [s.fmt === "Premium Format" ? "Premium" : s.fmt].filter(Boolean).join("");
           return '<button type="button" class="row' + (isPast(s) ? " past" : "") + '" data-i="' + shows.indexOf(s) + '"><b>' + hm12(s.hm).replace(" ", "\u2009") +
             '</b> <span class="ft">' + esc(f.t) + '</span> <span class="th">' + esc(TINY[s.th] || tName(s.th)) + (extra ? ", " + esc(extra) : "") + "</span></button>";
         }).join("") + "</div></div>";
-      lastHalf = half;
     });
     if (past.length) html += '<button type="button" class="earlier" id="earlier">' + (state.showEarlier ? "Hide " : "Show ") + past.length + " earlier today</button>";
     $("sched").innerHTML = html;

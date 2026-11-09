@@ -134,8 +134,8 @@ year appended.
 - Wrong or missing match → `[tmdb.overrides]` (local title → id from themoviedb.org/movie/<id>).
   Matches are remembered in `tmdb_ids`.
 - **Special events = no TMDB movie match:** TV episodes (Heated Rivalry), double features, shorts
-  programs, one-night events. The site sorts them last, leaves them out of New releases /
-  Repertory, and gives them no "new" tag. A real film missing from TMDB lands here too — fix with
+  programs, one-night events. The site tags them "Special event", sorts them last (their own
+  section under Show All), leaves them out of New releases / Repertory, and gives them no "new" tag. A real film missing from TMDB lands here too — fix with
   an override.
 
 ### New-titles digest
@@ -198,7 +198,7 @@ and familiar beats strict consistency there. Mockups: claude.ai canvas "Denver S
 redesign directions" (A listings + C program won; B marquee rejected).
 
 - **Controls:** masthead "Denver Movie Showtimes" with the chosen date under it · sticky day strip
-  ("Next 2 wks", then the weekday, never "Today", "Tue Nov" over a big "10", every day the same width; the selected day is a brick block) · **Theaters**:
+  ("Next 2 wks", then the weekday, never "Today", "Nov" over a big "10" over "Tue", like a tear-off calendar, every day the same width; the selected day is a brick block) · **Theaters**:
   "Theaters near [zip] within 1 mi / 3 mi / 5 mi / any distance" and a checklist of all ten nearest first
   with miles in one row that scrolls sideways (no counts, no theater colors). Phones fold it to "At Sie and Mayan · Change". Zip default
   **80218**, **never saved**; straight-line distance from Census zip centroids in `zips.json`. Theater
@@ -208,7 +208,7 @@ redesign directions" (A listings + C program won; B marquee rejected).
   - **Newest:** new releases by Denver **release week** (Friday–Thursday; Wed/Thu previews count
     toward the Friday they lead into, `releaseWeek()`), latest and upcoming first, **Trending within
     a week**; then repertory by original release; special events last. With Show **All** (any sort),
-    a day always splits into **New releases / Repertory / One night only**, each in the chosen sort. Films without the data sort last.
+    a day always splits into **New releases / Repertory / Special events**, each in the chosen sort. Films without the data sort last.
 - **Cards:** poster, "Opening week" (first 7 days in Denver) / "Opens Nov 19", the title (bold condensed, its own capitalization),
   then times by theater as plain text ("11:50 am 1:45 pm 4:30 pm", every time with its am/pm;
   a format all of a theater's showings share goes on the theater line, "Mayan, Scope"). **Tap the
@@ -218,7 +218,7 @@ redesign directions" (A listings + C program won; B marquee rejected).
   `append_to_response=credits`). Special events have no details, so their poster isn't a button.
   **Posters:** TMDB `w500` first, other theaters' art next, Fandango (600 px renderer) last, then the
   title set white on black. Long lists clamp behind "Show all times" (`clampVenues()`).
-- **Schedule:** the day in time order under big brick hour numerals (earlier-today rows behind a
+- **Schedule:** the day in time order under big brick hour numerals, each with its am/pm (earlier-today rows behind a
   button). Desktop: sticky right column; phone: Films / Schedule tabs.
 - **Next 2 weeks:** **Now playing** (a showing today at the selected theaters, or a new release already open in Denver whose next showing is within `RUN_GAP_DAYS` = 3 days; repertory and events need today; by the chosen sort) then **Coming soon** (everything else, repertory included, by its next showing); each
   theater gets one line with its next showing ("Alamo Sat Nov 7, 5:00 pm through Nov 11"), soonest first; three show, the rest behind "Show all N theaters" (`SPAN_SHOWN`). Search's "Also playing elsewhere" cards work the same way. No schedule column.

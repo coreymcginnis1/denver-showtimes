@@ -320,12 +320,14 @@
         : function (a, b) { return order.indexOf(a[0]) - order.indexOf(b[0]); });
       var vhtml = vlist.map(function (e, k) {
         var t = theaterOf(e[0]) || {};
-        if (asSpan) {   // one line per theater, "Alamo  Sat Nov 7, 5:00 pm": its next showing; the first 3, then "Show all"
-          var first = e[1][0], o = dateObj(first.d), name = esc(TINY[e[0]] || tName(e[0]));
+        if (asSpan) {   // one line per theater, "Alamo  Sat Nov 7, 5:00 pm  through Nov 11"; the first 3, then "Show all"
+          var first = e[1][0], last = e[1][e[1].length - 1], o = dateObj(first.d), name = esc(TINY[e[0]] || tName(e[0]));
           var day = o.toLocaleDateString("en-US", { weekday: "short" }) + " " + shortDate(first.d);
           return '<div class="venue line' + (k >= SPAN_SHOWN ? " extra" : "") + '"><span class="vn">' + name + '</span><button type="button" class="time next" data-i="' +
             shows.indexOf(first) + '" aria-label="' + esc(f.t) + ", next showing " + longDate(first.d) + " " + (first.hm ? longTime(first.hm) : "") + ", " + esc(t.name || "") + '">' +
-            day + (first.hm ? ', <span class="nw">' + timeHTML(first.hm) + "</span>" : "") + "</button></div>";
+            day + (first.hm ? ', <span class="nw">' + timeHTML(first.hm) + "</span>" : "") + "</button>" +
+            // How long it runs here, quietly after the next showing: "through Nov 11".
+            (last.d !== first.d ? '<span class="thru">through ' + shortDate(last.d) + "</span>" : "") + "</div>";
         }
         // A format every showing here shares ("Mayan, Scope") goes with the theater, not on each time.
         var fm = e[1].map(function (s) { return s.fmt || ""; }), one = fm.every(function (x) { return x === fm[0]; }) ? fm[0] : null;
@@ -334,7 +336,8 @@
       }).join("");
       return '<article class="card"><div class="poster">' + posterBlock(i) + "</div>" +
         (flag ? '<p class="flag">' + esc(flag) + "</p>" : "") +
-        '<h3 class="title">' + esc(f.t) + "</h3>" +
+        // The title opens the details too: people tap titles, and it's the hint the poster needs.
+        '<h3 class="title">' + (f.event ? esc(f.t) : '<button type="button" data-p="' + i + '" aria-expanded="' + (state.open === i) + '">' + esc(f.t) + "</button>") + "</h3>" +
         '<div class="venues">' + vhtml + "</div>" +
         (asSpan && vlist.length > SPAN_SHOWN ? '<button type="button" class="more all">Show all ' + vlist.length + " theaters</button>" : "") +
         '<button type="button" class="more" hidden>Show all times</button></article>';

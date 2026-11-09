@@ -38,8 +38,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 :focus-visible { outline: 2px solid var(--brick); outline-offset: 2px; }
 .wrap { max-width: 1240px; margin: 0 auto; }
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
-/* The condensed display voice: masthead, section heads, film titles, day and hour numerals. */
-.cond { font-weight: 900; font-stretch: 70%; text-transform: uppercase; line-height: .95; }
+
 
 /* ---- Masthead ---------------------------------------------------------- */
 .mast { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 10px 24px;
@@ -124,8 +123,18 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .info a { margin-top: auto; padding-top: 6px; color: var(--paper); text-decoration: underline; cursor: pointer; }
 .info a:hover { color: #f0b6a6; }
 .flag { margin: 0 0 3px; font-size: 13px; color: var(--brick); font-weight: 700; }
-.title { margin: 0 0 8px; font-weight: 900; font-stretch: 70%; font-size: 28px; line-height: .95; text-transform: uppercase;
+/* Film titles in their own capitalization (easier to read than caps, and long titles stay short);
+   caps are kept for the masthead and section heads, the structure of the page. */
+.title { margin: 0 0 8px; font-weight: 800; font-stretch: 75%; font-size: 26px; line-height: 1.02; letter-spacing: -0.005em;
   overflow-wrap: anywhere; text-wrap: balance; }
+.title button { text-align: left; }
+.title button:hover { color: var(--brick); }
+/* The poster says it opens without a mark: a pointer, and on hover it dims a touch and the title
+   underlines with it. */
+.poster > button { cursor: pointer; }
+.poster > button img { transition: filter .15s ease; }
+.card:has(.poster > button:hover) .poster img, .card:has(.title button:hover) .poster img { filter: brightness(.82); }
+.card:has(.poster > button:hover) .title button { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 4px; }
 .venues { display: grid; gap: 6px; }
 .venue .vn { display: block; color: var(--muted); font-size: 14px; }
 .times { display: flex; flex-wrap: wrap; column-gap: 12px; }
@@ -140,6 +149,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .venue.line { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 8px; }
 .venue.line .vn { display: inline; }
 .venue.line .time.next { font-size: 15px; min-height: 26px; }
+.thru { color: var(--muted); font-size: 14px; }
 .card:not(.all-th) .venue.extra { display: none; }
 .venues.clamp { max-height: 210px; overflow: hidden; -webkit-mask: linear-gradient(#000 70%, #0000); mask: linear-gradient(#000 70%, #0000); }
 .more { margin-top: 6px; text-decoration: underline; font-size: 14px; }
@@ -164,7 +174,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .sheet { width: min(440px, 100%); background: var(--paper); border-top: 6px solid var(--ink); padding: 18px;
   display: grid; grid-template-columns: 84px minmax(0, 1fr); gap: 16px; }
 .sheet img, .sheet .ph { width: 84px; aspect-ratio: 2 / 3; object-fit: cover; background: var(--ink); border-radius: 3px; }
-.sheet h3 { margin: 0 0 6px; font-weight: 900; font-stretch: 70%; font-size: 28px; line-height: .95; text-transform: uppercase; overflow-wrap: anywhere; }
+.sheet h3 { margin: 0 0 6px; font-weight: 800; font-stretch: 75%; font-size: 26px; line-height: 1.02; overflow-wrap: anywhere; }
 .sheet .when { font-weight: 700; font-size: 16px; }
 .sheet .where { color: var(--muted); margin-top: 2px; }
 .actions { grid-column: 1 / -1; display: grid; gap: 8px; }
@@ -209,7 +219,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   .search { flex: 1; width: auto; }
   .sort + .sort { padding-left: 0; border-left: 0; }
   .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 14px; }
-  .title { font-size: 24px; }
+  .title { font-size: 22px; }
   .info { padding: 12px; font-size: 13px; gap: 6px; }
   .group { font-size: 30px; }
   .backdrop { place-items: end center; padding: 0; }

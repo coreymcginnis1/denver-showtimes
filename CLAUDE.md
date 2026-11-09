@@ -188,8 +188,9 @@ Each run lists titles new since the last (tracked in `known_titles.txt`; dry run
 
 Redesigned again Nov 2026 to look less generic ("less AI-built"; Corey prefers character over polish):
 a printed listings page, not an app. Near-white paper `--paper #f7f5f0`, black ink, newsletter brick
-`--brick #b83a22` as the one accent. **One typeface, Archivo** (variable weight + width, condensed caps
-for the masthead, section heads, film titles, day and hour numerals), **self-hosted** in
+`--brick #b83a22` as the one accent. **One typeface, Archivo** (variable weight + width): condensed **caps only for the masthead
+and section heads**; film titles bold condensed in their own capitalization (readability); big
+condensed day and hour numerals. Modern, not a newspaper pastiche, **self-hosted** in
 `public/fonts/` (latin + latin-ext woff2, OFL alongside) so no visit reports to Google. Heavy black
 rules instead of boxes; no pills, dots, count badges, shadows or "·" separators. Posters keep 3px
 corners. Corey kept the original Show / Sort toggles (small caps labels, 4px selected tint): clean
@@ -208,10 +209,11 @@ redesign directions" (A listings + C program won; B marquee rejected).
     toward the Friday they lead into, `releaseWeek()`), latest and upcoming first, **Trending within
     a week**; then repertory by original release; special events last. With Show **All** (any sort),
     a day always splits into **New releases / Repertory / One night only**, each in the chosen sort. Films without the data sort last.
-- **Cards:** poster, "Opening week" (first 7 days in Denver) / "Opens Nov 19", the title in condensed
-  caps, then times by theater as plain text ("11:50 am 1:45 pm 4:30 pm", every time with its am/pm;
+- **Cards:** poster, "Opening week" (first 7 days in Denver) / "Opens Nov 19", the title (bold condensed, its own capitalization),
+  then times by theater as plain text ("11:50 am 1:45 pm 4:30 pm", every time with its am/pm;
   a format all of a theater's showings share goes on the theater line, "Mayan, Scope"). **Tap the
-  poster** for the details over it: director(s), country (non-US), year, runtime, rating, TMDB synopsis,
+  poster or the title** for the details over the poster (no "i" mark: a pointer, and on hover the poster
+  dims and the title underlines): director(s), country (non-US), year, runtime, rating, TMDB synopsis,
   Letterboxd link (`film_meta.directors` / `.countries` / `.overview`, from the same TMDB request with
   `append_to_response=credits`). Special events have no details, so their poster isn't a button.
   **Posters:** TMDB `w500` first, other theaters' art next, Fandango (600 px renderer) last, then the
@@ -219,7 +221,7 @@ redesign directions" (A listings + C program won; B marquee rejected).
 - **Schedule:** the day in time order under big brick hour numerals (earlier-today rows behind a
   button). Desktop: sticky right column; phone: Films / Schedule tabs.
 - **Next 2 weeks:** **Now playing** (a showing today at the selected theaters, or a new release already open in Denver whose next showing is within `RUN_GAP_DAYS` = 3 days; repertory and events need today; by the chosen sort) then **Coming soon** (everything else, repertory included, by its next showing); each
-  theater gets one line with its next showing ("Alamo Sat Nov 7, 5:00 pm"), soonest first; three show, the rest behind "Show all N theaters" (`SPAN_SHOWN`). Search's "Also playing elsewhere" cards work the same way. No schedule column.
+  theater gets one line with its next showing ("Alamo Sat Nov 7, 5:00 pm through Nov 11"), soonest first; three show, the rest behind "Show all N theaters" (`SPAN_SHOWN`). Search's "Also playing elsewhere" cards work the same way. No schedule column.
 - **Search** also shows matches beyond the selected theaters/day under "Also playing elsewhere"
   (e.g. Fjord, only at AMC Westminster).
 - **Tap a time** → sheet with Get tickets and one "Add to calendar" button that opens Google, Outlook,

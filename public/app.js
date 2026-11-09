@@ -325,7 +325,7 @@
 
     if (!ids.length && !extraIds.length) {
       $("grid").innerHTML = '<p class="empty">' + (state.kind === "film" && !state.q
-        ? "Nothing is showing on film in the next two weeks. Prints are rare; check back, or see the theaters' sites."
+        ? "Nothing is showing on film in the next two weeks."
         : state.theaters.size ? "Nothing matches" + (all ? "" : " on this day") + ". Try " + (all ? "" : "another day, ") + "more theaters, or clear the search."
         : "Pick at least one theater above to see films.") + "</p>";
       return;

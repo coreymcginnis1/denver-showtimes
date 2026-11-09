@@ -49,8 +49,8 @@ scrapers → cleanup rules → TMDB match → trending, openings → public/data
   to +90, ~350 more showings); `openings` forget films
   400 days after they last opened; `film_meta`/`tmdb_ids` hold only current films. Events carry only
   the fields the site reads (no nulls), and each poster URL only on a film's first showing
-  (`_build_feed`; the page gathers posters per film), so with 22 theaters (~7,900 showings) a daily
-  data commit is ~4.6 MB raw, ~570 KB as served (gzip). Most of what's left is Fandango ticket
+  (`_build_feed`; the page gathers posters per film), so with 32 theaters (~10,400 showings) a daily
+  data commit is ~6.2 MB raw, ~775 KB as served (gzip). Most of what's left is Fandango ticket
   links (a unique hash each). Git history grows ~60–200 MB/year; don't rewrite history to trim it.
 
 ### Secrets (repository → Settings → Secrets and variables → Actions)
@@ -67,7 +67,8 @@ Tests never touch the network (`tests/conftest.py` unsets tokens and stubs Wikip
 
 - `src/movie_scraper/` — `python -m movie_scraper` (`--theater KEY`, `--dry-run`, `--output`,
   `--summary`, `--compare-trending`, `-v`). Python 3.11+; httpx, pydantic.
-  - `scrapers/` — `sie_eventive.py`, `landmark.py`, `alamo.py`, `fandango.py` (AMC/Regal/Harkins).
+  - `scrapers/` — `sie_eventive.py`, `landmark.py`, `alamo.py`, `fandango.py` (AMC/Regal/Harkins/
+    Cinemark/Emagine/Movie Tavern), `dairy.py` (Dairy Arts Center), `cu_ifs.py` (CU Film Series).
   - `pipeline.py` — cleanup, TMDB standardization, openings, trending, feed, run summary.
   - `tmdb.py` · `wikipedia.py` · `omdb.py` (off) · `formats.py` · `config.py` · `cli.py` · `models.py`.
 - `public/` — `index.html`, `styles.css`, `app.js` (vanilla, no build), `zips.json`,
@@ -78,7 +79,7 @@ Tests never touch the network (`tests/conftest.py` unsets tokens and stubs Wikip
 
 ### `data.json`
 
-`theaters` (key, name, color, default_on, lat, lon) · `films` · `events` (`id`, `title`, `start`,
+`theaters` (key, name, color, default_on, lat, lon, optional `site`) · `films` · `events` (`id`, `title`, `start`,
 optional `end`/`allDay`, `extendedProps`: `theater`, `screen`, `fmt`, `ticketUrl`, `poster`,
 `lang`, `rating`, `runtime`, `year`, `release`) · `film_meta` (displayed title → TMDB data:
 `directors`, `cast` (top five billed), `genres`, `countries`, `overview`, `trend`, `wiki_views`, …) · `tmdb_ids` (local title → TMDB id) · `openings` (title → Denver opening date) ·
@@ -86,9 +87,10 @@ optional `end`/`allDay`, `extendedProps`: `theater`, `screen`, `fmt`, `ticketUrl
 
 ## Theaters (`config.toml` `[theaters.*]`)
 
-Twenty-two theaters: **every year-round theater within 15 mi of 80218** (checked on Fandango Nov
-2026), so readers anywhere in the metro can find the ones nearest them. Sie and Landmark Mayan start
-on; the rest have `default_on = false`. One scraper can back several theaters via `scraper` +
+Thirty-two theaters: **every year-round theater within 30 mi of 80218** (checked on Fandango Nov
+2026; Longmont's Regal sits right on the line), plus Boulder's two film venues, so readers anywhere in
+the metro can find the ones nearest them. Sie and Landmark Mayan start on; the rest have
+`default_on = false`. One scraper can back several theaters via `scraper` +
 `location`. `lat`/`lon` drive the distance filter.
 
 | Theater | Source |
@@ -102,6 +104,10 @@ on; the rest have `default_on = false`. One scraper can back several theaters vi
 | Regal River Point / SouthGlenn / UA Colorado Mills | **Fandango**; AAVKZ / AAVRY / AAQQK |
 | Cinemark Century Bel Mar 16 and XD / Century Aurora and XD | **Fandango**; AARMQ / AAJNI |
 | Movie Tavern Aurora (Marcus) | **Fandango**; AAUFX |
+| AMC Orchard 12 / Flatiron Crossing 14 / Southlands 16 / Showplace Brighton 12 / Castle Rock 12 | **Fandango**; AAUUN / AAQBW / AATXU / AATIQ / AATTI |
+| Emagine Parker · Cinemark Century Boulder · Regal Village at the Peaks (Longmont) | **Fandango**; AAQPS · AAUNI · AAHTU |
+| Dairy Arts Center, Boulder (Boedecker + Gordon Gamm Theaters) | thedairy.org's The Events Calendar REST API, `/wp-json/tribe/events/v1/events?categories=cinema` (one ranged request, 90-day look-ahead; skips Cinema Club talks and youth board meetings by tag; strips the run dates from titles, "Queen at Sea \| Nov. 11 – 14") |
+| International Film Series (CU Boulder), Muenzinger Auditorium | CU's Localist calendar API, `calendar.colorado.edu/api/2/events?group_id=13934` (Film-type events only, 90-day look-ahead, 1 s between pages per robots.txt). internationalfilmseries.com refuses automated requests (403, robots.txt included), so it isn't touched; links go there. Most but maybe not all IFS films reach the campus calendar. |
 | Alamo Drafthouse Sloans Lake / Westminster / Littleton | `drafthouse.com/s/mother/v2/schedule/venue/<location>` (JSON, one request each, whole schedule); `sloans-lake` / `westminster` / `littleton` |
 
 - **AMC, Regal, Harkins, Cinemark and Movie Tavern come from Fandango:** amctheatres.com and
@@ -109,9 +115,12 @@ on; the rest have `default_on = false`. One scraper can back several theaters vi
   plain httpx, and its ticket links work. One request per theater per day (~0.3 s each), so the ten
   added in Nov 2026 cost under a minute a run. Fandango silently serves a grey "F" placeholder image
   when it lacks a poster.
-- **Coverage (Nov 2026):** Fandango's `napi/theaterswithshowtimes?zipCode=` returns only the nearest
-  21 per zip, so the 15 mi list was built from 80218 plus a ring of suburban zips. Just past 15 mi:
-  AMC Orchard 12, AMC Flatiron Crossing 14, AMC Southlands 16. Not on Fandango: the 88 Drive-In
+- **Coverage (Nov 2026):** Fandango's `napi/theaterswithshowtimes?zipCode=` / `napi/nearbyTheaters`
+  return only the nearest 21 per zip, so the lists were built from 80218 plus rings of suburban zips
+  out to 36 mi. Within 30 mi nothing on Fandango is left out. Boulder's Dairy blocks AI crawlers
+  (GPTBot, ClaudeBot) by name in robots.txt; our scraper identifies itself as `denver-showtimes-bot`
+  with the site's address (`base.USER_AGENT`), and its terms say nothing about automated access.
+  Radius map: claude.ai artifact "80218 Theater Radius". Not on Fandango: the 88 Drive-In
   (Commerce City, seasonal, first-run double features; would need its own scraper) and summer-only
   series (Elitch Theatre, Sunset Cinema, the Bug's occasional nights). Closed: the Esquire (July
   2024), Chez Artiste (Aug 2024), Denver Mart Drive-In (2021). The ten chains added Nov 2026 mostly
@@ -130,14 +139,16 @@ Prefer **general** patterns over one-offs.
 
 - `strip_prefixes` — series/presenter labels: Bleak Week, Scream Screen, The Popcorn List, Sci-Fi
   Film Series, Fan Faves, Staff Pick, Crunchyroll Anime Nights, Sie's "… Dose of Reality
-  [Screening]", any "<Presenter> Presents:".
+  [Screening]", any "<Presenter> Presents:", the Dairy's Friday Night Weird and Cinema Classics
+  (with Jeffrey Kash), CU's "Film Screening:".
 - `strip_suffixes` — release year `(2026)`, `Nth Anniversary` (paren/colon forms), `… Cut`,
   `… Edition`, `Re-release`/`Reissue`/`(RE26)`, `Encore`/`(2026 Encore)`, language versions
   (`(English 2026)`, `(Hindi Dubbed)`), `on 35mm` (gauge kept as the format), `(dir. X)`, Sensory
   Friendly, sponsor tags, Fan Event / Early Access / Promo / Preview screenings, `- Super Ticket`
-  (ticket bundles), `w/ …`.
+  (ticket bundles), `w/ …`, CU's `- Part of <festival>`, `- FREE SHOW`, `- <guests> in person!`,
+  `- IFS Underground`; `(Director's Cut)` in parentheses too.
 - `drop` — not films: mystery screenings (Screen Unseen, Mystery Movie, Harkins Secret Cinema,
-  Cinemark Secret Movie Series),
+  Cinemark Secret Movie Series, a bare "IFS Underground"),
   private rentals, members-only, memorials, watch parties, live sports and esports. Concerts, opera,
   NT Live and TV-episode screenings are **kept**.
 - `normalize_title()` also fixes ALL-CAPS/lowercase titles and dangling `:`/`-`;
@@ -154,7 +165,10 @@ year appended.
   ": subtitle", possessive credits dropped, and a year hint — the year Sie/Landmark state beats
   Fandango's `releaseDate` (a revival's may be the re-release). No fuzzy guessing.
 - Wrong or missing match → `[tmdb.overrides]` (local title → id from themoviedb.org/movie/<id>).
-  Matches are remembered in `tmdb_ids`.
+  Matches are remembered in `tmdb_ids`. `0` means "not on TMDB" (an event sharing a film's name:
+  the Dairy's "Family Reunion" shorts night). `"Title @theater"` scopes an override to one theater
+  when two show different films under one title (`"Little Women @dairy"` = the 1933 one, while the
+  Alamos show 2019's); the two then read "Little Women (1933)" / "(2019)".
 - **Special events = no TMDB movie match:** TV episodes (Heated Rivalry), double features, shorts
   programs, one-night events. The site tags them "Special event", sorts them last (their own
   section under Show All), leaves them out of New releases / Repertory, and gives them no "new" tag. A real film missing from TMDB lands here too — fix with
@@ -222,12 +236,12 @@ redesign directions" (A listings + C program won; B marquee rejected).
 - **Controls:** masthead "Denver Movie Showtimes" with the chosen date under it · sticky day strip
   ("All dates", then the weekday, never "Today", "Nov" over a big "10" over "Tue", like a tear-off calendar, every day the same width; the selected day is a brick block) · **Theaters**:
   "Theaters near [zip] within 1 mi / 3 mi / 5 mi / any distance" (no 10 mi on purpose: past
-  5 mi, readers pick a specific theater by name) and a checklist of all 22 nearest first
+  5 mi, readers pick a specific theater by name) and a checklist of all 32 nearest first
   with miles in one row that scrolls sideways: no scrollbar, the side with more fades and gets a ‹ / ›
   arrow (no counts, no theater colors). **Phones** fold theaters *and* Show/Sort into one line, "At Sie
   and Mayan, all films, newest first · Change", with search under it; opened, the checklist runs top
   to bottom with the 5 nearest plus checked ones further out when there are at most 3 (`TK_SHOWN`,
-  `TK_CHECKED`; picked on open / zip / distance / collapse, not per tap) and "Show all 22 theaters" /
+  `TK_CHECKED`; picked on open / zip / distance / collapse, not per tap) and "Show all 32 theaters" /
   "Show fewer theaters", so Show / Sort stay close. Expanded, "Show fewer theaters" sticks to the
   bottom of the screen until the list ends. Hover colors
   only apply under `(hover: hover)` (a tap leaves :hover stuck on phones). The masthead is one line and
@@ -242,7 +256,8 @@ redesign directions" (A listings + C program won; B marquee rejected).
   at these theaters on this day. Try All dates or more theaters." (Its own "On film on other dates /
   at other theaters" sections were dropped Nov 2026 as clutter.)
   **Look-ahead** (`ahead_days = 90`, `fetch_ahead()`): sources that can look months out cheaply (Sie,
-  one request a week; Landmark, one ranged request; the three Alamos, their full feeds) report **everything** up to 90
+  one request a week; Landmark, one ranged request; the three Alamos, their full feeds; the Dairy and
+  CU's calendar, one ranged request each) report **everything** up to 90
   days; Fandango (a request per day per theater) stops at 14. The day strip stays at `WINDOW_DAYS` = 14;
   later dates show only in All dates ("Further out") and search.
   - **Newest:** new releases by Denver **release week** (Friday–Thursday; Wed/Thu previews count
@@ -265,7 +280,7 @@ redesign directions" (A listings + C program won; B marquee rejected).
   button). Desktop: sticky right column that scrolls on its own with **no scrollbar**, like the
   theater row: the end with more fades out (`schedEdges()`). Phone: Films / Schedule tabs.
 - **All dates:** **Now playing** (a showing today at the selected theaters, or a new release already open in Denver whose next showing is within `RUN_GAP_DAYS` = 3 days; repertory and events need today; by the chosen sort) then **Coming soon** (everything else, repertory included, by its next showing); each
-  theater gets one line with its next showing ("Alamo Sat Nov 7, 5:00 pm through Nov 11"), soonest first; three show, the rest behind "Show all N theaters" (`SPAN_SHOWN`). Then **Further out**: films whose first showing is past the two weeks, soonest first, with the note "Sie, Landmark and Alamo only." Search's extra matches ("Playing on other dates" / "Playing at other theaters") work the same way. No schedule column.
+  theater gets one line with its next showing ("Alamo Sat Nov 7, 5:00 pm through Nov 11"), soonest first; three show, the rest behind "Show all N theaters" (`SPAN_SHOWN`). Then **Further out**: films whose first showing is past the two weeks, soonest first, with the note "Sie, Landmark, Alamo, Dairy and CU Film Series only." Search's extra matches ("Playing on other dates" / "Playing at other theaters") work the same way. No schedule column.
 - **Formats and languages** (`formats.py`, shared by every scraper; Corey's rule, Nov 2026): only
   formats people pick a showing for are named — **IMAX, IMAX 3D, IMAX 70mm, Dolby (Cinema), Dolby 3D,
   3D, 16mm, 35mm, 70mm, VistaVision**. Every other premium screen (AMC Prime, RPX, 4DX, ScreenX, Harkins
@@ -292,7 +307,12 @@ redesign directions" (A listings + C program won; B marquee rejected).
   selected day and theaters, split into "Playing on other dates" (your theaters) and "Playing at
   other theaters" (e.g. Fjord, only at AMC Westminster).
 - **Tap a time** → sheet with Get tickets and one "Add to calendar" button that opens Google, Outlook,
-  Apple/.ics (ICS uses TZID America/Denver).
+  Apple/.ics (ICS uses TZID America/Denver). Fandango showings read "Get tickets on Fandango" (straight to
+  the seats) with "Or buy from AMC directly" under it: the theater's own page (`site` in config.toml;
+  skips Fandango's fee and earns the chain's rewards, but the reader picks the time again, as Fandango's
+  data has no chain showtime ids). AMC and Regal block automated checks, so their pages came from search
+  results; where none confirmed a theater's page (seven AMCs, Regal River Point, Harkins' JavaScript-only
+  site) `site` is the chain's Denver / theater list. Swap in the real page when one is confirmed.
 - **Times read "3:00 pm"** (lowercase, no periods; `hm12()`); digits tabular, "am/pm" in `.ap`.
 - "Floating time": the ISO offset is ignored, so every viewer sees Denver wall-clock times; "now"
   (for dimming past showtimes) is computed in America/Denver. A tab left open overnight reloads when

@@ -13,6 +13,8 @@ from .config import Config, load_config
 from .models import Showtime
 from .scrapers.alamo import AlamoScraper
 from .scrapers.fandango import FandangoScraper
+from .scrapers.dairy import DairyScraper
+from .scrapers.cu_ifs import CuIfsScraper
 from .scrapers.landmark import LandmarkScraper
 from .scrapers.sie_eventive import SieScraper
 from .omdb import add_scores
@@ -29,6 +31,8 @@ SCRAPERS = {
     "landmark": LandmarkScraper,
     "alamo": AlamoScraper,
     "fandango": FandangoScraper,
+    "dairy": DairyScraper,
+    "cu_ifs": CuIfsScraper,
 }
 WEEKDAYS = {"mon": 0, "tue": 1, "wed": 2, "thu": 3, "fri": 4, "sat": 5, "sun": 6}
 
@@ -277,6 +281,13 @@ def standardize_titles(shows: list[Showtime], previous: dict | None, cfg: Config
     feed so next week reuses each match instead of searching again.
     """
     previous = previous or {}
+    # "Title @theater" overrides: two theaters can show different films under one title (the
+    # Alamos' Little Women is the 2019 one, the Dairy's the 1933 one), so that theater's showings
+    # are matched on their own. Unmatched, they fall back to the plain title below.
+    scoped = {k for k in cfg.tmdb.overrides if " @" in k}
+    for s in shows:
+        if f"{s.film_title} @{s.theater}" in scoped:
+            s.film_title = f"{s.film_title} @{s.theater}"
     by_id = {m["tmdb_id"]: m for m in (previous.get("film_meta") or {}).values() if m.get("tmdb_id")}
     known = {local: by_id.get(i) or {"tmdb_id": i} for local, i in (previous.get("tmdb_ids") or {}).items()}
     found = enrich(year_hints(shows), known, cfg.tmdb.overrides, enabled=cfg.tmdb.enabled)
@@ -295,7 +306,7 @@ def standardize_titles(shows: list[Showtime], previous: dict | None, cfg: Config
 
     rename = {local: display(m) for local, m in found.items() if m.get("title")}
     for s in shows:
-        s.film_title = rename.get(s.film_title, s.film_title)
+        s.film_title = rename.get(s.film_title, s.film_title.split(" @")[0] if s.film_title in scoped else s.film_title)
     film_meta = {rename[local]: m for local, m in found.items() if local in rename}
     tmdb_ids = {local: m["tmdb_id"] for local, m in found.items() if m.get("tmdb_id")}
     return film_meta, tmdb_ids
@@ -412,7 +423,7 @@ def _build_feed(cfg: Config, shows: list[Showtime], tz: ZoneInfo,
         "generated_at": datetime.now(tz).isoformat(),
         "timezone": cfg.timezone,
         "theaters": [{"key": k, "name": t.name, "color": t.color, "default_on": t.default_on,
-                      "lat": t.lat, "lon": t.lon}
+                      "lat": t.lat, "lon": t.lon, **({"site": t.site} if t.site else {})}
                      for k, t in cfg.theaters.items() if t.enabled],
         "films": films,
         "stale_theaters": list(stale),   # failed this run; their events are from the last feed

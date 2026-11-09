@@ -182,6 +182,8 @@ def test_is_non_film_drops_ufc_broadcasts():
 def test_is_non_film_drops_mystery_series():
     assert is_non_film("Harkins Secret Cinema", DEFAULT_DROP)
     assert is_non_film("Cinemark Secret Movie Series", DEFAULT_DROP)
+    assert is_non_film("IFS Underground", DEFAULT_DROP)        # a series night with no film named
+    assert not is_non_film("Café Flesh", DEFAULT_DROP)
     assert not is_non_film("The Secret Agent", DEFAULT_DROP)
 
 
@@ -245,12 +247,23 @@ def test_every_theater_within_15_miles_is_configured():
              "cinemark_aurora": "AAJNI", "regal_southglenn": "AAVRY", "regal_colorado_mills": "AAQQK",
              "amc_bowles": "AABAT", "amc_highlands_ranch": "AAECM", "movie_tavern_aurora": "AAUFX",
              "amc_arapahoe": "AAEWN"}
-    assert len(c.theaters) == 22
+    assert len(c.theaters) == 32                 # + the ten out to 30 mi (test_scrapers)
     for key, tid in added.items():
         t = c.theaters[key]
         assert t.enabled and t.default_on is False and t.scraper == "fandango" and t.location == tid
         assert 39.5 < t.lat < 39.9 and -105.2 < t.lon < -104.7
     assert [k for k, t in c.theaters.items() if t.default_on] == ["sie", "landmark"]
+
+
+def test_fandango_theaters_link_their_own_site():
+    c = fresh_cfg()
+    fandango = {k: t for k, t in c.theaters.items() if t.scraper == "fandango"}
+    assert fandango and all((t.site or "").startswith("https://") for t in fandango.values())
+    assert c.theaters["amc_highlands_ranch"].site.endswith("/amc-highlands-ranch-24")
+    feed = _build_feed(c, [st("A", 19, "amc")], DEN)
+    by_key = {t["key"]: t for t in feed["theaters"]}
+    assert by_key["amc_highlands_ranch"]["site"].startswith("https://www.amctheatres.com/")
+    assert "site" not in by_key["sie"]                        # sells its own tickets: nothing to add
 
 
 def test_build_feed_carries_default_on():
@@ -269,6 +282,13 @@ def test_title_variants_from_fandango_and_amc():
         ("The Nightmare Before Christmas Re-release", "The Nightmare Before Christmas"),
         ("The Nightmare Before Christmas (RE26)", "The Nightmare Before Christmas"),
         ("The Hunger Games: Sunrise on the Reaping - Super Ticket", "The Hunger Games: Sunrise on the Reaping"),
+        ("Elevation (Director's Cut) - Anthony Mackie and George Nolfi in person!", "Elevation"),
+        ("Breathless - Part of the Albertine Cinémathèque French Film Festival", "Breathless"),
+        ("Whiplash - FREE SHOW", "Whiplash"),
+        ("Café Flesh - IFS Underground", "Café Flesh"),
+        ("Film Screening: Little Amélie or the Character of Rain", "Little Amélie or the Character of Rain"),
+        ("Friday Night Weird: These People", "These People"),
+        ("Cinema Classics with Jeffrey Kash: Modern Times", "Modern Times"),
         ("The Hunger Games: Sunrise on the Reaping Early Access",
          "The Hunger Games: Sunrise on the Reaping"),
         ("Sinners Early Access Screening", "Sinners"),

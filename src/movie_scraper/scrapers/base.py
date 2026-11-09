@@ -14,7 +14,7 @@ from ..models import Showtime
 log = logging.getLogger(__name__)
 
 # Descriptive UA: identify the bot honestly and link to the project.
-USER_AGENT = "denver-showtimes-bot/0.1 (+https://github.com/; personal movie calendar)"
+USER_AGENT = "denver-showtimes-bot/0.1 (+https://coreymcginnis1.github.io/denver-showtimes/; showtimes listing)"
 
 
 def http_client(timeout: float = 30.0) -> httpx.Client:

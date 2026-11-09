@@ -1,0 +1,228 @@
+{
+ "events": [
+  {
+   "event": {
+    "id": 53800422657353,
+    "title": "IFS Underground",
+    "location_name": "Visual Arts Complex",
+    "url": "",
+    "localist_url": "https://calendar.colorado.edu/event/ifs-underground-3121",
+    "photo_url": "https://localist-images.azureedge.net/photos/53800422690127/huge/b2ec372cb3d5058e630d35f77a85ea44b98496f3.jpg",
+    "ticket_cost": "FREE",
+    "event_instances": [
+     {
+      "event_instance": {
+       "start": "2026-08-28T22:30:00-06:00",
+       "end": null,
+       "all_day": false
+      }
+     }
+    ],
+    "filters": {
+     "event_types": [
+      {
+       "name": "Film"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "event": {
+    "id": 53807400915071,
+    "title": "Café Flesh - IFS Underground",
+    "location_name": "Visual Arts Complex",
+    "url": "https://www.internationalfilmseries.com/fall-2026/11560/underground-25",
+    "localist_url": "https://calendar.colorado.edu/event/cafe-flesh-ifs-underground",
+    "photo_url": "https://localist-images.azureedge.net/photos/53807400986757/huge/39f9aa7fa0e4adb210a0c12842e39e6d1f2aa1cc.jpg",
+    "ticket_cost": "FREE",
+    "event_instances": [
+     {
+      "event_instance": {
+       "start": "2026-09-11T22:30:00-06:00",
+       "end": null,
+       "all_day": false
+      }
+     }
+    ],
+    "filters": {
+     "event_types": [
+      {
+       "name": "Film"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "event": {
+    "id": 54047140484932,
+    "title": "Elevation (Director's Cut) - Anthony Mackie and George Nolfi in person!",
+    "location_name": "Muenzinger Auditorium",
+    "url": "https://www.internationalfilmseries.com/fall-2026/11566/elevation",
+    "localist_url": "https://calendar.colorado.edu/event/elevation-directors-cut-george-nolfi-in-person",
+    "photo_url": "https://localist-images.azureedge.net/photos/54047140548427/huge/aef822348ce70d416ac9f8e96bb0920e9dbefcce.jpg",
+    "ticket_cost": "FREE",
+    "event_instances": [
+     {
+      "event_instance": {
+       "start": "2026-10-11T19:30:00-06:00",
+       "end": null,
+       "all_day": false
+      }
+     }
+    ],
+    "filters": {
+     "event_types": [
+      {
+       "name": "Film"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "event": {
+    "id": 54181230966702,
+    "title": "King Kong (1933)",
+    "location_name": "Muenzinger Auditorium",
+    "url": "https://www.internationalfilmseries.com/fall-2026/11536/king-kong-2026",
+    "localist_url": "https://calendar.colorado.edu/event/king-kong-1933",
+    "photo_url": "https://localist-images.azureedge.net/photos/54181231094709/huge/256e4db1f9caea2f72dd01b4073a5b99d778accc.jpg",
+    "ticket_cost": "$10 GA/$8 STU",
+    "event_instances": [
+     {
+      "event_instance": {
+       "start": "2026-10-14T19:30:00-06:00",
+       "end": null,
+       "all_day": false
+      }
+     }
+    ],
+    "filters": {
+     "event_types": [
+      {
+       "name": "Film"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "event": {
+    "id": 54437929298959,
+    "title": "GUTS Student Film Festival",
+    "location_name": "Muenzinger Auditorium",
+    "url": "https://www.colorado.edu/project/gutc/",
+    "localist_url": "https://calendar.colorado.edu/event/guts-student-film-festival",
+    "photo_url": "https://localist-images.azureedge.net/photos/54437929475100/huge/49f94cf01e15fc1f60d457615daa54f1b81d68af.jpg",
+    "ticket_cost": "Free",
+    "event_instances": [
+     {
+      "event_instance": {
+       "start": "2026-11-11T19:00:00-07:00",
+       "end": "2026-11-11T22:30:00-07:00",
+       "all_day": false
+      }
+     }
+    ],
+    "filters": {
+     "event_types": [
+      {
+       "name": "Film"
+      },
+      {
+       "name": "Festival"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "event": {
+    "id": 54463532110789,
+    "title": "The Big Lebowski",
+    "location_name": "Muenzinger Auditorium",
+    "url": "https://www.internationalfilmseries.com/fall-2026/11549/the-big-lebowski",
+    "localist_url": "https://calendar.colorado.edu/event/the-big-lebowski",
+    "photo_url": "https://localist-images.azureedge.net/photos/54463532203983/huge/8ca637cc7711e57716024ce3058db88f94dc22f7.jpg",
+    "ticket_cost": "$10/GA $8/STU",
+    "event_instances": [
+     {
+      "event_instance": {
+       "start": "2026-11-16T19:30:00-07:00",
+       "end": "2026-11-16T22:30:00-07:00",
+       "all_day": false
+      }
+     }
+    ],
+    "filters": {
+     "event_types": [
+      {
+       "name": "Film"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "event": {
+    "id": 54463625448854,
+    "title": "Them! on 35mm",
+    "location_name": "Muenzinger Auditorium",
+    "url": "https://www.internationalfilmseries.com/fall-2026/11554/them",
+    "localist_url": "https://calendar.colorado.edu/event/them-on-35mm",
+    "photo_url": "https://localist-images.azureedge.net/photos/54463625492896/huge/0f6ce9dc6595bc5fd53ebe44305687caba159195.jpg",
+    "ticket_cost": "$10/GA $8/STU",
+    "event_instances": [
+     {
+      "event_instance": {
+       "start": "2026-12-02T19:30:00-07:00",
+       "end": "2026-12-02T22:30:00-07:00",
+       "all_day": false
+      }
+     }
+    ],
+    "filters": {
+     "event_types": [
+      {
+       "name": "Film"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "event": {
+    "id": 53800422657353,
+    "title": "IFS Volunteer Orientation",
+    "location_name": "Visual Arts Complex",
+    "url": "",
+    "localist_url": "https://calendar.colorado.edu/event/ifs-underground-3121",
+    "photo_url": "https://localist-images.azureedge.net/photos/53800422690127/huge/b2ec372cb3d5058e630d35f77a85ea44b98496f3.jpg",
+    "ticket_cost": "FREE",
+    "event_instances": [
+     {
+      "event_instance": {
+       "start": "2026-08-28T22:30:00-06:00",
+       "end": null,
+       "all_day": false
+      }
+     }
+    ],
+    "filters": {
+     "event_types": [
+      {
+       "name": "Meeting"
+      }
+     ]
+    }
+   }
+  }
+ ],
+ "page": {
+  "current": 1,
+  "total": 1,
+  "next_page": null
+ }
+}

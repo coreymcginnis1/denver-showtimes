@@ -15,7 +15,10 @@
     amc_cherry_creek: "AMC Cherry Creek", cinemark_belmar: "Cinemark Bel Mar", regal_river_point: "Regal River Point",
     cinemark_aurora: "Cinemark Aurora", regal_southglenn: "Regal SouthGlenn", regal_colorado_mills: "Regal Colorado Mills",
     amc_bowles: "AMC Bowles Crossing", amc_highlands_ranch: "AMC Highlands Ranch", movie_tavern_aurora: "Movie Tavern Aurora",
-    amc_arapahoe: "AMC Arapahoe Crossing" };
+    amc_arapahoe: "AMC Arapahoe Crossing",
+    dairy: "Dairy Arts Center", cu_ifs: "CU Film Series", amc_orchard: "AMC Orchard", amc_flatiron: "AMC Flatiron Crossing",
+    amc_southlands: "AMC Southlands", emagine_parker: "Emagine Parker", amc_brighton: "AMC Brighton", amc_castle_rock: "AMC Castle Rock",
+    cinemark_boulder: "Cinemark Boulder", regal_longmont: "Regal Longmont" };
   var THEATER_SITES = [   // one link per company; each site lists its own locations
     ["Sie FilmCenter", "https://www.denverfilm.org/"],
     ["Landmark", "https://www.landmarktheatres.com/"],
@@ -24,7 +27,10 @@
     ["Harkins", "https://www.harkins.com/"],
     ["Cinemark", "https://www.cinemark.com/"],
     ["Alamo Drafthouse", "https://drafthouse.com/denver"],
-    ["Movie Tavern", "https://www.marcustheatres.com/"]   // Marcus runs it; movietavern.com's certificate had lapsed (Nov 2026)
+    ["Movie Tavern", "https://www.marcustheatres.com/"],
+    ["Emagine", "https://www.emagine-entertainment.com/"],
+    ["Dairy Arts Center", "https://thedairy.org/cinema/"],
+    ["CU International Film Series", "https://www.internationalfilmseries.com/"]   // Marcus runs it; movietavern.com's certificate had lapsed (Nov 2026)
   ];
   // Shortest names, for the times under a poster, the hour list and the "At Sie and Mayan" line.
   var TINY = { sie: "Sie", landmark: "Mayan", amc: "AMC 9+CO 10", regal_pavilions: "Regal Pavilions",
@@ -34,7 +40,10 @@
     amc_cherry_creek: "AMC Cherry Creek", cinemark_belmar: "Cinemark Bel Mar", regal_river_point: "Regal River Point",
     cinemark_aurora: "Cinemark Aurora", regal_southglenn: "Regal SouthGlenn", regal_colorado_mills: "Regal Colorado Mills",
     amc_bowles: "AMC Bowles Crossing", amc_highlands_ranch: "AMC Highlands Ranch", movie_tavern_aurora: "Movie Tavern Aurora",
-    amc_arapahoe: "AMC Arapahoe Crossing" };
+    amc_arapahoe: "AMC Arapahoe Crossing",
+    dairy: "Dairy Arts Center", cu_ifs: "CU Film Series", amc_orchard: "AMC Orchard", amc_flatiron: "AMC Flatiron Crossing",
+    amc_southlands: "AMC Southlands", emagine_parker: "Emagine Parker", amc_brighton: "AMC Brighton", amc_castle_rock: "AMC Castle Rock",
+    cinemark_boulder: "Cinemark Boulder", regal_longmont: "Regal Longmont" };
   // Formats and languages (scraper's formats.py): IMAX, Dolby, film prints and 3D by name; every other
   // premium screen is "PLF"; "Subtitled" / "Dubbed". A theater whose showings all share one goes on its
   // line; mixed ones get a short red mark per time (anything not listed uses its own name).
@@ -150,12 +159,12 @@
   var REPERTORY_DAYS = 730;
   var RUN_GAP_DAYS = 3;     // a new release off today but back within this many days is still "Now playing"
   var SPAN_SHOWN = 3;       // All dates / search: theaters listed before "Show all N theaters"
-  var TK_SHOWN = 5;         // phones: theaters in the opened checklist before "Show all 22 theaters"
+  var TK_SHOWN = 5;         // phones: theaters in the opened checklist before "Show all 32 theaters"
   var TK_CHECKED = 3;       // ... plus up to this many checked theaters further out
   var CLAMP_PX = 210;       // a card's times stop here (styles.css .venues.clamp) ...
   var CLAMP_SLACK = 90;     // ... but only when that hides this much more: never a button for a line or two
   var WINDOW_DAYS = 14;     // the day strip: today + 14 (Sie, Landmark and Alamo list up to ~90 days out)
-  var FURTHER_NOTE = "Sie, Landmark and Alamo only.";
+  var FURTHER_NOTE = "Sie, Landmark, Alamo, Dairy and CU Film Series only.";
   function isRepertory(f) {
     var orig = f.rel || (f.year ? f.year + "-07-01" : null);
     return !!(orig && f.opened && dayDiff(orig, f.opened) > REPERTORY_DAYS);
@@ -281,7 +290,7 @@
   }
 
   // Phones list the theaters top to bottom: the nearest few and a few checked ones, the rest
-  // behind "Show all 22 theaters" so Show / Sort aren't a long scroll away. Picked when the list
+  // behind "Show all 32 theaters" so Show / Sort aren't a long scroll away. Picked when the list
   // opens or the zip / distance changes, not on each tap, so a row never vanishes as it's unchecked.
   function pickShownTheaters() {
     var near = theaters.slice().sort(function (a, b) { return (miles(a) || 0) - (miles(b) || 0); });
@@ -625,6 +634,17 @@
     return { google: google, outlook: outlook, ics: URL.createObjectURL(new Blob([ics], { type: "text/calendar;charset=utf-8" })), end: e };
   }
 
+  // Fandango's links go straight to the seats; the theater's own site skips Fandango's fee and earns
+  // the chain's rewards, but needs the time picked again (Fandango's data has no chain showtime ids).
+  var CHAINS = [["amctheatres.com", "AMC"], ["regmovies.com", "Regal"], ["harkins.com", "Harkins"], ["cinemark.com", "Cinemark"],
+    ["emagine-entertainment.com", "Emagine"], ["marcustheatres.com", "Movie Tavern"]];
+  function chainOf(url) {
+    var host = ""; try { host = new URL(url).hostname; } catch (e) { return "the theater"; }
+    for (var n = 0; n < CHAINS.length; n++) if (host === CHAINS[n][0] || host.slice(-CHAINS[n][0].length - 1) === "." + CHAINS[n][0]) return CHAINS[n][1];
+    return "the theater";
+  }
+  function isFandango(url) { try { return /(^|\.)fandango\.com$/.test(new URL(url).hostname); } catch (e) { return false; } }
+
   var lastFocus = null, icsUrl = null;
   function openSheet(i) {
     var s = shows[i], f = films[s.f], t = theaterOf(s.th) || { name: s.th };
@@ -636,7 +656,8 @@
       (f.posters.length ? posterHTML(s.f, "sheet-poster") : '<div class="ph"></div>') +
       '<div><h3 id="sheetT">' + esc(f.t) + '</h3><div class="when">' + when + "</div>" +
       '<div class="where">' + esc(where) + (s.hm && !s.end && !f.runtime ? ", runtime unknown, 2h assumed" : "") + "</div></div>" +
-      '<div class="actions">' + (s.url ? '<a class="btn primary" href="' + esc(s.url) + '" target="_blank" rel="noopener">Get tickets</a>' : "") +
+      '<div class="actions">' + (s.url ? '<a class="btn primary" href="' + esc(s.url) + '" target="_blank" rel="noopener">Get tickets' + (isFandango(s.url) ? " on Fandango" : "") + "</a>" : "") +
+      (s.url && isFandango(s.url) && t.site ? '<a class="alt" href="' + esc(t.site) + '" target="_blank" rel="noopener">Or buy from ' + esc(chainOf(t.site)) + " directly</a>" : "") +
       // One "Add to calendar" button; its three choices open under it, so tickets stay the big button.
       (links ? '<button type="button" class="btn" id="calToggle" aria-expanded="false" aria-controls="calOpts">Add to calendar</button>' +
         '<div class="btn-row" id="calOpts" hidden><a class="btn" href="' + esc(links.google) + '" target="_blank" rel="noopener">Google</a>' +

@@ -128,6 +128,110 @@ location = "AATYG"                # Fandango theater id
 lat = 39.7851
 lon = -104.8919
 
+# --- Every other theater within 15 mi of 80218 (Fandango, checked Nov 2026), added so readers
+# can find the ones nearest them; all start unchecked. Just past 15 mi: AMC Orchard 12,
+# AMC Flatiron Crossing 14, AMC Southlands 16. ---
+
+[theaters.amc_cherry_creek]
+enabled = true
+default_on = false
+name = "AMC Dine-In Cherry Creek 8"
+color = "#5B7DB1"
+scraper = "fandango"
+location = "AAADR"
+lat = 39.7157
+lon = -104.9526
+
+[theaters.cinemark_belmar]
+enabled = true
+default_on = false
+name = "Cinemark Century Bel Mar 16 and XD"
+color = "#D1495B"
+scraper = "fandango"
+location = "AARMQ"
+lat = 39.7088
+lon = -105.0764
+
+[theaters.regal_river_point]
+enabled = true
+default_on = false
+name = "Regal River Point"
+color = "#3D8B5E"
+scraper = "fandango"
+location = "AAVKZ"
+lat = 39.652
+lon = -105.0099
+
+[theaters.cinemark_aurora]
+enabled = true
+default_on = false
+name = "Cinemark Century Aurora and XD"
+color = "#B83D4E"
+scraper = "fandango"
+location = "AAJNI"
+lat = 39.706
+lon = -104.8207
+
+[theaters.regal_southglenn]
+enabled = true
+default_on = false
+name = "Regal SouthGlenn"
+color = "#5FA37E"
+scraper = "fandango"
+location = "AAVRY"
+lat = 39.5904
+lon = -104.9638
+
+[theaters.regal_colorado_mills]
+enabled = true
+default_on = false
+name = "Regal UA Colorado Mills"
+color = "#2F7A52"
+scraper = "fandango"
+location = "AAQQK"
+lat = 39.7342
+lon = -105.1594
+
+[theaters.amc_bowles]
+enabled = true
+default_on = false
+name = "AMC Bowles Crossing 12"
+color = "#4A6FA5"
+scraper = "fandango"
+location = "AABAT"
+lat = 39.6098
+lon = -105.0912
+
+[theaters.amc_highlands_ranch]
+enabled = true
+default_on = false
+name = "AMC Highlands Ranch 24"
+color = "#3B4F8C"
+scraper = "fandango"
+location = "AAECM"
+lat = 39.5603
+lon = -104.9911
+
+[theaters.movie_tavern_aurora]
+enabled = true
+default_on = false
+name = "Movie Tavern Aurora"
+color = "#8C5E3C"
+scraper = "fandango"
+location = "AAUFX"
+lat = 39.6547
+lon = -104.7703
+
+[theaters.amc_arapahoe]
+enabled = true
+default_on = false
+name = "AMC Arapahoe Crossing 16"
+color = "#7A6FD0"
+scraper = "fandango"
+location = "AAEWN"
+lat = 39.5943
+lon = -104.8008
+
 # Title standardization: strip repertory/event series labels from the START of a
 # film title (the label plus its ":" / "–" / "-" separator), so e.g.
 # "Bleak Week: Gummo" -> "Gummo" and "Fan Faves: Michael" -> "Michael".
@@ -160,6 +264,7 @@ strip_suffixes = [
   '\s*[-–—]\s*Studio Ghibli Fest(?:ival)?(?:\s+\d{4})?$',  # "... - Studio Ghibli Fest 2026"
   '\s+(?:IMAX\s+)?(?:Opening Night\s+)?Fan Event$',      # "MOANA IMAX Opening Night Fan Event"
   '\s+(?:IMAX\s+)?(?:Early Access(?:\s+Screenings?)?|Advance\s+Screenings?)$',  # "... Early Access [Screening]"
+  '\s*[-–—:]\s*Super Ticket$',                          # ticket bundles: "The Hunger Games: ... - Super Ticket"
   '\s*[-–—:]?\s*\(?\b(?:Re-?release|Re-?issue|RE\d{2})\)?$',  # "Coraline Re-release" / "Dune: Part One Reissue" / "(RE26)"
   '\s+(?:on|in)\s+(?:\d{2,3}\s?mm|VistaVision)(?:\s+film)?$',   # "Interstellar on 35mm" / "... in 70mm" / "... in VistaVision"
   '\s*[:–—-]\s*Sensory[- ]?Friendly\b.*$',  # "Supergirl: Sensory Friendly Screening" -> "Supergirl"
@@ -181,7 +286,7 @@ drop = [
   'Apple TV Live',            # live sports broadcasts: "F1 on Apple TV Live in IMAX: ..."
   'Memorial Screening',       # tribute events with no film named
   'Mystery Movie',            # surprise screenings, no film named ("REGAL: Monday Mystery Movie")
-  'Secret Cinema',            # Harkins mystery screenings, no film named
+  'Secret (?:Cinema|Movie)',  # mystery screenings, no film named (Harkins Secret Cinema, Cinemark Secret Movie Series)
   '\bUFC \d',                 # live UFC pay-per-view broadcasts ("UFC 329: ..."), not films
   'Members?\s+Only',          # members-only screenings (public can't attend) — drop them
   'League of Legends',        # live esports broadcasts ("League of Legends Worlds 26 - Finals")

@@ -44,8 +44,10 @@ scrapers → cleanup rules → TMDB match → trending, openings → public/data
 - **Nothing piles up:** each run rebuilds `data.json` for today … +14 days (Sie, Landmark and Alamo
   to +90, ~350 more showings); `openings` forget films
   400 days after they last opened; `film_meta`/`tmdb_ids` hold only current films. Events carry only
-  the fields the site reads (no nulls), so a daily data commit is ~2.5 MB raw. Git history grows
-  ~30–120 MB/year; don't rewrite history to trim it.
+  the fields the site reads (no nulls), and each poster URL only on a film's first showing
+  (`_build_feed`; the page gathers posters per film), so with 22 theaters (~7,900 showings) a daily
+  data commit is ~4.6 MB raw, ~570 KB as served (gzip). Most of what's left is Fandango ticket
+  links (a unique hash each). Git history grows ~60–200 MB/year; don't rewrite history to trim it.
 
 ### Secrets (repository → Settings → Secrets and variables → Actions)
 
@@ -80,9 +82,10 @@ optional `end`/`allDay`, `extendedProps`: `theater`, `screen`, `fmt`, `ticketUrl
 
 ## Theaters (`config.toml` `[theaters.*]`)
 
-Twelve theaters. Sie and Landmark Mayan start on; the rest have `default_on = false`.
-One scraper can back several theaters via `scraper` + `location`. `lat`/`lon` drive the distance
-filter.
+Twenty-two theaters: **every year-round theater within 15 mi of 80218** (checked on Fandango Nov
+2026), so readers anywhere in the metro can find the ones nearest them. Sie and Landmark Mayan start
+on; the rest have `default_on = false`. One scraper can back several theaters via `scraper` +
+`location`. `lat`/`lon` drive the distance filter.
 
 | Theater | Source |
 |---|---|
@@ -91,16 +94,26 @@ filter.
 | AMC 9+CO 10 / Westminster Promenade 24 | **Fandango** `napi/theaterMovieShowtimes/<id>`; AAYUA / AAECN |
 | Regal UA Denver Pavilions / Colorado Center | **Fandango**; AAJJG / AAFXW |
 | Harkins Arvada 14 / Northfield 18 | **Fandango**; AAYFG / AATYG |
+| AMC Dine-In Cherry Creek 8 / Bowles Crossing 12 / Highlands Ranch 24 / Arapahoe Crossing 16 | **Fandango**; AAADR / AABAT / AAECM / AAEWN |
+| Regal River Point / SouthGlenn / UA Colorado Mills | **Fandango**; AAVKZ / AAVRY / AAQQK |
+| Cinemark Century Bel Mar 16 and XD / Century Aurora and XD | **Fandango**; AARMQ / AAJNI |
+| Movie Tavern Aurora (Marcus) | **Fandango**; AAUFX |
 | Alamo Drafthouse Sloans Lake / Westminster / Littleton | `drafthouse.com/s/mother/v2/schedule/venue/<location>` (JSON, one request each, whole schedule); `sloans-lake` / `westminster` / `littleton` |
 
-- **AMC, Regal and Harkins come from Fandango:** amctheatres.com and regmovies.com block scrapers
-  (Cloudflare / bot challenges); Fandango's `napi` JSON is open over plain httpx, and its ticket
-  links work. Fandango silently serves a grey "F" placeholder image when it lacks a poster.
-- **Coverage checked Nov 2026** (within 10 mi of 80206): also on Fandango but not added — AMC Dine-In
-  Cherry Creek 8 (AAADR; 12 of 13 films duplicated elsewhere), Regal River Point, Cinemark Bel Mar
-  16, Cinemark Century Aurora, Regal SouthGlenn. The Esquire closed July 2024. Alamo Westminster and
-  Littleton (~10 mi) were added Nov 2026, off by default: cheap (one request each) and Alamo programs
-  repertory and 35mm.
+- **AMC, Regal, Harkins, Cinemark and Movie Tavern come from Fandango:** amctheatres.com and
+  regmovies.com block scrapers (Cloudflare / bot challenges); Fandango's `napi` JSON is open over
+  plain httpx, and its ticket links work. One request per theater per day (~0.3 s each), so the ten
+  added in Nov 2026 cost under a minute a run. Fandango silently serves a grey "F" placeholder image
+  when it lacks a poster.
+- **Coverage (Nov 2026):** Fandango's `napi/theaterswithshowtimes?zipCode=` returns only the nearest
+  21 per zip, so the 15 mi list was built from 80218 plus a ring of suburban zips. Just past 15 mi:
+  AMC Orchard 12, AMC Flatiron Crossing 14, AMC Southlands 16. Not on Fandango: the 88 Drive-In
+  (Commerce City, seasonal, first-run double features; would need its own scraper) and summer-only
+  series (Elitch Theatre, Sunset Cinema, the Bug's occasional nights). Closed: the Esquire (July
+  2024), Chez Artiste (Aug 2024), Denver Mart Drive-In (2021). The ten chains added Nov 2026 mostly
+  repeat films playing nearer in, but brought ~21 films found nowhere else (Fathom-style repertory:
+  Goldfinger, Scarface, Miami Vice…) and three more IMAX screens (Colorado Mills, Highlands Ranch,
+  Arapahoe Crossing).
 - **Regal Colorado Center** shrank from ~20 films / ~430 showtimes (July) to ~5–6 / ~115 (Nov 2026)
   while the feed stayed healthy, so the theater itself is running fewer screens. If it drops to
   zero, check regmovies.com in a browser before treating it as a scraper failure.
@@ -117,8 +130,10 @@ Prefer **general** patterns over one-offs.
 - `strip_suffixes` — release year `(2026)`, `Nth Anniversary` (paren/colon forms), `… Cut`,
   `… Edition`, `Re-release`/`Reissue`/`(RE26)`, `Encore`/`(2026 Encore)`, language versions
   (`(English 2026)`, `(Hindi Dubbed)`), `on 35mm` (gauge kept as the format), `(dir. X)`, Sensory
-  Friendly, sponsor tags, Fan Event / Early Access / Promo / Preview screenings, `w/ …`.
-- `drop` — not films: mystery screenings (Screen Unseen, Mystery Movie, Harkins Secret Cinema),
+  Friendly, sponsor tags, Fan Event / Early Access / Promo / Preview screenings, `- Super Ticket`
+  (ticket bundles), `w/ …`.
+- `drop` — not films: mystery screenings (Screen Unseen, Mystery Movie, Harkins Secret Cinema,
+  Cinemark Secret Movie Series),
   private rentals, members-only, memorials, watch parties, live sports and esports. Concerts, opera,
   NT Live and TV-episode screenings are **kept**.
 - `normalize_title()` also fixes ALL-CAPS/lowercase titles and dangling `:`/`-`;
@@ -202,12 +217,12 @@ redesign directions" (A listings + C program won; B marquee rejected).
 
 - **Controls:** masthead "Denver Movie Showtimes" with the chosen date under it · sticky day strip
   ("All dates", then the weekday, never "Today", "Nov" over a big "10" over "Tue", like a tear-off calendar, every day the same width; the selected day is a brick block) · **Theaters**:
-  "Theaters near [zip] within 1 mi / 3 mi / 5 mi / any distance" and a checklist of all twelve nearest first
+  "Theaters near [zip] within 1 mi / 3 mi / 5 mi / 10 mi / any distance" and a checklist of all 22 nearest first
   with miles in one row that scrolls sideways: no scrollbar, the side with more fades and gets a ‹ / ›
   arrow (no counts, no theater colors). **Phones** fold theaters *and* Show/Sort into one line, "At Sie
   and Mayan, all films, newest first · Change", with search under it; opened, the checklist runs top
   to bottom with the 5 nearest plus any checked (`TK_SHOWN`, picked on open / zip / distance, not per
-  tap) and "Show all 12 theaters" / "Show fewer theaters", so Show / Sort stay close. Hover colors
+  tap) and "Show all 22 theaters" / "Show fewer theaters", so Show / Sort stay close. Hover colors
   only apply under `(hover: hover)` (a tap leaves :hover stuck on phones). The masthead is one line and
   the date line is dropped (the brick day says it), so posters start in the first screen. Zip default
   **80218**, **never saved**; straight-line distance from Census zip centroids in `zips.json`. Theater
@@ -273,7 +288,7 @@ redesign directions" (A listings + C program won; B marquee rejected).
 - **Privacy:** no cookies, no analytics. The only browser storage is the theater pick
   (`dst-theaters` in `localStorage`, never sent anywhere); the zip is never saved. Third-party
   requests are poster images only (TMDB, Fandango, theaters). Keep it that way.
-- **Footer** credits TMDB (logo + required notice; posters, directors and synopses) and Wikipedia, and links each theater company's site (one link per company).
+- **Footer** credits TMDB (logo + required notice; posters, directors and synopses) and Wikipedia, and links each theater company's site (one link per company; Movie Tavern goes to marcustheatres.com, as movietavern.com's certificate had lapsed in Nov 2026).
 - **Cache-busting:** `index.html` loads `styles.css`/`app.js` with `?v=__ASSET_VERSION__`, replaced
   with the commit SHA on deploy; `data.json` is fetched `no-store`. OG tags use `__SITE_URL__`.
 

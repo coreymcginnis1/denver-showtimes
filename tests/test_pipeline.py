@@ -179,6 +179,12 @@ def test_is_non_film_drops_ufc_broadcasts():
     assert not is_non_film("Jack Johnson: Surfilmusic", DEFAULT_DROP)
 
 
+def test_is_non_film_drops_mystery_series():
+    assert is_non_film("Harkins Secret Cinema", DEFAULT_DROP)
+    assert is_non_film("Cinemark Secret Movie Series", DEFAULT_DROP)
+    assert not is_non_film("The Secret Agent", DEFAULT_DROP)
+
+
 def test_is_non_film_drop():
     assert is_non_film("AMC Screen Unseen: June 22", DEFAULT_DROP)
     assert is_non_film("¡GOLAZO!: 2026 Soccer Watch Parties", DEFAULT_DROP)
@@ -213,6 +219,40 @@ def test_secondary_theaters_config():
     assert c.theaters["regal_colorado"].scraper == "fandango"
 
 
+def test_build_feed_lists_each_poster_once_per_film():
+    a1, a2, b = st("A", 19, "amc"), st("A", 21, "regal_pavilions"), st("B", 20, "amc")
+    a1.poster = a2.poster = "https://img/a.jpg"
+    b.poster = "https://img/a.jpg"                 # same art on another film still shows for it
+    feed = _build_feed(fresh_cfg(), [a2, b, a1], DEN)
+    got = [(e["title"], e["start"][11:16], e["extendedProps"].get("poster")) for e in feed["events"]]
+    assert got == [("A", "19:00", "https://img/a.jpg"), ("B", "20:00", "https://img/a.jpg"), ("A", "21:00", None)]
+
+
+def test_carried_rows_get_their_poster_back():
+    prev = {"events": [
+        {"title": "A", "start": "2026-06-18T19:00:00-06:00", "extendedProps": {"theater": "flaky", "poster": "p.jpg"}},
+        {"title": "A", "start": "2026-06-20T19:00:00-06:00", "extendedProps": {"theater": "flaky"}},
+        {"title": "B", "start": "2026-06-20T19:00:00-06:00", "extendedProps": {"theater": "flaky"}},
+    ]}
+    out = pipeline._carried_events(prev, ["flaky"], date(2026, 6, 19))
+    assert [(e["title"], e["extendedProps"].get("poster")) for e in out] == [("A", "p.jpg"), ("B", None)]
+    assert "poster" not in prev["events"][1]["extendedProps"]   # the previous feed isn't changed
+
+
+def test_every_theater_within_15_miles_is_configured():
+    c = fresh_cfg()
+    added = {"amc_cherry_creek": "AAADR", "cinemark_belmar": "AARMQ", "regal_river_point": "AAVKZ",
+             "cinemark_aurora": "AAJNI", "regal_southglenn": "AAVRY", "regal_colorado_mills": "AAQQK",
+             "amc_bowles": "AABAT", "amc_highlands_ranch": "AAECM", "movie_tavern_aurora": "AAUFX",
+             "amc_arapahoe": "AAEWN"}
+    assert len(c.theaters) == 22
+    for key, tid in added.items():
+        t = c.theaters[key]
+        assert t.enabled and t.default_on is False and t.scraper == "fandango" and t.location == tid
+        assert 39.5 < t.lat < 39.9 and -105.2 < t.lon < -104.7
+    assert [k for k, t in c.theaters.items() if t.default_on] == ["sie", "landmark"]
+
+
 def test_build_feed_carries_default_on():
     c = fresh_cfg()
     feed = _build_feed(c, [st("A", 19, "amc")], DEN)
@@ -228,6 +268,7 @@ def test_title_variants_from_fandango_and_amc():
     for raw, want in [
         ("The Nightmare Before Christmas Re-release", "The Nightmare Before Christmas"),
         ("The Nightmare Before Christmas (RE26)", "The Nightmare Before Christmas"),
+        ("The Hunger Games: Sunrise on the Reaping - Super Ticket", "The Hunger Games: Sunrise on the Reaping"),
         ("The Hunger Games: Sunrise on the Reaping Early Access",
          "The Hunger Games: Sunrise on the Reaping"),
         ("Sinners Early Access Screening", "Sinners"),

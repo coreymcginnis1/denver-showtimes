@@ -349,11 +349,27 @@ def year_hints(shows: list[Showtime]) -> dict[str, int | None]:
 
 
 def _carried_events(previous: dict | None, theaters: list[str], today: date) -> list[dict]:
-    """A failed theater's still-upcoming events from the last feed, so it stays on the site."""
+    """A failed theater's still-upcoming events from the last feed, so it stays on the site.
+
+    The feed lists each poster once per film (on its first showing), so a carried row whose
+    poster sat on an earlier row gets it back here; `_build_feed` trims the repeats again.
+    """
     if not previous or not theaters:
         return []
-    return [e for e in previous.get("events", [])
-            if e["extendedProps"]["theater"] in theaters and e["start"][:10] >= today.isoformat()]
+    old = previous.get("events", [])
+    art: dict[tuple[str, str], str] = {}
+    for e in old:
+        p = e["extendedProps"].get("poster")
+        if p:
+            art.setdefault((e["title"], e["extendedProps"]["theater"]), p)
+            art.setdefault((e["title"], ""), p)
+    out = []
+    for e in old:
+        x = e["extendedProps"]
+        if x["theater"] in theaters and e["start"][:10] >= today.isoformat():
+            p = x.get("poster") or art.get((e["title"], x["theater"])) or art.get((e["title"], ""))
+            out.append({**e, "extendedProps": {**x, **({"poster": p} if p else {})}})
+    return out
 
 
 def _passes(s: Showtime, cfg: Config) -> bool:
@@ -380,6 +396,16 @@ def _build_feed(cfg: Config, shows: list[Showtime], tz: ZoneInfo,
                 carried: list[dict] = (), stale: list[str] = ()) -> dict:
     events = [s.to_event() for s in shows] + list(carried)
     events.sort(key=lambda e: (e["start"], e["extendedProps"]["theater"], e["title"]))
+    # Each poster once per film: the page gathers a film's posters from all its showings, and
+    # repeating the same URL on every showing was over a third of data.json.
+    seen: set[tuple[str, str]] = set()
+    for e in events:
+        p = e["extendedProps"].get("poster")
+        if p:
+            if (e["title"], p) in seen:
+                e["extendedProps"] = {k: v for k, v in e["extendedProps"].items() if k != "poster"}
+            else:
+                seen.add((e["title"], p))
     films = sorted({e["title"] for e in events}, key=str.lower)
 
     return {

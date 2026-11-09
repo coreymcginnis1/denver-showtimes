@@ -140,7 +140,7 @@ strip_suffixes = [
   '\s+(?:IMAX\s+)?(?:Opening Night\s+)?Fan Event$',      # "MOANA IMAX Opening Night Fan Event"
   '\s+(?:IMAX\s+)?(?:Early Access(?:\s+Screenings?)?|Advance\s+Screenings?)$',  # "... Early Access [Screening]"
   '\s*[-–—:]?\s*\(?\b(?:Re-?release|Re-?issue|RE\d{2})\)?$',  # "Coraline Re-release" / "Dune: Part One Reissue" / "(RE26)"
-  '\s+on\s+\d{2,3}\s?mm(?:\s+film)?$',   # "Interstellar on 35mm" / "The Odyssey on 35mm film"
+  '\s+(?:on|in)\s+(?:\d{2,3}\s?mm|VistaVision)(?:\s+film)?$',   # "Interstellar on 35mm" / "... in 70mm" / "... in VistaVision"
   '\s*[:–—-]\s*Sensory[- ]?Friendly\b.*$',  # "Supergirl: Sensory Friendly Screening" -> "Supergirl"
   '\s*\(dir\.?\s[^)]*\)$',      # director annotation: "Alpha (dir. Rawail)" -> "Alpha"
   '\s*[:–—-]\s*Xfinity\b.*$',   # sponsor tag: "Minions & Monsters: Xfinity" -> "Minions & Monsters"

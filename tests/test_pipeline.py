@@ -151,6 +151,12 @@ def test_is_non_film_drops_live_broadcast_and_memorial():
     assert not is_non_film("F1: The Movie", DEFAULT_DROP)
 
 
+def test_title_format_extraction_vistavision_and_in():
+    assert title_format("One Battle After Another in VistaVision") == "VistaVision"
+    assert title_format("Lawrence of Arabia in 70mm") == "70mm"
+    assert normalize_title("Lawrence of Arabia in 70mm", DEFAULT_STRIP_PREFIXES, DEFAULT_STRIP_SUFFIXES) == "Lawrence of Arabia"
+
+
 def test_title_format_extraction():
     assert title_format("Interstellar on 35mm") == "35mm"
     assert title_format("Oppenheimer on 70mm") == "70mm"

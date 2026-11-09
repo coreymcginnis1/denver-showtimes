@@ -18,6 +18,7 @@ import re
 from datetime import date, datetime, timedelta
 
 from .base import BaseScraper, http_client, to_int
+from ..formats import canon
 from ..models import Showtime
 
 log = logging.getLogger(__name__)
@@ -114,13 +115,10 @@ class LandmarkScraper(BaseScraper):
 
     @staticmethod
     def _fmt(tags: list[str]) -> str | None:
-        for tag in tags:
-            if tag.startswith("Format.Projection."):
-                fmt = tag.rsplit(".", 1)[-1]
-                # "Digital" is the default; "Scope"/"Flat" are just the screen's aspect ratio, which
-                # nobody picks a showing by. Real formats (35mm, 70mm…) still come through.
-                return None if fmt.lower() in ("digital", "scope", "flat") else fmt
-        return None
+        """formats.canon() of the projection tag ("Format.Projection.35mm"): Digital and the aspect
+        ratios Scope / Flat come back as None."""
+        proj = [t.rsplit(".", 1)[-1] for t in tags if t.startswith("Format.Projection.")]
+        return canon(proj)
 
     @staticmethod
     def _screen(sh: dict, tags: list[str]) -> str | None:

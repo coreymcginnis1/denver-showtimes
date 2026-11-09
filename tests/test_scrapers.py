@@ -59,7 +59,7 @@ def test_fandango_parse(cfg, fandango_showtimes):
     assert all(s.start.tzinfo is not None and s.start.date() == date(2026, 6, 29) for s in out)
     assert all("fandango.com" in (s.ticket_url or "") for s in out)
     assert any("Supergirl" in s.film_title for s in out)
-    assert any(s.fmt == "IMAX" for s in out)               # the named screen, not "Premium Format"
+    assert any(s.fmt == "IMAX" for s in out)               # named from the amenities, not "Premium Format"
     assert any(s.fmt == "3D" for s in out)                 # RealD 3D is plain 3D
     assert any(s.release_date == "2026-06-26" for s in out)  # release date kept for sorting
     assert all(s.fmt != "Standard" for s in out)
@@ -87,21 +87,34 @@ def test_fandango_skips_its_placeholder_poster():
 
 
 def test_fandango_names_premium_screens():
-    """Fandango's header only says "Premium Format"; the amenities name the screen."""
+    """IMAX and Dolby are named; branded premium screens are just "PLF"; 3D keeps IMAX/Dolby."""
     f = FandangoScraper._fmt
     prem, three_d = {"filmFormatHeader": "Premium Format"}, {"filmFormatHeader": "3D"}
     group = lambda *names: {"amenities": [{"name": n} for n in names]}
-    assert f(prem, group("Dolby Cinema @ AMC", "Reserved seating")) == "Dolby Cinema"
+    assert f(prem, group("Dolby Cinema @ AMC", "Reserved seating")) == "Dolby"
     assert f(prem, group("IMAX with Laser", "IMAX")) == "IMAX"
-    assert f(prem, group("PRIME at AMC")) == "AMC Prime"
-    assert f(prem, group("CINÉ XL®")) == "Ciné XL"
-    assert f(three_d, group("4DX", "RealD 3D")) == "4DX 3D"
-    assert f(three_d, group("RealD 3D", "Laser at AMC")) == "3D"
-    assert f(prem, group("Reserved seating")) == "Premium Format"     # unknown screen: keep the header
-    assert f({"filmFormatHeader": "Standard"}, group("Laser at AMC")) is None
+    assert f(prem, group("PRIME at AMC")) == "PLF"
+    assert f(prem, group("CINÉ XL®")) == "PLF"
+    assert f(prem, group("RPX", "Recliner Seats")) == "PLF"
+    assert f(three_d, group("4DX", "RealD 3D")) == "3D"
+    assert f(three_d, group("IMAX", "RealD 3D")) == "IMAX 3D"
+    assert f(prem, group("IMAX 70MM")) == "IMAX 70mm"
+    assert f(prem, group("Reserved seating")) == "PLF"                 # unnamed premium screen
+    assert f({"filmFormatHeader": "Standard"}, group("Laser at AMC", "Dolby Atmos")) is None
+
+
+def test_languages():
+    from movie_scraper.formats import language
+    assert language(["Japanese with English Subtitles", "Reserved seating"]) == "Subtitled"
+    assert language(["English Subtitles", "Hindi Language"]) == "Subtitled"
+    assert language(["Spanish Dubbed"]) == "Spanish dub"
+    assert language(["English Dubbed"]) == "Dubbed"
+    assert language(["Reserved seating", "Hindi Language"]) is None
+    assert language(["Laser at AMC"]) is None
 
 
 def test_landmark_hides_aspect_ratio_formats():
     assert LandmarkScraper._fmt(["Format.Projection.Scope"]) is None
     assert LandmarkScraper._fmt(["Format.Projection.Digital"]) is None
     assert LandmarkScraper._fmt(["Format.Projection.35mm"]) == "35mm"
+    assert LandmarkScraper._fmt(["Format.Projection.70mm"]) == "70mm"

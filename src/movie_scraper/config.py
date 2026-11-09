@@ -53,7 +53,7 @@ DEFAULT_STRIP_SUFFIXES = [
     r"\s+(?:IMAX\s+)?(?:Opening Night\s+)?Fan Event$",        # "MOANA IMAX Opening Night Fan Event"
     r"\s+(?:IMAX\s+)?(?:Early Access(?:\s+Screenings?)?|Advance\s+Screenings?)$",  # "... Early Access [Screening]"
     r"\s*[-–—:]?\s*\(?\b(?:Re-?release|Re-?issue|RE\d{2})\)?$",  # "Coraline Re-release" / "Dune: Part One Reissue" / "(RE26)"
-    r"\s+on\s+\d{2,3}\s?mm(?:\s+film)?$",   # "Interstellar on 35mm" / "The Odyssey on 35mm film"
+    r"\s+(?:on|in)\s+(?:\d{2,3}\s?mm|VistaVision)(?:\s+film)?$",   # "Interstellar on 35mm" / "... in 70mm" / "... in VistaVision"
     r"\s*[:–—-]\s*Sensory[- ]?Friendly\b.*$",  # "Supergirl: Sensory Friendly Screening" -> "Supergirl"
     r"\s*\(dir\.?\s[^)]*\)$",     # director annotation: "Alpha (dir. Rawail)" -> "Alpha"
     r"\s*[:–—-]\s*Xfinity\b.*$",  # sponsor tag: "Minions & Monsters: Xfinity" -> "Minions & Monsters"

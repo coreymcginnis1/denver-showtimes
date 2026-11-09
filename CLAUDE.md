@@ -62,7 +62,7 @@ Tests never touch the network (`tests/conftest.py` unsets tokens and stubs Wikip
   `--summary`, `--compare-trending`, `-v`). Python 3.11+; httpx, pydantic.
   - `scrapers/` — `sie_eventive.py`, `landmark.py`, `alamo.py`, `fandango.py` (AMC/Regal/Harkins).
   - `pipeline.py` — cleanup, TMDB standardization, openings, trending, feed, run summary.
-  - `tmdb.py` · `wikipedia.py` · `omdb.py` (off) · `config.py` · `cli.py` · `models.py`.
+  - `tmdb.py` · `wikipedia.py` · `omdb.py` (off) · `formats.py` · `config.py` · `cli.py` · `models.py`.
 - `public/` — `index.html`, `styles.css`, `app.js` (vanilla, no build), `zips.json`,
   `tmdb-logo.svg`, `preview.png`, `data.json` (written by the workflow).
 - `config.toml` — theaters, cleanup rules, TMDB overrides, feature switches.
@@ -72,7 +72,7 @@ Tests never touch the network (`tests/conftest.py` unsets tokens and stubs Wikip
 
 `theaters` (key, name, color, default_on, lat, lon) · `films` · `events` (`id`, `title`, `start`,
 optional `end`/`allDay`, `extendedProps`: `theater`, `screen`, `fmt`, `ticketUrl`, `poster`,
-`rating`, `runtime`, `year`, `release`) · `film_meta` (displayed title → TMDB data, `trend`,
+`lang`, `rating`, `runtime`, `year`, `release`) · `film_meta` (displayed title → TMDB data, `trend`,
 `wiki_views`, …) · `tmdb_ids` (local title → TMDB id) · `openings` (title → Denver opening date) ·
 `stale_theaters` · `generated_at` · `timezone`.
 
@@ -223,14 +223,18 @@ redesign directions" (A listings + C program won; B marquee rejected).
   button). Desktop: sticky right column; phone: Films / Schedule tabs.
 - **Next 2 weeks:** **Now playing** (a showing today at the selected theaters, or a new release already open in Denver whose next showing is within `RUN_GAP_DAYS` = 3 days; repertory and events need today; by the chosen sort) then **Coming soon** (everything else, repertory included, by its next showing); each
   theater gets one line with its next showing ("Alamo Sat Nov 7, 5:00 pm through Nov 11"), soonest first; three show, the rest behind "Show all N theaters" (`SPAN_SHOWN`). Search's "Also playing elsewhere" cards work the same way. No schedule column.
-- **Formats** (only special ones; the default 2D digital showing is never tagged): Fandango's header
-  says just Standard / Premium Format / 3D, so `fandango._fmt()` names the screen from the showtime
-  group's amenities: IMAX, Dolby Cinema, AMC Prime, 4DX, RPX, Ciné XL, ScreenX, "4DX 3D", plain "3D";
-  "Premium Format" only if no screen is named. Landmark hides Digital and the aspect ratios Scope /
-  Flat (nobody picks a showing by them). Alamo keeps real formats only (35mm, 70mm, IMAX, Dolby…,
-  joined with ", "). Sie's 35mm/70mm come from the title ("… on 35mm"). On the site a format all of a
-  theater's showings share goes on the theater line; mixed ones get a short red mark per time
-  (`FMT_TAG`, else the format's own name).
+- **Formats and languages** (`formats.py`, shared by every scraper; Corey's rule, Nov 2026): only
+  formats people pick a showing for are named — **IMAX, IMAX 3D, IMAX 70mm, Dolby (Cinema), Dolby 3D,
+  3D, 16mm, 35mm, 70mm, VistaVision**. Every other premium screen (AMC Prime, RPX, 4DX, ScreenX, Harkins
+  Ciné XL…) is theater branding, so it's just **PLF** (premium large format); 3D in one of those is
+  plain "3D". Laser projection, Atmos sound, seating and aspect ratios (Landmark's Scope / Flat) aren't
+  formats. Fandango's header says only Standard / Premium Format / 3D, so the screen comes from the
+  showtime group's amenities. **Language** (`lang`): "Subtitled", "Dubbed", or "<Language> dub"
+  ("Spanish dub"), from Fandango amenities and Alamo attributes; sources only flag the exceptions, so
+  an untagged showing of a foreign film can be either. Sie's prints come from the title ("… on 35mm",
+  "… in VistaVision"). On the site, a format/language all of a theater's showings share goes on the
+  theater line ("Regal Pavilions, Subtitled"); mixed ones get a short red mark per time (`FMT_TAG`:
+  IMAX, Dolby, 3D, PLF, Sub, Dub…, else the label itself).
 - **Search** also shows matches beyond the selected theaters/day under "Also playing elsewhere"
   (e.g. Fjord, only at AMC Westminster).
 - **Tap a time** → sheet with Get tickets and one "Add to calendar" button that opens Google, Outlook,

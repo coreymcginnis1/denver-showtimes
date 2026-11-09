@@ -154,7 +154,7 @@ def review_titles(new_titles: list[str], films: list[str]) -> list[tuple[str, st
     return out
 
 
-_TITLE_FORMAT_RE = re.compile(r"\bon\s+(\d{2,3})\s?mm\b", re.I)
+_TITLE_FORMAT_RE = re.compile(r"\b(?:on|in)\s+(\d{2})\s?mm\b|\b(?:on|in)\s+(VistaVision)\b", re.I)
 
 
 def title_format(title: str) -> str | None:
@@ -164,7 +164,7 @@ def title_format(title: str) -> str | None:
     showtime's format field instead of being lost.
     """
     m = _TITLE_FORMAT_RE.search(title or "")
-    return f"{m.group(1)}mm" if m else None
+    return (f"{m.group(1)}mm" if m.group(1) else "VistaVision") if m else None
 
 
 def run(config_path: str = "config.toml", only: set[str] | None = None) -> dict:

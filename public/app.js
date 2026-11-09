@@ -23,12 +23,15 @@
   var TINY = { sie: "Sie", landmark: "Mayan", amc: "AMC 9+CO 10", regal_pavilions: "Regal Pavilions",
     alamo_sloans: "Alamo", regal_colorado: "Regal Colorado", amc_westminster: "AMC Westminster",
     landmark_greenwood: "Landmark Greenwood Village", harkins_arvada: "Harkins Arvada", harkins_northfield: "Harkins Northfield" };
-  // Formats: the scrapers keep only special ones (premium screens, 3D, film prints). Short marks for
-  // times when a theater mixes formats; anything not listed uses its own name, so none goes unmarked.
-  var FMT_TAG = { "Premium Format": "Prem", "IMAX": "IMAX", "Dolby Cinema": "Dolby", "AMC Prime": "Prime", "RPX": "RPX",
-    "Ciné XL": "XL", "4DX": "4DX", "4DX 3D": "4DX 3D", "ScreenX": "ScreenX", "3D": "3D", "35mm": "35mm", "70mm": "70mm" };
-  function fmtTag(f) { return FMT_TAG[f] || f; }
-  function fmtName(f) { return f === "Premium Format" ? "Premium" : f; }
+  // Formats and languages (scraper's formats.py): IMAX, Dolby, film prints and 3D by name; every other
+  // premium screen is "PLF"; "Subtitled" / "Dubbed". A theater whose showings all share one goes on its
+  // line; mixed ones get a short red mark per time (anything not listed uses its own name).
+  var FMT_TAG = { "IMAX": "IMAX", "IMAX 3D": "IMAX 3D", "IMAX 70mm": "IMAX 70", "Dolby": "Dolby", "Dolby 3D": "Dolby 3D",
+    "3D": "3D", "16mm": "16mm", "35mm": "35mm", "70mm": "70mm", "VistaVision": "VV", "PLF": "PLF", "Premium Format": "PLF",
+    "Subtitled": "Sub", "Dubbed": "Dub" };
+  function fmtName(f) { return f === "Premium Format" ? "PLF" : f; }   // older data said "Premium Format"
+  function tagOf(s) { return [s.fmt ? fmtName(s.fmt) : "", s.lang || ""].filter(Boolean).join(", "); }   // "IMAX, Subtitled"
+  function shortTag(t) { return t.split(", ").map(function (x) { return FMT_TAG[x] || x; }).join(" "); }
   var COUNTRY = (function () { try { return new Intl.DisplayNames(["en"], { type: "region" }); } catch (e) { return null; } })();
 
   var $ = function (id) { return document.getElementById(id); };
@@ -73,7 +76,7 @@
       if (!f.runtime && x.runtime) f.runtime = x.runtime;
       if (!f.year && x.year) f.year = x.year;
       shows.push({ f: index[e.title], th: x.theater, d: e.start.slice(0, 10), hm: e.allDay ? null : e.start.slice(11, 16),
-        end: e.end ? e.end.slice(0, 16) : null, fmt: x.fmt, scr: x.screen, url: x.ticketUrl, id: e.id });
+        end: e.end ? e.end.slice(0, 16) : null, fmt: x.fmt, lang: x.lang, scr: x.screen, url: x.ticketUrl, id: e.id });
     });
     var openings = data.openings || {};
     films.forEach(function (f, i) {
@@ -258,7 +261,7 @@
   function timesHTML(list, f, t, sameFmt) {
     var half = null;
     return list.map(function (s) {
-      var tag = !sameFmt && s.fmt ? "<sup>" + esc(fmtTag(s.fmt)) + "</sup>" : "", label = "Times vary";
+      var tag = !sameFmt && tagOf(s) ? "<sup>" + esc(shortTag(tagOf(s))) + "</sup>" : "", label = "Times vary";
       if (s.hm) {
         var h = +s.hm.slice(0, 2), ap = h < 12 ? "am" : "pm";
         label = ((h % 12) || 12) + ":" + s.hm.slice(3) + ' <span class="ap">' + ap + "</span>";
@@ -343,9 +346,9 @@
             // How long it runs here, quietly after the next showing: "through Nov 11".
             (last.d !== first.d ? '<span class="thru">through ' + shortDate(last.d) + "</span>" : "") + "</div>";
         }
-        // A format every showing here shares ("Regal Colorado, IMAX") goes with the theater, not on each time.
-        var fm = e[1].map(function (s) { return s.fmt || ""; }), one = fm.every(function (x) { return x === fm[0]; }) ? fm[0] : null;
-        var label = (TINY[e[0]] || tName(e[0])) + (one ? ", " + fmtName(one) : "");
+        // A format / language every showing here shares ("Regal Colorado, IMAX") goes with the theater, not on each time.
+        var fm = e[1].map(tagOf), one = fm.every(function (x) { return x === fm[0]; }) ? fm[0] : null;
+        var label = (TINY[e[0]] || tName(e[0])) + (one ? ", " + one : "");
         return '<div class="venue"><span class="vn">' + esc(label) + '</span><div class="times">' + timesHTML(e[1], f, t, one != null) + "</div></div>";
       }).join("");
       return '<article class="card"><div class="poster">' + posterBlock(i) + "</div>" +
@@ -420,7 +423,7 @@
       var n = +h, half = n < 12 ? "am" : "pm";
       html += '<div class="hour"><p class="h">' + ((n % 12) || 12) + "<small>" + half + "</small>" + '</p><div class="rows">' +
         rows.map(function (s) {
-          var f = films[s.f], extra = s.fmt ? fmtName(s.fmt) : "";
+          var f = films[s.f], extra = tagOf(s);
           return '<button type="button" class="row' + (isPast(s) ? " past" : "") + '" data-i="' + shows.indexOf(s) + '"><b>' + hm12(s.hm).replace(" ", "\u2009") +
             '</b> <span class="ft">' + esc(f.t) + '</span> <span class="th">' + esc(TINY[s.th] || tName(s.th)) + (extra ? ", " + esc(extra) : "") + "</span></button>";
         }).join("") + "</div></div>";
@@ -465,7 +468,7 @@
   var lastFocus = null, icsUrl = null;
   function openSheet(i) {
     var s = shows[i], f = films[s.f], t = theaterOf(s.th) || { name: s.th };
-    var where = [t.name, s.scr, s.fmt ? fmtName(s.fmt) : ""].filter(Boolean).join(", "), links = s.hm ? calendarLinks(s) : null;
+    var where = [t.name, s.scr, tagOf(s)].filter(Boolean).join(", "), links = s.hm ? calendarLinks(s) : null;
     icsUrl = links && links.ics;
     var when = dateObj(s.d).toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" }) +
       (s.hm ? ", " + timeHTML(s.hm) + " to " + timeHTML(links.end.hm) : ", times vary");

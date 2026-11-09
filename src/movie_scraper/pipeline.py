@@ -10,6 +10,7 @@ from pathlib import Path
 from zoneinfo import ZoneInfo
 
 from .config import Config, load_config
+from .formats import on_film
 from .models import Showtime
 from .scrapers.alamo import AlamoScraper
 from .scrapers.fandango import FandangoScraper
@@ -193,6 +194,24 @@ def run(config_path: str = "config.toml", only: set[str] | None = None) -> dict:
             log.error("theater %s returned no showtimes — keeping its last published rows", key)
             failed.append(key)
 
+    # Film prints beyond the window: sources that can look far ahead cheaply report them months out
+    # (the Sie announces 35mm runs early). Only on-film showings are kept from this; a failure here
+    # never fails a theater.
+    ahead: set[int] = set()
+    if cfg.film_days_ahead > cfg.days_ahead:
+        far = today + timedelta(days=cfg.film_days_ahead)
+        for key, tc in cfg.theaters.items():
+            cls = SCRAPERS.get(tc.scraper or key)
+            if not tc.enabled or (only and key not in only) or cls is None or key in failed:
+                continue
+            try:
+                rows = cls(cfg, tc, key=key).fetch_ahead(end + timedelta(days=1), far) or []
+            except Exception as e:
+                log.warning("film look-ahead %s: %s", key, e)
+                rows = []
+            ahead.update(id(r) for r in rows)
+            collected.extend(rows)
+
     tcfg = cfg.titles
     normalized: list[Showtime] = []
     for s in collected:
@@ -200,6 +219,8 @@ def run(config_path: str = "config.toml", only: set[str] | None = None) -> dict:
         if gauge and not s.fmt:
             s.fmt = gauge
         s.film_title = normalize_title(s.film_title, tcfg.strip_prefixes, tcfg.strip_suffixes)
+        if id(s) in ahead and not on_film(s.fmt):
+            continue   # look-ahead rows are for film prints only
         if not is_non_film(s.film_title, tcfg.drop):
             normalized.append(s)
     merge_case_variants(normalized)

@@ -41,6 +41,14 @@ def canon(names: list[str], three_d: bool = False) -> str | None:
     return None
 
 
+PRINTS = {"16mm", "35mm", "70mm", "IMAX 70mm", "VistaVision"}
+
+
+def on_film(fmt: str | None) -> bool:
+    """Projected from a film print (the site's "On film")."""
+    return fmt in PRINTS
+
+
 def language(names: list[str]) -> str | None:
     """"Subtitled" or "Dubbed" (with the language when it isn't English: "Spanish dub"), else None.
 

@@ -95,7 +95,7 @@
       f.event = !f.id;
     });
     days = Array.from(new Set(shows.map(function (s) { return s.d; }))).sort()
-      .filter(function (d) { return d >= NOW.day; });
+      .filter(function (d) { return d >= NOW.day && dayDiff(NOW.day, d) <= WINDOW_DAYS; });   // film prints run further out
     if (!days.length) days = Array.from(new Set(shows.map(function (s) { return s.d; }))).sort();
     state.day = days.indexOf(NOW.day) >= 0 ? NOW.day : days[0];
 
@@ -113,7 +113,8 @@
   // (TMDB dates them by it). New releases (and events with no release date) are everything else.
   var REPERTORY_DAYS = 730;
   var RUN_GAP_DAYS = 3;
-  var SPAN_SHOWN = 3;   // two weeks / search: theaters listed before "Show all N theaters"   // a new release off today but back within this many days is still "Now playing"
+  var SPAN_SHOWN = 3;
+  var WINDOW_DAYS = 14;  // the day strip: today + 14 (data.json also holds film prints up to ~90 days out)   // two weeks / search: theaters listed before "Show all N theaters"   // a new release off today but back within this many days is still "Now playing"
   function isRepertory(f) {
     var orig = f.rel || (f.year ? f.year + "-07-01" : null);
     return !!(orig && f.opened && dayDiff(orig, f.opened) > REPERTORY_DAYS);
@@ -316,16 +317,21 @@
       var q = state.q.toLowerCase();
       shows.forEach(function (s) {
         var f = films[s.f];
-        if (byFilm.has(s.f) || days.indexOf(s.d) < 0 || isPast(s) || (q && f.t.toLowerCase().indexOf(q) < 0)) return;
+        var inRange = days.indexOf(s.d) >= 0 || (state.kind === "film" && s.d > days[days.length - 1]);   // prints: months out
+        if (byFilm.has(s.f) || !inRange || isPast(s) || (q && f.t.toLowerCase().indexOf(q) < 0)) return;
         if (!kindOk(s)) return;
         if (!elsewhere.has(s.f)) elsewhere.set(s.f, []); elsewhere.get(s.f).push(s);
       });
     }
     var extraIds = sortFilms(Array.from(elsewhere.keys()));
+    if (state.kind === "film") {   // prints: soonest screening first
+      var soonest = function (i) { return elsewhere.get(i).reduce(function (m, s) { return (s.d + s.hm) < m ? s.d + s.hm : m; }, "9999"); };
+      extraIds.sort(function (a, b) { return soonest(a).localeCompare(soonest(b)); });
+    }
 
     if (!ids.length && !extraIds.length) {
       $("grid").innerHTML = '<p class="empty">' + (state.kind === "film" && !state.q
-        ? "Nothing is showing on film in the next two weeks."
+        ? "Nothing is showing on film in the next three months."
         : state.theaters.size ? "Nothing matches" + (all ? "" : " on this day") + ". Try " + (all ? "" : "another day, ") + "more theaters, or clear the search."
         : "Pick at least one theater above to see films.") + "</p>";
       return;
@@ -396,7 +402,7 @@
     }
     if (extraIds.length) {
       $("grid").innerHTML += '<h3 class="group">' + (state.kind === "film" && !state.q ? "On film elsewhere" : "Also playing elsewhere") + "</h3>" +
-        '<p class="group-note">Other theaters or days in the next two weeks.</p>' +
+        '<p class="group-note">' + (state.kind === "film" ? "Other theaters and dates, up to three months out." : "Other theaters or days in the next two weeks.") + "</p>" +
         '<div class="grid">' + extraIds.map(function (i) { return cardHTML(i, true); }).join("") + "</div>";
     }
     clampVenues();

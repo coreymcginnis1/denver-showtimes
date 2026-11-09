@@ -31,6 +31,9 @@ _BASIC = "Basic " + base64.b64encode(f"{EVENTIVE_PUBLISHABLE_KEY}:".encode()).de
 class SieScraper(BaseScraper):
     key = "sie"
 
+    def fetch_ahead(self, start: date, end: date) -> list[Showtime]:
+        return self.fetch(start, end)   # a handful of requests (Sie: one a week; Alamo: one in all)
+
     def fetch(self, start: date, end: date) -> list[Showtime]:
         films: dict[str, dict] = {}
         shows_by_day: dict[str, dict] = {}
@@ -101,9 +104,9 @@ class SieScraper(BaseScraper):
             runtime_minutes=to_int(details.get("runtime")),
             director=credits.get("director"),
             year=to_int(details.get("year")),
-            # Eventive has no projection field; a "35mm"-style tag is the only sign of a print.
+            # Eventive has no projection field; a "35mm Film"-style tag (or the title) is the only sign of a print.
             fmt=canon([t.get("name", "") for t in film.get("tags") or [] if isinstance(t, dict)
-                       and re.fullmatch(r"(?i)\s*(16|35|70)\s?mm\s*|\s*vistavision\s*", t.get("name", ""))]),
+                       and re.fullmatch(r"(?i)\s*((16|35|70)\s?mm|vistavision)(\s+film)?\s*", t.get("name", ""))]),
             lang=self._lang(details),
         )
 

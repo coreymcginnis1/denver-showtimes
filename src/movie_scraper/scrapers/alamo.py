@@ -28,6 +28,9 @@ DEFAULT_MARKET = "denver"
 class AlamoScraper(BaseScraper):
     key = "alamo"
 
+    def fetch_ahead(self, start: date, end: date) -> list[Showtime]:
+        return self.fetch(start, end)   # a handful of requests (Sie: one a week; Alamo: one in all)
+
     def fetch(self, start: date, end: date) -> list[Showtime]:
         venue = self.theater_cfg.location or DEFAULT_VENUE
         with http_client() as c:

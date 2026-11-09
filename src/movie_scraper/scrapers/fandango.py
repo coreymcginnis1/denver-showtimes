@@ -26,6 +26,11 @@ SHOWTIMES_URL = "https://www.fandango.com/napi/theaterMovieShowtimes/{tid}"
 DEFAULT_TID = "AAFXW"
 # Format headers we don't surface (the default 2D screen); keep IMAX / RPX / Premium / 3D / Dolby.
 _GENERIC_FMT = {"", "standard", "standard format", "2d"}
+# Fandango's header only says "Premium Format"; the showtime group's amenities name the screen.
+# Amenity name (lowercased) -> the label the site shows. Laser projection, seating, captions and
+# languages are not formats and are ignored.
+_SCREENS = [("imax", "IMAX"), ("dolby cinema", "Dolby Cinema"), ("prime at amc", "AMC Prime"),
+            ("4dx", "4DX"), ("screenx", "ScreenX"), ("rpx", "RPX"), ("ciné xl", "Ciné XL"), ("cine xl", "Ciné XL")]
 
 
 class FandangoScraper(BaseScraper):
@@ -66,8 +71,8 @@ class FandangoScraper(BaseScraper):
             runtime = m.get("runtime") or None
             release = (m.get("releaseDate") or "")[:10] or None
             for v in m.get("variants", []) or []:
-                fmt = self._fmt(v)
                 for ag in v.get("amenityGroups", []) or []:
+                    fmt = self._fmt(v, ag)
                     for st in ag.get("showtimes", []) or []:
                         if st.get("expired"):
                             continue
@@ -97,9 +102,20 @@ class FandangoScraper(BaseScraper):
             return None
 
     @staticmethod
-    def _fmt(variant: dict) -> str | None:
+    def _fmt(variant: dict, group: dict | None = None) -> str | None:
+        """"IMAX", "Dolby Cinema", "4DX 3D", "3D"…; None for a standard 2D showing.
+
+        The variant header is only Standard / Premium Format / 3D, so the named screen comes from
+        the amenity group; a premium showing with no recognizable screen stays "Premium Format".
+        """
         h = (variant.get("filmFormatHeader") or "").strip()
-        return h if h and h.lower() not in _GENERIC_FMT else None
+        if not h or h.lower() in _GENERIC_FMT:
+            return None
+        names = [(a.get("name") or "").strip().lower() for a in (group or {}).get("amenities") or []]
+        screen = next((label for key, label in _SCREENS if any(n.startswith(key) for n in names)), None)
+        if h.lower() == "3d":
+            return f"{screen} 3D" if screen else "3D"
+        return screen or h
 
     @staticmethod
     def _poster(m: dict) -> str | None:

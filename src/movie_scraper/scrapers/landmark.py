@@ -117,7 +117,9 @@ class LandmarkScraper(BaseScraper):
         for tag in tags:
             if tag.startswith("Format.Projection."):
                 fmt = tag.rsplit(".", 1)[-1]
-                return None if fmt.lower() == "digital" else fmt  # "Digital" is the default, hide it
+                # "Digital" is the default; "Scope"/"Flat" are just the screen's aspect ratio, which
+                # nobody picks a showing by. Real formats (35mm, 70mm…) still come through.
+                return None if fmt.lower() in ("digital", "scope", "flat") else fmt
         return None
 
     @staticmethod

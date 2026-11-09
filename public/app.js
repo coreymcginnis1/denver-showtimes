@@ -23,7 +23,12 @@
   var TINY = { sie: "Sie", landmark: "Mayan", amc: "AMC 9+CO 10", regal_pavilions: "Regal Pavilions",
     alamo_sloans: "Alamo", regal_colorado: "Regal Colorado", amc_westminster: "AMC Westminster",
     landmark_greenwood: "Landmark Greenwood Village", harkins_arvada: "Harkins Arvada", harkins_northfield: "Harkins Northfield" };
-  var FMT_TAG = { "Premium Format": "Prem", "3D": "3D", "Scope": "Scope", "35mm": "35mm", "70mm": "70mm" };
+  // Formats: the scrapers keep only special ones (premium screens, 3D, film prints). Short marks for
+  // times when a theater mixes formats; anything not listed uses its own name, so none goes unmarked.
+  var FMT_TAG = { "Premium Format": "Prem", "IMAX": "IMAX", "Dolby Cinema": "Dolby", "AMC Prime": "Prime", "RPX": "RPX",
+    "Ciné XL": "XL", "4DX": "4DX", "4DX 3D": "4DX 3D", "ScreenX": "ScreenX", "3D": "3D", "35mm": "35mm", "70mm": "70mm" };
+  function fmtTag(f) { return FMT_TAG[f] || f; }
+  function fmtName(f) { return f === "Premium Format" ? "Premium" : f; }
   var COUNTRY = (function () { try { return new Intl.DisplayNames(["en"], { type: "region" }); } catch (e) { return null; } })();
 
   var $ = function (id) { return document.getElementById(id); };
@@ -253,7 +258,7 @@
   function timesHTML(list, f, t, sameFmt) {
     var half = null;
     return list.map(function (s) {
-      var tag = !sameFmt && FMT_TAG[s.fmt] ? "<sup>" + FMT_TAG[s.fmt] + "</sup>" : "", label = "Times vary";
+      var tag = !sameFmt && s.fmt ? "<sup>" + esc(fmtTag(s.fmt)) + "</sup>" : "", label = "Times vary";
       if (s.hm) {
         var h = +s.hm.slice(0, 2), ap = h < 12 ? "am" : "pm";
         label = ((h % 12) || 12) + ":" + s.hm.slice(3) + ' <span class="ap">' + ap + "</span>";
@@ -338,9 +343,9 @@
             // How long it runs here, quietly after the next showing: "through Nov 11".
             (last.d !== first.d ? '<span class="thru">through ' + shortDate(last.d) + "</span>" : "") + "</div>";
         }
-        // A format every showing here shares ("Mayan, Scope") goes with the theater, not on each time.
+        // A format every showing here shares ("Regal Colorado, IMAX") goes with the theater, not on each time.
         var fm = e[1].map(function (s) { return s.fmt || ""; }), one = fm.every(function (x) { return x === fm[0]; }) ? fm[0] : null;
-        var label = (TINY[e[0]] || tName(e[0])) + (one ? ", " + (one === "Premium Format" ? "Premium" : one) : "");
+        var label = (TINY[e[0]] || tName(e[0])) + (one ? ", " + fmtName(one) : "");
         return '<div class="venue"><span class="vn">' + esc(label) + '</span><div class="times">' + timesHTML(e[1], f, t, one != null) + "</div></div>";
       }).join("");
       return '<article class="card"><div class="poster">' + posterBlock(i) + "</div>" +
@@ -415,7 +420,7 @@
       var n = +h, half = n < 12 ? "am" : "pm";
       html += '<div class="hour"><p class="h">' + ((n % 12) || 12) + "<small>" + half + "</small>" + '</p><div class="rows">' +
         rows.map(function (s) {
-          var f = films[s.f], extra = [s.fmt === "Premium Format" ? "Premium" : s.fmt].filter(Boolean).join("");
+          var f = films[s.f], extra = s.fmt ? fmtName(s.fmt) : "";
           return '<button type="button" class="row' + (isPast(s) ? " past" : "") + '" data-i="' + shows.indexOf(s) + '"><b>' + hm12(s.hm).replace(" ", "\u2009") +
             '</b> <span class="ft">' + esc(f.t) + '</span> <span class="th">' + esc(TINY[s.th] || tName(s.th)) + (extra ? ", " + esc(extra) : "") + "</span></button>";
         }).join("") + "</div></div>";
@@ -460,7 +465,7 @@
   var lastFocus = null, icsUrl = null;
   function openSheet(i) {
     var s = shows[i], f = films[s.f], t = theaterOf(s.th) || { name: s.th };
-    var where = [t.name, s.scr, s.fmt].filter(Boolean).join(", "), links = s.hm ? calendarLinks(s) : null;
+    var where = [t.name, s.scr, s.fmt ? fmtName(s.fmt) : ""].filter(Boolean).join(", "), links = s.hm ? calendarLinks(s) : null;
     icsUrl = links && links.ics;
     var when = dateObj(s.d).toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" }) +
       (s.hm ? ", " + timeHTML(s.hm) + " to " + timeHTML(links.end.hm) : ", times vary");

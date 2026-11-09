@@ -101,4 +101,4 @@ class AlamoScraper(BaseScraper):
             t = (fmt_titles.get(session.get("formatSlug")) or "").strip()
             if t and t.lower() not in _GENERIC_FMT and "digital" not in t.lower():
                 bits.append(t)
-        return " · ".join(bits) or None
+        return ", ".join(bits) or None

@@ -204,6 +204,10 @@ def test_secondary_theaters_config():
     assert c.theaters["amc"].scraper == "fandango"          # AMC reads from Fandango
     assert c.theaters["amc_westminster"].scraper == "fandango"
     assert c.theaters["alamo_sloans"].default_on is False
+    for key, loc in (("alamo_westminster", "westminster"), ("alamo_littleton", "littleton")):
+        t = c.theaters[key]                                   # same Alamo feed, its own location
+        assert t.enabled and t.default_on is False and t.scraper == "alamo" and t.location == loc
+        assert t.lat and t.lon                                # for the distance filter
     assert c.theaters["regal_colorado"].enabled is True     # scraped via Fandango
     assert c.theaters["regal_colorado"].default_on is False  # but off by default
     assert c.theaters["regal_colorado"].scraper == "fandango"

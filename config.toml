@@ -58,6 +58,26 @@ location = "sloans-lake"
 lat = 39.7409
 lon = -105.0425
 
+[theaters.alamo_westminster]
+enabled = true
+default_on = false
+name = "Alamo Drafthouse Westminster"
+color = "#C98B3F"
+scraper = "alamo"
+location = "westminster"         # same feed as Sloans Lake, one request per location
+lat = 39.8586
+lon = -105.0620
+
+[theaters.alamo_littleton]
+enabled = true
+default_on = false
+name = "Alamo Drafthouse Littleton"
+color = "#B97A2E"
+scraper = "alamo"
+location = "littleton"
+lat = 39.5837
+lon = -105.0249
+
 [theaters.regal_colorado]
 enabled = true
 default_on = false

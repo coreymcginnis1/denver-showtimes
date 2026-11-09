@@ -9,7 +9,8 @@
 
   // Names for the theater checklist; the full name is used in the sheet and calendar entries.
   var SHORT = { sie: "Sie FilmCenter", landmark: "Landmark Mayan", amc: "AMC 9+CO 10", regal_pavilions: "Regal Pavilions",
-    alamo_sloans: "Alamo Sloans Lake", regal_colorado: "Regal Colorado Ctr", amc_westminster: "AMC Westminster",
+    alamo_sloans: "Alamo Sloans Lake", alamo_westminster: "Alamo Westminster", alamo_littleton: "Alamo Littleton",
+    regal_colorado: "Regal Colorado Ctr", amc_westminster: "AMC Westminster",
     landmark_greenwood: "Landmark Greenwood Village", harkins_arvada: "Harkins Arvada", harkins_northfield: "Harkins Northfield" };
   var THEATER_SITES = [   // one link per company; each site lists its own locations
     ["Sie FilmCenter", "https://www.denverfilm.org/"],
@@ -21,7 +22,8 @@
   ];
   // Shortest names, for the times under a poster, the hour list and the "At Sie and Mayan" line.
   var TINY = { sie: "Sie", landmark: "Mayan", amc: "AMC 9+CO 10", regal_pavilions: "Regal Pavilions",
-    alamo_sloans: "Alamo", regal_colorado: "Regal Colorado", amc_westminster: "AMC Westminster",
+    alamo_sloans: "Alamo Sloans Lake", alamo_westminster: "Alamo Westminster", alamo_littleton: "Alamo Littleton",
+    regal_colorado: "Regal Colorado", amc_westminster: "AMC Westminster",
     landmark_greenwood: "Landmark Greenwood Village", harkins_arvada: "Harkins Arvada", harkins_northfield: "Harkins Northfield" };
   // Formats and languages (scraper's formats.py): IMAX, Dolby, film prints and 3D by name; every other
   // premium screen is "PLF"; "Subtitled" / "Dubbed". A theater whose showings all share one goes on its

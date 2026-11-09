@@ -79,7 +79,7 @@ optional `end`/`allDay`, `extendedProps`: `theater`, `screen`, `fmt`, `ticketUrl
 
 ## Theaters (`config.toml` `[theaters.*]`)
 
-Ten theaters. Sie and Landmark Mayan start on; the rest have `default_on = false`.
+Twelve theaters. Sie and Landmark Mayan start on; the rest have `default_on = false`.
 One scraper can back several theaters via `scraper` + `location`. `lat`/`lon` drive the distance
 filter.
 
@@ -90,7 +90,7 @@ filter.
 | AMC 9+CO 10 / Westminster Promenade 24 | **Fandango** `napi/theaterMovieShowtimes/<id>`; AAYUA / AAECN |
 | Regal UA Denver Pavilions / Colorado Center | **Fandango**; AAJJG / AAFXW |
 | Harkins Arvada 14 / Northfield 18 | **Fandango**; AAYFG / AATYG |
-| Alamo Drafthouse Sloans Lake | `drafthouse.com/s/mother/v2/schedule/venue/sloans-lake` (JSON) |
+| Alamo Drafthouse Sloans Lake / Westminster / Littleton | `drafthouse.com/s/mother/v2/schedule/venue/<location>` (JSON, one request each, whole schedule); `sloans-lake` / `westminster` / `littleton` |
 
 - **AMC, Regal and Harkins come from Fandango:** amctheatres.com and regmovies.com block scrapers
   (Cloudflare / bot challenges); Fandango's `napi` JSON is open over plain httpx, and its ticket
@@ -98,7 +98,8 @@ filter.
 - **Coverage checked Nov 2026** (within 10 mi of 80206): also on Fandango but not added — AMC Dine-In
   Cherry Creek 8 (AAADR; 12 of 13 films duplicated elsewhere), Regal River Point, Cinemark Bel Mar
   16, Cinemark Century Aurora, Regal SouthGlenn. The Esquire closed July 2024. Alamo Westminster and
-  Littleton are beyond 10 mi.
+  Littleton (~10 mi) were added Nov 2026, off by default: cheap (one request each) and Alamo programs
+  repertory and 35mm.
 - **Regal Colorado Center** shrank from ~20 films / ~430 showtimes (July) to ~5–6 / ~115 (Nov 2026)
   while the feed stayed healthy, so the theater itself is running fewer screens. If it drops to
   zero, check regmovies.com in a browser before treating it as a scraper failure.
@@ -200,7 +201,7 @@ redesign directions" (A listings + C program won; B marquee rejected).
 
 - **Controls:** masthead "Denver Movie Showtimes" with the chosen date under it · sticky day strip
   ("All dates", then the weekday, never "Today", "Nov" over a big "10" over "Tue", like a tear-off calendar, every day the same width; the selected day is a brick block) · **Theaters**:
-  "Theaters near [zip] within 1 mi / 3 mi / 5 mi / any distance" and a checklist of all ten nearest first
+  "Theaters near [zip] within 1 mi / 3 mi / 5 mi / any distance" and a checklist of all twelve nearest first
   with miles in one row that scrolls sideways: no scrollbar, the side with more fades and gets a ‹ / ›
   arrow (no counts, no theater colors). Phones fold it to "At Sie and Mayan · Change". Zip default
   **80218**, **never saved**; straight-line distance from Census zip centroids in `zips.json`. Theater
@@ -211,7 +212,7 @@ redesign directions" (A listings + C program won; B marquee rejected).
   prints are rare, also lists them on other dates at your theaters ("On film on other dates") and at other theaters
   ("On film at other theaters"), soonest first.
   **Look-ahead** (`ahead_days = 90`, `fetch_ahead()`): sources that can look months out cheaply (Sie,
-  one request a week; Landmark, one ranged request; Alamo, its full feed) report **everything** up to 90
+  one request a week; Landmark, one ranged request; the three Alamos, their full feeds) report **everything** up to 90
   days; Fandango (a request per day per theater) stops at 14. The day strip stays at `WINDOW_DAYS` = 14;
   later dates show only in All dates ("Further out"), On film and search.
   - **Newest:** new releases by Denver **release week** (Friday–Thursday; Wed/Thu previews count

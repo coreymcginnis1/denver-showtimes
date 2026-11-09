@@ -115,7 +115,7 @@
   var RUN_GAP_DAYS = 3;     // a new release off today but back within this many days is still "Now playing"
   var SPAN_SHOWN = 3;       // All dates / search: theaters listed before "Show all N theaters"
   var WINDOW_DAYS = 14;     // the day strip: today + 14 (Sie, Landmark and Alamo list up to ~90 days out)
-  var FURTHER_NOTE = "Sie, Landmark and Alamo only; the chains post about two weeks ahead.";
+  var FURTHER_NOTE = "Sie, Landmark and Alamo only.";
   function isRepertory(f) {
     var orig = f.rel || (f.year ? f.year + "-07-01" : null);
     return !!(orig && f.opened && dayDiff(orig, f.opened) > REPERTORY_DAYS);

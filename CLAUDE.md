@@ -208,7 +208,8 @@ redesign directions" (A listings + C program won; B marquee rejected).
   resets everyone) · "Find a film" search first (× clears it; Enter closes the phone keyboard), then
   **Show** All / New releases / Repertory / **On film** and **Sort** Newest / Trending / A–Z. On film (Corey's
   interest) keeps only showings projected from a print (16/35/70mm, IMAX 70mm, VistaVision) and, since
-  prints are rare, also lists them at other theaters and dates ("On film elsewhere", soonest first).
+  prints are rare, also lists them on other dates at your theaters ("On film on other dates") and at other theaters
+  ("On film at other theaters"), soonest first.
   **Look-ahead** (`ahead_days = 90`, `fetch_ahead()`): sources that can look months out cheaply (Sie,
   one request a week; Landmark, one ranged request; Alamo, its full feed) report **everything** up to 90
   days; Fandango (a request per day per theater) stops at 14. The day strip stays at `WINDOW_DAYS` = 14;
@@ -229,7 +230,7 @@ redesign directions" (A listings + C program won; B marquee rejected).
 - **Schedule:** the day in time order under big brick hour numerals, each with its am/pm (earlier-today rows behind a
   button). Desktop: sticky right column; phone: Films / Schedule tabs.
 - **All dates:** **Now playing** (a showing today at the selected theaters, or a new release already open in Denver whose next showing is within `RUN_GAP_DAYS` = 3 days; repertory and events need today; by the chosen sort) then **Coming soon** (everything else, repertory included, by its next showing); each
-  theater gets one line with its next showing ("Alamo Sat Nov 7, 5:00 pm through Nov 11"), soonest first; three show, the rest behind "Show all N theaters" (`SPAN_SHOWN`). Then **Further out**: films whose first showing is past the two weeks, soonest first, with the note "Sie, Landmark and Alamo only; the chains post about two weeks ahead." Search's "Also playing elsewhere" cards work the same way. No schedule column.
+  theater gets one line with its next showing ("Alamo Sat Nov 7, 5:00 pm through Nov 11"), soonest first; three show, the rest behind "Show all N theaters" (`SPAN_SHOWN`). Then **Further out**: films whose first showing is past the two weeks, soonest first, with the note "Sie, Landmark and Alamo only; the chains post about two weeks ahead." Search's extra matches ("Playing on other dates" / "Playing at other theaters") work the same way. No schedule column.
 - **Formats and languages** (`formats.py`, shared by every scraper; Corey's rule, Nov 2026): only
   formats people pick a showing for are named — **IMAX, IMAX 3D, IMAX 70mm, Dolby (Cinema), Dolby 3D,
   3D, 16mm, 35mm, 70mm, VistaVision**. Every other premium screen (AMC Prime, RPX, 4DX, ScreenX, Harkins
@@ -243,8 +244,8 @@ redesign directions" (A listings + C program won; B marquee rejected).
   "… in VistaVision") or a "35mm" Eventive tag (Eventive has no projection field). On the site, a format/language all of a theater's showings share goes on the
   theater line ("Regal Pavilions, Subtitled"); mixed ones get a short red mark per time (`FMT_TAG`:
   IMAX, Dolby, 3D, PLF, Sub, Dub…, else the label itself).
-- **Search** also shows matches beyond the selected theaters/day under "Also playing elsewhere"
-  (e.g. Fjord, only at AMC Westminster).
+- **Search** also shows matches beyond the selected day and theaters, split into "Playing on other
+  dates" (your theaters) and "Playing at other theaters" (e.g. Fjord, only at AMC Westminster).
 - **Tap a time** → sheet with Get tickets and one "Add to calendar" button that opens Google, Outlook,
   Apple/.ics (ICS uses TZID America/Denver).
 - **Times read "3:00 pm"** (lowercase, no periods; `hm12()`); digits tabular, "am/pm" in `.ap`.

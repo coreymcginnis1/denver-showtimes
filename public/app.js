@@ -324,11 +324,25 @@
         if (!elsewhere.has(s.f)) elsewhere.set(s.f, []); elsewhere.get(s.f).push(s);
       });
     }
-    var extraIds = sortFilms(Array.from(elsewhere.keys()));
-    if (state.kind === "film") {   // prints: soonest screening first
-      var soonest = function (i) { return elsewhere.get(i).reduce(function (m, s) { return (s.d + s.hm) < m ? s.d + s.hm : m; }, "9999"); };
-      extraIds.sort(function (a, b) { return soonest(a).localeCompare(soonest(b)); });
-    }
+    // Split the extra matches: your theaters on other dates, then other theaters (a film can be in both).
+    var split = function (mine) {
+      var m = new Map();
+      elsewhere.forEach(function (list, i) {
+        var part = list.filter(function (s) { return state.theaters.has(s.th) === mine; });
+        if (part.length) m.set(i, part);
+      });
+      return m;
+    };
+    var otherDates = split(true), otherTheaters = split(false);
+    var order = function (m) {
+      var ids = sortFilms(Array.from(m.keys()));
+      if (state.kind === "film") {   // prints: soonest screening first
+        var soonest = function (i) { return m.get(i).reduce(function (x, s) { return (s.d + s.hm) < x ? s.d + s.hm : x; }, "9999"); };
+        ids.sort(function (a, b) { return soonest(a).localeCompare(soonest(b)); });
+      }
+      return ids;
+    };
+    var extraIds = Array.from(elsewhere.keys());
 
     if (!ids.length && !extraIds.length) {
       $("grid").innerHTML = '<p class="empty">' + (state.kind === "film" && !state.q
@@ -337,8 +351,8 @@
         : "Pick at least one theater above to see films.") + "</p>";
       return;
     }
-    var cardHTML = function (i, other) {   // other: a match from beyond the selected theaters/day
-      var f = films[i], list = (other ? elsewhere : byFilm).get(i), venues = new Map(), asSpan = all || !!other;
+    var cardHTML = function (i, other) {   // other: the Map of extra matches this card comes from
+      var f = films[i], list = (other || byFilm).get(i).slice(), venues = new Map(), asSpan = all || !!other;
       list.sort(function (a, b) { return (a.d + (a.hm || "")).localeCompare(b.d + (b.hm || "")); })
         .forEach(function (s) { if (!venues.has(s.th)) venues.set(s.th, []); venues.get(s.th).push(s); });
       var since = f.opened ? dayDiff(f.opened, asSpan ? days[0] : state.day) : null;
@@ -404,11 +418,12 @@
       $("grid").innerHTML = ids.length ? '<div class="grid">' + ids.map(function (i) { return cardHTML(i); }).join("") + "</div>"
         : '<p class="empty">' + (state.kind === "film" ? "Nothing on film" : "No match") + ' at these theaters' + (all ? "" : " on this day") + ".</p>";
     }
-    if (extraIds.length) {
-      $("grid").innerHTML += '<h3 class="group">' + (state.kind === "film" && !state.q ? "On film elsewhere" : "Also playing elsewhere") + "</h3>" +
-        '<p class="group-note">Other theaters or dates.</p>' +
-        '<div class="grid">' + extraIds.map(function (i) { return cardHTML(i, true); }).join("") + "</div>";
-    }
+    var lead = state.kind === "film" && !state.q ? "On film" : "Playing";
+    [[otherDates, lead + " on other dates"], [otherTheaters, lead + " at other theaters"]].forEach(function (g) {
+      if (!g[0].size) return;
+      $("grid").innerHTML += '<h3 class="group">' + g[1] + '</h3><div class="grid">' +
+        order(g[0]).map(function (i) { return cardHTML(i, g[0]); }).join("") + "</div>";
+    });
     clampVenues();
   }
 

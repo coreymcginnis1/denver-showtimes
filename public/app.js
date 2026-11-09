@@ -95,7 +95,7 @@
       f.event = !f.id;
     });
     days = Array.from(new Set(shows.map(function (s) { return s.d; }))).sort()
-      .filter(function (d) { return d >= NOW.day && dayDiff(NOW.day, d) <= WINDOW_DAYS; });   // film prints run further out
+      .filter(function (d) { return d >= NOW.day && dayDiff(NOW.day, d) <= WINDOW_DAYS; });   // later dates: All dates only
     if (!days.length) days = Array.from(new Set(shows.map(function (s) { return s.d; }))).sort();
     state.day = days.indexOf(NOW.day) >= 0 ? NOW.day : days[0];
 
@@ -112,9 +112,10 @@
   // Two years, not one: indie films often reach Denver a year or more after a festival premiere
   // (TMDB dates them by it). New releases (and events with no release date) are everything else.
   var REPERTORY_DAYS = 730;
-  var RUN_GAP_DAYS = 3;
-  var SPAN_SHOWN = 3;
-  var WINDOW_DAYS = 14;  // the day strip: today + 14 (data.json also holds film prints up to ~90 days out)   // two weeks / search: theaters listed before "Show all N theaters"   // a new release off today but back within this many days is still "Now playing"
+  var RUN_GAP_DAYS = 3;     // a new release off today but back within this many days is still "Now playing"
+  var SPAN_SHOWN = 3;       // All dates / search: theaters listed before "Show all N theaters"
+  var WINDOW_DAYS = 14;     // the day strip: today + 14 (Sie, Landmark and Alamo list up to ~90 days out)
+  var FURTHER_NOTE = "Sie, Landmark and Alamo only; the chains post about two weeks ahead.";
   function isRepertory(f) {
     var orig = f.rel || (f.year ? f.year + "-07-01" : null);
     return !!(orig && f.opened && dayDiff(orig, f.opened) > REPERTORY_DAYS);
@@ -160,7 +161,7 @@
     var q = state.q.toLowerCase();
     return shows.filter(function (s) {
       var f = films[s.f];
-      return (d === ALL ? days.indexOf(s.d) >= 0 && !isPast(s) : s.d === d) && (anyTheater || state.theaters.has(s.th)) && (!q || f.t.toLowerCase().indexOf(q) >= 0) &&
+      return (d === ALL ? s.d >= days[0] && !isPast(s) : s.d === d) && (anyTheater || state.theaters.has(s.th)) && (!q || f.t.toLowerCase().indexOf(q) >= 0) &&
         kindOk(s);
     });
   }
@@ -192,20 +193,20 @@
     }).join(", ");
   }
 
-  var ALL = "all";   // state.day for the "Next 2 weeks" view
+  var ALL = "all";   // state.day for the "All dates" view
   function shortDate(d) { return dateObj(d).toLocaleDateString("en-US", { month: "short", day: "numeric" }); }
   function dayName(d) { return relDay(d) || dateObj(d).toLocaleDateString("en-US", { weekday: "short" }) + " " + shortDate(d); }
 
   function renderDays() {
     $("days").innerHTML = '<button type="button" class="day" data-d="' + ALL + '" aria-pressed="' + (state.day === ALL) + '">' +
-      '<span class="dm">Next</span><span class="dn">2</span><span class="dw">weeks</span></button>' + days.map(function (d, n) {
+      '<span class="dm">&nbsp;</span><span class="dn">All</span><span class="dw">dates</span></button>' + days.map(function (d, n) {
       var rel = relDay(d), o = dateObj(d), wd = o.toLocaleDateString("en-US", { weekday: "short" });
       // Like a tear-off calendar: "Nov" over a big "10" over "Tue". Always the weekday, never "Today",
       // so every day keeps the same width; the month on every day reads right across Nov into Dec.
       return '<button type="button" class="day" data-d="' + d + '" aria-pressed="' + (d === state.day) + '" aria-label="' + (rel ? rel + ", " : "") + longDate(d) + '">' +
         '<span class="dm">' + o.toLocaleDateString("en-US", { month: "short" }) + '</span><span class="dn">' + o.getDate() + '</span><span class="dw">' + wd + "</span></button>";
     }).join("");
-    $("when").textContent = state.day === ALL ? "The next two weeks, " + shortDate(days[0]) + " to " + shortDate(days[days.length - 1])
+    $("when").textContent = state.day === ALL ? "All dates, from " + shortDate(days[0])
       : longDate(state.day);
   }
 
@@ -317,7 +318,7 @@
       var q = state.q.toLowerCase();
       shows.forEach(function (s) {
         var f = films[s.f];
-        var inRange = days.indexOf(s.d) >= 0 || (state.kind === "film" && s.d > days[days.length - 1]);   // prints: months out
+        var inRange = s.d >= days[0];   // any date we have (some theaters list months out)
         if (byFilm.has(s.f) || !inRange || isPast(s) || (q && f.t.toLowerCase().indexOf(q) < 0)) return;
         if (!kindOk(s)) return;
         if (!elsewhere.has(s.f)) elsewhere.set(s.f, []); elsewhere.get(s.f).push(s);
@@ -331,7 +332,7 @@
 
     if (!ids.length && !extraIds.length) {
       $("grid").innerHTML = '<p class="empty">' + (state.kind === "film" && !state.q
-        ? "Nothing is showing on film in the next three months."
+        ? "Nothing is showing on film in the dates we have."
         : state.theaters.size ? "Nothing matches" + (all ? "" : " on this day") + ". Try " + (all ? "" : "another day, ") + "more theaters, or clear the search."
         : "Pick at least one theater above to see films.") + "</p>";
       return;
@@ -375,21 +376,24 @@
         (asSpan && vlist.length > SPAN_SHOWN ? '<button type="button" class="more all">Show all ' + vlist.length + " theaters</button>" : "") +
         '<button type="button" class="more" hidden>Show all times</button></article>';
     };
-    if (all) {   // two groups: now playing (by the chosen sort), then everything else, soonest first
+    if (all) {   // now playing (by the chosen sort); coming soon in the two weeks; further out (some theaters only)
       var firstDay = function (i) { return byFilm.get(i).reduce(function (m, s) { return s.d < m ? s.d : m; }, "9999"); };
+      var lastDay = days[days.length - 1];
       // Now playing: a showing today, or a new release already open in Denver that's only off for a
       // day or so (a dark day, a gap between theaters). Repertory and special events need today.
       var isNow = function (i) {
         var f = films[i], d = firstDay(i);
         return d === days[0] || (!f.rep && !f.event && !!f.opened && f.opened <= days[0] && dayDiff(days[0], d) <= RUN_GAP_DAYS);
       };
+      var bySoonest = function (a, b) { return firstDay(a).localeCompare(firstDay(b)) || films[a].t.localeCompare(films[b].t); };
       var now = ids.filter(isNow);
-      var soon = ids.filter(function (i) { return !isNow(i); });
-      soon.sort(function (a, b) { return firstDay(a).localeCompare(firstDay(b)) || films[a].t.localeCompare(films[b].t); });
-      $("grid").innerHTML = (now.length ? '<h3 class="group">Now playing</h3>' +
-          '<div class="grid">' + now.map(function (i) { return cardHTML(i); }).join("") + "</div>" : "") +
-        (soon.length ? '<h3 class="group">Coming soon</h3>' +
-          '<div class="grid">' + soon.map(function (i) { return cardHTML(i); }).join("") + "</div>" : "");
+      var soon = ids.filter(function (i) { return !isNow(i) && firstDay(i) <= lastDay; }).sort(bySoonest);
+      var later = ids.filter(function (i) { return !isNow(i) && firstDay(i) > lastDay; }).sort(bySoonest);
+      var grid = function (list) { return '<div class="grid">' + list.map(function (i) { return cardHTML(i); }).join("") + "</div>"; };
+      $("grid").innerHTML = (now.length ? '<h3 class="group">Now playing</h3>' + grid(now) : "") +
+        (soon.length ? '<h3 class="group">Coming soon</h3>' + grid(soon) : "") +
+        // Only the Sie, Landmark and Alamo list this far ahead (the chains' feeds go two weeks out).
+        (later.length ? '<h3 class="group">Further out</h3><p class="group-note">' + FURTHER_NOTE + "</p>" + grid(later) : "");
     } else if (state.kind === "all") {   // everything: new releases, then repertory, then one-offs, each in the chosen sort
       $("grid").innerHTML = [["New releases", function (f) { return !f.rep && !f.event; }], ["Repertory", function (f) { return f.rep && !f.event; }],
         ["Special events", function (f) { return f.event; }]].map(function (g) {
@@ -402,7 +406,7 @@
     }
     if (extraIds.length) {
       $("grid").innerHTML += '<h3 class="group">' + (state.kind === "film" && !state.q ? "On film elsewhere" : "Also playing elsewhere") + "</h3>" +
-        '<p class="group-note">' + (state.kind === "film" ? "Other theaters and dates, up to three months out." : "Other theaters or days in the next two weeks.") + "</p>" +
+        '<p class="group-note">Other theaters or dates.</p>' +
         '<div class="grid">' + extraIds.map(function (i) { return cardHTML(i, true); }).join("") + "</div>";
     }
     clampVenues();

@@ -3,7 +3,7 @@
 
 timezone = "America/Denver"
 days_ahead = 14                  # rolling window: today .. today + days_ahead
-film_days_ahead = 90             # film-print showings (35mm…) from Sie, Landmark, Alamo this far out
+ahead_days = 90                  # Sie, Landmark and Alamo: everything this far out (cheap for them)
 output = "public/data.json"      # where the frontend reads from
 default_runtime_minutes = 120    # fallback event length when a film's runtime is unknown
 

@@ -41,8 +41,8 @@ scrapers → cleanup rules → TMDB match → trending, openings → public/data
   listed in `stale_theaters`; the site still publishes, then the run is marked failed so GitHub
   emails Corey. Each run's summary has a per-theater table (flags drops over half), TMDB coverage
   and the new titles.
-- **Nothing piles up:** each run rebuilds `data.json` for today … +14 days (plus film prints up to
-  +90); `openings` forget films
+- **Nothing piles up:** each run rebuilds `data.json` for today … +14 days (Sie, Landmark and Alamo
+  to +90, ~350 more showings); `openings` forget films
   400 days after they last opened; `film_meta`/`tmdb_ids` hold only current films. Events carry only
   the fields the site reads (no nulls), so a daily data commit is ~2.5 MB raw. Git history grows
   ~30–120 MB/year; don't rewrite history to trim it.
@@ -199,7 +199,7 @@ and familiar beats strict consistency there. Mockups: claude.ai canvas "Denver S
 redesign directions" (A listings + C program won; B marquee rejected).
 
 - **Controls:** masthead "Denver Movie Showtimes" with the chosen date under it · sticky day strip
-  ("Next 2 wks", then the weekday, never "Today", "Nov" over a big "10" over "Tue", like a tear-off calendar, every day the same width; the selected day is a brick block) · **Theaters**:
+  ("All dates", then the weekday, never "Today", "Nov" over a big "10" over "Tue", like a tear-off calendar, every day the same width; the selected day is a brick block) · **Theaters**:
   "Theaters near [zip] within 1 mi / 3 mi / 5 mi / any distance" and a checklist of all ten nearest first
   with miles in one row that scrolls sideways: no scrollbar, the side with more fades and gets a ‹ / ›
   arrow (no counts, no theater colors). Phones fold it to "At Sie and Mayan · Change". Zip default
@@ -208,10 +208,11 @@ redesign directions" (A listings + C program won; B marquee rejected).
   resets everyone) · "Find a film" search first (× clears it; Enter closes the phone keyboard), then
   **Show** All / New releases / Repertory / **On film** and **Sort** Newest / Trending / A–Z. On film (Corey's
   interest) keeps only showings projected from a print (16/35/70mm, IMAX 70mm, VistaVision) and, since
-  prints are rare, also lists them at other theaters and dates up to ~3 months out ("On film elsewhere",
-  soonest first). The scraper's **film look-ahead** (`film_days_ahead = 90`, `fetch_ahead()`: Sie one
-  request a week, Landmark one ranged request, Alamo its full feed; not Fandango, which is per-day) adds
-  only on-film showings beyond the 14 days; the day strip stays at `WINDOW_DAYS` = 14.
+  prints are rare, also lists them at other theaters and dates ("On film elsewhere", soonest first).
+  **Look-ahead** (`ahead_days = 90`, `fetch_ahead()`): sources that can look months out cheaply (Sie,
+  one request a week; Landmark, one ranged request; Alamo, its full feed) report **everything** up to 90
+  days; Fandango (a request per day per theater) stops at 14. The day strip stays at `WINDOW_DAYS` = 14;
+  later dates show only in All dates ("Further out"), On film and search.
   - **Newest:** new releases by Denver **release week** (Friday–Thursday; Wed/Thu previews count
     toward the Friday they lead into, `releaseWeek()`), latest and upcoming first, **Trending within
     a week**; then repertory by original release; special events last. With Show **All** (any sort),
@@ -227,8 +228,8 @@ redesign directions" (A listings + C program won; B marquee rejected).
   title set white on black. Long lists clamp behind "Show all times" (`clampVenues()`).
 - **Schedule:** the day in time order under big brick hour numerals, each with its am/pm (earlier-today rows behind a
   button). Desktop: sticky right column; phone: Films / Schedule tabs.
-- **Next 2 weeks:** **Now playing** (a showing today at the selected theaters, or a new release already open in Denver whose next showing is within `RUN_GAP_DAYS` = 3 days; repertory and events need today; by the chosen sort) then **Coming soon** (everything else, repertory included, by its next showing); each
-  theater gets one line with its next showing ("Alamo Sat Nov 7, 5:00 pm through Nov 11"), soonest first; three show, the rest behind "Show all N theaters" (`SPAN_SHOWN`). Search's "Also playing elsewhere" cards work the same way. No schedule column.
+- **All dates:** **Now playing** (a showing today at the selected theaters, or a new release already open in Denver whose next showing is within `RUN_GAP_DAYS` = 3 days; repertory and events need today; by the chosen sort) then **Coming soon** (everything else, repertory included, by its next showing); each
+  theater gets one line with its next showing ("Alamo Sat Nov 7, 5:00 pm through Nov 11"), soonest first; three show, the rest behind "Show all N theaters" (`SPAN_SHOWN`). Then **Further out**: films whose first showing is past the two weeks, soonest first, with the note "Sie, Landmark and Alamo only; the chains post about two weeks ahead." Search's "Also playing elsewhere" cards work the same way. No schedule column.
 - **Formats and languages** (`formats.py`, shared by every scraper; Corey's rule, Nov 2026): only
   formats people pick a showing for are named — **IMAX, IMAX 3D, IMAX 70mm, Dolby (Cinema), Dolby 3D,
   3D, 16mm, 35mm, 70mm, VistaVision**. Every other premium screen (AMC Prime, RPX, 4DX, ScreenX, Harkins

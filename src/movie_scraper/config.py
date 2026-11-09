@@ -111,9 +111,9 @@ class TrendingCfg(BaseModel):
 class Config(BaseModel):
     timezone: str = "America/Denver"
     days_ahead: int = 14
-    # Film prints are rare and announced early: theaters whose source can look far ahead cheaply
-    # (Sie, Landmark, Alamo) also report on-film showings up to this many days out.
-    film_days_ahead: int = 90
+    # Theaters whose source can look far ahead in a request or a few (Sie, Landmark, Alamo) report
+    # everything up to this many days out; the chains (Fandango, one request a day) stop at days_ahead.
+    ahead_days: int = 90
     output: str = "public/data.json"
     default_runtime_minutes: int = 120
     theaters: dict[str, TheaterCfg]

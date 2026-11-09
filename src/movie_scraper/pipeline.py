@@ -10,7 +10,6 @@ from pathlib import Path
 from zoneinfo import ZoneInfo
 
 from .config import Config, load_config
-from .formats import on_film
 from .models import Showtime
 from .scrapers.alamo import AlamoScraper
 from .scrapers.fandango import FandangoScraper
@@ -194,12 +193,11 @@ def run(config_path: str = "config.toml", only: set[str] | None = None) -> dict:
             log.error("theater %s returned no showtimes — keeping its last published rows", key)
             failed.append(key)
 
-    # Film prints beyond the window: sources that can look far ahead cheaply report them months out
-    # (the Sie announces 35mm runs early). Only on-film showings are kept from this; a failure here
-    # never fails a theater.
-    ahead: set[int] = set()
-    if cfg.film_days_ahead > cfg.days_ahead:
-        far = today + timedelta(days=cfg.film_days_ahead)
+    # Beyond the window: sources that can look far ahead cheaply (Sie, Landmark, Alamo) report
+    # months out, so "All dates" shows what's announced (35mm runs, openings). A failure here never
+    # fails a theater; the chains (Fandango, a request per day) don't take part.
+    if cfg.ahead_days > cfg.days_ahead:
+        far = today + timedelta(days=cfg.ahead_days)
         for key, tc in cfg.theaters.items():
             cls = SCRAPERS.get(tc.scraper or key)
             if not tc.enabled or (only and key not in only) or cls is None or key in failed:
@@ -209,7 +207,6 @@ def run(config_path: str = "config.toml", only: set[str] | None = None) -> dict:
             except Exception as e:
                 log.warning("film look-ahead %s: %s", key, e)
                 rows = []
-            ahead.update(id(r) for r in rows)
             collected.extend(rows)
 
     tcfg = cfg.titles
@@ -219,8 +216,6 @@ def run(config_path: str = "config.toml", only: set[str] | None = None) -> dict:
         if gauge and not s.fmt:
             s.fmt = gauge
         s.film_title = normalize_title(s.film_title, tcfg.strip_prefixes, tcfg.strip_suffixes)
-        if id(s) in ahead and not on_film(s.fmt):
-            continue   # look-ahead rows are for film prints only
         if not is_non_film(s.film_title, tcfg.drop):
             normalized.append(s)
     merge_case_variants(normalized)

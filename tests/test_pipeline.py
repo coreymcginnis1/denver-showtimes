@@ -420,8 +420,8 @@ def test_wiki_views_fall_back_to_last_run(monkeypatch):
     assert meta["A"]["wiki_views"] == 500 and meta["B"]["wiki_views"] == 77 and "wiki_views" not in meta["C"]
 
 
-def test_film_look_ahead_keeps_only_prints(tmp_path, monkeypatch):
-    """Beyond the two weeks, only on-film showings come in (the Sie lists 35mm runs months out)."""
+def test_look_ahead_adds_far_showings(tmp_path, monkeypatch):
+    """Sources that can look months ahead (the Sie lists 35mm runs early) add those showings."""
     today = date.today()
     far = datetime.combine(today + timedelta(days=40), datetime.min.time()).replace(hour=19, tzinfo=DEN)
     config = tmp_path / "config.toml"
@@ -444,6 +444,6 @@ def test_film_look_ahead_keeps_only_prints(tmp_path, monkeypatch):
     monkeypatch.chdir(tmp_path)
     feed = run(str(config))
     by_title = {e["title"]: e for e in feed["events"]}
-    assert "Some Digital Film" not in by_title
+    assert "Some Digital Film" in by_title
     winter = by_title["Cameron Winter at Carnegie Hall"]
     assert winter["extendedProps"]["fmt"] == "35mm"            # moved off the title

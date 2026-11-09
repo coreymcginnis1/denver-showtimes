@@ -172,6 +172,26 @@ def test_normalize_title_recases_allcaps_words():
     assert normalize_title("Jack Johnson: SURFILMUSIC", P) == "Jack Johnson: Surfilmusic"
     # short interior acronyms are left alone
     assert normalize_title("UFC 329: McGregor vs. Holloway 2", P) == "UFC 329: McGregor vs. Holloway 2"
+    # all-caps connector words are lowered mid-title, capitalized where a phrase starts
+    assert normalize_title("Terror IN THE Aisles II (12-Hour Horror Marathon)", P) == \
+        "Terror in the Aisles II (12-Hour Horror Marathon)"
+    assert normalize_title("Halloween: THE Night He Came Home", P) == "Halloween: The Night He Came Home"
+    assert normalize_title("Plan A", P) == "Plan A"                       # single letters stay
+    assert normalize_title("Star Wars: Episode IV - A New Hope", P) == "Star Wars: Episode IV - A New Hope"
+
+
+def test_restorations_are_stripped_and_lose_the_rerelease_year():
+    P, S = DEFAULT_STRIP_PREFIXES, DEFAULT_STRIP_SUFFIXES
+    for raw, want in [("The Host 4K Restoration", "The Host"), ("Paris, Texas (4K Restoration)", "Paris, Texas"),
+                      ("Possession - New 4K Remaster", "Possession"), ("Suspiria (Restored)", "Suspiria"),
+                      ("Paris, Texas (1984) 4K Restoration", "Paris, Texas"),
+                      ("The Host 4K Restoration (2026)", "The Host")]:     # Fandango's actual title
+        assert normalize_title(raw, P, S) == want
+        assert pipeline.revival_tagged(raw, want)          # Fandango's date is the re-release's
+    assert normalize_title("Restoration", P, S) == "Restoration"   # a film called that is kept
+    assert pipeline.revival_tagged("Coraline Re-release", "Coraline")
+    assert not pipeline.revival_tagged("Restoration", "Restoration")
+    assert not pipeline.revival_tagged("The Host", "The Host")
 
 
 def test_is_non_film_drops_ufc_broadcasts():

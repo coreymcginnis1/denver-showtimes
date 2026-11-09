@@ -60,11 +60,20 @@ def recase(t: str) -> str:
     """Even out capitalization so casing variants of a title merge.
 
     A fully UPPER or lower title becomes Title Case; in a mixed-case title, ALL-CAPS words of 4+
-    letters are down-cased ("BLEACH: ..." -> "Bleach: ..."), while short acronyms (UFC, RRR) and
-    stylized mixed case (GoodFellas) are left alone.
+    letters are down-cased ("BLEACH: ..." -> "Bleach: ..."), and so are ALL-CAPS connector words
+    ("Terror IN THE Aisles II" -> "Terror in the Aisles II"), while short acronyms (UFC, RRR),
+    single letters ("Plan A") and stylized mixed case (GoodFellas) are left alone.
     """
     if t and (t == t.upper() or t == t.lower()) and t.upper() != t.lower():
         return _titlecase(t)
+
+    def small(m: re.Match) -> str:
+        w = m.group(0)
+        if w.lower() not in _TITLE_SMALL:
+            return w
+        before = t[:m.start()].rstrip()
+        return w.capitalize() if not before or before[-1] in ":–—-(" else w.lower()   # a phrase starts
+    t = re.sub(r"\b[A-Z]{2,4}\b", small, t)
     return re.sub(r"\b[A-Z]{4,}\b", lambda m: m.group(0).capitalize(), t)
 
 
@@ -82,12 +91,28 @@ def normalize_title(title: str, prefixes: list[str] = (), suffixes: list[str] = 
         m = re.match(r"^(?:%s)\s*[:–—-]\s*" % "|".join(prefixes), t, re.I)
         if m:
             t = t[m.end():].strip()
-    for suffix in suffixes or ():
-        t = re.sub(suffix, "", t, flags=re.I).strip()
+    # Again until nothing changes: tags stack in any order ("The Host 4K Restoration (2026)" needs
+    # the year off before the restoration rule can see the end of the title).
+    for _ in range(4):
+        before = t
+        for suffix in suffixes or ():
+            t = re.sub(suffix, "", t, flags=re.I).strip()
+        if t == before:
+            break
     # Safety net: a stripped tag can leave its separator behind ("The Angry Birds Movie:" once
     # the anniversary rule missed the colon form), so drop any dangling ":" / "-" / "–".
     t = re.sub(r"\s*[:–—-]+$", "", t).strip()
     return recase(t) or (title or "").strip()
+
+
+# Tags that mark a revival. Fandango dates a revival by its re-release, which is no year hint for
+# the film: "The Host 4K Restoration" (Nov 2026) would match a 2026 film also called The Host.
+_REVIVAL = re.compile(r"restor(?:ation|ed)|remaster|re-?release|re-?issue|\bRE\d{2}\b|anniversary", re.I)
+
+
+def revival_tagged(raw: str, cleaned: str) -> bool:
+    """True if cleanup stripped a revival tag (restoration, re-release, anniversary, …)."""
+    return bool(_REVIVAL.search(raw or "")) and not _REVIVAL.search(cleaned or "")
 
 
 def is_non_film(title: str, drop: list[str]) -> bool:
@@ -219,7 +244,10 @@ def run(config_path: str = "config.toml", only: set[str] | None = None) -> dict:
         gauge = title_format(s.film_title)   # capture "35mm"/"70mm" before normalize strips it
         if gauge and not s.fmt:
             s.fmt = gauge
+        raw = s.film_title
         s.film_title = normalize_title(s.film_title, tcfg.strip_prefixes, tcfg.strip_suffixes)
+        if revival_tagged(raw, s.film_title):
+            s.release_date = None   # the re-release date: not the film's year (see _REVIVAL)
         if not is_non_film(s.film_title, tcfg.drop):
             normalized.append(s)
     merge_case_variants(normalized)

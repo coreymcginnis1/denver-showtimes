@@ -118,3 +118,12 @@ def test_landmark_hides_aspect_ratio_formats():
     assert LandmarkScraper._fmt(["Format.Projection.Digital"]) is None
     assert LandmarkScraper._fmt(["Format.Projection.35mm"]) == "35mm"
     assert LandmarkScraper._fmt(["Format.Projection.70mm"]) == "70mm"
+
+
+def test_sie_subtitles_and_print_tags():
+    from movie_scraper.scrapers.sie_eventive import SieScraper
+    lang = SieScraper._lang
+    assert lang({"language": "Spanish", "subtitle_language": "English"}) == "Subtitled"
+    assert lang({"language": "German, English", "subtitle_language": "English"}) == "Subtitled"
+    assert lang({"language": "English", "subtitle_language": "English"}) is None    # captions, not a sub
+    assert lang({"language": "Japanese"}) is None                                    # no subtitle track listed

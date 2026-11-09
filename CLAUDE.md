@@ -205,7 +205,9 @@ redesign directions" (A listings + C program won; B marquee rejected).
   **80218**, **never saved**; straight-line distance from Census zip centroids in `zips.json`. Theater
   choices are saved in `localStorage` with the default set they were made against (changing `default_on`
   resets everyone) · "Find a film" search first (× clears it; Enter closes the phone keyboard), then
-  **Show** All / New releases / Repertory and **Sort** Newest / Trending / A–Z.
+  **Show** All / New releases / Repertory / **On film** and **Sort** Newest / Trending / A–Z. On film (Corey's
+  interest) keeps only showings projected from a print (16/35/70mm, IMAX 70mm, VistaVision) and, since
+  prints are rare, also lists them at other theaters and days ("On film elsewhere").
   - **Newest:** new releases by Denver **release week** (Friday–Thursday; Wed/Thu previews count
     toward the Friday they lead into, `releaseWeek()`), latest and upcoming first, **Trending within
     a week**; then repertory by original release; special events last. With Show **All** (any sort),
@@ -230,9 +232,10 @@ redesign directions" (A listings + C program won; B marquee rejected).
   plain "3D". Laser projection, Atmos sound, seating and aspect ratios (Landmark's Scope / Flat) aren't
   formats. Fandango's header says only Standard / Premium Format / 3D, so the screen comes from the
   showtime group's amenities. **Language** (`lang`): "Subtitled", "Dubbed", or "<Language> dub"
-  ("Spanish dub"), from Fandango amenities and Alamo attributes; sources only flag the exceptions, so
+  ("Spanish dub"), from Fandango amenities, Alamo attributes and the Sie's `subtitle_language` (non-English
+  film + English subtitle track = Subtitled); sources only flag the exceptions, so
   an untagged showing of a foreign film can be either. Sie's prints come from the title ("… on 35mm",
-  "… in VistaVision"). On the site, a format/language all of a theater's showings share goes on the
+  "… in VistaVision") or a "35mm" Eventive tag (Eventive has no projection field). On the site, a format/language all of a theater's showings share goes on the
   theater line ("Regal Pavilions, Subtitled"); mixed ones get a short red mark per time (`FMT_TAG`:
   IMAX, Dolby, 3D, PLF, Sub, Dub…, else the label itself).
 - **Search** also shows matches beyond the selected theaters/day under "Also playing elsewhere"

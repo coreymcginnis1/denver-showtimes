@@ -148,12 +148,19 @@
   function theaterOf(k) { for (var i = 0; i < theaters.length; i++) if (theaters[i].key === k) return theaters[i]; return null; }
   function tName(k) { return SHORT[k] || (theaterOf(k) || {}).name || k; }
   function isPast(s) { return s.d === NOW.day && s.hm && s.hm < NOW.hm; }
+  // "On film": projected from a print (16/35/70mm, IMAX 70mm, VistaVision). A filter on showings,
+  // not films: a film's digital showings drop out.
+  function onFilm(s) { return /^(16|35|70)mm$|^IMAX 70mm$|^VistaVision$/.test(s.fmt || ""); }
+  function kindOk(s) {
+    var f = films[s.f];
+    return state.kind === "all" || (state.kind === "film" ? onFilm(s) : !f.event && (state.kind === "rep") === f.rep);
+  }
   function dayShows(d, anyTheater) {
     var q = state.q.toLowerCase();
     return shows.filter(function (s) {
       var f = films[s.f];
       return (d === ALL ? days.indexOf(s.d) >= 0 && !isPast(s) : s.d === d) && (anyTheater || state.theaters.has(s.th)) && (!q || f.t.toLowerCase().indexOf(q) >= 0) &&
-        (state.kind === "all" || (!f.event && (state.kind === "rep") === f.rep));
+        kindOk(s);
     });
   }
 
@@ -304,20 +311,22 @@
     // Searching also finds a film beyond the chosen theaters/day ("Fjord" only at AMC Westminster):
     // those matches follow the normal results as compact two-week cards.
     var elsewhere = new Map();
-    if (state.q) {
+    // "On film" too: prints are rare, so show the ones at other theaters and days as well.
+    if (state.q || state.kind === "film") {
       var q = state.q.toLowerCase();
       shows.forEach(function (s) {
         var f = films[s.f];
-        if (byFilm.has(s.f) || days.indexOf(s.d) < 0 || isPast(s) || f.t.toLowerCase().indexOf(q) < 0) return;
-        if (state.kind !== "all" && (f.event || (state.kind === "rep") !== f.rep)) return;
+        if (byFilm.has(s.f) || days.indexOf(s.d) < 0 || isPast(s) || (q && f.t.toLowerCase().indexOf(q) < 0)) return;
+        if (!kindOk(s)) return;
         if (!elsewhere.has(s.f)) elsewhere.set(s.f, []); elsewhere.get(s.f).push(s);
       });
     }
     var extraIds = sortFilms(Array.from(elsewhere.keys()));
 
     if (!ids.length && !extraIds.length) {
-      $("grid").innerHTML = '<p class="empty">' + (state.theaters.size
-        ? "Nothing matches" + (all ? "" : " on this day") + ". Try " + (all ? "" : "another day, ") + "more theaters, or clear the search."
+      $("grid").innerHTML = '<p class="empty">' + (state.kind === "film" && !state.q
+        ? "Nothing is showing on film in the next two weeks. Prints are rare; check back, or see the theaters' sites."
+        : state.theaters.size ? "Nothing matches" + (all ? "" : " on this day") + ". Try " + (all ? "" : "another day, ") + "more theaters, or clear the search."
         : "Pick at least one theater above to see films.") + "</p>";
       return;
     }
@@ -338,7 +347,8 @@
       var vhtml = vlist.map(function (e, k) {
         var t = theaterOf(e[0]) || {};
         if (asSpan) {   // one line per theater, "Alamo  Sat Nov 7, 5:00 pm  through Nov 11"; the first 3, then "Show all"
-          var first = e[1][0], last = e[1][e[1].length - 1], o = dateObj(first.d), name = esc(TINY[e[0]] || tName(e[0]));
+          var first = e[1][0], last = e[1][e[1].length - 1], o = dateObj(first.d), tg = e[1].map(tagOf);
+          var name = esc((TINY[e[0]] || tName(e[0])) + (tg[0] && tg.every(function (x) { return x === tg[0]; }) ? ", " + tg[0] : ""));   // "Alamo, 35mm"
           var day = o.toLocaleDateString("en-US", { weekday: "short" }) + " " + shortDate(first.d);
           return '<div class="venue line' + (k >= SPAN_SHOWN ? " extra" : "") + '"><span class="vn">' + name + '</span><button type="button" class="time next" data-i="' +
             shows.indexOf(first) + '" aria-label="' + esc(f.t) + ", next showing " + longDate(first.d) + " " + (first.hm ? longTime(first.hm) : "") + ", " + esc(t.name || "") + '">' +
@@ -382,10 +392,10 @@
       }).join("") || '<p class="empty">No match at these theaters on this day.</p>';
     } else {
       $("grid").innerHTML = ids.length ? '<div class="grid">' + ids.map(function (i) { return cardHTML(i); }).join("") + "</div>"
-        : '<p class="empty">No match at these theaters' + (all ? "" : " on this day") + ".</p>";
+        : '<p class="empty">' + (state.kind === "film" ? "Nothing on film" : "No match") + ' at these theaters' + (all ? "" : " on this day") + ".</p>";
     }
     if (extraIds.length) {
-      $("grid").innerHTML += '<h3 class="group">Also playing elsewhere</h3>' +
+      $("grid").innerHTML += '<h3 class="group">' + (state.kind === "film" && !state.q ? "On film elsewhere" : "Also playing elsewhere") + "</h3>" +
         '<p class="group-note">Other theaters or days in the next two weeks.</p>' +
         '<div class="grid">' + extraIds.map(function (i) { return cardHTML(i, true); }).join("") + "</div>";
     }

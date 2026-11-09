@@ -8,10 +8,12 @@ screen -> [{id, start_time(UTC), end_time(UTC), start_time_label}]).
 from __future__ import annotations
 
 import base64
+import re
 import logging
 from datetime import date, datetime, timedelta, timezone
 
 from .base import BaseScraper, http_client, to_int
+from ..formats import canon
 from ..models import Showtime
 
 log = logging.getLogger(__name__)
@@ -99,7 +101,18 @@ class SieScraper(BaseScraper):
             runtime_minutes=to_int(details.get("runtime")),
             director=credits.get("director"),
             year=to_int(details.get("year")),
+            # Eventive has no projection field; a "35mm"-style tag is the only sign of a print.
+            fmt=canon([t.get("name", "") for t in film.get("tags") or [] if isinstance(t, dict)
+                       and re.fullmatch(r"(?i)\s*(16|35|70)\s?mm\s*|\s*vistavision\s*", t.get("name", ""))]),
+            lang=self._lang(details),
         )
+
+    @staticmethod
+    def _lang(details: dict) -> str | None:
+        """The Sie never dubs: an English subtitle track on a film not (first) in English = Subtitled."""
+        first = (details.get("language") or "").split(",")[0].strip().lower()
+        subs = (details.get("subtitle_language") or "").strip()
+        return "Subtitled" if subs and first and first != "english" else None
 
     @staticmethod
     def _clean_screen(screen: str | None) -> str | None:

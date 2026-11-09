@@ -77,7 +77,8 @@
   // Distances are from the centre of a zip code to each theater, as the crow flies. The zip is
   // never saved: it resets to DEFAULT_ZIP on every visit, so nothing about a reader is kept.
   var DEFAULT_ZIP = "80218", ZIPS = {};   // distance buttons (1 / 3 / 5 mi / All) are in index.html
-  var state = { day: null, q: "", sort: "new", kind: "all", showEarlier: false, theaters: null, zip: DEFAULT_ZIP, radius: null, open: null };
+  var state = { day: null, q: "", sort: "new", kind: "all", showEarlier: false, theaters: null, zip: DEFAULT_ZIP, radius: null, open: null,
+    tShown: null, tAll: false };
 
   // ---- Data ------------------------------------------------------------------
 
@@ -138,6 +139,7 @@
   var REPERTORY_DAYS = 730;
   var RUN_GAP_DAYS = 3;     // a new release off today but back within this many days is still "Now playing"
   var SPAN_SHOWN = 3;       // All dates / search: theaters listed before "Show all N theaters"
+  var TK_SHOWN = 5;         // phones: theaters in the opened checklist before "Show all 12 theaters"
   var CLAMP_PX = 210;       // a card's times stop here (styles.css .venues.clamp) ...
   var CLAMP_SLACK = 90;     // ... but only when that hides this much more: never a button for a line or two
   var WINDOW_DAYS = 14;     // the day strip: today + 14 (Sie, Landmark and Alamo list up to ~90 days out)
@@ -243,14 +245,27 @@
     $("tPrev").hidden = !left; $("tNext").hidden = !right;
   }
 
+  // Phones list the theaters top to bottom: the nearest few and any that are checked, the rest
+  // behind "Show all 12 theaters" so Show / Sort aren't a long scroll away. Picked when the list
+  // opens or the zip / distance changes, not on each tap, so a row never vanishes as it's unchecked.
+  function pickShownTheaters() {
+    var near = theaters.slice().sort(function (a, b) { return (miles(a) || 0) - (miles(b) || 0); });
+    state.tShown = new Set(near.filter(function (t, n) { return n < TK_SHOWN || state.theaters.has(t.key); }).map(function (t) { return t.key; }));
+  }
+
   function renderTheaters() {
     var near = theaters.slice().sort(function (a, b) { return (miles(a) || 0) - (miles(b) || 0); });
+    if (!state.tShown) pickShownTheaters();
+    var hidden = near.filter(function (t) { return !state.tShown.has(t.key); }).length;
     $("tlist").innerHTML = near.map(function (t) {
       var mi = miles(t);
-      return '<button type="button" class="tk" data-k="' + t.key + '" aria-pressed="' + state.theaters.has(t.key) + '">' +
+      return '<button type="button" class="tk' + (state.tShown.has(t.key) ? "" : " extra") + '" data-k="' + t.key + '" aria-pressed="' + state.theaters.has(t.key) + '">' +
         '<span class="box" aria-hidden="true"></span><span><span class="nm">' + esc(tName(t.key)) + "</span>" +
         (mi != null ? '<span class="mi">' + mi.toFixed(1) + " mi</span>" : "") + "</span></button>";
     }).join("");
+    $("tpanel").classList.toggle("all-th", state.tAll);
+    var more = $("tMore"); more.hidden = !hidden;
+    more.textContent = state.tAll ? "Show fewer theaters" : "Show all " + near.length + " theaters"; more.setAttribute("aria-expanded", state.tAll);
     document.querySelectorAll("[data-r]").forEach(function (x) { x.setAttribute("aria-pressed", String(x.dataset.r === String(state.radius))); });
     var on = near.filter(function (t) { return state.theaters.has(t.key); }).map(function (t) { return TINY[t.key] || t.name; });
     edges();
@@ -629,7 +644,15 @@
       if (b.id === "tToggle") {
         var open = !$("controls").classList.contains("open");
         $("controls").classList.toggle("open", open); b.setAttribute("aria-expanded", open); b.textContent = open ? "Done" : "Change";
+        if (open) { state.tAll = false; pickShownTheaters(); renderTheaters(); }
         measure(); return;
+      }
+      if (b.id === "tMore") {   // collapsing keeps the button where it was on screen
+        var y = b.getBoundingClientRect().top; state.tAll = !state.tAll;
+        if (!state.tAll) pickShownTheaters();   // keeps any just checked further down the list
+        renderTheaters();
+        if (!state.tAll) window.scrollBy(0, b.getBoundingClientRect().top - y);
+        return;
       }
       if (b.id === "closeSheet") return closeSheet();
       if (b.id === "calToggle") {
@@ -642,7 +665,7 @@
         saveTheaters(); renderAll(); return;
       }
       if (b.dataset.r) {
-        state.radius = b.dataset.r; applyRadius(); saveTheaters(); renderAll(); return;
+        state.radius = b.dataset.r; applyRadius(); pickShownTheaters(); saveTheaters(); renderAll(); return;
       }
       if (b.dataset.kind) {
         state.kind = b.dataset.kind;
@@ -678,7 +701,7 @@
       if (z !== e.target.value) e.target.value = z;
       var ok = z.length === 5 && ZIPS[z];
       $("zipNote").hidden = !(z.length === 5 && !ok);
-      if (ok) { state.zip = z; applyRadius(); renderAll(); }
+      if (ok) { state.zip = z; applyRadius(); pickShownTheaters(); renderAll(); }
     });
     window.addEventListener("resize", function () { measure(); clampVenues(); edges(); schedEdges(); });
     if (document.fonts) document.fonts.ready.then(function () { clampVenues(); edges(); schedEdges(); });   // re-measure in Archivo

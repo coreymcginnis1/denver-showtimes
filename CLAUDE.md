@@ -205,7 +205,10 @@ redesign directions" (A listings + C program won; B marquee rejected).
   "Theaters near [zip] within 1 mi / 3 mi / 5 mi / any distance" and a checklist of all twelve nearest first
   with miles in one row that scrolls sideways: no scrollbar, the side with more fades and gets a ‹ / ›
   arrow (no counts, no theater colors). **Phones** fold theaters *and* Show/Sort into one line, "At Sie
-  and Mayan, all films, newest first · Change", with search under it; the masthead is one line and
+  and Mayan, all films, newest first · Change", with search under it; opened, the checklist runs top
+  to bottom with the 5 nearest plus any checked (`TK_SHOWN`, picked on open / zip / distance, not per
+  tap) and "Show all 12 theaters" / "Show fewer theaters", so Show / Sort stay close. Hover colors
+  only apply under `(hover: hover)` (a tap leaves :hover stuck on phones). The masthead is one line and
   the date line is dropped (the brick day says it), so posters start in the first screen. Zip default
   **80218**, **never saved**; straight-line distance from Census zip centroids in `zips.json`. Theater
   choices are saved in `localStorage` with the default set they were made against (changing `default_on`

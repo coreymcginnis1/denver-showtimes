@@ -1,19 +1,21 @@
 name: Update showtimes
 
 # Everything runs on GitHub; nothing depends on a personal computer.
-#   Daily at 5:20 am Denver time and "Run workflow": scrape -> commit the data -> publish the site.
+#   Daily at 3:07 am Denver time and "Run workflow": scrape -> commit the data -> publish the site.
 #   Pushes to main: publish the site without scraping.
 #   Pull requests: run the tests and a scrape that writes nothing, proving every theater source
 #     still answers from GitHub's network before a change merges.
 # A push made with GITHUB_TOKEN doesn't trigger workflows, so the data commit can't loop, which
 # is also why publishing is a job in this workflow rather than a reaction to that push.
 on:
-  # Daily at 5:20 am Denver time. Cron is UTC and Denver shifts between MDT (UTC-6) and MST (UTC-7),
+  # Daily at 3:07 am Denver time. Cron is UTC and Denver shifts between MDT (UTC-6) and MST (UTC-7),
   # so both candidate times are scheduled and the `gate` job lets through only the one that is
-  # 5:20 am locally that day. Off the hour on purpose: GitHub delays runs scheduled at :00.
+  # 3:07 am locally that day. Off the hour on purpose: GitHub delays runs scheduled at :00.
+  # 3 am, not later, because GitHub starts scheduled runs late (5:20 am ran ~10:50 am in Nov 2026);
+  # a late start still finishes by the morning.
   schedule:
-    - cron: "20 11 * * *"     # 5:20 am MDT (summer)
-    - cron: "20 12 * * *"     # 5:20 am MST (winter)
+    - cron: "7 9 * * *"       # 3:07 am MDT (summer)
+    - cron: "7 10 * * *"      # 3:07 am MST (winter)
   workflow_dispatch:
   push:
     branches: [main]
@@ -66,12 +68,12 @@ jobs:
           # "Run workflow" always goes. A scheduled run goes only if its cron matches Denver's
           # current UTC offset (-0600 in summer, -0700 in winter); this survives late starts.
           offset=$(TZ=America/Denver date +%z)
-          if [ -z "$CRON" ] || { [ "$CRON" = "20 11 * * *" ] && [ "$offset" = "-0600" ]; } \
-             || { [ "$CRON" = "20 12 * * *" ] && [ "$offset" = "-0700" ]; }; then
+          if [ -z "$CRON" ] || { [ "$CRON" = "7 9 * * *" ] && [ "$offset" = "-0600" ]; } \
+             || { [ "$CRON" = "7 10 * * *" ] && [ "$offset" = "-0700" ]; }; then
             echo "run=true" >> "$GITHUB_OUTPUT"
           else
             echo "run=false" >> "$GITHUB_OUTPUT"
-            echo "Skipping: the other daily slot is 5:20 am Denver time today (offset $offset)."
+            echo "Skipping: the other daily slot is 3:07 am Denver time today (offset $offset)."
           fi
 
   scrape:

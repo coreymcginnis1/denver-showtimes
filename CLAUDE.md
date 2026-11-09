@@ -200,7 +200,8 @@ redesign directions" (A listings + C program won; B marquee rejected).
 - **Controls:** masthead "Denver Movie Showtimes" with the chosen date under it · sticky day strip
   ("Next 2 wks", then the weekday, never "Today", "Nov" over a big "10" over "Tue", like a tear-off calendar, every day the same width; the selected day is a brick block) · **Theaters**:
   "Theaters near [zip] within 1 mi / 3 mi / 5 mi / any distance" and a checklist of all ten nearest first
-  with miles in one row that scrolls sideways (no counts, no theater colors). Phones fold it to "At Sie and Mayan · Change". Zip default
+  with miles in one row that scrolls sideways: no scrollbar, the side with more fades and gets a ‹ / ›
+  arrow (no counts, no theater colors). Phones fold it to "At Sie and Mayan · Change". Zip default
   **80218**, **never saved**; straight-line distance from Census zip centroids in `zips.json`. Theater
   choices are saved in `localStorage` with the default set they were made against (changing `default_on`
   resets everyone) · "Find a film" search first (× clears it; Enter closes the phone keyboard), then

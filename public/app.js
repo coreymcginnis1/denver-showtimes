@@ -193,6 +193,14 @@
       : longDate(state.day);
   }
 
+  // The theater row hides its scrollbar: fade the side with more theaters and show an arrow there.
+  function edges() {
+    var l = $("tlist"), max = l.scrollWidth - l.clientWidth, row = $("trow");
+    var left = l.scrollLeft > 2, right = max - l.scrollLeft > 2 && getComputedStyle(l).display === "flex";
+    row.classList.toggle("more-l", left); row.classList.toggle("more-r", right);
+    $("tPrev").hidden = !left; $("tNext").hidden = !right;
+  }
+
   function renderTheaters() {
     var near = theaters.slice().sort(function (a, b) { return (miles(a) || 0) - (miles(b) || 0); });
     $("tlist").innerHTML = near.map(function (t) {
@@ -203,6 +211,7 @@
     }).join("");
     document.querySelectorAll("[data-r]").forEach(function (x) { x.setAttribute("aria-pressed", String(x.dataset.r === String(state.radius))); });
     var on = near.filter(function (t) { return state.theaters.has(t.key); }).map(function (t) { return TINY[t.key] || t.name; });
+    edges();
     $("tsum").textContent = !on.length ? "No theaters picked" : on.length <= 2 ? "At " + on.join(" and ") : "At " + on.length + " theaters";
   }
 
@@ -562,7 +571,10 @@
       $("zipNote").hidden = !(z.length === 5 && !ok);
       if (ok) { state.zip = z; applyRadius(); renderAll(); }
     });
-    window.addEventListener("resize", function () { measure(); clampVenues(); });
+    window.addEventListener("resize", function () { measure(); clampVenues(); edges(); });
+    $("tlist").addEventListener("scroll", edges, { passive: true });
+    $("tPrev").addEventListener("click", function () { $("tlist").scrollBy({ left: -$("tlist").clientWidth * .8 }); });
+    $("tNext").addEventListener("click", function () { $("tlist").scrollBy({ left: $("tlist").clientWidth * .8 }); });
   }
 
   var zipTable = fetch("zips.json").then(function (r) { return r.ok ? r.json() : {}; }).catch(function () { return {}; });

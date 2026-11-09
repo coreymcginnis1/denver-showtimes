@@ -71,8 +71,20 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .pick[aria-pressed="true"] { font-weight: 700; text-decoration: none; box-shadow: inset 0 -2px 0 var(--brick); }
 .zipnote { color: var(--brick); }
 /* One row that scrolls sideways, nearest first; the right edge fades to show there's more. */
-.tlist { display: flex; overflow-x: auto; scrollbar-width: thin; border-top: 1px solid var(--ink); border-bottom: 1px solid var(--ink);
-  -webkit-mask: linear-gradient(90deg, #000 calc(100% - 40px), #0000); mask: linear-gradient(90deg, #000 calc(100% - 40px), #0000); padding-right: 36px; }
+/* No scrollbar; instead the edge with more theaters fades, and a ‹ / › arrow there scrolls the row
+   (mouse users without a trackpad). Tabbing through the checkboxes scrolls it too. */
+.trow { position: relative; border-top: 1px solid var(--ink); border-bottom: 1px solid var(--ink); }
+.tlist { display: flex; overflow-x: auto; scrollbar-width: none; scroll-behavior: smooth; }
+.tlist::-webkit-scrollbar { display: none; }
+.trow.more-r .tlist { -webkit-mask: linear-gradient(90deg, #000 calc(100% - 64px), #0000); mask: linear-gradient(90deg, #000 calc(100% - 64px), #0000); }
+.trow.more-l .tlist { -webkit-mask: linear-gradient(90deg, #0000, #000 64px); mask: linear-gradient(90deg, #0000, #000 64px); }
+.trow.more-l.more-r .tlist { -webkit-mask: linear-gradient(90deg, #0000, #000 64px, #000 calc(100% - 64px), #0000);
+  mask: linear-gradient(90deg, #0000, #000 64px, #000 calc(100% - 64px), #0000); }
+.tscroll { position: absolute; top: 50%; transform: translateY(-50%); z-index: 1; width: 32px; height: 32px; border-radius: 50%;
+  background: var(--ink); color: var(--paper); font-size: 20px; line-height: 30px; text-align: center; }
+.tscroll:hover { background: var(--brick); }
+.tscroll.prev { left: 0; }
+.tscroll.next { right: 0; }
 .tk { flex: none; display: flex; gap: 10px; align-items: flex-start; padding: 11px 22px 11px 0; color: var(--muted); white-space: nowrap; }
 .tk .box { width: 18px; height: 18px; flex: none; margin-top: 1px; border: 2px solid var(--box); display: grid; place-items: center; }
 .tk .nm { display: block; font-weight: 700; line-height: 1.15; }
@@ -211,7 +223,9 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   .tsum b { min-width: 0; }
   .tsum button { text-decoration: underline; min-height: 44px; flex: none; }
   .theaters:not(.open) .tpanel { display: none; }
-  .tlist { display: block; overflow: visible; -webkit-mask: none; mask: none; padding-right: 0; border: 0; }
+  .trow { border: 0; }
+  .tlist, .trow.more-l .tlist, .trow.more-r .tlist, .trow.more-l.more-r .tlist { display: block; overflow: visible; -webkit-mask: none; mask: none; }
+  .tscroll { display: none; }
   .tk { width: 100%; align-items: center; min-height: 44px; padding: 8px 0; border-top: 1px solid var(--hair); white-space: normal; }
   .tk .nm { flex: 1; }
   .tk > span:last-child { flex: 1; display: flex; justify-content: space-between; gap: 10px; }

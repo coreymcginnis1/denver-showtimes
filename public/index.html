@@ -40,7 +40,11 @@
           <button type="button" class="pick" data-r="all" aria-pressed="false">any distance</button>
           <span class="zipnote" id="zipNote" hidden>That zip isn't in the Denver area.</span>
         </div>
-        <div class="tlist" id="tlist" role="group" aria-label="Theaters, nearest first"></div>
+        <div class="trow" id="trow">
+          <button type="button" class="tscroll prev" id="tPrev" aria-label="Scroll theaters left" tabindex="-1" hidden>‹</button>
+          <div class="tlist" id="tlist" role="group" aria-label="Theaters, nearest first"></div>
+          <button type="button" class="tscroll next" id="tNext" aria-label="Scroll theaters right" tabindex="-1" hidden>›</button>
+        </div>
       </div>
     </section>
 

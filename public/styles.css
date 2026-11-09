@@ -173,7 +173,13 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 
 /* ---- Schedule: the day by hour --------------------------------------- */
 .sched { position: sticky; top: calc(var(--days-h, 60px) + 16px); max-height: calc(100vh - var(--days-h, 60px) - 32px);
-  overflow-y: auto; overscroll-behavior: contain; }
+  overflow-y: auto; overscroll-behavior: contain; scrollbar-width: none; }
+.sched::-webkit-scrollbar { display: none; }
+/* No scrollbar: the end with more fades out instead (classes from schedEdges()). */
+.sched.more-b { -webkit-mask: linear-gradient(#000 calc(100% - 56px), #0000); mask: linear-gradient(#000 calc(100% - 56px), #0000); }
+.sched.more-t { -webkit-mask: linear-gradient(#0000, #000 40px); mask: linear-gradient(#0000, #000 40px); }
+.sched.more-t.more-b { -webkit-mask: linear-gradient(#0000, #000 40px, #000 calc(100% - 56px), #0000);
+  mask: linear-gradient(#0000, #000 40px, #000 calc(100% - 56px), #0000); }
 .hour { display: flex; gap: 14px; border-bottom: 1px solid var(--ink); padding: 10px 0; }
 .hour .h { width: 58px; flex: none; margin: 0; font-weight: 900; font-stretch: 62%; font-size: 44px; line-height: .85; color: var(--brick); }
 .hour .h small { font-size: 14px; font-stretch: 85%; margin-left: 2px; }

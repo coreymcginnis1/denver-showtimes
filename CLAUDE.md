@@ -230,9 +230,13 @@ redesign directions" (A listings + C program won; B marquee rejected).
   Letterboxd link (`film_meta.directors` / `.countries` / `.overview`, from the same TMDB request with
   `append_to_response=credits`). Special events have no details, so their poster isn't a button.
   **Posters:** TMDB `w500` first, other theaters' art next, Fandango (600 px renderer) last, then the
-  title set white on black. Long lists clamp behind "Show all times" (`clampVenues()`).
+  title set white on black. Long lists clamp at 210px behind "Show all times" / "Show all N theaters"
+  (`clampVenues()`), only when that hides 90px or more (`CLAMP_SLACK`): hiding a line or two made
+  the card *shrink* on expand (the button went, a few px came in). Every "Show all" toggles to
+  "Show fewer …", and collapsing keeps the button where it was on screen (`toggleMore()`).
 - **Schedule:** the day in time order under big brick hour numerals, each with its am/pm (earlier-today rows behind a
-  button). Desktop: sticky right column; phone: Films / Schedule tabs.
+  button). Desktop: sticky right column that scrolls on its own with **no scrollbar**, like the
+  theater row: the end with more fades out (`schedEdges()`). Phone: Films / Schedule tabs.
 - **All dates:** **Now playing** (a showing today at the selected theaters, or a new release already open in Denver whose next showing is within `RUN_GAP_DAYS` = 3 days; repertory and events need today; by the chosen sort) then **Coming soon** (everything else, repertory included, by its next showing); each
   theater gets one line with its next showing ("Alamo Sat Nov 7, 5:00 pm through Nov 11"), soonest first; three show, the rest behind "Show all N theaters" (`SPAN_SHOWN`). Then **Further out**: films whose first showing is past the two weeks, soonest first, with the note "Sie, Landmark and Alamo only." Search's extra matches ("Playing on other dates" / "Playing at other theaters") work the same way. No schedule column.
 - **Formats and languages** (`formats.py`, shared by every scraper; Corey's rule, Nov 2026): only

@@ -138,6 +138,8 @@
   var REPERTORY_DAYS = 730;
   var RUN_GAP_DAYS = 3;     // a new release off today but back within this many days is still "Now playing"
   var SPAN_SHOWN = 3;       // All dates / search: theaters listed before "Show all N theaters"
+  var CLAMP_PX = 210;       // a card's times stop here (styles.css .venues.clamp) ...
+  var CLAMP_SLACK = 90;     // ... but only when that hides this much more: never a button for a line or two
   var WINDOW_DAYS = 14;     // the day strip: today + 14 (Sie, Landmark and Alamo list up to ~90 days out)
   var FURTHER_NOTE = "Sie, Landmark and Alamo only.";
   function isRepertory(f) {
@@ -432,7 +434,7 @@
         // The title opens the details too: people tap titles, and it's the hint the poster needs.
         '<h3 class="title">' + (f.event ? esc(f.t) : '<button type="button" data-p="' + i + '" aria-expanded="' + (state.open === i) + '">' + esc(f.t) + "</button>") + "</h3>" +
         '<div class="venues">' + vhtml + "</div>" +
-        (asSpan && vlist.length > SPAN_SHOWN ? '<button type="button" class="more all">Show all ' + vlist.length + " theaters</button>" : "") +
+        (asSpan && vlist.length > SPAN_SHOWN ? '<button type="button" class="more all" aria-expanded="false" data-label="Show all ' + vlist.length + ' theaters">Show all ' + vlist.length + " theaters</button>" : "") +
         '<button type="button" class="more" hidden>Show all times</button></article>';
     };
     if (all) {   // now playing (by the chosen sort); coming soon in the two weeks; further out (some theaters only)
@@ -473,20 +475,34 @@
   }
 
   // Several theaters can make a card's times run far past its poster: clamp the list and offer
-  // "Show all times" only where it actually overflows (checked after layout).
+  // "Show all times" where that hides a good few lines (measured in pixels, after layout).
+  // Hiding just a line or two behind a button made the card *shrink* when expanded (the button
+  // went away, a few px of times came in), so those cards just show everything.
   function clampVenues() {
     document.querySelectorAll("#grid .card").forEach(function (card) {
       var v = card.querySelector(".venues"), btn = card.querySelector(".more:not(.all)");
-      if (!v || !btn || card.classList.contains("open")) return;
-      v.classList.add("clamp");
-      var over = v.scrollHeight > v.clientHeight + 4;
-      if (!over) v.classList.remove("clamp");
+      if (!v || !btn || card.classList.contains("expanded")) return;
+      v.classList.remove("clamp");
+      var over = v.scrollHeight > CLAMP_PX + CLAMP_SLACK;
+      v.classList.toggle("clamp", over);
       btn.hidden = !over;
       if (over) {
         var n = v.querySelectorAll(".venue").length;
-        btn.textContent = n > 1 ? "Show all " + n + " theaters" : "Show all times";
+        btn.textContent = btn.dataset.label = n > 1 ? "Show all " + n + " theaters" : "Show all times";
+        btn.setAttribute("aria-expanded", "false");
       }
     });
+  }
+  // "Show all" / "Show fewer": collapsing keeps the button where it was on screen, so the page
+  // doesn't jump out from under a reader who scrolled down through a long list.
+  function toggleMore(b) {
+    var card = b.closest(".card"), y = b.getBoundingClientRect().top, theaters = b.classList.contains("all");
+    var open = !card.classList.contains(theaters ? "all-th" : "expanded");
+    card.classList.toggle(theaters ? "all-th" : "expanded", open);
+    if (!theaters) card.querySelector(".venues").classList.toggle("clamp", !open);
+    b.textContent = open ? b.dataset.label.replace(/^Show all( \d+)?/, "Show fewer") : b.dataset.label;   // "Show fewer theaters"
+    b.setAttribute("aria-expanded", open);
+    if (!open) window.scrollBy(0, b.getBoundingClientRect().top - y);
   }
 
   // ---- Schedule --------------------------------------------------------------------
@@ -495,7 +511,7 @@
     var ds = dayShows(state.day).filter(function (s) { return s.hm; })
       .sort(function (a, b) { return a.hm.localeCompare(b.hm) || films[a.f].t.localeCompare(films[b.f].t); });
     var past = ds.filter(isPast), shown = state.showEarlier ? ds : ds.filter(function (s) { return !isPast(s); });
-    if (!ds.length) { $("sched").innerHTML = '<p class="empty">No showtimes match.</p>'; return; }
+    if (!ds.length) { $("sched").innerHTML = '<p class="empty">No showtimes match.</p>'; schedEdges(); return; }
     var hours = new Map();
     shown.forEach(function (s) { var h = s.hm.slice(0, 2); if (!hours.has(h)) hours.set(h, []); hours.get(h).push(s); });
     var html = shown.length ? "" : '<p class="empty">Everything has started for today.</p>';
@@ -510,6 +526,15 @@
     });
     if (past.length) html += '<button type="button" class="earlier" id="earlier">' + (state.showEarlier ? "Hide " : "Show ") + past.length + " earlier today</button>";
     $("sched").innerHTML = html;
+    schedEdges();
+  }
+  // Desktop: the schedule column scrolls on its own, with no scrollbar (like the theater row): the
+  // side with more fades out instead. Wheel / trackpad / keyboard scroll it as usual.
+  function schedEdges() {
+    var col = $("sched").parentNode, max = col.scrollHeight - col.clientHeight;
+    var scrolls = max > 2 && getComputedStyle(col).overflowY !== "visible";
+    col.classList.toggle("more-t", scrolls && col.scrollTop > 2);
+    col.classList.toggle("more-b", scrolls && max - col.scrollTop > 2);
   }
 
   // ---- Showtime sheet + add to calendar -----------------------------------------------
@@ -634,11 +659,7 @@
         document.querySelectorAll("[data-v]").forEach(function (x) { x.setAttribute("aria-pressed", x === b); });
         return;
       }
-      if (b.classList.contains("all")) { b.closest(".card").classList.add("all-th"); b.hidden = true; return; }
-      if (b.classList.contains("more")) {
-        var card = b.closest(".card"); card.classList.add("open");
-        card.querySelector(".venues").classList.remove("clamp"); b.hidden = true; return;
-      }
+      if (b.classList.contains("more")) return toggleMore(b);
       if (b.id === "earlier") { state.showEarlier = !state.showEarlier; renderSchedule(); return; }
       if (b.dataset.i) openSheet(+b.dataset.i);
     });
@@ -659,7 +680,8 @@
       $("zipNote").hidden = !(z.length === 5 && !ok);
       if (ok) { state.zip = z; applyRadius(); renderAll(); }
     });
-    window.addEventListener("resize", function () { measure(); clampVenues(); edges(); });
+    window.addEventListener("resize", function () { measure(); clampVenues(); edges(); schedEdges(); });
+    if (document.fonts) document.fonts.ready.then(function () { clampVenues(); edges(); schedEdges(); });   // re-measure in Archivo
     // A tab left open overnight would keep yesterday as "today": reload when the Denver date changes.
     document.addEventListener("visibilitychange", function () {
       if (document.visibilityState !== "visible") return;
@@ -667,6 +689,7 @@
       if (d !== NOW.day) location.reload();
     });
     $("tlist").addEventListener("scroll", edges, { passive: true });
+    $("sched").parentNode.addEventListener("scroll", schedEdges, { passive: true });
     $("tPrev").addEventListener("click", function () { $("tlist").scrollBy({ left: -$("tlist").clientWidth * .8 }); });
     $("tNext").addEventListener("click", function () { $("tlist").scrollBy({ left: $("tlist").clientWidth * .8 }); });
   }

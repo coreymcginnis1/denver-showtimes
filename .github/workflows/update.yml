@@ -1,21 +1,20 @@
 name: Update showtimes
 
 # Everything runs on GitHub; nothing depends on a personal computer.
-#   Daily at 3:07 am Denver time and "Run workflow": scrape -> commit the data -> publish the site.
+#   Daily from 3:07 am Denver time and "Run workflow": scrape -> commit the data -> publish the site.
 #   Pushes to main: publish the site without scraping.
 #   Pull requests: run the tests and a scrape that writes nothing, proving every theater source
 #     still answers from GitHub's network before a change merges.
 # A push made with GITHUB_TOKEN doesn't trigger workflows, so the data commit can't loop, which
 # is also why publishing is a job in this workflow rather than a reaction to that push.
 on:
-  # Daily at 3:07 am Denver time. Cron is UTC and Denver shifts between MDT (UTC-6) and MST (UTC-7),
-  # so both candidate times are scheduled and the `gate` job lets through only the one that is
-  # 3:07 am locally that day. Off the hour on purpose: GitHub delays runs scheduled at :00.
-  # 3 am, not later, because GitHub starts scheduled runs late (5:20 am ran ~10:50 am in Nov 2026);
-  # a late start still finishes by the morning.
+  # Daily from 3:07 am Denver time, with hourly backups. GitHub starts scheduled runs late (5:20 am
+  # ran ~10:50 am on Nov 7 and 8, 2026) and sometimes not at all (Nov 9), so there's an attempt
+  # every hour from 09:07 to 16:07 UTC: 3:07-10:07 am MDT in summer, 2:07-9:07 am MST in winter.
+  # The `gate` job lets through the first attempt that is past 3 am in Denver on a day main has no
+  # "Update showtimes <today>" commit yet; the rest skip. Off the hour: GitHub delays :00 runs.
   schedule:
-    - cron: "7 9 * * *"       # 3:07 am MDT (summer)
-    - cron: "7 10 * * *"      # 3:07 am MST (winter)
+    - cron: "7 9-16 * * *"
   workflow_dispatch:
   push:
     branches: [main]
@@ -63,17 +62,22 @@ jobs:
     steps:
       - id: check
         env:
-          CRON: ${{ github.event.schedule }}
+          EVENT: ${{ github.event_name }}
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
         run: |
-          # "Run workflow" always goes. A scheduled run goes only if its cron matches Denver's
-          # current UTC offset (-0600 in summer, -0700 in winter); this survives late starts.
-          offset=$(TZ=America/Denver date +%z)
-          if [ -z "$CRON" ] || { [ "$CRON" = "7 9 * * *" ] && [ "$offset" = "-0600" ]; } \
-             || { [ "$CRON" = "7 10 * * *" ] && [ "$offset" = "-0700" ]; }; then
+          # "Run workflow" always goes. A scheduled attempt goes only after 3 am Denver time and only
+          # if today's data commit isn't on main yet (an earlier attempt or a manual run made it).
+          today=$(TZ=America/Denver date +%F); hour=$(TZ=America/Denver date +%-H)
+          last=$(gh api "repos/$REPO/commits?sha=main&path=public/data.json&per_page=1" --jq '.[0].commit.message' | head -n1)
+          if [ "$EVENT" != "schedule" ]; then
             echo "run=true" >> "$GITHUB_OUTPUT"
+          elif [ "$hour" -lt 3 ]; then
+            echo "run=false" >> "$GITHUB_OUTPUT"; echo "Skipping: before 3 am in Denver."
+          elif [ "$last" = "Update showtimes $today" ]; then
+            echo "run=false" >> "$GITHUB_OUTPUT"; echo "Skipping: today's showtimes are already on main."
           else
-            echo "run=false" >> "$GITHUB_OUTPUT"
-            echo "Skipping: the other daily slot is 3:07 am Denver time today (offset $offset)."
+            echo "run=true" >> "$GITHUB_OUTPUT"
           fi
 
   scrape:
@@ -88,21 +92,39 @@ jobs:
       cancel-in-progress: false
     outputs:
       outcome: ${{ steps.scrape.outcome }}
+      done: ${{ steps.again.outputs.done }}
     steps:
+      # Two late attempts can pass the gate together; this job runs one at a time (concurrency),
+      # so the second checks again here and stops if the first has already updated today.
+      - id: again
+        env:
+          EVENT: ${{ github.event_name }}
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: |
+          last=$(gh api "repos/$REPO/commits?sha=main&path=public/data.json&per_page=1" --jq '.[0].commit.message' | head -n1)
+          if [ "$EVENT" = "schedule" ] && [ "$last" = "Update showtimes $(TZ=America/Denver date +%F)" ]; then
+            echo "done=true" >> "$GITHUB_OUTPUT"; echo "Skipping: another attempt already updated today."
+          fi
+
       - uses: actions/checkout@v4
+        if: steps.again.outputs.done != 'true'
 
       - uses: actions/setup-python@v5
+        if: steps.again.outputs.done != 'true'
         with:
           python-version: "3.12"
           cache: pip
           cache-dependency-path: pyproject.toml
 
       - run: pip install -e .
+        if: steps.again.outputs.done != 'true'
 
       # A failed theater keeps its last published showtimes, so the data below is still worth
       # publishing. The alert job fails the run afterward, which is what triggers GitHub's email.
       - name: Scrape every theater
         id: scrape
+        if: steps.again.outputs.done != 'true'
         continue-on-error: true
         env:
           TMDB_TOKEN: ${{ secrets.TMDB_TOKEN }}       # matching, release dates, popularity
@@ -110,6 +132,7 @@ jobs:
         run: python -m movie_scraper --summary "$GITHUB_STEP_SUMMARY"
 
       - name: Commit the refreshed data
+        if: steps.again.outputs.done != 'true'
         run: |
           git add public/data.json known_titles.txt
           if git diff --cached --quiet; then
@@ -126,7 +149,7 @@ jobs:
     needs: scrape
     if: >-
       always() && github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
-      && (needs.scrape.result == 'success'
+      && ((needs.scrape.result == 'success' && needs.scrape.outputs.done != 'true')
           || (needs.scrape.result == 'skipped' && github.event_name == 'push'))
     runs-on: ubuntu-latest
     timeout-minutes: 10

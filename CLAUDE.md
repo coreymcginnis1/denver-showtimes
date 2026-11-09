@@ -30,10 +30,13 @@ scrapers → cleanup rules → TMDB match → trending, openings → public/data
 
 `.github/workflows/update.yml` does everything; nothing runs on anyone's computer.
 
-- **Daily at 3:07 am Denver time** (and "Run workflow"): scrape → commit `public/data.json` +
-  `known_titles.txt` → publish. Cron is UTC, so it's scheduled at 09:07 and 10:07 UTC and the `gate`
-  job lets through only the one that is 3:07 am locally (checks Denver's current UTC offset).
-  GitHub starts scheduled runs late (5:20 am runs started ~10:50 am in Nov 2026), hence 3 am.
+- **Daily from 3:07 am Denver time, with hourly backups** (and "Run workflow"): scrape → commit
+  `public/data.json` + `known_titles.txt` (message "Update showtimes <Denver date>") → publish.
+  GitHub starts scheduled runs late (5:20 am runs started ~10:50 am on Nov 7–8, 2026) and sometimes
+  never (Nov 9), so cron `7 9-16 * * *` (UTC) tries every hour: 3:07–10:07 am MDT, 2:07–9:07 am MST.
+  The `gate` job lets through the first attempt past 3 am Denver time on a day `main` has no
+  "Update showtimes <today>" commit (a manual run counts); the scrape job checks again once it holds
+  the `pages` concurrency lock, so two late attempts arriving together can't both scrape.
 - **Pushes to `main`** publish the site without scraping (frontend changes go live at once).
 - **Pull requests** run `pytest` and a `--dry-run` scrape from GitHub's network with the real
   secrets. The dry run prints a `MATCH |` line per film (TMDB id, release, IMDb id) for reviewing

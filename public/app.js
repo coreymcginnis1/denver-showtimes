@@ -101,6 +101,7 @@
       var m = meta[t] || {};
       return { t: t, id: m.tmdb_id || null, rel: m.release || null, pop: m.popularity, trend: m.trend != null ? m.trend : null, va: m.vote_average, vc: m.vote_count || 0,
         indie: !!m.indie, intl: !!m.intl, olang: m.lang || null, dirs: m.directors || [], countries: m.countries || [], about: m.overview || "",
+        cast: m.cast || [], genres: m.genres || [], qt: fold(t),
         posters: [], tmdbPoster: m.tmdb_poster || null, rating: null, runtime: null, year: m.release ? +m.release.slice(0, 4) : null };
     });
     data.events.forEach(function (e) {
@@ -195,11 +196,34 @@
     var f = films[s.f];
     return state.kind === "all" || (state.kind === "film" ? onFilm(s) : !f.event && (state.kind === "rep") === f.rep);
   }
+  // "Find a film" matches a title anywhere ("wild" finds Wild Horse Nine), and from three letters on
+  // also the start of a word in a director's or top-billed actor's name, or a genre ("lynch",
+  // "pedro pascal", "horror", "sci-fi"). Accents and capitals don't matter ("almodovar").
+  function fold(t) { return (t || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase(); }
+  var GENRE_ALSO = { "Science Fiction": "sci-fi scifi", "Animation": "animated" };
+  var hits = { q: null, by: [] };
+  function hitOf(i) {   // null, or { why } with why "" for a title match, else "Directed by ..." etc.
+    var q = fold(state.q);
+    if (hits.q !== q) hits = { q: q, by: [] };
+    if (hits.by[i] !== undefined) return hits.by[i];
+    var f = films[i], out = null;
+    if (!q || f.qt.indexOf(q) >= 0) out = { why: "" };
+    else if (q.length >= 3) {
+      var re = new RegExp("(^|[\\s'.-])" + q.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));
+      var find = function (list, also) {
+        for (var n = 0; n < list.length; n++) if (re.test(fold(list[n]) + (also && also[list[n]] ? " " + also[list[n]] : ""))) return list[n];
+        return null;
+      };
+      var d = find(f.dirs), c = !d && find(f.cast), g = !d && !c && find(f.genres, GENRE_ALSO);
+      if (d) out = { why: "Directed by " + d };
+      else if (c) out = { why: "With " + c };
+      else if (g) out = { why: g };
+    }
+    return (hits.by[i] = out);
+  }
   function dayShows(d, anyTheater) {
-    var q = state.q.toLowerCase();
     return shows.filter(function (s) {
-      var f = films[s.f];
-      return (d === ALL ? s.d >= days[0] && !isPast(s) : s.d === d) && (anyTheater || state.theaters.has(s.th)) && (!q || f.t.toLowerCase().indexOf(q) >= 0) &&
+      return (d === ALL ? s.d >= days[0] && !isPast(s) : s.d === d) && (anyTheater || state.theaters.has(s.th)) && (!state.q || hitOf(s.f)) &&
         kindOk(s);
     });
   }
@@ -386,11 +410,9 @@
     var elsewhere = new Map();
     // "On film" too: prints are rare, so show the ones at other theaters and days as well.
     if (state.q || state.kind === "film") {
-      var q = state.q.toLowerCase();
       shows.forEach(function (s) {
-        var f = films[s.f];
         var inRange = s.d >= days[0];   // any date we have (some theaters list months out)
-        if (byFilm.has(s.f) || !inRange || isPast(s) || (q && f.t.toLowerCase().indexOf(q) < 0)) return;
+        if (byFilm.has(s.f) || !inRange || isPast(s) || (state.q && !hitOf(s.f))) return;
         if (!kindOk(s)) return;
         if (!elsewhere.has(s.f)) elsewhere.set(s.f, []); elsewhere.get(s.f).push(s);
       });
@@ -458,6 +480,8 @@
         (flag ? '<p class="flag">' + esc(flag) + "</p>" : "") +
         // The title opens the details too: people tap titles, and it's the hint the poster needs.
         '<h3 class="title">' + (f.event ? esc(f.t) : '<button type="button" data-p="' + i + '" aria-expanded="' + (state.open === i) + '">' + esc(f.t) + "</button>") + "</h3>" +
+        // Found by someone in it or its genre, not its title: say so, or the match looks like a mistake.
+        (state.q && hitOf(i) && hitOf(i).why ? '<p class="why">' + esc(hitOf(i).why) + "</p>" : "") +
         '<div class="venues">' + vhtml + "</div>" +
         (asSpan && vlist.length > SPAN_SHOWN ? '<button type="button" class="more all" aria-expanded="false" data-label="Show all ' + vlist.length + ' theaters">Show all ' + vlist.length + " theaters</button>" : "") +
         '<button type="button" class="more" hidden>Show all times</button></article>';

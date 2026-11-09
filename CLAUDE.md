@@ -76,8 +76,8 @@ Tests never touch the network (`tests/conftest.py` unsets tokens and stubs Wikip
 
 `theaters` (key, name, color, default_on, lat, lon) · `films` · `events` (`id`, `title`, `start`,
 optional `end`/`allDay`, `extendedProps`: `theater`, `screen`, `fmt`, `ticketUrl`, `poster`,
-`lang`, `rating`, `runtime`, `year`, `release`) · `film_meta` (displayed title → TMDB data, `trend`,
-`wiki_views`, …) · `tmdb_ids` (local title → TMDB id) · `openings` (title → Denver opening date) ·
+`lang`, `rating`, `runtime`, `year`, `release`) · `film_meta` (displayed title → TMDB data:
+`directors`, `cast` (top five billed), `genres`, `countries`, `overview`, `trend`, `wiki_views`, …) · `tmdb_ids` (local title → TMDB id) · `openings` (title → Denver opening date) ·
 `stale_theaters` · `generated_at` · `timezone`.
 
 ## Theaters (`config.toml` `[theaters.*]`)
@@ -275,8 +275,14 @@ redesign directions" (A listings + C program won; B marquee rejected).
   IMAX, Dolby, 3D, PLF, Sub, Dub…, else the label itself). Format and language are judged
   **separately** (`shared()` / `ownTag()`): all-subtitled showings with a few PLF ones read "Regal
   Pavilions, Subtitled" with "PLF" only on those times.
-- **Search** also shows matches beyond the selected day and theaters, split into "Playing on other
-  dates" (your theaters) and "Playing at other theaters" (e.g. Fjord, only at AMC Westminster).
+- **Search** ("Title, director, actor or genre"; `hitOf()`): a title matches anywhere; from three
+  letters on, so does the start of a word in a director's or top-five-billed actor's name or a TMDB
+  genre (`film_meta.directors` / `.cast` / `.genres`, all from the one TMDB request; "sci-fi" finds
+  Science Fiction, "animated" Animation). Accents and capitals don't matter ("almodovar"). A card
+  found by anything but its title says why under the title ("Directed by Pedro Almodóvar", "With
+  Pedro Pascal", "Horror"), or the match looks like a mistake. Search also shows matches beyond the
+  selected day and theaters, split into "Playing on other dates" (your theaters) and "Playing at
+  other theaters" (e.g. Fjord, only at AMC Westminster).
 - **Tap a time** → sheet with Get tickets and one "Add to calendar" button that opens Google, Outlook,
   Apple/.ics (ICS uses TZID America/Denver).
 - **Times read "3:00 pm"** (lowercase, no periods; `hm12()`); digits tabular, "am/pm" in `.ap`.

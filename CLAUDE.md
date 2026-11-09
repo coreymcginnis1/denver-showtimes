@@ -65,7 +65,8 @@ Tests never touch the network (`tests/conftest.py` unsets tokens and stubs Wikip
   - `pipeline.py` — cleanup, TMDB standardization, openings, trending, feed, run summary.
   - `tmdb.py` · `wikipedia.py` · `omdb.py` (off) · `formats.py` · `config.py` · `cli.py` · `models.py`.
 - `public/` — `index.html`, `styles.css`, `app.js` (vanilla, no build), `zips.json`,
-  `tmdb-logo.svg`, `preview.png`, `data.json` (written by the workflow).
+  `tmdb-logo.svg`, `favicon.svg` (brick square, white D), `preview.png` (Substack card, 1200×630, the
+  redesign's look; regenerate if the masthead or theaters change), `data.json` (written by the workflow).
 - `config.toml` — theaters, cleanup rules, TMDB overrides, feature switches.
 - `tests/` — offline, against saved fixtures in `tests/fixtures/`.
 
@@ -220,7 +221,7 @@ redesign directions" (A listings + C program won; B marquee rejected).
     a week**; then repertory by original release; special events last. With Show **All** (any sort),
     a day always splits into **New releases / Repertory / Special events**, each in the chosen sort. Films without the data sort last.
 - **Cards:** poster, "Opening week" (first 7 days in Denver) / "Opens Nov 19", the title (bold condensed, its own capitalization),
-  then times by theater as plain text ("11:50 am 1:45 pm 4:30 pm", every time with its am/pm;
+  then times by theater (nearest first, like the checklist) as plain text ("11:50 am 1:45 pm 4:30 pm", every time with its am/pm;
   a format all of a theater's showings share goes on the theater line, "Alamo, 35mm"). **Tap the
   poster or the title** for the details over the poster (no "i" mark: a pointer, and on hover the poster
   dims and the title underlines): director(s), country (non-US), year, runtime, rating, TMDB synopsis,
@@ -251,7 +252,8 @@ redesign directions" (A listings + C program won; B marquee rejected).
   Apple/.ics (ICS uses TZID America/Denver).
 - **Times read "3:00 pm"** (lowercase, no periods; `hm12()`); digits tabular, "am/pm" in `.ap`.
 - "Floating time": the ISO offset is ignored, so every viewer sees Denver wall-clock times; "now"
-  (for dimming past showtimes) is computed in America/Denver.
+  (for dimming past showtimes) is computed in America/Denver. A tab left open overnight reloads when
+  it comes back on a new Denver date (`visibilitychange`).
 - **Privacy:** no cookies, no analytics. The only browser storage is the theater pick
   (`dst-theaters` in `localStorage`, never sent anywhere); the zip is never saved. Third-party
   requests are poster images only (TMDB, Fandango, theaters). Keep it that way.

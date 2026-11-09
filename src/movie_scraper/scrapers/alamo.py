@@ -13,7 +13,6 @@ cinema, but we still filter by the venue's cinemaId defensively.
 from __future__ import annotations
 
 import logging
-import re
 from datetime import date, datetime
 
 from .base import BaseScraper, http_client

@@ -197,7 +197,6 @@
 
   var ALL = "all";   // state.day for the "All dates" view
   function shortDate(d) { return dateObj(d).toLocaleDateString("en-US", { month: "short", day: "numeric" }); }
-  function dayName(d) { return relDay(d) || dateObj(d).toLocaleDateString("en-US", { weekday: "short" }) + " " + shortDate(d); }
 
   function renderDays() {
     $("days").innerHTML = '<button type="button" class="day" data-d="' + ALL + '" aria-pressed="' + (state.day === ALL) + '">' +
@@ -270,13 +269,11 @@
 
   // A run of times in plain text, "11:50 am 1:45 pm 4:30 pm", each with its am/pm.
   function timesHTML(list, f, t, sameFmt) {
-    var half = null;
     return list.map(function (s) {
       var tag = !sameFmt && tagOf(s) ? "<sup>" + esc(shortTag(tagOf(s))) + "</sup>" : "", label = "Times vary";
       if (s.hm) {
         var h = +s.hm.slice(0, 2), ap = h < 12 ? "am" : "pm";
         label = ((h % 12) || 12) + ":" + s.hm.slice(3) + ' <span class="ap">' + ap + "</span>";
-        half = ap;
       }
       return '<button type="button" class="time' + (isPast(s) ? " past" : "") + '" data-i="' + shows.indexOf(s) + '" aria-label="' +
         esc(f.t) + ", " + (s.hm ? longTime(s.hm) : "times vary") + ", " + esc(t.name || "") + '">' + label + tag + "</button>";
@@ -363,7 +360,8 @@
       // "Indie" and "International" tags are on hold (Nov 2026): the Indie guess (TMDB lists
       // producers, not distributors) wasn't reliable, and Corey wants both or neither. The data
       // (film_meta.indie / .intl) is still in data.json.
-      var order = theaters.map(function (t) { return t.key; });
+      // Day view: theaters nearest first (same order as the checklist, so it follows the zip).
+      var order = theaters.slice().sort(function (a, b) { return (miles(a) || 0) - (miles(b) || 0); }).map(function (t) { return t.key; });
       // Two weeks / search: theaters by their next showing, soonest first; otherwise in the usual order.
       var vlist = Array.from(venues.entries()).sort(asSpan ? function (a, b) { return (a[1][0].d + a[1][0].hm).localeCompare(b[1][0].d + b[1][0].hm); }
         : function (a, b) { return order.indexOf(a[0]) - order.indexOf(b[0]); });
@@ -617,6 +615,12 @@
       if (ok) { state.zip = z; applyRadius(); renderAll(); }
     });
     window.addEventListener("resize", function () { measure(); clampVenues(); edges(); });
+    // A tab left open overnight would keep yesterday as "today": reload when the Denver date changes.
+    document.addEventListener("visibilitychange", function () {
+      if (document.visibilityState !== "visible") return;
+      var d = new Intl.DateTimeFormat("en-CA", { timeZone: "America/Denver" }).format(new Date());
+      if (d !== NOW.day) location.reload();
+    });
     $("tlist").addEventListener("scroll", edges, { passive: true });
     $("tPrev").addEventListener("click", function () { $("tlist").scrollBy({ left: -$("tlist").clientWidth * .8 }); });
     $("tNext").addEventListener("click", function () { $("tlist").scrollBy({ left: $("tlist").clientWidth * .8 }); });

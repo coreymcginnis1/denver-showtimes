@@ -16,6 +16,7 @@
   <meta property="og:image" content="__SITE_URL__preview.png" />
   <meta name="twitter:card" content="summary_large_image" />
 
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
   <link rel="preload" href="fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="stylesheet" href="styles.css?v=__ASSET_VERSION__" />
 </head>
@@ -48,30 +49,31 @@
       </div>
     </section>
 
-    <div class="opts">
-      <label class="searchbox"><span>Find a film</span>
-        <input class="search" id="q" type="search" enterkeyhint="search" autocomplete="off" />
-        <button type="button" class="clear" id="qClear" aria-label="Clear search" hidden>×</button>
-      </label>
-      <div class="sort" role="group" aria-label="Show">
-        <span class="lbl" aria-hidden="true">Show</span>
-        <button type="button" data-kind="all" aria-pressed="true">All</button>
-        <button type="button" data-kind="new" aria-pressed="false">New releases</button>
-        <button type="button" data-kind="rep" aria-pressed="false">Repertory</button>
-        <button type="button" data-kind="film" aria-pressed="false" title="Projected from a film print: 16mm, 35mm, 70mm, IMAX 70mm, VistaVision">On film</button>
+    <section class="controls" aria-label="Find and sort films">
+      <div class="opts">
+        <label class="searchbox"><span>Find a film</span>
+          <input class="search" id="q" type="search" enterkeyhint="search" autocomplete="off" />
+          <button type="button" class="clear" id="qClear" aria-label="Clear search" hidden>×</button>
+        </label>
+        <div class="sort" role="group" aria-label="Show">
+          <span class="lbl" aria-hidden="true">Show</span>
+          <button type="button" data-kind="all" aria-pressed="true">All</button>
+          <button type="button" data-kind="new" aria-pressed="false">New releases</button>
+          <button type="button" data-kind="rep" aria-pressed="false">Repertory</button>
+          <button type="button" data-kind="film" aria-pressed="false" title="Projected from a film print: 16mm, 35mm, 70mm, IMAX 70mm, VistaVision">On film</button>
+        </div>
+        <div class="sort" role="group" aria-label="Sort films">
+          <span class="lbl" aria-hidden="true">Sort</span>
+          <button type="button" data-s="new" aria-pressed="true">Newest</button>
+          <button type="button" data-s="pop" aria-pressed="false" title="What people are looking up this week, on TMDB and Wikipedia">Trending</button>
+          <button type="button" data-s="az" aria-pressed="false">A–Z</button>
+        </div>
       </div>
-      <div class="sort" role="group" aria-label="Sort films">
-        <span class="lbl" aria-hidden="true">Sort</span>
-        <button type="button" data-s="new" aria-pressed="true">Newest</button>
-        <button type="button" data-s="pop" aria-pressed="false" title="What people are looking up this week, on TMDB and Wikipedia">Trending</button>
-        <button type="button" data-s="az" aria-pressed="false">A–Z</button>
+      <div class="seg" role="group" aria-label="View">
+        <button type="button" data-v="films" aria-pressed="true">Films</button>
+        <button type="button" data-v="schedule" aria-pressed="false">Schedule</button>
       </div>
-    </div>
-
-    <div class="seg" role="group" aria-label="View">
-      <button type="button" data-v="films" aria-pressed="true">Films</button>
-      <button type="button" data-v="schedule" aria-pressed="false">Schedule</button>
-    </div>
+    </section>
 
     <main class="layout" id="layout" data-view="films">
       <section class="films" aria-labelledby="filmsH">

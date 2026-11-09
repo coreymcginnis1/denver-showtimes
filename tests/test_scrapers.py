@@ -109,7 +109,9 @@ def test_languages():
     assert language(["English Subtitles", "Hindi Language"]) == "Subtitled"
     assert language(["Spanish Dubbed"]) == "Spanish dub"
     assert language(["English Dubbed"]) == "Dubbed"
-    assert language(["Reserved seating", "Hindi Language"]) is None
+    assert language(["Reserved seating", "Hindi Language"]) == "Hindi language"   # page decides sub vs dub
+    assert language(["Japanese Language", "CINÉ XL®"]) == "Japanese language"
+    assert language(["English Language"]) is None
     assert language(["Laser at AMC"]) is None
 
 

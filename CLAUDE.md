@@ -243,11 +243,15 @@ redesign directions" (A listings + C program won; B marquee rejected).
   formats. Fandango's header says only Standard / Premium Format / 3D, so the screen comes from the
   showtime group's amenities. **Language** (`lang`): "Subtitled", "Dubbed", or "<Language> dub"
   ("Spanish dub"), from Fandango amenities, Alamo attributes and the Sie's `subtitle_language` (non-English
-  film + English subtitle track = Subtitled); sources only flag the exceptions, so
-  an untagged showing of a foreign film can be either. Sie's prints come from the title ("… on 35mm",
+  film + English subtitle track = Subtitled). Harkins says only "Japanese Language": the scraper passes
+  "Japanese language" and the page (`resolveLang()`) compares it with TMDB's original language:
+  same = Subtitled, an English film = "<X> dub", anything else = "In <X>". Sources only flag the
+  exceptions (Alamo flags nothing), so an untagged showing of a foreign film can be either. Sie's prints come from the title ("… on 35mm",
   "… in VistaVision") or a "35mm" Eventive tag (Eventive has no projection field). On the site, a format/language all of a theater's showings share goes on the
   theater line ("Regal Pavilions, Subtitled"); mixed ones get a short red mark per time (`FMT_TAG`:
-  IMAX, Dolby, 3D, PLF, Sub, Dub…, else the label itself).
+  IMAX, Dolby, 3D, PLF, Sub, Dub…, else the label itself). Format and language are judged
+  **separately** (`shared()` / `ownTag()`): all-subtitled showings with a few PLF ones read "Regal
+  Pavilions, Subtitled" with "PLF" only on those times.
 - **Search** also shows matches beyond the selected day and theaters, split into "Playing on other
   dates" (your theaters) and "Playing at other theaters" (e.g. Fjord, only at AMC Westminster).
 - **Tap a time** → sheet with Get tickets and one "Add to calendar" button that opens Google, Outlook,

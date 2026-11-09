@@ -50,7 +50,7 @@ def on_film(fmt: str | None) -> bool:
 
 
 def language(names: list[str]) -> str | None:
-    """"Subtitled" or "Dubbed" (with the language when it isn't English: "Spanish dub"), else None.
+    """"Subtitled", "Dubbed" / "Spanish dub", or "<X> language" (the page resolves it), else None.
 
     Sources only flag the exceptions (Fandango: "Japanese with English Subtitles", "Spanish Dubbed",
     "English Subtitles"), so an untagged showing of a foreign film can be either.
@@ -65,4 +65,11 @@ def language(names: list[str]) -> str | None:
             return "Dubbed"
     if any(re.search(r"(?i)\bsubtitle[sd]?\b|\bsubbed\b", n or "") for n in names):
         return "Subtitled"
+    # "Japanese Language" (Harkins): shown in that language. Whether that's the original (subtitled)
+    # or a dub depends on the film's own language, which the site knows from TMDB, so it's passed on
+    # as "Japanese language" and the page decides ("Subtitled" or "Japanese dub").
+    for n in names:
+        m = re.match(r"(?i)^\s*(\w+)\s+language\s*$", n or "")
+        if m and m.group(1).lower() != "english":
+            return f"{m.group(1).capitalize()} language"
     return None

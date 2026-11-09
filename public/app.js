@@ -34,7 +34,29 @@
   function fmtName(f) { return f === "Premium Format" ? "PLF" : f; }   // older data said "Premium Format"
   function tagOf(s) { return [s.fmt ? fmtName(s.fmt) : "", s.lang || ""].filter(Boolean).join(", "); }   // "IMAX, Subtitled"
   function shortTag(t) { return t.split(", ").map(function (x) { return FMT_TAG[x] || x; }).join(" "); }
+  // Format and language are judged separately for a theater's showings: whatever all of them share
+  // goes on the theater line ("Regal Pavilions, Subtitled"); only what differs is marked on a time
+  // ("2:00 pm PLF"). Judged together, one PLF showing used to push "Sub" onto every time.
+  function shared(list) {
+    var same = function (get) { var v = get(list[0]); return list.every(function (s) { return get(s) === v; }) ? v : null; };
+    return { fmt: same(function (s) { return s.fmt ? fmtName(s.fmt) : ""; }), lang: same(function (s) { return s.lang || ""; }) };
+  }
+  function sharedLabel(sh) { return [sh.fmt, sh.lang].filter(Boolean).join(", "); }
+  function ownTag(s, sh) {   // what this showing has that its theater's other showings don't all share
+    return [sh.fmt == null && s.fmt ? fmtName(s.fmt) : "", sh.lang == null && s.lang ? s.lang : ""].filter(Boolean).join(", ");
+  }
   var COUNTRY = (function () { try { return new Intl.DisplayNames(["en"], { type: "region" }); } catch (e) { return null; } })();
+  var LANGUAGE = (function () { try { return new Intl.DisplayNames(["en"], { type: "language" }); } catch (e) { return null; } })();
+  // A showing "in Japanese" (Harkins says only that) is the subtitled original when the film is
+  // Japanese (TMDB's original language), or a dub when it isn't ("Spanish language" on an English film).
+  function resolveLang(raw, f) {
+    var m = /^(\w+) language$/.exec(raw || "");
+    if (!m) return raw || null;
+    var orig = f.olang === "cn" ? "Cantonese" : f.olang && LANGUAGE ? LANGUAGE.of(f.olang) : null;
+    var same = orig === m[1] || (orig === "Chinese" && /^(Mandarin|Cantonese)$/.test(m[1]));
+    // Only an English film in another language is surely a dub; any other mismatch just says the language.
+    return same ? "Subtitled" : f.olang === "en" ? m[1] + " dub" : "In " + m[1];
+  }
 
   var $ = function (id) { return document.getElementById(id); };
   function esc(s) { return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
@@ -67,7 +89,7 @@
       index[t] = i;
       var m = meta[t] || {};
       return { t: t, id: m.tmdb_id || null, rel: m.release || null, pop: m.popularity, trend: m.trend != null ? m.trend : null, va: m.vote_average, vc: m.vote_count || 0,
-        indie: !!m.indie, intl: !!m.intl, dirs: m.directors || [], countries: m.countries || [], about: m.overview || "",
+        indie: !!m.indie, intl: !!m.intl, olang: m.lang || null, dirs: m.directors || [], countries: m.countries || [], about: m.overview || "",
         posters: [], tmdbPoster: m.tmdb_poster || null, rating: null, runtime: null, year: m.release ? +m.release.slice(0, 4) : null };
     });
     data.events.forEach(function (e) {
@@ -78,7 +100,7 @@
       if (!f.runtime && x.runtime) f.runtime = x.runtime;
       if (!f.year && x.year) f.year = x.year;
       shows.push({ f: index[e.title], th: x.theater, d: e.start.slice(0, 10), hm: e.allDay ? null : e.start.slice(11, 16),
-        end: e.end ? e.end.slice(0, 16) : null, fmt: x.fmt, lang: x.lang, scr: x.screen, url: x.ticketUrl, id: e.id });
+        end: e.end ? e.end.slice(0, 16) : null, fmt: x.fmt, lang: resolveLang(x.lang, f), scr: x.screen, url: x.ticketUrl, id: e.id });
     });
     var openings = data.openings || {};
     films.forEach(function (f, i) {
@@ -291,9 +313,9 @@
   }
 
   // A run of times in plain text, "11:50 am 1:45 pm 4:30 pm", each with its am/pm.
-  function timesHTML(list, f, t, sameFmt) {
+  function timesHTML(list, f, t, sh) {
     return list.map(function (s) {
-      var tag = !sameFmt && tagOf(s) ? "<sup>" + esc(shortTag(tagOf(s))) + "</sup>" : "", label = "Times vary";
+      var own = ownTag(s, sh), tag = own ? "<sup>" + esc(shortTag(own)) + "</sup>" : "", label = "Times vary";
       if (s.hm) {
         var h = +s.hm.slice(0, 2), ap = h < 12 ? "am" : "pm";
         label = ((h % 12) || 12) + ":" + s.hm.slice(3) + ' <span class="ap">' + ap + "</span>";
@@ -391,19 +413,19 @@
       var vhtml = vlist.map(function (e, k) {
         var t = theaterOf(e[0]) || {};
         if (asSpan) {   // one line per theater, "Alamo  Sat Nov 7, 5:00 pm  through Nov 11"; the first 3, then "Show all"
-          var first = e[1][0], last = e[1][e[1].length - 1], o = dateObj(first.d), tg = e[1].map(tagOf);
-          var name = esc((TINY[e[0]] || tName(e[0])) + (tg[0] && tg.every(function (x) { return x === tg[0]; }) ? ", " + tg[0] : ""));   // "Alamo, 35mm"
+          var first = e[1][0], last = e[1][e[1].length - 1], o = dateObj(first.d), shs = shared(e[1]), lbl = sharedLabel(shs), own = ownTag(first, shs);
+          var name = esc((TINY[e[0]] || tName(e[0])) + (lbl ? ", " + lbl : ""));   // "Alamo, 35mm"
           var day = o.toLocaleDateString("en-US", { weekday: "short" }) + " " + shortDate(first.d);
           return '<div class="venue line' + (k >= SPAN_SHOWN ? " extra" : "") + '"><span class="vn">' + name + '</span><button type="button" class="time next" data-i="' +
             shows.indexOf(first) + '" aria-label="' + esc(f.t) + ", next showing " + longDate(first.d) + " " + (first.hm ? longTime(first.hm) : "") + ", " + esc(t.name || "") + '">' +
-            day + (first.hm ? ', <span class="nw">' + timeHTML(first.hm) + "</span>" : "") + "</button>" +
+            day + (first.hm ? ', <span class="nw">' + timeHTML(first.hm) + "</span>" : "") + (own ? "<sup>" + esc(shortTag(own)) + "</sup>" : "") + "</button>" +
             // How long it runs here, quietly after the next showing: "through Nov 11".
             (last.d !== first.d ? '<span class="thru">through ' + shortDate(last.d) + "</span>" : "") + "</div>";
         }
         // A format / language every showing here shares ("Regal Colorado, IMAX") goes with the theater, not on each time.
-        var fm = e[1].map(tagOf), one = fm.every(function (x) { return x === fm[0]; }) ? fm[0] : null;
-        var label = (TINY[e[0]] || tName(e[0])) + (one ? ", " + one : "");
-        return '<div class="venue"><span class="vn">' + esc(label) + '</span><div class="times">' + timesHTML(e[1], f, t, one != null) + "</div></div>";
+        var sh = shared(e[1]), lbl = sharedLabel(sh);
+        var label = (TINY[e[0]] || tName(e[0])) + (lbl ? ", " + lbl : "");
+        return '<div class="venue"><span class="vn">' + esc(label) + '</span><div class="times">' + timesHTML(e[1], f, t, sh) + "</div></div>";
       }).join("");
       return '<article class="card"><div class="poster">' + posterBlock(i) + "</div>" +
         (flag ? '<p class="flag">' + esc(flag) + "</p>" : "") +

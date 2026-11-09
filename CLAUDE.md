@@ -230,13 +230,15 @@ redesign directions" (A listings + C program won; B marquee rejected).
   choices are saved in `localStorage` with the default set they were made against (changing `default_on`
   resets everyone) · "Find a film" search first (× clears it; Enter closes the phone keyboard), then
   **Show** All / New releases / Repertory / **On film** and **Sort** Newest / Trending / A–Z. On film (Corey's
-  interest) keeps only showings projected from a print (16/35/70mm, IMAX 70mm, VistaVision) and, since
-  prints are rare, also lists them on other dates at your theaters ("On film on other dates") and at other theaters
-  ("On film at other theaters"), soonest first.
+  interest) keeps only showings projected from a print (16/35/70mm, IMAX 70mm, VistaVision). It's a
+  plain filter like the other Show choices: the chosen day and theaters only; **All dates** lists every
+  print coming up (Now playing / Coming soon / Further out), and a day with none says "Nothing on film
+  at these theaters on this day. Try All dates or more theaters." (Its own "On film on other dates /
+  at other theaters" sections were dropped Nov 2026 as clutter.)
   **Look-ahead** (`ahead_days = 90`, `fetch_ahead()`): sources that can look months out cheaply (Sie,
   one request a week; Landmark, one ranged request; the three Alamos, their full feeds) report **everything** up to 90
   days; Fandango (a request per day per theater) stops at 14. The day strip stays at `WINDOW_DAYS` = 14;
-  later dates show only in All dates ("Further out"), On film and search.
+  later dates show only in All dates ("Further out") and search.
   - **Newest:** new releases by Denver **release week** (Friday–Thursday; Wed/Thu previews count
     toward the Friday they lead into, `releaseWeek()`), latest and upcoming first, **Trending within
     a week**; then repertory by original release; special events last. With Show **All** (any sort),

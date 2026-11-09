@@ -191,37 +191,39 @@ a printed listings page, not an app. Near-white paper `--paper #f7f5f0`, black i
 `--brick #b83a22` as the one accent. **One typeface, Archivo** (variable weight + width, condensed caps
 for the masthead, section heads, film titles, day and hour numerals), **self-hosted** in
 `public/fonts/` (latin + latin-ext woff2, OFL alongside) so no visit reports to Google. Heavy black
-rules instead of boxes; no pills, dots, count badges, tiny all-caps labels, shadows or "·" separators.
-Posters keep 3px corners; nothing else is rounded. Mockups: claude.ai canvas "Denver Showtimes
+rules instead of boxes; no pills, dots, count badges, shadows or "·" separators. Posters keep 3px
+corners. Corey kept the original Show / Sort toggles (small caps labels, 4px selected tint): clean
+and familiar beats strict consistency there. Mockups: claude.ai canvas "Denver Showtimes
 redesign directions" (A listings + C program won; B marquee rejected).
 
 - **Controls:** masthead "Denver Movie Showtimes" with the chosen date under it · sticky day strip
-  ("Next 2 wks", then the weekday, never "Today", over a big numeral, every day the same width; the selected day is a brick block) · **Theaters**:
+  ("Next 2 wks", then the weekday, never "Today", "Tue Nov" over a big "10", every day the same width; the selected day is a brick block) · **Theaters**:
   "Theaters near [zip] within 1 mi / 3 mi / 5 mi / any distance" and a checklist of all ten nearest first
-  with miles (no counts, no theater colors). Phones fold it to "At Sie and Mayan · Change". Zip default
+  with miles in one row that scrolls sideways (no counts, no theater colors). Phones fold it to "At Sie and Mayan · Change". Zip default
   **80218**, **never saved**; straight-line distance from Census zip centroids in `zips.json`. Theater
   choices are saved in `localStorage` with the default set they were made against (changing `default_on`
-  resets everyone) · a sentence: "Showing everything / new releases / repertory by newest / trending /
-  title" · "Find a film" search (× clears it; Enter closes the phone keyboard).
+  resets everyone) · "Find a film" search first (× clears it; Enter closes the phone keyboard), then
+  **Show** All / New releases / Repertory and **Sort** Newest / Trending / A–Z.
   - **Newest:** new releases by Denver **release week** (Friday–Thursday; Wed/Thu previews count
     toward the Friday they lead into, `releaseWeek()`), latest and upcoming first, **Trending within
-    a week**; then repertory by original release; special events last. With "everything" + newest,
-    a day splits into **New releases / Repertory / One night only**. Films without the data sort last.
+    a week**; then repertory by original release; special events last. With Show **All** (any sort),
+    a day always splits into **New releases / Repertory / One night only**, each in the chosen sort. Films without the data sort last.
 - **Cards:** poster, "Opening week" (first 7 days in Denver) / "Opens Nov 19", the title in condensed
-  caps, then times by theater as plain text ("11:50 am 1:45 pm 4:30 7:15": am/pm only where it changes;
+  caps, then times by theater as plain text ("11:50 am 1:45 pm 4:30 pm", every time with its am/pm;
   a format all of a theater's showings share goes on the theater line, "Mayan, Scope"). **Tap the
   poster** for the details over it: director(s), country (non-US), year, runtime, rating, TMDB synopsis,
   Letterboxd link (`film_meta.directors` / `.countries` / `.overview`, from the same TMDB request with
   `append_to_response=credits`). Special events have no details, so their poster isn't a button.
   **Posters:** TMDB `w500` first, other theaters' art next, Fandango (600 px renderer) last, then the
   title set white on black. Long lists clamp behind "Show all times" (`clampVenues()`).
-- **By the hour:** the day in time order under big brick hour numerals (earlier-today rows behind a
-  button). Desktop: sticky right column; phone: Films / By the hour tabs.
+- **Schedule:** the day in time order under big brick hour numerals (earlier-today rows behind a
+  button). Desktop: sticky right column; phone: Films / Schedule tabs.
 - **Next 2 weeks:** **Now playing** (a showing today at the selected theaters, or a new release already open in Denver whose next showing is within `RUN_GAP_DAYS` = 3 days; repertory and events need today; by the chosen sort) then **Coming soon** (everything else, repertory included, by its next showing); each
-  theater gets one line with its next showing ("Alamo Sat 7, 5:00 pm"), soonest first; three show, the rest behind "Show all N theaters" (`SPAN_SHOWN`). Search's "Also playing elsewhere" cards work the same way. No By the hour.
+  theater gets one line with its next showing ("Alamo Sat Nov 7, 5:00 pm"), soonest first; three show, the rest behind "Show all N theaters" (`SPAN_SHOWN`). Search's "Also playing elsewhere" cards work the same way. No schedule column.
 - **Search** also shows matches beyond the selected theaters/day under "Also playing elsewhere"
   (e.g. Fjord, only at AMC Westminster).
-- **Tap a time** → sheet with Get tickets, Google, Outlook, Apple/.ics (ICS uses TZID America/Denver).
+- **Tap a time** → sheet with Get tickets and one "Add to calendar" button that opens Google, Outlook,
+  Apple/.ics (ICS uses TZID America/Denver).
 - **Times read "3:00 pm"** (lowercase, no periods; `hm12()`); digits tabular, "am/pm" in `.ap`.
 - "Floating time": the ISO offset is ignored, so every viewer sees Denver wall-clock times; "now"
   (for dimming past showtimes) is computed in America/Denver.

@@ -45,23 +45,27 @@
     </section>
 
     <div class="opts">
-      <p role="group" aria-label="Show">Showing
-        <button type="button" class="opt" data-kind="all" aria-pressed="true">everything</button>,
-        <button type="button" class="opt" data-kind="new" aria-pressed="false">new releases</button>,
-        <button type="button" class="opt" data-kind="rep" aria-pressed="false">repertory</button></p>
-      <p role="group" aria-label="Sort">by
-        <button type="button" class="opt" data-s="new" aria-pressed="true">newest</button>,
-        <button type="button" class="opt" data-s="pop" aria-pressed="false" title="What people are looking up this week, on TMDB and Wikipedia">trending</button>,
-        <button type="button" class="opt" data-s="az" aria-pressed="false">title</button></p>
-      <label class="searchbox">Find a film
+      <label class="searchbox"><span>Find a film</span>
         <input class="search" id="q" type="search" enterkeyhint="search" autocomplete="off" />
         <button type="button" class="clear" id="qClear" aria-label="Clear search" hidden>×</button>
       </label>
+      <div class="sort" role="group" aria-label="Show">
+        <span class="lbl" aria-hidden="true">Show</span>
+        <button type="button" data-kind="all" aria-pressed="true">All</button>
+        <button type="button" data-kind="new" aria-pressed="false">New releases</button>
+        <button type="button" data-kind="rep" aria-pressed="false">Repertory</button>
+      </div>
+      <div class="sort" role="group" aria-label="Sort films">
+        <span class="lbl" aria-hidden="true">Sort</span>
+        <button type="button" data-s="new" aria-pressed="true">Newest</button>
+        <button type="button" data-s="pop" aria-pressed="false" title="What people are looking up this week, on TMDB and Wikipedia">Trending</button>
+        <button type="button" data-s="az" aria-pressed="false">A–Z</button>
+      </div>
     </div>
 
     <div class="seg" role="group" aria-label="View">
       <button type="button" data-v="films" aria-pressed="true">Films</button>
-      <button type="button" data-v="schedule" aria-pressed="false">By the hour</button>
+      <button type="button" data-v="schedule" aria-pressed="false">Schedule</button>
     </div>
 
     <main class="layout" id="layout" data-view="films">
@@ -70,7 +74,7 @@
         <div id="grid"><p class="empty">Loading showtimes…</p></div>
       </section>
       <aside class="sched" aria-labelledby="schedH">
-        <h2 class="group" id="schedH">By the hour</h2>
+        <h2 class="group" id="schedH">Schedule</h2>
         <div id="sched"></div>
       </aside>
     </main>

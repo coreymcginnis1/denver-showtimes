@@ -1,6 +1,6 @@
 /* Denver Showtimes: one day at a time, set like a printed listings page.
    Poster cards for every film playing on the chosen day (times grouped by theater; tap a poster for
-   the director and synopsis), plus the day "By the hour". Tap a time for tickets or to add it to
+   the director and synopsis), plus the day's schedule by hour. Tap a time for tickets or to add it to
    Google / Outlook / .ics.
    Times are Denver wall-clock ("floating"): the ISO offset is ignored, so every viewer sees the
    time printed on the theater's own site. No dependencies. */
@@ -10,7 +10,7 @@
   // Names for the theater checklist; the full name is used in the sheet and calendar entries.
   var SHORT = { sie: "Sie FilmCenter", landmark: "Landmark Mayan", amc: "AMC 9+CO 10", regal_pavilions: "Regal Pavilions",
     alamo_sloans: "Alamo Sloans Lake", regal_colorado: "Regal Colorado Ctr", amc_westminster: "AMC Westminster",
-    landmark_greenwood: "Landmark Greenwood", harkins_arvada: "Harkins Arvada", harkins_northfield: "Harkins Northfield" };
+    landmark_greenwood: "Landmark Greenwood Village", harkins_arvada: "Harkins Arvada", harkins_northfield: "Harkins Northfield" };
   var THEATER_SITES = [   // one link per company; each site lists its own locations
     ["Sie FilmCenter", "https://www.denverfilm.org/"],
     ["Landmark", "https://www.landmarktheatres.com/"],
@@ -22,7 +22,7 @@
   // Shortest names, for the times under a poster, the hour list and the "At Sie and Mayan" line.
   var TINY = { sie: "Sie", landmark: "Mayan", amc: "AMC 9+CO 10", regal_pavilions: "Regal Pavilions",
     alamo_sloans: "Alamo", regal_colorado: "Regal Colorado", amc_westminster: "AMC Westminster",
-    landmark_greenwood: "Landmark Greenwood", harkins_arvada: "Harkins Arvada", harkins_northfield: "Harkins Northfield" };
+    landmark_greenwood: "Landmark Greenwood Village", harkins_arvada: "Harkins Arvada", harkins_northfield: "Harkins Northfield" };
   var FMT_TAG = { "Premium Format": "Prem", "3D": "3D", "Scope": "Scope", "35mm": "35mm", "70mm": "70mm" };
   var COUNTRY = (function () { try { return new Intl.DisplayNames(["en"], { type: "region" }); } catch (e) { return null; } })();
 
@@ -184,10 +184,10 @@
     $("days").innerHTML = '<button type="button" class="day" data-d="' + ALL + '" aria-pressed="' + (state.day === ALL) + '">' +
       '<span class="dw">Next</span><span class="dn">2 wks</span></button>' + days.map(function (d, n) {
       var rel = relDay(d), o = dateObj(d), wd = o.toLocaleDateString("en-US", { weekday: "short" });
-      var mon = o.getDate() === 1 ? " " + o.toLocaleDateString("en-US", { month: "short" }) : "";   // "Tue Dec" on the 1st
-      // Always the weekday ("Sat"), never "Today"/"Tomorrow": every day keeps the same width.
+      // "Tue Nov" over a big "10": always the weekday, never "Today"/"Tomorrow", so every day keeps the
+      // same width; the month on every day so the strip reads right across Nov into Dec.
       return '<button type="button" class="day" data-d="' + d + '" aria-pressed="' + (d === state.day) + '" aria-label="' + (rel ? rel + ", " : "") + longDate(d) + '">' +
-        '<span class="dw">' + wd + mon + '</span><span class="dn">' + o.getDate() + "</span></button>";
+        '<span class="dw">' + wd + " " + o.toLocaleDateString("en-US", { month: "short" }) + '</span><span class="dn">' + o.getDate() + "</span></button>";
     }).join("");
     $("when").textContent = state.day === ALL ? "The next two weeks, " + shortDate(days[0]) + " to " + shortDate(days[days.length - 1])
       : longDate(state.day);
@@ -240,14 +240,14 @@
         (f.id ? '<a href="https://letterboxd.com/tmdb/' + f.id + '/" target="_blank" rel="noopener">View on Letterboxd</a>' : "") + "</div>" : "");
   }
 
-  // A run of times in plain text, "11:50 am 1:45 pm 4:30 7:15": am/pm only where it changes.
+  // A run of times in plain text, "11:50 am 1:45 pm 4:30 pm", each with its am/pm.
   function timesHTML(list, f, t, sameFmt) {
     var half = null;
     return list.map(function (s) {
       var tag = !sameFmt && FMT_TAG[s.fmt] ? "<sup>" + FMT_TAG[s.fmt] + "</sup>" : "", label = "Times vary";
       if (s.hm) {
         var h = +s.hm.slice(0, 2), ap = h < 12 ? "am" : "pm";
-        label = ((h % 12) || 12) + ":" + s.hm.slice(3) + (ap !== half ? ' <span class="ap">' + ap + "</span>" : "");
+        label = ((h % 12) || 12) + ":" + s.hm.slice(3) + ' <span class="ap">' + ap + "</span>";
         half = ap;
       }
       return '<button type="button" class="time' + (isPast(s) ? " past" : "") + '" data-i="' + shows.indexOf(s) + '" aria-label="' +
@@ -320,9 +320,9 @@
         : function (a, b) { return order.indexOf(a[0]) - order.indexOf(b[0]); });
       var vhtml = vlist.map(function (e, k) {
         var t = theaterOf(e[0]) || {};
-        if (asSpan) {   // one line per theater, "Alamo  Sat 7, 5:00 pm": its next showing; the first 3, then "Show all"
+        if (asSpan) {   // one line per theater, "Alamo  Sat Nov 7, 5:00 pm": its next showing; the first 3, then "Show all"
           var first = e[1][0], o = dateObj(first.d), name = esc(TINY[e[0]] || tName(e[0]));
-          var day = o.toLocaleDateString("en-US", { weekday: "short" }) + " " + o.getDate();
+          var day = o.toLocaleDateString("en-US", { weekday: "short" }) + " " + shortDate(first.d);
           return '<div class="venue line' + (k >= SPAN_SHOWN ? " extra" : "") + '"><span class="vn">' + name + '</span><button type="button" class="time next" data-i="' +
             shows.indexOf(first) + '" aria-label="' + esc(f.t) + ", next showing " + longDate(first.d) + " " + (first.hm ? longTime(first.hm) : "") + ", " + esc(t.name || "") + '">' +
             day + (first.hm ? ', <span class="nw">' + timeHTML(first.hm) + "</span>" : "") + "</button></div>";
@@ -354,7 +354,7 @@
           '<div class="grid">' + now.map(function (i) { return cardHTML(i); }).join("") + "</div>" : "") +
         (soon.length ? '<h3 class="group">Coming soon</h3>' +
           '<div class="grid">' + soon.map(function (i) { return cardHTML(i); }).join("") + "</div>" : "");
-    } else if (state.sort === "new" && state.kind === "all") {   // Newest: new releases, then repertory, then one-offs
+    } else if (state.kind === "all") {   // everything: new releases, then repertory, then one-offs, each in the chosen sort
       $("grid").innerHTML = [["New releases", function (f) { return !f.rep && !f.event; }], ["Repertory", function (f) { return f.rep && !f.event; }],
         ["One night only", function (f) { return f.event; }]].map(function (g) {
         var part = ids.filter(function (i) { return g[1](films[i]); });
@@ -458,7 +458,9 @@
       '<div><h3 id="sheetT">' + esc(f.t) + '</h3><div class="when">' + when + "</div>" +
       '<div class="where">' + esc(where) + (s.hm && !s.end && !f.runtime ? ", runtime unknown, 2h assumed" : "") + "</div></div>" +
       '<div class="actions">' + (s.url ? '<a class="btn primary" href="' + esc(s.url) + '" target="_blank" rel="noopener">Get tickets</a>' : "") +
-      (links ? '<div class="btn-row"><a class="btn" href="' + esc(links.google) + '" target="_blank" rel="noopener">Google</a>' +
+      // One "Add to calendar" button; its three choices open under it, so tickets stay the big button.
+      (links ? '<button type="button" class="btn" id="calToggle" aria-expanded="false" aria-controls="calOpts">Add to calendar</button>' +
+        '<div class="btn-row" id="calOpts" hidden><a class="btn" href="' + esc(links.google) + '" target="_blank" rel="noopener">Google</a>' +
         '<a class="btn" href="' + esc(links.outlook) + '" target="_blank" rel="noopener">Outlook</a>' +
         '<a class="btn" href="' + links.ics + '" download="' + slug(f.t) + '.ics">Apple / .ics</a></div>' : "") +
       '<button type="button" class="btn" id="closeSheet">Close</button></div></div>';
@@ -474,7 +476,7 @@
 
   // ---- Wiring ------------------------------------------------------------------------
 
-  function setMode() {   // the two-week view has no "By the hour"
+  function setMode() {   // the two-week view has no schedule
     var all = state.day === ALL;
     $("layout").dataset.mode = all ? "span" : "day";
     var seg = document.querySelector(".seg"); if (seg) seg.hidden = all;
@@ -506,6 +508,10 @@
         measure(); return;
       }
       if (b.id === "closeSheet") return closeSheet();
+      if (b.id === "calToggle") {
+        var opts = $("calOpts"), show = opts.hidden; opts.hidden = !show; b.setAttribute("aria-expanded", show);
+        if (show) opts.querySelector("a").focus(); return;
+      }
       if (b.dataset.d) { state.day = b.dataset.d; state.showEarlier = false; state.open = null; setMode(); renderDays(); renderAll(); toFilms(); return; }
       if (b.dataset.k) {
         var k = b.dataset.k; state.theaters.has(k) ? state.theaters.delete(k) : state.theaters.add(k); state.radius = null;

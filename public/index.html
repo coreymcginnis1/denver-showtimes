@@ -26,30 +26,33 @@
       <h1>Denver Movie Showtimes</h1>
       <p class="from"><span id="when"></span><br />from <a href="https://coreymcginnis.substack.com/" target="_blank" rel="noopener">The Movie Newsletter</a></p>
     </header>
+    <p class="notice" id="notice" role="status" hidden></p>
 
     <nav class="days" id="days" aria-label="Choose a day"></nav>
 
-    <section class="theaters" id="theaters" aria-label="Theaters">
-      <div class="tsum"><b id="tsum"></b><button type="button" id="tToggle" aria-expanded="false" aria-controls="tpanel">Change</button></div>
-      <div class="tpanel" id="tpanel">
-        <div class="near">
-          <label>Theaters near <input id="zip" class="zip" type="text" inputmode="numeric" maxlength="5" value="80218" autocomplete="off" aria-describedby="zipNote" /></label>
-          <span>within</span>
-          <button type="button" class="pick" data-r="1" aria-pressed="false">1 mi</button>
-          <button type="button" class="pick" data-r="3" aria-pressed="false">3 mi</button>
-          <button type="button" class="pick" data-r="5" aria-pressed="false">5 mi</button>
-          <button type="button" class="pick" data-r="all" aria-pressed="false">any distance</button>
-          <span class="zipnote" id="zipNote" hidden>That zip isn't in the Denver area.</span>
-        </div>
-        <div class="trow" id="trow">
-          <button type="button" class="tscroll prev" id="tPrev" aria-label="Scroll theaters left" tabindex="-1" hidden>‹</button>
-          <div class="tlist" id="tlist" role="group" aria-label="Theaters, nearest first"></div>
-          <button type="button" class="tscroll next" id="tNext" aria-label="Scroll theaters right" tabindex="-1" hidden>›</button>
+    <!-- Theaters, search, Show/Sort. On phones it folds to one line ("At Sie and Mayan, all films,
+         newest first · Change") with search under it, so the films start near the top. -->
+    <section class="controls" id="controls" aria-label="Theaters, search and sort">
+      <div class="theaters" id="theaters" role="group" aria-label="Theaters">
+        <div class="tsum"><p><b id="tsum"></b> <span id="ssum"></span></p><button type="button" id="tToggle" aria-expanded="false" aria-controls="tpanel">Change</button></div>
+        <div class="tpanel" id="tpanel">
+          <div class="near">
+            <label>Theaters near <input id="zip" class="zip" type="text" inputmode="numeric" maxlength="5" value="80218" autocomplete="off" aria-describedby="zipNote" /></label>
+            <span>within</span>
+            <button type="button" class="pick" data-r="1" aria-pressed="false">1 mi</button>
+            <button type="button" class="pick" data-r="3" aria-pressed="false">3 mi</button>
+            <button type="button" class="pick" data-r="5" aria-pressed="false">5 mi</button>
+            <button type="button" class="pick" data-r="all" aria-pressed="false">any distance</button>
+            <span class="zipnote" id="zipNote" hidden>That zip isn't in the Denver area.</span>
+          </div>
+          <div class="trow" id="trow">
+            <button type="button" class="tscroll prev" id="tPrev" aria-label="Scroll theaters left" tabindex="-1" hidden>‹</button>
+            <div class="tlist" id="tlist" role="group" aria-label="Theaters, nearest first"></div>
+            <button type="button" class="tscroll next" id="tNext" aria-label="Scroll theaters right" tabindex="-1" hidden>›</button>
+          </div>
         </div>
       </div>
-    </section>
 
-    <section class="controls" aria-label="Find and sort films">
       <div class="opts">
         <label class="searchbox"><span>Find a film</span>
           <input class="search" id="q" type="search" enterkeyhint="search" autocomplete="off" />

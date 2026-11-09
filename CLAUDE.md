@@ -204,7 +204,9 @@ redesign directions" (A listings + C program won; B marquee rejected).
   ("All dates", then the weekday, never "Today", "Nov" over a big "10" over "Tue", like a tear-off calendar, every day the same width; the selected day is a brick block) · **Theaters**:
   "Theaters near [zip] within 1 mi / 3 mi / 5 mi / any distance" and a checklist of all twelve nearest first
   with miles in one row that scrolls sideways: no scrollbar, the side with more fades and gets a ‹ / ›
-  arrow (no counts, no theater colors). Phones fold it to "At Sie and Mayan · Change". Zip default
+  arrow (no counts, no theater colors). **Phones** fold theaters *and* Show/Sort into one line, "At Sie
+  and Mayan, all films, newest first · Change", with search under it; the masthead is one line and
+  the date line is dropped (the brick day says it), so posters start in the first screen. Zip default
   **80218**, **never saved**; straight-line distance from Census zip centroids in `zips.json`. Theater
   choices are saved in `localStorage` with the default set they were made against (changing `default_on`
   resets everyone) · "Find a film" search first (× clears it; Enter closes the phone keyboard), then
@@ -254,6 +256,9 @@ redesign directions" (A listings + C program won; B marquee rejected).
 - "Floating time": the ISO offset is ignored, so every viewer sees Denver wall-clock times; "now"
   (for dimming past showtimes) is computed in America/Denver. A tab left open overnight reloads when
   it comes back on a new Denver date (`visibilitychange`).
+- **Notice** (`renderNotice()`): silent normally. If the update is over 36 h old: "Showtimes were last
+  updated <day>…"; otherwise, if a selected theater is in `stale_theaters`: "Couldn't refresh <theater>
+  today; its times are from the last update."
 - **Privacy:** no cookies, no analytics. The only browser storage is the theater pick
   (`dst-theaters` in `localStorage`, never sent anywhere); the zip is never saved. Third-party
   requests are poster images only (TMDB, Fandango, theaters). Keep it that way.

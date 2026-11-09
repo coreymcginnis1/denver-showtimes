@@ -230,8 +230,31 @@
     document.querySelectorAll("[data-r]").forEach(function (x) { x.setAttribute("aria-pressed", String(x.dataset.r === String(state.radius))); });
     var on = near.filter(function (t) { return state.theaters.has(t.key); }).map(function (t) { return TINY[t.key] || t.name; });
     edges();
-    $("tsum").textContent = !on.length ? "No theaters picked" : on.length <= 2 ? "At " + on.join(" and ") : "At " + on.length + " theaters";
+    $("tsum").textContent = (!on.length ? "No theaters picked" : on.length <= 2 ? "At " + on.join(" and ") : "At " + on.length + " theaters") + ",";
+    renderSummary(); renderNotice();
   }
+
+  // Says something only when something's wrong: a selected theater didn't refresh (the scraper kept
+  // its last good rows: data.stale_theaters), or the whole update is over a day and a half old
+  // (the daily run normally lands by mid-morning).
+  var STALE_HOURS = 36;
+  function renderNotice() {
+    var msg = "", made = Date.parse(D.generated_at || "");
+    var stale = (D.stale_theaters || []).filter(function (k) { return state.theaters.has(k); }).map(tName);
+    if (made && (Date.now() - made) / 36e5 > STALE_HOURS)   // the whole update is old: that's the news
+      msg = "Showtimes were last updated " + new Date(made).toLocaleDateString("en-US",
+        { timeZone: "America/Denver", weekday: "long", month: "long", day: "numeric" }) + ". Check the theater\u2019s site before you go.";
+    else if (stale.length)
+      msg = "Couldn\u2019t refresh " + listOf(stale) + " today; " + (stale.length > 1 ? "their" : "its") + " times are from the last update.";
+    $("notice").textContent = msg;
+    $("notice").hidden = !msg;
+  }
+  function listOf(a) { return a.length < 3 ? a.join(" and ") : a.slice(0, -1).join(", ") + " and " + a[a.length - 1]; }
+
+  // Phones fold the controls to one line: "At Sie and Mayan, all films, newest first · Change".
+  var KIND_SUM = { all: "all films", "new": "new releases", rep: "repertory", film: "on film" };
+  var SORT_SUM = { "new": "newest first", pop: "trending first", az: "A to Z" };
+  function renderSummary() { $("ssum").textContent = KIND_SUM[state.kind] + ", " + SORT_SUM[state.sort]; }
 
   // ---- Film cards ----------------------------------------------------------------
 
@@ -557,8 +580,8 @@
       var b = e.target.closest("button"); if (!b) return;
       if (b.dataset.p) { var p = +b.dataset.p; state.open = state.open === p ? null : p; renderFilms(); focusPoster(p); return; }
       if (b.id === "tToggle") {
-        var open = !$("theaters").classList.contains("open");
-        $("theaters").classList.toggle("open", open); b.setAttribute("aria-expanded", open); b.textContent = open ? "Done" : "Change";
+        var open = !$("controls").classList.contains("open");
+        $("controls").classList.toggle("open", open); b.setAttribute("aria-expanded", open); b.textContent = open ? "Done" : "Change";
         measure(); return;
       }
       if (b.id === "closeSheet") return closeSheet();
@@ -582,7 +605,7 @@
       if (b.dataset.s) {
         state.sort = b.dataset.s;
         document.querySelectorAll("[data-s]").forEach(function (x) { x.setAttribute("aria-pressed", x === b); });
-        renderFilms(); return;
+        renderSummary(); renderFilms(); return;
       }
       if (b.dataset.v) {
         $("layout").dataset.view = b.dataset.v;

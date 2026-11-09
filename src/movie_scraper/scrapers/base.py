@@ -47,3 +47,8 @@ class BaseScraper(ABC):
     @abstractmethod
     def fetch(self, start: date, end: date) -> list[Showtime]:
         ...
+
+    # Sources that can look months ahead in a few requests override this (used to find film prints
+    # beyond the two-week window). None = not supported.
+    def fetch_ahead(self, start: date, end: date) -> list[Showtime] | None:
+        return None

@@ -13,10 +13,10 @@ cinema, but we still filter by the venue's cinemaId defensively.
 from __future__ import annotations
 
 import logging
-import re
 from datetime import date, datetime
 
 from .base import BaseScraper, http_client
+from ..formats import canon, language
 from ..models import Showtime
 
 log = logging.getLogger(__name__)
@@ -24,16 +24,11 @@ log = logging.getLogger(__name__)
 SCHEDULE_URL = "https://drafthouse.com/s/mother/v2/schedule/venue/{venue}"
 DEFAULT_VENUE = "sloans-lake"
 DEFAULT_MARKET = "denver"
-# Generic projection tags we don't surface as a "format" (hidden like Landmark's "Digital").
-_GENERIC_FMT = {"digital", "2d", "2d-digital", "standard"}
-# Alamo's sessionAttributes mix film formats (35MM) with programming/ops tags (Kid Friendly,
-# Baby Day Show, "Menu Add Special Screening"). Only surface things that are actually a format.
-_SPECIAL_FMT = re.compile(
-    r"^(?:\d{2,3}\s?mm|imax|dolby(?:\s+cinema)?|atmos|laser|rpx|3d|4dx|screenx)$", re.I)
-
-
 class AlamoScraper(BaseScraper):
     key = "alamo"
+
+    def fetch_ahead(self, start: date, end: date) -> list[Showtime]:
+        return self.fetch(start, end)   # a handful of requests (Sie: one a week; Alamo: one in all)
 
     def fetch(self, start: date, end: date) -> list[Showtime]:
         venue = self.theater_cfg.location or DEFAULT_VENUE
@@ -79,6 +74,7 @@ class AlamoScraper(BaseScraper):
                 start=dt,
                 screen=f"Screen {screen}" if screen else None,
                 fmt=self._fmt(s, fmt_titles, attr_names),
+                lang=language(self._labels(s, fmt_titles, attr_names)),
                 ticket_url=f"https://drafthouse.com/{market_slug}/show/{slug}" if slug else None,
                 poster=self._poster(show),
                 rating=show.get("certification") or None,
@@ -90,15 +86,11 @@ class AlamoScraper(BaseScraper):
         imgs = show.get("posterImages") or []
         return imgs[0].get("uri") if imgs and isinstance(imgs[0], dict) else None
 
+    def _labels(self, session: dict, fmt_titles: dict, attr_names: dict) -> list[str]:
+        """The session's attribute names (35MM, Subtitled, Kid Friendly…) and its projection format;
+        formats.canon() / language() pick out what matters and ignore the rest."""
+        names = [(attr_names.get(slug) or slug or "").strip() for slug in session.get("sessionAttributeSlugs") or []]
+        return names + [(fmt_titles.get(session.get("formatSlug")) or "").strip()]
+
     def _fmt(self, session: dict, fmt_titles: dict, attr_names: dict) -> str | None:
-        """Surface special film formats (35MM, 70MM, IMAX, …); drop generic + programming tags."""
-        bits: list[str] = []
-        for slug in session.get("sessionAttributeSlugs") or []:
-            name = (attr_names.get(slug) or slug or "").strip()
-            if name and _SPECIAL_FMT.match(name) and name not in bits:
-                bits.append(name)
-        if not bits:   # fall back to a non-generic projection format (e.g. a "70mm" formatSlug)
-            t = (fmt_titles.get(session.get("formatSlug")) or "").strip()
-            if t and t.lower() not in _GENERIC_FMT and "digital" not in t.lower():
-                bits.append(t)
-        return " · ".join(bits) or None
+        return canon(self._labels(session, fmt_titles, attr_names))

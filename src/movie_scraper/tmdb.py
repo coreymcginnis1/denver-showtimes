@@ -1,4 +1,4 @@
-"""Film metadata from TMDB (themoviedb.org): release date, weekly popularity, rating, poster.
+"""Film metadata from TMDB (themoviedb.org): release date, weekly popularity, poster, director, synopsis.
 
 The site sorts films by Newest, Popular this week and Top rated, and these come from TMDB.
 Letterboxd's terms forbid scraping and its API is by application only, so TMDB is the source.
@@ -108,6 +108,15 @@ def meta_from(m: dict) -> dict:
         "vote_count": m.get("vote_count") or 0,
         "tmdb_poster": POSTER + m["poster_path"] if m.get("poster_path") else None,
         "imdb_id": m.get("imdb_id") or None,   # only on full movie records, not search results
+        # Shown when a reader taps a poster: who made it, where, and what it's about.
+        "directors": [c["name"] for c in (m.get("credits") or {}).get("crew") or []
+                      if c.get("job") == "Director" and c.get("name")][:3],
+        "countries": [c.get("iso_3166_1") for c in m.get("production_countries") or [] if c.get("iso_3166_1")][:3],
+        # For "Find a film": the top-billed cast and TMDB's genres ride along on the same request.
+        "cast": [c["name"] for c in sorted((m.get("credits") or {}).get("cast") or [], key=lambda c: c.get("order", 99))
+                 if c.get("name")][:5],
+        "genres": [g["name"] for g in m.get("genres") or [] if g.get("name")],
+        "overview": (m.get("overview") or "").strip() or None,
     }
 
 
@@ -116,7 +125,8 @@ class Tmdb:
         self.c = client
 
     def movie(self, tmdb_id: int) -> dict:
-        r = self.c.get(f"/movie/{tmdb_id}")
+        # Credits ride along on the same request (for the director), so this is still one call.
+        r = self.c.get(f"/movie/{tmdb_id}", params={"append_to_response": "credits"})
         r.raise_for_status()
         return r.json()
 

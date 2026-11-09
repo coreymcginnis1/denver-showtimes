@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Denver Movie Showtimes</title>
   <meta name="description" content="What's playing in Denver today: indie, repertory and first-run showtimes, with tickets and add-to-calendar. A companion to The Movie Newsletter." />
-  <meta name="theme-color" content="#15110e" />
+  <meta name="theme-color" content="#f7f5f0" />
 
   <!-- Open Graph / preview card (used when this URL is pasted into Substack, etc.).
        __SITE_URL__ is replaced with the deployed Pages URL by the GitHub Action. -->
@@ -16,73 +16,76 @@
   <meta property="og:image" content="__SITE_URL__preview.png" />
   <meta name="twitter:card" content="summary_large_image" />
 
-  <link rel="preload" href="fonts/newsreader-normal-latin.woff2" as="font" type="font/woff2" crossorigin />
-  <link rel="preload" href="fonts/schibsted-grotesk-normal-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="preload" href="fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="stylesheet" href="styles.css?v=__ASSET_VERSION__" />
 </head>
 <body>
   <div class="wrap">
     <header class="mast">
-      <div>
-        <h1>Denver Movie Showtimes</h1>
-      </div>
-      <p class="from">From <a href="https://coreymcginnis.substack.com/" target="_blank" rel="noopener">The Movie Newsletter</a></p>
+      <h1>Denver Movie Showtimes</h1>
+      <p class="from"><span id="when"></span><br />from <a href="https://coreymcginnis.substack.com/" target="_blank" rel="noopener">The Movie Newsletter</a></p>
     </header>
-  </div>
+    <p class="notice" id="notice" role="status" hidden></p>
 
-  <div class="bar" id="bar">
-    <div class="wrap bar-inner">
-      <div class="scroller" id="days" role="group" aria-label="Choose a day"></div>
-      <div class="near" role="group" aria-label="Theaters near a zip code">
-        <label for="zip">Near</label>
-        <input id="zip" class="zip" type="text" inputmode="numeric" maxlength="5" value="80218" autocomplete="off" aria-describedby="zipNote" />
-        <span class="lbl">within</span>
-        <button type="button" class="radius" data-r="1" aria-pressed="false">1 mi</button>
-        <button type="button" class="radius" data-r="3" aria-pressed="false">3 mi</button>
-        <button type="button" class="radius" data-r="5" aria-pressed="false">5 mi</button>
-        <button type="button" class="radius" data-r="all" aria-pressed="false">All</button>
-        <span class="zipnote" id="zipNote" hidden>That zip isn't in the Denver area.</span>
+    <nav class="days" id="days" aria-label="Choose a day"></nav>
+
+    <!-- Theaters, search, Show/Sort. On phones it folds to one line ("At Sie and Mayan, all films,
+         newest first · Change") with search under it, so the films start near the top. -->
+    <section class="controls" id="controls" aria-label="Theaters, search and sort">
+      <div class="theaters" id="theaters" role="group" aria-label="Theaters">
+        <div class="tsum"><p><b id="tsum"></b> <span id="ssum"></span></p><button type="button" id="tToggle" aria-expanded="false" aria-controls="tpanel">Change</button></div>
+        <div class="tpanel" id="tpanel">
+          <div class="near">
+            <label>Theaters near <input id="zip" class="zip" type="text" inputmode="numeric" maxlength="5" value="80218" autocomplete="off" aria-describedby="zipNote" /></label>
+            <span>within</span>
+            <button type="button" class="pick" data-r="1" aria-pressed="false">1 mi</button>
+            <button type="button" class="pick" data-r="3" aria-pressed="false">3 mi</button>
+            <button type="button" class="pick" data-r="5" aria-pressed="false">5 mi</button>
+            <button type="button" class="pick" data-r="all" aria-pressed="false">any distance</button>
+            <span class="zipnote" id="zipNote" hidden>That zip isn't in the Denver area.</span>
+          </div>
+          <div class="trow" id="trow">
+            <button type="button" class="tscroll prev" id="tPrev" aria-label="Scroll theaters left" tabindex="-1" hidden>‹</button>
+            <div class="tlist" id="tlist" role="group" aria-label="Theaters, nearest first"></div>
+            <button type="button" class="tscroll next" id="tNext" aria-label="Scroll theaters right" tabindex="-1" hidden>›</button>
+          </div>
+          <button type="button" class="more tmore" id="tMore" aria-controls="tlist" aria-expanded="false" hidden>Show all theaters</button>
+        </div>
       </div>
-      <div class="filters">
-        <div class="scroller" id="theaters" role="group" aria-label="Theaters"></div>
-        <span class="searchbox">
-          <input class="search" id="q" type="search" enterkeyhint="search" placeholder="Search films" aria-label="Search films" autocomplete="off" />
+
+      <div class="opts">
+        <label class="searchbox"><span>Find a film</span>
+          <input class="search" id="q" type="search" enterkeyhint="search" autocomplete="off" placeholder="Title, director, actor or genre" />
           <button type="button" class="clear" id="qClear" aria-label="Clear search" hidden>×</button>
-        </span>
+        </label>
+        <div class="sort" role="group" aria-label="Show">
+          <span class="lbl" aria-hidden="true">Show</span>
+          <button type="button" data-kind="all" aria-pressed="true">All</button>
+          <button type="button" data-kind="new" aria-pressed="false">New releases</button>
+          <button type="button" data-kind="rep" aria-pressed="false">Repertory</button>
+          <button type="button" data-kind="film" aria-pressed="false" title="Projected from a film print: 16mm, 35mm, 70mm, IMAX 70mm, VistaVision">On film</button>
+        </div>
+        <div class="sort" role="group" aria-label="Sort films">
+          <span class="lbl" aria-hidden="true">Sort</span>
+          <button type="button" data-s="new" aria-pressed="true">Newest</button>
+          <button type="button" data-s="pop" aria-pressed="false" title="What people are looking up this week, on TMDB and Wikipedia">Trending</button>
+          <button type="button" data-s="az" aria-pressed="false">A–Z</button>
+        </div>
       </div>
       <div class="seg" role="group" aria-label="View">
         <button type="button" data-v="films" aria-pressed="true">Films</button>
         <button type="button" data-v="schedule" aria-pressed="false">Schedule</button>
       </div>
-    </div>
-  </div>
+    </section>
 
-  <div class="wrap">
     <main class="layout" id="layout" data-view="films">
       <section class="films" aria-labelledby="filmsH">
-        <div class="sechead">
-          <div><h2 id="filmsH">Playing today</h2><div class="sub" id="filmsSub"></div></div>
-        </div>
-        <div class="toolbar">
-          <div class="sort" role="group" aria-label="Show">
-            <span class="lbl" aria-hidden="true">Show</span>
-            <button type="button" data-kind="all" aria-pressed="true">All</button>
-            <button type="button" data-kind="new" aria-pressed="false">New releases</button>
-            <button type="button" data-kind="rep" aria-pressed="false">Repertory</button>
-          </div>
-          <div class="sort" role="group" aria-label="Sort films">
-            <span class="lbl" aria-hidden="true">Sort</span>
-            <button type="button" data-s="new" aria-pressed="true">Newest</button>
-            <button type="button" data-s="pop" aria-pressed="false" title="What people are looking up this week, on TMDB and Wikipedia">Trending</button>
-            <button type="button" data-s="az" aria-pressed="false">A–Z</button>
-          </div>
-        </div>
+        <h2 class="sr" id="filmsH">Films</h2>
         <div id="grid"><p class="empty">Loading showtimes…</p></div>
       </section>
       <aside class="sched" aria-labelledby="schedH">
-        <div class="sechead">
-          <h2 id="schedH">Schedule</h2>
-        </div>
+        <h2 class="group" id="schedH">Schedule</h2>
         <div id="sched"></div>
       </aside>
     </main>
@@ -91,7 +94,7 @@
       <p>Showtimes come from each theater's site (AMC, Regal and Harkins via Fandango) and refresh daily. Always confirm on the theater's site before you go.</p>
       <p id="srcLinks"></p>
       <p class="tmdb"><a href="https://www.themoviedb.org/" target="_blank" rel="noopener"><img src="tmdb-logo.svg" alt="TMDB" width="110" height="14" /></a>
-        Release dates, popularity and posters from TMDB; weekly page views from Wikipedia. This product uses the TMDB API but is not endorsed or certified by TMDB.</p>
+        Release dates, posters, directors and synopses from TMDB; weekly page views from Wikipedia. This product uses the TMDB API but is not endorsed or certified by TMDB.</p>
     </footer>
   </div>
 

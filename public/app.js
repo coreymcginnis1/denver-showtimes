@@ -1,25 +1,72 @@
-/* Denver Showtimes: one day at a time.
-   Poster cards for every film playing on the chosen day (times grouped by theater), plus that
-   day's schedule in time order. Tap a time for tickets or to add it to Google / Outlook / .ics.
+/* Denver Showtimes: one day at a time, set like a printed listings page.
+   Poster cards for every film playing on the chosen day (times grouped by theater; tap a poster for
+   the director and synopsis), plus the day's schedule by hour. Tap a time for tickets or to add it to
+   Google / Outlook / .ics.
    Times are Denver wall-clock ("floating"): the ISO offset is ignored, so every viewer sees the
    time printed on the theater's own site. No dependencies. */
 (function () {
   "use strict";
 
-  // Short names for chips and rows; the full name is used in the sheet and calendar entries.
+  // Names for the theater checklist; the full name is used in the sheet and calendar entries.
   var SHORT = { sie: "Sie FilmCenter", landmark: "Landmark Mayan", amc: "AMC 9+CO 10", regal_pavilions: "Regal Pavilions",
-    alamo_sloans: "Alamo Sloans Lake", regal_colorado: "Regal Colorado Ctr", amc_westminster: "AMC Westminster",
-    landmark_greenwood: "Landmark Greenwood", harkins_arvada: "Harkins Arvada", harkins_northfield: "Harkins Northfield" };
+    alamo_sloans: "Alamo Sloans Lake", alamo_westminster: "Alamo Westminster", alamo_littleton: "Alamo Littleton",
+    regal_colorado: "Regal Colorado Ctr", amc_westminster: "AMC Westminster",
+    landmark_greenwood: "Landmark Greenwood Village", harkins_arvada: "Harkins Arvada", harkins_northfield: "Harkins Northfield",
+    amc_cherry_creek: "AMC Cherry Creek", cinemark_belmar: "Cinemark Bel Mar", regal_river_point: "Regal River Point",
+    cinemark_aurora: "Cinemark Aurora", regal_southglenn: "Regal SouthGlenn", regal_colorado_mills: "Regal Colorado Mills",
+    amc_bowles: "AMC Bowles Crossing", amc_highlands_ranch: "AMC Highlands Ranch", movie_tavern_aurora: "Movie Tavern Aurora",
+    amc_arapahoe: "AMC Arapahoe Crossing" };
   var THEATER_SITES = [   // one link per company; each site lists its own locations
     ["Sie FilmCenter", "https://www.denverfilm.org/"],
     ["Landmark", "https://www.landmarktheatres.com/"],
     ["AMC", "https://www.amctheatres.com/"],
     ["Regal", "https://www.regmovies.com/"],
     ["Harkins", "https://www.harkins.com/"],
-    ["Alamo Drafthouse", "https://drafthouse.com/denver"]
+    ["Cinemark", "https://www.cinemark.com/"],
+    ["Alamo Drafthouse", "https://drafthouse.com/denver"],
+    ["Movie Tavern", "https://www.marcustheatres.com/"]   // Marcus runs it; movietavern.com's certificate had lapsed (Nov 2026)
   ];
-  var FMT_TAG = { "Premium Format": "Prem", "3D": "3D", "Scope": "Scope", "35mm": "35mm", "70mm": "70mm" };
-  var SLOTS = [["Morning", "00:00"], ["Afternoon", "12:00"], ["Evening", "17:00"], ["Late", "21:00"]];
+  // Shortest names, for the times under a poster, the hour list and the "At Sie and Mayan" line.
+  var TINY = { sie: "Sie", landmark: "Mayan", amc: "AMC 9+CO 10", regal_pavilions: "Regal Pavilions",
+    alamo_sloans: "Alamo Sloans Lake", alamo_westminster: "Alamo Westminster", alamo_littleton: "Alamo Littleton",
+    regal_colorado: "Regal Colorado", amc_westminster: "AMC Westminster",
+    landmark_greenwood: "Landmark Greenwood Village", harkins_arvada: "Harkins Arvada", harkins_northfield: "Harkins Northfield",
+    amc_cherry_creek: "AMC Cherry Creek", cinemark_belmar: "Cinemark Bel Mar", regal_river_point: "Regal River Point",
+    cinemark_aurora: "Cinemark Aurora", regal_southglenn: "Regal SouthGlenn", regal_colorado_mills: "Regal Colorado Mills",
+    amc_bowles: "AMC Bowles Crossing", amc_highlands_ranch: "AMC Highlands Ranch", movie_tavern_aurora: "Movie Tavern Aurora",
+    amc_arapahoe: "AMC Arapahoe Crossing" };
+  // Formats and languages (scraper's formats.py): IMAX, Dolby, film prints and 3D by name; every other
+  // premium screen is "PLF"; "Subtitled" / "Dubbed". A theater whose showings all share one goes on its
+  // line; mixed ones get a short red mark per time (anything not listed uses its own name).
+  var FMT_TAG = { "IMAX": "IMAX", "IMAX 3D": "IMAX 3D", "IMAX 70mm": "IMAX 70", "Dolby": "Dolby", "Dolby 3D": "Dolby 3D",
+    "3D": "3D", "16mm": "16mm", "35mm": "35mm", "70mm": "70mm", "VistaVision": "VV", "PLF": "PLF", "Premium Format": "PLF",
+    "Subtitled": "Sub", "Dubbed": "Dub" };
+  function fmtName(f) { return f === "Premium Format" ? "PLF" : f; }   // older data said "Premium Format"
+  function tagOf(s) { return [s.fmt ? fmtName(s.fmt) : "", s.lang || ""].filter(Boolean).join(", "); }   // "IMAX, Subtitled"
+  function shortTag(t) { return t.split(", ").map(function (x) { return FMT_TAG[x] || x; }).join(" "); }
+  // Format and language are judged separately for a theater's showings: whatever all of them share
+  // goes on the theater line ("Regal Pavilions, Subtitled"); only what differs is marked on a time
+  // ("2:00 pm PLF"). Judged together, one PLF showing used to push "Sub" onto every time.
+  function shared(list) {
+    var same = function (get) { var v = get(list[0]); return list.every(function (s) { return get(s) === v; }) ? v : null; };
+    return { fmt: same(function (s) { return s.fmt ? fmtName(s.fmt) : ""; }), lang: same(function (s) { return s.lang || ""; }) };
+  }
+  function sharedLabel(sh) { return [sh.fmt, sh.lang].filter(Boolean).join(", "); }
+  function ownTag(s, sh) {   // what this showing has that its theater's other showings don't all share
+    return [sh.fmt == null && s.fmt ? fmtName(s.fmt) : "", sh.lang == null && s.lang ? s.lang : ""].filter(Boolean).join(", ");
+  }
+  var COUNTRY = (function () { try { return new Intl.DisplayNames(["en"], { type: "region" }); } catch (e) { return null; } })();
+  var LANGUAGE = (function () { try { return new Intl.DisplayNames(["en"], { type: "language" }); } catch (e) { return null; } })();
+  // A showing "in Japanese" (Harkins says only that) is the subtitled original when the film is
+  // Japanese (TMDB's original language), or a dub when it isn't ("Spanish language" on an English film).
+  function resolveLang(raw, f) {
+    var m = /^(\w+) language$/.exec(raw || "");
+    if (!m) return raw || null;
+    var orig = f.olang === "cn" ? "Cantonese" : f.olang && LANGUAGE ? LANGUAGE.of(f.olang) : null;
+    var same = orig === m[1] || (orig === "Chinese" && /^(Mandarin|Cantonese)$/.test(m[1]));
+    // Only an English film in another language is surely a dub; any other mismatch just says the language.
+    return same ? "Subtitled" : f.olang === "en" ? m[1] + " dub" : "In " + m[1];
+  }
 
   var $ = function (id) { return document.getElementById(id); };
   function esc(s) { return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
@@ -40,7 +87,8 @@
   // Distances are from the centre of a zip code to each theater, as the crow flies. The zip is
   // never saved: it resets to DEFAULT_ZIP on every visit, so nothing about a reader is kept.
   var DEFAULT_ZIP = "80218", ZIPS = {};   // distance buttons (1 / 3 / 5 mi / All) are in index.html
-  var state = { day: null, q: "", sort: "new", kind: "all", showEarlier: false, theaters: null, zip: DEFAULT_ZIP, radius: null };
+  var state = { day: null, q: "", sort: "new", kind: "all", showEarlier: false, theaters: null, zip: DEFAULT_ZIP, radius: null, open: null,
+    tShown: null, tAll: false };
 
   // ---- Data ------------------------------------------------------------------
 
@@ -52,7 +100,8 @@
       index[t] = i;
       var m = meta[t] || {};
       return { t: t, id: m.tmdb_id || null, rel: m.release || null, pop: m.popularity, trend: m.trend != null ? m.trend : null, va: m.vote_average, vc: m.vote_count || 0,
-        indie: !!m.indie, intl: !!m.intl,
+        indie: !!m.indie, intl: !!m.intl, olang: m.lang || null, dirs: m.directors || [], countries: m.countries || [], about: m.overview || "",
+        cast: m.cast || [], genres: m.genres || [], qt: fold(t),
         posters: [], tmdbPoster: m.tmdb_poster || null, rating: null, runtime: null, year: m.release ? +m.release.slice(0, 4) : null };
     });
     data.events.forEach(function (e) {
@@ -63,7 +112,7 @@
       if (!f.runtime && x.runtime) f.runtime = x.runtime;
       if (!f.year && x.year) f.year = x.year;
       shows.push({ f: index[e.title], th: x.theater, d: e.start.slice(0, 10), hm: e.allDay ? null : e.start.slice(11, 16),
-        end: e.end ? e.end.slice(0, 16) : null, fmt: x.fmt, scr: x.screen, url: x.ticketUrl, id: e.id });
+        end: e.end ? e.end.slice(0, 16) : null, fmt: x.fmt, lang: resolveLang(x.lang, f), scr: x.screen, url: x.ticketUrl, id: e.id });
     });
     var openings = data.openings || {};
     films.forEach(function (f, i) {
@@ -82,7 +131,7 @@
       f.event = !f.id;
     });
     days = Array.from(new Set(shows.map(function (s) { return s.d; }))).sort()
-      .filter(function (d) { return d >= NOW.day; });
+      .filter(function (d) { return d >= NOW.day && dayDiff(NOW.day, d) <= WINDOW_DAYS; });   // later dates: All dates only
     if (!days.length) days = Array.from(new Set(shows.map(function (s) { return s.d; }))).sort();
     state.day = days.indexOf(NOW.day) >= 0 ? NOW.day : days[0];
 
@@ -99,7 +148,14 @@
   // Two years, not one: indie films often reach Denver a year or more after a festival premiere
   // (TMDB dates them by it). New releases (and events with no release date) are everything else.
   var REPERTORY_DAYS = 730;
-  var RUN_GAP_DAYS = 3;   // a new release off today but back within this many days is still "Now playing"
+  var RUN_GAP_DAYS = 3;     // a new release off today but back within this many days is still "Now playing"
+  var SPAN_SHOWN = 3;       // All dates / search: theaters listed before "Show all N theaters"
+  var TK_SHOWN = 5;         // phones: theaters in the opened checklist before "Show all 22 theaters"
+  var TK_CHECKED = 3;       // ... plus up to this many checked theaters further out
+  var CLAMP_PX = 210;       // a card's times stop here (styles.css .venues.clamp) ...
+  var CLAMP_SLACK = 90;     // ... but only when that hides this much more: never a button for a line or two
+  var WINDOW_DAYS = 14;     // the day strip: today + 14 (Sie, Landmark and Alamo list up to ~90 days out)
+  var FURTHER_NOTE = "Sie, Landmark and Alamo only.";
   function isRepertory(f) {
     var orig = f.rel || (f.year ? f.year + "-07-01" : null);
     return !!(orig && f.opened && dayDiff(orig, f.opened) > REPERTORY_DAYS);
@@ -134,12 +190,42 @@
   function theaterOf(k) { for (var i = 0; i < theaters.length; i++) if (theaters[i].key === k) return theaters[i]; return null; }
   function tName(k) { return SHORT[k] || (theaterOf(k) || {}).name || k; }
   function isPast(s) { return s.d === NOW.day && s.hm && s.hm < NOW.hm; }
+  // "On film": projected from a print (16/35/70mm, IMAX 70mm, VistaVision). A filter on showings,
+  // not films: a film's digital showings drop out.
+  function onFilm(s) { return /^(16|35|70)mm$|^IMAX 70mm$|^VistaVision$/.test(s.fmt || ""); }
+  function kindOk(s) {
+    var f = films[s.f];
+    return state.kind === "all" || (state.kind === "film" ? onFilm(s) : !f.event && (state.kind === "rep") === f.rep);
+  }
+  // "Find a film" matches a title anywhere ("wild" finds Wild Horse Nine), and from three letters on
+  // also the start of a word in a director's or top-billed actor's name, or a genre ("lynch",
+  // "pedro pascal", "horror", "sci-fi"). Accents and capitals don't matter ("almodovar").
+  function fold(t) { return (t || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase(); }
+  var GENRE_ALSO = { "Science Fiction": "sci-fi scifi", "Animation": "animated" };
+  var hits = { q: null, by: [] };
+  function hitOf(i) {   // null, or { why } with why "" for a title match, else "Directed by ..." etc.
+    var q = fold(state.q);
+    if (hits.q !== q) hits = { q: q, by: [] };
+    if (hits.by[i] !== undefined) return hits.by[i];
+    var f = films[i], out = null;
+    if (!q || f.qt.indexOf(q) >= 0) out = { why: "" };
+    else if (q.length >= 3) {
+      var re = new RegExp("(^|[\\s'.-])" + q.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));
+      var find = function (list, also) {
+        for (var n = 0; n < list.length; n++) if (re.test(fold(list[n]) + (also && also[list[n]] ? " " + also[list[n]] : ""))) return list[n];
+        return null;
+      };
+      var d = find(f.dirs), c = !d && find(f.cast), g = !d && !c && find(f.genres, GENRE_ALSO);
+      if (d) out = { why: "Directed by " + d };
+      else if (c) out = { why: "With " + c };
+      else if (g) out = { why: g };
+    }
+    return (hits.by[i] = out);
+  }
   function dayShows(d, anyTheater) {
-    var q = state.q.toLowerCase();
     return shows.filter(function (s) {
-      var f = films[s.f];
-      return (d === ALL ? days.indexOf(s.d) >= 0 && !isPast(s) : s.d === d) && (anyTheater || state.theaters.has(s.th)) && (!q || f.t.toLowerCase().indexOf(q) >= 0) &&
-        (state.kind === "all" || (!f.event && (state.kind === "rep") === f.rep));
+      return (d === ALL ? s.d >= days[0] && !isPast(s) : s.d === d) && (anyTheater || state.theaters.has(s.th)) && (!state.q || hitOf(s.f)) &&
+        kindOk(s);
     });
   }
 
@@ -167,35 +253,86 @@
   function renderSources() {
     $("srcLinks").innerHTML = "Theater sites: " + THEATER_SITES.map(function (t) {
       return '<a href="' + t[1] + '" target="_blank" rel="noopener">' + esc(t[0]) + "</a>";
-    }).join(" · ");
+    }).join(", ");
   }
 
-  var ALL = "all";   // state.day for the "Next 2 weeks" view
+  var ALL = "all";   // state.day for the "All dates" view
   function shortDate(d) { return dateObj(d).toLocaleDateString("en-US", { month: "short", day: "numeric" }); }
-  function dayName(d) { return relDay(d) || dateObj(d).toLocaleDateString("en-US", { weekday: "short" }) + " " + shortDate(d); }
 
   function renderDays() {
-    $("days").innerHTML = '<button type="button" class="day rel span" data-d="' + ALL + '" aria-pressed="' + (state.day === ALL) + '">' +
-      '<span class="dw">Next</span><span class="dn">2 weeks</span></button>' + days.map(function (d) {
-      var rel = relDay(d), o = dateObj(d);
-      return '<button type="button" class="day' + (rel ? " rel" : "") + '" data-d="' + d + '" aria-pressed="' + (d === state.day) + '">' +
-        '<span class="dw">' + (rel || o.toLocaleDateString("en-US", { weekday: "short" })) + "</span>" +
-        '<span class="dn">' + o.toLocaleDateString("en-US", { month: "short", day: "numeric" }) + "</span></button>";
+    $("days").innerHTML = '<button type="button" class="day" data-d="' + ALL + '" aria-pressed="' + (state.day === ALL) + '">' +
+      '<span class="dm">&nbsp;</span><span class="dn">All</span><span class="dw">dates</span></button>' + days.map(function (d, n) {
+      var rel = relDay(d), o = dateObj(d), wd = o.toLocaleDateString("en-US", { weekday: "short" });
+      // Like a tear-off calendar: "Nov" over a big "10" over "Tue". Always the weekday, never "Today",
+      // so every day keeps the same width; the month on every day reads right across Nov into Dec.
+      return '<button type="button" class="day" data-d="' + d + '" aria-pressed="' + (d === state.day) + '" aria-label="' + (rel ? rel + ", " : "") + longDate(d) + '">' +
+        '<span class="dm">' + o.toLocaleDateString("en-US", { month: "short" }) + '</span><span class="dn">' + o.getDate() + '</span><span class="dw">' + wd + "</span></button>";
     }).join("");
+    $("when").textContent = state.day === ALL ? "All dates, from " + shortDate(days[0])
+      : longDate(state.day);
+  }
+
+  // The theater row hides its scrollbar: fade the side with more theaters and show an arrow there.
+  function edges() {
+    var l = $("tlist"), max = l.scrollWidth - l.clientWidth, row = $("trow");
+    var left = l.scrollLeft > 2, right = max - l.scrollLeft > 2 && getComputedStyle(l).display === "flex";
+    row.classList.toggle("more-l", left); row.classList.toggle("more-r", right);
+    $("tPrev").hidden = !left; $("tNext").hidden = !right;
+  }
+
+  // Phones list the theaters top to bottom: the nearest few and a few checked ones, the rest
+  // behind "Show all 22 theaters" so Show / Sort aren't a long scroll away. Picked when the list
+  // opens or the zip / distance changes, not on each tap, so a row never vanishes as it's unchecked.
+  function pickShownTheaters() {
+    var near = theaters.slice().sort(function (a, b) { return (miles(a) || 0) - (miles(b) || 0); });
+    // Checked theaters further out stay in the short list too, but only a few ("any distance" checks
+    // all 32, which kept the list from ever getting shorter).
+    var far = near.filter(function (t, n) { return n >= TK_SHOWN && state.theaters.has(t.key); });
+    var keep = near.slice(0, TK_SHOWN).concat(far.length <= TK_CHECKED ? far : []);
+    state.tShown = new Set(keep.map(function (t) { return t.key; }));
   }
 
   function renderTheaters() {
-    var counts = {};
-    dayShows(state.day, true).forEach(function (s) { counts[s.th] = (counts[s.th] || 0) + 1; });
     var near = theaters.slice().sort(function (a, b) { return (miles(a) || 0) - (miles(b) || 0); });
-    $("theaters").innerHTML = near.map(function (t) {
+    if (!state.tShown) pickShownTheaters();
+    var hidden = near.filter(function (t) { return !state.tShown.has(t.key); }).length;
+    $("tlist").innerHTML = near.map(function (t) {
       var mi = miles(t);
-      return '<button type="button" class="chip" style="--c:' + t.color + '" data-k="' + t.key + '" aria-pressed="' + state.theaters.has(t.key) + '">' +
-        '<span class="dot"></span>' + esc(tName(t.key)) + (mi != null ? ' <span class="mi">' + mi.toFixed(1) + " mi</span>" : "") +
-        ' <span class="n">' + (counts[t.key] || 0) + "</span></button>";
+      return '<button type="button" class="tk' + (state.tShown.has(t.key) ? "" : " extra") + '" data-k="' + t.key + '" aria-pressed="' + state.theaters.has(t.key) + '">' +
+        '<span class="box" aria-hidden="true"></span><span><span class="nm">' + esc(tName(t.key)) + "</span>" +
+        (mi != null ? '<span class="mi">' + mi.toFixed(1) + " mi</span>" : "") + "</span></button>";
     }).join("");
+    $("tpanel").classList.toggle("all-th", state.tAll);
+    var more = $("tMore"); more.hidden = !hidden && !state.tAll;
+    more.textContent = state.tAll ? "Show fewer theaters" : "Show all " + near.length + " theaters"; more.setAttribute("aria-expanded", state.tAll);
     document.querySelectorAll("[data-r]").forEach(function (x) { x.setAttribute("aria-pressed", String(x.dataset.r === String(state.radius))); });
+    var on = near.filter(function (t) { return state.theaters.has(t.key); }).map(function (t) { return TINY[t.key] || t.name; });
+    edges();
+    $("tsum").textContent = (!on.length ? "No theaters picked" : on.length <= 2 ? "At " + on.join(" and ") : "At " + on.length + " theaters") + ",";
+    renderSummary(); renderNotice();
   }
+
+  // Says something only when something's wrong: a selected theater didn't refresh (the scraper kept
+  // its last good rows: data.stale_theaters), or the whole update is over a day and a half old
+  // (the daily run normally lands by mid-morning).
+  var STALE_HOURS = 36;
+  function renderNotice() {
+    var msg = "", made = Date.parse(D.generated_at || "");
+    var stale = (D.stale_theaters || []).filter(function (k) { return state.theaters.has(k); }).map(tName);
+    if (made && (Date.now() - made) / 36e5 > STALE_HOURS)   // the whole update is old: that's the news
+      msg = "Showtimes were last updated " + new Date(made).toLocaleDateString("en-US",
+        { timeZone: "America/Denver", weekday: "long", month: "long", day: "numeric" }) + ". Check the theater\u2019s site before you go.";
+    else if (stale.length)
+      msg = "Couldn\u2019t refresh " + listOf(stale) + " today; " + (stale.length > 1 ? "their" : "its") + " times are from the last update.";
+    $("notice").textContent = msg;
+    $("notice").hidden = !msg;
+  }
+  function listOf(a) { return a.length < 3 ? a.join(" and ") : a.slice(0, -1).join(", ") + " and " + a[a.length - 1]; }
+
+  // Phones fold the controls to one line: "At Sie and Mayan, all films, newest first · Change".
+  var KIND_SUM = { all: "all films", "new": "new releases", rep: "repertory", film: "on film" };
+  var SORT_SUM = { "new": "newest first", pop: "trending first", az: "A to Z" };
+  function renderSummary() { $("ssum").textContent = KIND_SUM[state.kind] + ", " + SORT_SUM[state.sort]; }
 
   // ---- Film cards ----------------------------------------------------------------
 
@@ -205,7 +342,7 @@
     return '<img' + (cls ? ' class="' + cls + '"' : "") + ' src="' + esc(f.posters[0]) + '" data-f="' + i + '" data-n="0" alt="' +
       (cls ? "" : "Poster for " + esc(f.t)) + '" loading="lazy" decoding="async" referrerpolicy="no-referrer">';
   }
-  function fallbackHTML(f) { return '<div class="fallback" aria-hidden="true">' + esc(f.t) + "<small>No poster</small></div>"; }
+  function fallbackHTML(f) { return '<span class="fallback" aria-hidden="true">' + esc(f.t) + "</span>"; }
 
   // A broken poster tries the film's next image, then a typeset placeholder.
   document.addEventListener("error", function (e) {
@@ -216,6 +353,33 @@
     if (img.classList.contains("th")) { img.removeAttribute("src"); img.dataset.f = ""; return; }
     img.outerHTML = fallbackHTML(f);
   }, true);
+
+  // The poster is a button: tapping it lays the director, facts and synopsis over the art.
+  // Special events (no TMDB match) have none of that, so their poster is just a picture.
+  function posterBlock(i) {
+    var f = films[i], img = f.posters.length ? posterHTML(i) : fallbackHTML(f);
+    if (f.event) return '<span class="still">' + img + "</span>";
+    var where = f.countries.filter(function (c) { return c !== "US"; }).slice(0, 1).map(function (c) { return COUNTRY ? COUNTRY.of(c) : c; });
+    var facts = where.concat([f.year, f.runtime ? runtime(f.runtime) : "", f.rating]).filter(Boolean).join(", ");
+    var open = state.open === i;
+    return '<button type="button" data-p="' + i + '" aria-expanded="' + open + '" aria-label="' + esc(f.t) + (open ? ", hide details" : ", show details") + '">' + img + "</button>" +
+      (open ? '<div class="info" data-p="' + i + '">' + (f.dirs.length ? '<p class="dir">' + esc(f.dirs.join(", ")) + "</p>" : "") +
+        (facts ? '<p class="facts">' + esc(facts) + "</p>" : "") + (f.about ? "<p>" + esc(f.about) + "</p>" : "") +
+        (f.id ? '<a href="https://letterboxd.com/tmdb/' + f.id + '/" target="_blank" rel="noopener">View on Letterboxd</a>' : "") + "</div>" : "");
+  }
+
+  // A run of times in plain text, "11:50 am 1:45 pm 4:30 pm", each with its am/pm.
+  function timesHTML(list, f, t, sh) {
+    return list.map(function (s) {
+      var own = ownTag(s, sh), tag = own ? "<sup>" + esc(shortTag(own)) + "</sup>" : "", label = "Times vary";
+      if (s.hm) {
+        var h = +s.hm.slice(0, 2), ap = h < 12 ? "am" : "pm";
+        label = ((h % 12) || 12) + ":" + s.hm.slice(3) + ' <span class="ap">' + ap + "</span>";
+      }
+      return '<button type="button" class="time' + (isPast(s) ? " past" : "") + '" data-i="' + shows.indexOf(s) + '" aria-label="' +
+        esc(f.t) + ", " + (s.hm ? longTime(s.hm) : "times vary") + ", " + esc(t.name || "") + '">' + label + tag + "</button>";
+    }).join("");
+  }
 
   function sortFilms(ids) {
     var key = {
@@ -243,118 +407,157 @@
   function renderFilms() {
     var ds = dayShows(state.day), byFilm = new Map();
     ds.forEach(function (s) { if (!byFilm.has(s.f)) byFilm.set(s.f, []); byFilm.get(s.f).push(s); });
-    var ids = sortFilms(Array.from(byFilm.keys())), rel = relDay(state.day);
+    var ids = sortFilms(Array.from(byFilm.keys()));
 
     var all = state.day === ALL;
     // Searching also finds a film beyond the chosen theaters/day ("Fjord" only at AMC Westminster):
     // those matches follow the normal results as compact two-week cards.
     var elsewhere = new Map();
+    // Only search reaches past the chosen day and theaters. "On film" is a plain filter like the
+    // other Show choices (Nov 2026: its own "On film on other dates" sections read as clutter);
+    // All dates lists every print coming up, Now playing / Coming soon / Further out.
     if (state.q) {
-      var q = state.q.toLowerCase();
       shows.forEach(function (s) {
-        var f = films[s.f];
-        if (byFilm.has(s.f) || days.indexOf(s.d) < 0 || isPast(s) || f.t.toLowerCase().indexOf(q) < 0) return;
-        if (state.kind !== "all" && (f.event || (state.kind === "rep") !== f.rep)) return;
+        var inRange = s.d >= days[0];   // any date we have (some theaters list months out)
+        if (byFilm.has(s.f) || !inRange || isPast(s) || (state.q && !hitOf(s.f))) return;
+        if (!kindOk(s)) return;
         if (!elsewhere.has(s.f)) elsewhere.set(s.f, []); elsewhere.get(s.f).push(s);
       });
     }
-    var extraIds = sortFilms(Array.from(elsewhere.keys()));
-    $("filmsH").textContent = all ? "Playing the next two weeks" : "Playing " + (rel ? rel.toLowerCase() : longDate(state.day));
-    $("filmsSub").textContent = (all ? shortDate(days[0]) + "–" + shortDate(days[days.length - 1]) + " · "
-      : rel ? longDate(state.day) + " · " : "") + ids.length + " film" + (ids.length === 1 ? "" : "s") +
-      " · " + state.theaters.size + " theater" + (state.theaters.size === 1 ? "" : "s");
+    // Split the extra matches: your theaters on other dates, then other theaters (a film can be in both).
+    var split = function (mine) {
+      var m = new Map();
+      elsewhere.forEach(function (list, i) {
+        var part = list.filter(function (s) { return state.theaters.has(s.th) === mine; });
+        if (part.length) m.set(i, part);
+      });
+      return m;
+    };
+    var otherDates = split(true), otherTheaters = split(false);
+    var order = function (m) {
+      var ids = sortFilms(Array.from(m.keys()));
+      if (state.kind === "film") {   // prints: soonest screening first
+        var soonest = function (i) { return m.get(i).reduce(function (x, s) { return (s.d + s.hm) < x ? s.d + s.hm : x; }, "9999"); };
+        ids.sort(function (a, b) { return soonest(a).localeCompare(soonest(b)); });
+      }
+      return ids;
+    };
+    var extraIds = Array.from(elsewhere.keys());
 
     if (!ids.length && !extraIds.length) {
-      $("grid").innerHTML = '<p class="empty">' + (state.theaters.size
-        ? "Nothing matches" + (all ? "" : " on this day") + ". Try " + (all ? "" : "another day, ") + "more theaters, or clear the search."
+      $("grid").innerHTML = '<p class="empty">' + (state.kind === "film" && !state.q && state.theaters.size
+        ? "Nothing on film at these theaters" + (all ? ". Try more theaters." : ' on this day. Try <button type="button" class="inline" data-d="' + ALL + '">All dates</button> or more theaters.')
+        : state.theaters.size ? "Nothing matches" + (all ? "" : " on this day") + ". Try " + (all ? "" : "another day, ") + "more theaters, or clear the search."
         : "Pick at least one theater above to see films.") + "</p>";
       return;
     }
-    var cardHTML = function (i, other) {   // other: a match from beyond the selected theaters/day
-      var f = films[i], list = (other ? elsewhere : byFilm).get(i), venues = new Map(), asSpan = all || !!other;
+    var cardHTML = function (i, other) {   // other: the Map of extra matches this card comes from
+      var f = films[i], list = (other || byFilm).get(i).slice(), venues = new Map(), asSpan = all || !!other;
       list.sort(function (a, b) { return (a.d + (a.hm || "")).localeCompare(b.d + (b.hm || "")); })
         .forEach(function (s) { if (!venues.has(s.th)) venues.set(s.th, []); venues.get(s.th).push(s); });
-      var fmts = Array.from(new Set(list.map(function (s) { return s.fmt === "Premium Format" ? "Premium" : s.fmt; }).filter(Boolean)));
-      var meta = [f.year ? "<span>" + f.year + "</span>" : "", f.rating ? "<span>" + esc(f.rating) + "</span>" : "",
-        f.runtime ? "<span>" + runtime(f.runtime) + "</span>" : ""]
-        .concat(fmts.map(function (x) { return '<span class="tag">' + esc(x) + "</span>"; })).join("");
       var since = f.opened ? dayDiff(f.opened, asSpan ? days[0] : state.day) : null;
-      var fresh = f.rep || f.event || since == null ? "" : since < 0 ? "Opens " + shortDate(f.opened)
-        : since <= 6 ? "Opening week" : "";
-      if (fresh) meta += '<span class="tag fresh">' + fresh + "</span>";
+      var fresh = f.rep || f.event || since == null ? "" : since < 0 ? "Opens " + shortDate(f.opened) : since <= 6 ? "Opening week" : "";
+      var flag = f.event ? "Special event" : fresh;   // events (no TMDB match) say so; they sort and behave differently
       // "Indie" and "International" tags are on hold (Nov 2026): the Indie guess (TMDB lists
       // producers, not distributors) wasn't reliable, and Corey wants both or neither. The data
       // (film_meta.indie / .intl) is still in data.json.
-      var order = theaters.map(function (t) { return t.key; });
-      var vhtml = Array.from(venues.entries()).sort(function (a, b) { return order.indexOf(a[0]) - order.indexOf(b[0]); }).map(function (e) {
-        var t = theaterOf(e[0]) || { color: "#888" };
-        if (asSpan) {   // one line per theater: when it plays, how often, and the next showing
-          var first = e[1][0], last = e[1][e[1].length - 1], n = e[1].length;
-          var span = first.d === last.d ? dayName(first.d) : shortDate(first.d) + "–" + shortDate(last.d);
-          return '<div class="venue" style="--c:' + t.color + '"><div class="vn"><i></i>' + esc(tName(e[0])) + "</div>" +
-            '<div class="span-line">' + span + " · " + n + " showing" + (n === 1 ? "" : "s") + "</div>" +
-            '<div class="times"><button type="button" class="time next" data-i="' + shows.indexOf(first) + '" aria-label="' +
-            esc(f.t) + ", next showing " + dayName(first.d) + " " + (first.hm ? longTime(first.hm) : "") + ", " + esc(t.name || "") + '"><span class="ap">Next</span> ' +
-            dayName(first.d) + (first.hm ? " · " + timeHTML(first.hm) : "") + "</button></div></div>";
+      // Day view: theaters nearest first (same order as the checklist, so it follows the zip).
+      var order = theaters.slice().sort(function (a, b) { return (miles(a) || 0) - (miles(b) || 0); }).map(function (t) { return t.key; });
+      // Two weeks / search: theaters by their next showing, soonest first; otherwise in the usual order.
+      var vlist = Array.from(venues.entries()).sort(asSpan ? function (a, b) { return (a[1][0].d + a[1][0].hm).localeCompare(b[1][0].d + b[1][0].hm); }
+        : function (a, b) { return order.indexOf(a[0]) - order.indexOf(b[0]); });
+      var vhtml = vlist.map(function (e, k) {
+        var t = theaterOf(e[0]) || {};
+        if (asSpan) {   // one line per theater, "Alamo  Sat Nov 7, 5:00 pm  through Nov 11"; the first 3, then "Show all"
+          var first = e[1][0], last = e[1][e[1].length - 1], o = dateObj(first.d), shs = shared(e[1]), lbl = sharedLabel(shs), own = ownTag(first, shs);
+          var name = esc((TINY[e[0]] || tName(e[0])) + (lbl ? ", " + lbl : ""));   // "Alamo, 35mm"
+          var day = o.toLocaleDateString("en-US", { weekday: "short" }) + " " + shortDate(first.d);
+          return '<div class="venue line' + (k >= SPAN_SHOWN ? " extra" : "") + '"><span class="vn">' + name + '</span><button type="button" class="time next" data-i="' +
+            shows.indexOf(first) + '" aria-label="' + esc(f.t) + ", next showing " + longDate(first.d) + " " + (first.hm ? longTime(first.hm) : "") + ", " + esc(t.name || "") + '">' +
+            day + (first.hm ? ', <span class="nw">' + timeHTML(first.hm) + "</span>" : "") + (own ? "<sup>" + esc(shortTag(own)) + "</sup>" : "") + "</button>" +
+            // How long it runs here, quietly after the next showing: "through Nov 11".
+            (last.d !== first.d ? '<span class="thru">through ' + shortDate(last.d) + "</span>" : "") + "</div>";
         }
-        return '<div class="venue" style="--c:' + t.color + '"><div class="vn"><i></i>' + esc(tName(e[0])) + '</div><div class="times">' +
-          e[1].map(function (s) {
-            var tag = FMT_TAG[s.fmt] ? "<sup>" + FMT_TAG[s.fmt] + "</sup>" : "";
-            var label = s.hm ? timeHTML(s.hm) : "Times vary";
-            return '<button type="button" class="time' + (isPast(s) ? " past" : "") + '" data-i="' + shows.indexOf(s) + '" aria-label="' +
-              esc(f.t) + ", " + (s.hm ? longTime(s.hm) : "times vary") + ", " + esc(t.name || "") + '">' + label + tag + "</button>";
-          }).join("") + "</div></div>";
+        // A format / language every showing here shares ("Regal Colorado, IMAX") goes with the theater, not on each time.
+        var sh = shared(e[1]), lbl = sharedLabel(sh);
+        var label = (TINY[e[0]] || tName(e[0])) + (lbl ? ", " + lbl : "");
+        return '<div class="venue"><span class="vn">' + esc(label) + '</span><div class="times">' + timesHTML(e[1], f, t, sh) + "</div></div>";
       }).join("");
-      return '<article class="card"><div class="poster">' + posterHTML(i) +
-        "</div>" +
-        '<h3 class="title">' + esc(f.t) + "</h3>" + (meta ? '<div class="meta">' + meta + "</div>" : "") +
+      return '<article class="card"><div class="poster">' + posterBlock(i) + "</div>" +
+        (flag ? '<p class="flag">' + esc(flag) + "</p>" : "") +
+        // The title opens the details too: people tap titles, and it's the hint the poster needs.
+        '<h3 class="title">' + (f.event ? esc(f.t) : '<button type="button" data-p="' + i + '" aria-expanded="' + (state.open === i) + '">' + esc(f.t) + "</button>") + "</h3>" +
+        // Found by someone in it or its genre, not its title: say so, or the match looks like a mistake.
+        (state.q && hitOf(i) && hitOf(i).why ? '<p class="why">' + esc(hitOf(i).why) + "</p>" : "") +
         '<div class="venues">' + vhtml + "</div>" +
-        '<button type="button" class="more" hidden>Show all times</button>' +
-        (f.id ? '<a class="lb" href="https://letterboxd.com/tmdb/' + f.id + '/" target="_blank" rel="noopener">View on Letterboxd</a>' : "") +
-        "</article>";
+        (asSpan && vlist.length > SPAN_SHOWN ? '<button type="button" class="more all" aria-expanded="false" data-label="Show all ' + vlist.length + ' theaters">Show all ' + vlist.length + " theaters</button>" : "") +
+        '<button type="button" class="more" hidden>Show all times</button></article>';
     };
-    if (all) {   // two groups: now playing (by the chosen sort), then everything else, soonest first
+    if (all) {   // now playing (by the chosen sort); coming soon in the two weeks; further out (some theaters only)
       var firstDay = function (i) { return byFilm.get(i).reduce(function (m, s) { return s.d < m ? s.d : m; }, "9999"); };
+      var lastDay = days[days.length - 1];
       // Now playing: a showing today, or a new release already open in Denver that's only off for a
       // day or so (a dark day, a gap between theaters). Repertory and special events need today.
       var isNow = function (i) {
         var f = films[i], d = firstDay(i);
         return d === days[0] || (!f.rep && !f.event && !!f.opened && f.opened <= days[0] && dayDiff(days[0], d) <= RUN_GAP_DAYS);
       };
+      var bySoonest = function (a, b) { return firstDay(a).localeCompare(firstDay(b)) || films[a].t.localeCompare(films[b].t); };
       var now = ids.filter(isNow);
-      var soon = ids.filter(function (i) { return !isNow(i); });
-      soon.sort(function (a, b) { return firstDay(a).localeCompare(firstDay(b)) || films[a].t.localeCompare(films[b].t); });
-      $("grid").innerHTML = (now.length ? '<h3 class="group">Now playing <span>' + now.length + "</span></h3>" +
-          '<div class="grid">' + now.map(function (i) { return cardHTML(i); }).join("") + "</div>" : "") +
-        (soon.length ? '<h3 class="group">Coming soon <span>' + soon.length + "</span></h3>" +
-          '<div class="grid">' + soon.map(function (i) { return cardHTML(i); }).join("") + "</div>" : "");
+      var soon = ids.filter(function (i) { return !isNow(i) && firstDay(i) <= lastDay; }).sort(bySoonest);
+      var later = ids.filter(function (i) { return !isNow(i) && firstDay(i) > lastDay; }).sort(bySoonest);
+      var grid = function (list) { return '<div class="grid">' + list.map(function (i) { return cardHTML(i); }).join("") + "</div>"; };
+      $("grid").innerHTML = (now.length ? '<h3 class="group">Now playing</h3>' + grid(now) : "") +
+        (soon.length ? '<h3 class="group">Coming soon</h3>' + grid(soon) : "") +
+        // Only the Sie, Landmark and Alamo list this far ahead (the chains' feeds go two weeks out).
+        (later.length ? '<h3 class="group">Further out</h3><p class="group-note">' + FURTHER_NOTE + "</p>" + grid(later) : "");
+    } else if (state.kind === "all") {   // everything: new releases, then repertory, then one-offs, each in the chosen sort
+      $("grid").innerHTML = [["New releases", function (f) { return !f.rep && !f.event; }], ["Repertory", function (f) { return f.rep && !f.event; }],
+        ["Special events", function (f) { return f.event; }]].map(function (g) {
+        var part = ids.filter(function (i) { return g[1](films[i]); });
+        return part.length ? '<h3 class="group">' + g[0] + '</h3><div class="grid">' + part.map(function (i) { return cardHTML(i); }).join("") + "</div>" : "";
+      }).join("") || '<p class="empty">No match at these theaters on this day.</p>';
     } else {
       $("grid").innerHTML = ids.length ? '<div class="grid">' + ids.map(function (i) { return cardHTML(i); }).join("") + "</div>"
-        : '<p class="empty">No match at these theaters' + (all ? "" : " on this day") + ".</p>";
+        : '<p class="empty">' + (state.kind === "film" ? "Nothing on film" : "No match") + ' at these theaters' + (all ? "" : " on this day") + ".</p>";
     }
-    if (extraIds.length) {
-      $("grid").innerHTML += '<h3 class="group">Also playing elsewhere <span>' + extraIds.length + "</span></h3>" +
-        '<p class="group-note">Other theaters or days in the next two weeks.</p>' +
-        '<div class="grid">' + extraIds.map(function (i) { return cardHTML(i, true); }).join("") + "</div>";
-    }
+    [[otherDates, "Playing on other dates"], [otherTheaters, "Playing at other theaters"]].forEach(function (g) {
+      if (!g[0].size) return;
+      $("grid").innerHTML += '<h3 class="group">' + g[1] + '</h3><div class="grid">' +
+        order(g[0]).map(function (i) { return cardHTML(i, g[0]); }).join("") + "</div>";
+    });
     clampVenues();
   }
 
   // Several theaters can make a card's times run far past its poster: clamp the list and offer
-  // "Show all times" only where it actually overflows (checked after layout).
+  // "Show all times" where that hides a good few lines (measured in pixels, after layout).
+  // Hiding just a line or two behind a button made the card *shrink* when expanded (the button
+  // went away, a few px of times came in), so those cards just show everything.
   function clampVenues() {
     document.querySelectorAll("#grid .card").forEach(function (card) {
-      var v = card.querySelector(".venues"), btn = card.querySelector(".more");
-      if (!v || !btn || card.classList.contains("open")) return;
-      v.classList.add("clamp");
-      var over = v.scrollHeight > v.clientHeight + 4;
-      if (!over) v.classList.remove("clamp");
+      var v = card.querySelector(".venues"), btn = card.querySelector(".more:not(.all)");
+      if (!v || !btn || card.classList.contains("expanded")) return;
+      v.classList.remove("clamp");
+      var over = v.scrollHeight > CLAMP_PX + CLAMP_SLACK;
+      v.classList.toggle("clamp", over);
       btn.hidden = !over;
       if (over) {
         var n = v.querySelectorAll(".venue").length;
-        btn.textContent = n > 1 ? "Show all " + n + " theaters" : "Show all times";
+        btn.textContent = btn.dataset.label = n > 1 ? "Show all " + n + " theaters" : "Show all times";
+        btn.setAttribute("aria-expanded", "false");
       }
     });
+  }
+  // "Show all" / "Show fewer": collapsing keeps the button where it was on screen, so the page
+  // doesn't jump out from under a reader who scrolled down through a long list.
+  function toggleMore(b) {
+    var card = b.closest(".card"), y = b.getBoundingClientRect().top, theaters = b.classList.contains("all");
+    var open = !card.classList.contains(theaters ? "all-th" : "expanded");
+    card.classList.toggle(theaters ? "all-th" : "expanded", open);
+    if (!theaters) card.querySelector(".venues").classList.toggle("clamp", !open);
+    b.textContent = open ? b.dataset.label.replace(/^Show all( \d+)?/, "Show fewer") : b.dataset.label;   // "Show fewer theaters"
+    b.setAttribute("aria-expanded", open);
+    if (!open) window.scrollBy(0, b.getBoundingClientRect().top - y);
   }
 
   // ---- Schedule --------------------------------------------------------------------
@@ -363,24 +566,30 @@
     var ds = dayShows(state.day).filter(function (s) { return s.hm; })
       .sort(function (a, b) { return a.hm.localeCompare(b.hm) || films[a.f].t.localeCompare(films[b.f].t); });
     var past = ds.filter(isPast), shown = state.showEarlier ? ds : ds.filter(function (s) { return !isPast(s); });
-    if (!ds.length) {
-      $("sched").innerHTML = '<p class="empty">' + "No showtimes match." + "</p>";
-      return;
-    }
+    if (!ds.length) { $("sched").innerHTML = '<p class="empty">No showtimes match.</p>'; schedEdges(); return; }
+    var hours = new Map();
+    shown.forEach(function (s) { var h = s.hm.slice(0, 2); if (!hours.has(h)) hours.set(h, []); hours.get(h).push(s); });
     var html = shown.length ? "" : '<p class="empty">Everything has started for today.</p>';
-    SLOTS.forEach(function (sl, n) {
-      var end = n + 1 < SLOTS.length ? SLOTS[n + 1][1] : "99";
-      var rows = shown.filter(function (s) { return s.hm >= sl[1] && s.hm < end; });
-      if (!rows.length) return;
-      html += '<div class="slot"><span>' + sl[0] + "</span><span>" + rows.length + "</span></div>" + rows.map(function (s) {
-        var f = films[s.f], t = theaterOf(s.th) || { color: "#888" }, extra = [s.fmt === "Premium Format" ? "Premium" : s.fmt, s.scr].filter(Boolean).join(" · ");
-        return '<button type="button" class="row' + (isPast(s) ? " past" : "") + '" data-i="' + shows.indexOf(s) + '" style="--c:' + t.color + '">' +
-          '<span class="t">' + timeHTML(s.hm) + "</span>" + (f.posters.length ? posterHTML(s.f, "th") : '<span class="th"></span>') +
-          '<span class="f"><b>' + esc(f.t) + "</b><span><i></i>" + esc(tName(s.th)) + (extra ? " · " + esc(extra) : "") + "</span></span></button>";
-      }).join("");
+    hours.forEach(function (rows, h) {
+      var n = +h, half = n < 12 ? "am" : "pm";
+      html += '<div class="hour"><p class="h">' + ((n % 12) || 12) + "<small>" + half + "</small>" + '</p><div class="rows">' +
+        rows.map(function (s) {
+          var f = films[s.f], extra = tagOf(s);
+          return '<button type="button" class="row' + (isPast(s) ? " past" : "") + '" data-i="' + shows.indexOf(s) + '"><b>' + hm12(s.hm).replace(" ", "\u2009") +
+            '</b> <span class="ft">' + esc(f.t) + '</span> <span class="th">' + esc(TINY[s.th] || tName(s.th)) + (extra ? ", " + esc(extra) : "") + "</span></button>";
+        }).join("") + "</div></div>";
     });
     if (past.length) html += '<button type="button" class="earlier" id="earlier">' + (state.showEarlier ? "Hide " : "Show ") + past.length + " earlier today</button>";
     $("sched").innerHTML = html;
+    schedEdges();
+  }
+  // Desktop: the schedule column scrolls on its own, with no scrollbar (like the theater row): the
+  // side with more fades out instead. Wheel / trackpad / keyboard scroll it as usual.
+  function schedEdges() {
+    var col = $("sched").parentNode, max = col.scrollHeight - col.clientHeight;
+    var scrolls = max > 2 && getComputedStyle(col).overflowY !== "visible";
+    col.classList.toggle("more-t", scrolls && col.scrollTop > 2);
+    col.classList.toggle("more-b", scrolls && max - col.scrollTop > 2);
   }
 
   // ---- Showtime sheet + add to calendar -----------------------------------------------
@@ -419,16 +628,18 @@
   var lastFocus = null, icsUrl = null;
   function openSheet(i) {
     var s = shows[i], f = films[s.f], t = theaterOf(s.th) || { name: s.th };
-    var where = [t.name, s.scr, s.fmt].filter(Boolean).join(" · "), links = s.hm ? calendarLinks(s) : null;
+    var where = [t.name, s.scr, tagOf(s)].filter(Boolean).join(", "), links = s.hm ? calendarLinks(s) : null;
     icsUrl = links && links.ics;
     var when = dateObj(s.d).toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" }) +
-      (s.hm ? " · " + timeHTML(s.hm) + "–" + timeHTML(links.end.hm) : " · times vary");
+      (s.hm ? ", " + timeHTML(s.hm) + " to " + timeHTML(links.end.hm) : ", times vary");
     $("backdrop").innerHTML = '<div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetT">' +
       (f.posters.length ? posterHTML(s.f, "sheet-poster") : '<div class="ph"></div>') +
       '<div><h3 id="sheetT">' + esc(f.t) + '</h3><div class="when">' + when + "</div>" +
-      '<div class="where">' + esc(where) + (s.hm && !s.end && !f.runtime ? " · runtime unknown, 2h assumed" : "") + "</div></div>" +
+      '<div class="where">' + esc(where) + (s.hm && !s.end && !f.runtime ? ", runtime unknown, 2h assumed" : "") + "</div></div>" +
       '<div class="actions">' + (s.url ? '<a class="btn primary" href="' + esc(s.url) + '" target="_blank" rel="noopener">Get tickets</a>' : "") +
-      (links ? '<div class="btn-row three"><a class="btn" href="' + esc(links.google) + '" target="_blank" rel="noopener">Google</a>' +
+      // One "Add to calendar" button; its three choices open under it, so tickets stay the big button.
+      (links ? '<button type="button" class="btn" id="calToggle" aria-expanded="false" aria-controls="calOpts">Add to calendar</button>' +
+        '<div class="btn-row" id="calOpts" hidden><a class="btn" href="' + esc(links.google) + '" target="_blank" rel="noopener">Google</a>' +
         '<a class="btn" href="' + esc(links.outlook) + '" target="_blank" rel="noopener">Outlook</a>' +
         '<a class="btn" href="' + links.ics + '" download="' + slug(f.t) + '.ics">Apple / .ics</a></div>' : "") +
       '<button type="button" class="btn" id="closeSheet">Close</button></div></div>';
@@ -444,7 +655,7 @@
 
   // ---- Wiring ------------------------------------------------------------------------
 
-  function setMode() {   // the two-week view has no schedule column
+  function setMode() {   // the two-week view has no schedule
     var all = state.day === ALL;
     $("layout").dataset.mode = all ? "span" : "day";
     var seg = document.querySelector(".seg"); if (seg) seg.hidden = all;
@@ -454,20 +665,47 @@
     }
   }
   function renderAll() { renderTheaters(); renderFilms(); if (state.day !== ALL) renderSchedule(); }
-  function measure() { document.documentElement.style.setProperty("--bar-h", $("bar").offsetHeight + "px"); }
+  // A new day from far down the page: come back up to the top of the films (under the sticky days).
+  function toFilms() {
+    var top = $("layout").getBoundingClientRect().top + window.scrollY - $("days").offsetHeight - 12;
+    if (window.scrollY > top) window.scrollTo({ top: top });
+  }
+  // After a re-render, keep keyboard focus on the poster that was just opened or closed.
+  function focusPoster(i) { var el = document.querySelector('#grid button[data-p="' + i + '"]'); if (el) el.focus({ preventScroll: true }); }
+  function measure() { document.documentElement.style.setProperty("--days-h", $("days").offsetHeight + "px"); }
 
   function wire() {
     document.addEventListener("click", function (e) {
       if (e.target.id === "backdrop") return closeSheet();
+      var info = e.target.closest(".info");
+      if (info && !e.target.closest("a")) { state.open = null; renderFilms(); focusPoster(+info.dataset.p); return; }
       var b = e.target.closest("button"); if (!b) return;
+      if (b.dataset.p) { var p = +b.dataset.p; state.open = state.open === p ? null : p; renderFilms(); focusPoster(p); return; }
+      if (b.id === "tToggle") {
+        var open = !$("controls").classList.contains("open");
+        $("controls").classList.toggle("open", open); b.setAttribute("aria-expanded", open); b.textContent = open ? "Done" : "Change";
+        if (open) { state.tAll = false; pickShownTheaters(); renderTheaters(); }
+        measure(); return;
+      }
+      if (b.id === "tMore") {   // collapsing keeps the button where it was on screen
+        var y = b.getBoundingClientRect().top; state.tAll = !state.tAll;
+        if (!state.tAll) pickShownTheaters();   // keeps any just checked further down the list
+        renderTheaters();
+        if (!state.tAll) window.scrollBy(0, b.getBoundingClientRect().top - y);
+        return;
+      }
       if (b.id === "closeSheet") return closeSheet();
-      if (b.dataset.d) { state.day = b.dataset.d; state.showEarlier = false; setMode(); renderDays(); renderAll(); window.scrollTo({ top: 0 }); return; }
+      if (b.id === "calToggle") {
+        var opts = $("calOpts"), show = opts.hidden; opts.hidden = !show; b.setAttribute("aria-expanded", show);
+        if (show) opts.querySelector("a").focus(); return;
+      }
+      if (b.dataset.d) { state.day = b.dataset.d; state.showEarlier = false; state.open = null; setMode(); renderDays(); renderAll(); toFilms(); return; }
       if (b.dataset.k) {
         var k = b.dataset.k; state.theaters.has(k) ? state.theaters.delete(k) : state.theaters.add(k); state.radius = null;
         saveTheaters(); renderAll(); return;
       }
       if (b.dataset.r) {
-        state.radius = b.dataset.r; applyRadius(); saveTheaters(); renderAll(); return;
+        state.radius = b.dataset.r; applyRadius(); pickShownTheaters(); saveTheaters(); renderAll(); return;
       }
       if (b.dataset.kind) {
         state.kind = b.dataset.kind;
@@ -477,21 +715,22 @@
       if (b.dataset.s) {
         state.sort = b.dataset.s;
         document.querySelectorAll("[data-s]").forEach(function (x) { x.setAttribute("aria-pressed", x === b); });
-        renderFilms(); return;
+        renderSummary(); renderFilms(); return;
       }
       if (b.dataset.v) {
         $("layout").dataset.view = b.dataset.v;
         document.querySelectorAll("[data-v]").forEach(function (x) { x.setAttribute("aria-pressed", x === b); });
         return;
       }
-      if (b.classList.contains("more")) {
-        var card = b.closest(".card"); card.classList.add("open");
-        card.querySelector(".venues").classList.remove("clamp"); b.hidden = true; return;
-      }
+      if (b.classList.contains("more")) return toggleMore(b);
       if (b.id === "earlier") { state.showEarlier = !state.showEarlier; renderSchedule(); return; }
       if (b.dataset.i) openSheet(+b.dataset.i);
     });
-    document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !$("backdrop").hidden) closeSheet(); });
+    document.addEventListener("keydown", function (e) {
+      if (e.key !== "Escape") return;
+      if (!$("backdrop").hidden) return closeSheet();
+      if (state.open != null) { var p = state.open; state.open = null; renderFilms(); focusPoster(p); }
+    });
     var q = $("q"), clear = $("qClear");
     var setQ = function () { state.q = q.value.trim(); clear.hidden = !q.value; renderAll(); };
     q.addEventListener("input", setQ);
@@ -502,9 +741,20 @@
       if (z !== e.target.value) e.target.value = z;
       var ok = z.length === 5 && ZIPS[z];
       $("zipNote").hidden = !(z.length === 5 && !ok);
-      if (ok) { state.zip = z; applyRadius(); renderAll(); }
+      if (ok) { state.zip = z; applyRadius(); pickShownTheaters(); renderAll(); }
     });
-    window.addEventListener("resize", function () { measure(); clampVenues(); });
+    window.addEventListener("resize", function () { measure(); clampVenues(); edges(); schedEdges(); });
+    if (document.fonts) document.fonts.ready.then(function () { clampVenues(); edges(); schedEdges(); });   // re-measure in Archivo
+    // A tab left open overnight would keep yesterday as "today": reload when the Denver date changes.
+    document.addEventListener("visibilitychange", function () {
+      if (document.visibilityState !== "visible") return;
+      var d = new Intl.DateTimeFormat("en-CA", { timeZone: "America/Denver" }).format(new Date());
+      if (d !== NOW.day) location.reload();
+    });
+    $("tlist").addEventListener("scroll", edges, { passive: true });
+    $("sched").parentNode.addEventListener("scroll", schedEdges, { passive: true });
+    $("tPrev").addEventListener("click", function () { $("tlist").scrollBy({ left: -$("tlist").clientWidth * .8 }); });
+    $("tNext").addEventListener("click", function () { $("tlist").scrollBy({ left: $("tlist").clientWidth * .8 }); });
   }
 
   var zipTable = fetch("zips.json").then(function (r) { return r.ok ? r.json() : {}; }).catch(function () { return {}; });

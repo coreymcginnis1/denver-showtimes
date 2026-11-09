@@ -30,6 +30,7 @@ scraper (GitHub Actions)  ──►  public/data.json  ──►  static site (F
 | AMC Westminster Promenade 24 | Fandango napi (theater id `AAECN`) | Exact showtimes + formats; tickets link to Fandango; **off by default** |
 | Alamo Drafthouse Sloans Lake | "mother" schedule API (`drafthouse.com/s/mother/v2`) | Exact showtimes, screen, special formats (35/70mm); **off by default** |
 | Regal Colorado Center / Denver Pavilions | Fandango napi (`fandango.com/napi/theaterMovieShowtimes`) | Exact showtimes + formats (IMAX/RPX), via plain httpx; **off by default** |
+| Harkins, Cinemark, Movie Tavern, more AMC and Regal, Alamo Westminster / Littleton, Landmark Greenwood Village | Fandango napi, or the Alamo / Landmark APIs above | Every year-round theater within 15 mi of 80218 (22 in all); **off by default** |
 
 "Off by default" theaters are scraped and available, but their filter chip starts unchecked —
 readers click it to add them. **AMC and Regal** read from **Fandango** (one JSON call per date, no

@@ -18,6 +18,7 @@ import logging
 from datetime import date, datetime, timedelta
 
 from .base import BaseScraper, http_client
+from ..formats import canon, language
 from ..models import Showtime
 
 log = logging.getLogger(__name__)
@@ -26,6 +27,11 @@ SHOWTIMES_URL = "https://www.fandango.com/napi/theaterMovieShowtimes/{tid}"
 DEFAULT_TID = "AAFXW"
 # Format headers we don't surface (the default 2D screen); keep IMAX / RPX / Premium / 3D / Dolby.
 _GENERIC_FMT = {"", "standard", "standard format", "2d"}
+
+
+def _amenities(group: dict | None) -> list[str]:
+    return [(a.get("name") or "").strip() for a in (group or {}).get("amenities") or []]
+
 
 
 class FandangoScraper(BaseScraper):
@@ -66,8 +72,8 @@ class FandangoScraper(BaseScraper):
             runtime = m.get("runtime") or None
             release = (m.get("releaseDate") or "")[:10] or None
             for v in m.get("variants", []) or []:
-                fmt = self._fmt(v)
                 for ag in v.get("amenityGroups", []) or []:
+                    fmt, lang = self._fmt(v, ag), language(_amenities(ag))
                     for st in ag.get("showtimes", []) or []:
                         if st.get("expired"):
                             continue
@@ -80,6 +86,7 @@ class FandangoScraper(BaseScraper):
                             film_title=title,
                             start=dt,
                             fmt=fmt,
+                            lang=lang,
                             ticket_url=st.get("ticketingJumpPageURL") or None,
                             poster=poster,
                             rating=rating,
@@ -97,9 +104,13 @@ class FandangoScraper(BaseScraper):
             return None
 
     @staticmethod
-    def _fmt(variant: dict) -> str | None:
+    def _fmt(variant: dict, group: dict | None = None) -> str | None:
+        """formats.canon() of the variant header (Standard / Premium Format / 3D) plus the showtime
+        group's amenities, which name the screen ("IMAX with Laser", "Dolby Cinema @ AMC", "4DX")."""
         h = (variant.get("filmFormatHeader") or "").strip()
-        return h if h and h.lower() not in _GENERIC_FMT else None
+        if not h or h.lower() in _GENERIC_FMT:
+            h = ""
+        return canon([h] + _amenities(group), three_d=h.lower() == "3d")
 
     @staticmethod
     def _poster(m: dict) -> str | None:

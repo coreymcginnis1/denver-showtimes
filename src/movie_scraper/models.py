@@ -19,7 +19,8 @@ class Showtime(BaseModel):
     all_day: bool = False              # True for days-only entries (e.g. Landmark)
 
     screen: Optional[str] = None
-    fmt: Optional[str] = None          # e.g. "Dolby Cinema", "35mm"
+    fmt: Optional[str] = None          # formats.canon(): "IMAX", "Dolby 3D", "35mm", "PLF"…
+    lang: Optional[str] = None         # formats.language(): "Subtitled", "Dubbed", "Spanish dub"
     ticket_url: Optional[str] = None
     film_url: Optional[str] = None
     poster: Optional[str] = None
@@ -43,6 +44,7 @@ class Showtime(BaseModel):
             "theater": self.theater,
             "screen": self.screen,
             "fmt": self.fmt,
+            "lang": self.lang,
             "ticketUrl": self.ticket_url,
             "poster": self.poster,
             "rating": self.rating,

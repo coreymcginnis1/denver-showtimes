@@ -133,3 +133,25 @@ def test_classify_indie_and_international():
     assert toho["intl"] and not toho["indie"]                   # non-English: International only
     unknown = classify({"original_language": "en", "production_companies": co("Topic Studios")})
     assert unknown["indie"]                                     # no budget listed, no major
+
+
+def test_meta_from_keeps_director_countries_and_synopsis():
+    m = dict(r(5, "Fatherland", "2026-06-19"), overview="  In 1949, Thomas Mann and his daughter Erika take a road trip.  ",
+             production_countries=[{"iso_3166_1": "PL"}, {"iso_3166_1": "DE"}],
+             credits={"crew": [{"job": "Director", "name": "Paweł Pawlikowski"}, {"job": "Writer", "name": "Someone"}]})
+    out = tmdb.meta_from(m)
+    assert out["directors"] == ["Paweł Pawlikowski"]
+    assert out["countries"] == ["PL", "DE"]
+    assert out["overview"] == "In 1949, Thomas Mann and his daughter Erika take a road trip."
+    bare = tmdb.meta_from(r(6, "Gozu", "2003-07-11"))                 # a search result: none of these
+    assert bare["directors"] == [] and bare["countries"] == [] and bare["overview"] is None
+    assert bare["cast"] == [] and bare["genres"] == []
+
+
+def test_meta_from_keeps_top_billed_cast_and_genres():
+    cast = [{"name": f"Actor {n}", "order": n} for n in (6, 2, 0, 1, 3, 4, 5)] + [{"name": "", "order": 7}]
+    m = dict(r(7, "Godzilla Minus Zero", "2026-11-03"), credits={"cast": cast, "crew": []},
+             genres=[{"id": 878, "name": "Science Fiction"}, {"id": 27, "name": "Horror"}])
+    out = tmdb.meta_from(m)
+    assert out["cast"] == ["Actor 0", "Actor 1", "Actor 2", "Actor 3", "Actor 4"]   # billing order, top five
+    assert out["genres"] == ["Science Fiction", "Horror"]

@@ -52,8 +52,9 @@ DEFAULT_STRIP_SUFFIXES = [
     r"\s*[-–—]\s*Studio Ghibli Fest(?:ival)?(?:\s+\d{4})?$",  # "... - Studio Ghibli Fest 2026"
     r"\s+(?:IMAX\s+)?(?:Opening Night\s+)?Fan Event$",        # "MOANA IMAX Opening Night Fan Event"
     r"\s+(?:IMAX\s+)?(?:Early Access(?:\s+Screenings?)?|Advance\s+Screenings?)$",  # "... Early Access [Screening]"
+    r"\s*[-–—:]\s*Super Ticket$",                          # ticket bundles: "The Hunger Games: ... - Super Ticket"
     r"\s*[-–—:]?\s*\(?\b(?:Re-?release|Re-?issue|RE\d{2})\)?$",  # "Coraline Re-release" / "Dune: Part One Reissue" / "(RE26)"
-    r"\s+on\s+\d{2,3}\s?mm(?:\s+film)?$",   # "Interstellar on 35mm" / "The Odyssey on 35mm film"
+    r"\s+(?:on|in)\s+(?:\d{2,3}\s?mm|VistaVision)(?:\s+film)?$",   # "Interstellar on 35mm" / "... in 70mm" / "... in VistaVision"
     r"\s*[:–—-]\s*Sensory[- ]?Friendly\b.*$",  # "Supergirl: Sensory Friendly Screening" -> "Supergirl"
     r"\s*\(dir\.?\s[^)]*\)$",     # director annotation: "Alpha (dir. Rawail)" -> "Alpha"
     r"\s*[:–—-]\s*Xfinity\b.*$",  # sponsor tag: "Minions & Monsters: Xfinity" -> "Minions & Monsters"
@@ -73,7 +74,7 @@ DEFAULT_DROP = [
     r"Apple TV Live",             # live sports broadcasts: "F1 on Apple TV Live in IMAX: ..."
     r"Memorial Screening",        # tribute events with no film named: "Classic - ... Memorial Screening"
     r"Mystery Movie",
-    r"Secret Cinema",             # Harkins mystery screenings, no film named             # surprise screenings, no film named (e.g. "REGAL: Monday Mystery Movie")
+    r"Secret (?:Cinema|Movie)",   # mystery screenings, no film named (Harkins Secret Cinema, Cinemark Secret Movie Series)
     r"\bUFC \d",                  # live UFC pay-per-view broadcasts ("UFC 329: ..."), not films
     r"Members?\s+Only",           # members-only screenings (public can't attend) — drop them
     r"League of Legends",         # live esports broadcasts ("League of Legends Worlds 26 - Finals")
@@ -111,6 +112,9 @@ class TrendingCfg(BaseModel):
 class Config(BaseModel):
     timezone: str = "America/Denver"
     days_ahead: int = 14
+    # Theaters whose source can look far ahead in a request or a few (Sie, Landmark, Alamo) report
+    # everything up to this many days out; the chains (Fandango, one request a day) stop at days_ahead.
+    ahead_days: int = 90
     output: str = "public/data.json"
     default_runtime_minutes: int = 120
     theaters: dict[str, TheaterCfg]

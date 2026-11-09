@@ -18,6 +18,7 @@ import re
 from datetime import date, datetime, timedelta
 
 from .base import BaseScraper, http_client, to_int
+from ..formats import canon
 from ..models import Showtime
 
 log = logging.getLogger(__name__)
@@ -70,6 +71,31 @@ class LandmarkScraper(BaseScraper):
         log.info("landmark: %d showtimes", len(showtimes))
         return showtimes
 
+    def fetch_ahead(self, start: date, end: date) -> list[Showtime]:
+        """The whole range in one schedule request (the API accepts it), for far-ahead film prints."""
+        tid = (self.theater_cfg.location or THEATER_ID).upper()
+        theaters_param = '{"id":"%s","timeZone":"%s"}' % (tid, self.cfg.timezone)
+        with http_client() as client:
+            client.headers["Referer"] = "https://www.landmarktheatres.com/showtimes/"
+            resp = client.get(f"{BASE}/schedule", params={
+                "from": f"{start.isoformat()}T03:00:00",
+                "to": f"{(end + timedelta(days=1)).isoformat()}T03:00:00",
+                "theaters": theaters_param,
+            })
+            resp.raise_for_status()
+            schedule = (resp.json().get(tid) or {}).get("schedule") or {}
+            raw: dict[str, list[dict]] = {}
+            for mid, by_date in schedule.items():
+                for shows in by_date.values():
+                    raw.setdefault(mid, []).extend(shows)
+            movies: dict[str, dict] = {}
+            ids = sorted(raw)
+            if ids:
+                mr = client.get(f"{BASE}/movies", params=[("basic", "false"), ("castingLimit", "3")] + [("ids", i) for i in ids])
+                if mr.status_code == 200:
+                    movies = {str(m["id"]): m for m in mr.json()}
+        return self.build(raw, movies, start, end)
+
     def build(self, raw: dict, movies: dict, start: date, end: date) -> list[Showtime]:
         """Pure transform of `schedule` + `movies` payloads into timed Showtimes."""
         results: list[Showtime] = []
@@ -114,11 +140,10 @@ class LandmarkScraper(BaseScraper):
 
     @staticmethod
     def _fmt(tags: list[str]) -> str | None:
-        for tag in tags:
-            if tag.startswith("Format.Projection."):
-                fmt = tag.rsplit(".", 1)[-1]
-                return None if fmt.lower() == "digital" else fmt  # "Digital" is the default, hide it
-        return None
+        """formats.canon() of the projection tag ("Format.Projection.35mm"): Digital and the aspect
+        ratios Scope / Flat come back as None."""
+        proj = [t.rsplit(".", 1)[-1] for t in tags if t.startswith("Format.Projection.")]
+        return canon(proj)
 
     @staticmethod
     def _screen(sh: dict, tags: list[str]) -> str | None:

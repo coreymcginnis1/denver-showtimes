@@ -151,6 +151,12 @@ def test_is_non_film_drops_live_broadcast_and_memorial():
     assert not is_non_film("F1: The Movie", DEFAULT_DROP)
 
 
+def test_title_format_extraction_vistavision_and_in():
+    assert title_format("One Battle After Another in VistaVision") == "VistaVision"
+    assert title_format("Lawrence of Arabia in 70mm") == "70mm"
+    assert normalize_title("Lawrence of Arabia in 70mm", DEFAULT_STRIP_PREFIXES, DEFAULT_STRIP_SUFFIXES) == "Lawrence of Arabia"
+
+
 def test_title_format_extraction():
     assert title_format("Interstellar on 35mm") == "35mm"
     assert title_format("Oppenheimer on 70mm") == "70mm"
@@ -171,6 +177,12 @@ def test_normalize_title_recases_allcaps_words():
 def test_is_non_film_drops_ufc_broadcasts():
     assert is_non_film("UFC 329: McGregor vs. Holloway 2", DEFAULT_DROP)
     assert not is_non_film("Jack Johnson: Surfilmusic", DEFAULT_DROP)
+
+
+def test_is_non_film_drops_mystery_series():
+    assert is_non_film("Harkins Secret Cinema", DEFAULT_DROP)
+    assert is_non_film("Cinemark Secret Movie Series", DEFAULT_DROP)
+    assert not is_non_film("The Secret Agent", DEFAULT_DROP)
 
 
 def test_is_non_film_drop():
@@ -198,9 +210,47 @@ def test_secondary_theaters_config():
     assert c.theaters["amc"].scraper == "fandango"          # AMC reads from Fandango
     assert c.theaters["amc_westminster"].scraper == "fandango"
     assert c.theaters["alamo_sloans"].default_on is False
+    for key, loc in (("alamo_westminster", "westminster"), ("alamo_littleton", "littleton")):
+        t = c.theaters[key]                                   # same Alamo feed, its own location
+        assert t.enabled and t.default_on is False and t.scraper == "alamo" and t.location == loc
+        assert t.lat and t.lon                                # for the distance filter
     assert c.theaters["regal_colorado"].enabled is True     # scraped via Fandango
     assert c.theaters["regal_colorado"].default_on is False  # but off by default
     assert c.theaters["regal_colorado"].scraper == "fandango"
+
+
+def test_build_feed_lists_each_poster_once_per_film():
+    a1, a2, b = st("A", 19, "amc"), st("A", 21, "regal_pavilions"), st("B", 20, "amc")
+    a1.poster = a2.poster = "https://img/a.jpg"
+    b.poster = "https://img/a.jpg"                 # same art on another film still shows for it
+    feed = _build_feed(fresh_cfg(), [a2, b, a1], DEN)
+    got = [(e["title"], e["start"][11:16], e["extendedProps"].get("poster")) for e in feed["events"]]
+    assert got == [("A", "19:00", "https://img/a.jpg"), ("B", "20:00", "https://img/a.jpg"), ("A", "21:00", None)]
+
+
+def test_carried_rows_get_their_poster_back():
+    prev = {"events": [
+        {"title": "A", "start": "2026-06-18T19:00:00-06:00", "extendedProps": {"theater": "flaky", "poster": "p.jpg"}},
+        {"title": "A", "start": "2026-06-20T19:00:00-06:00", "extendedProps": {"theater": "flaky"}},
+        {"title": "B", "start": "2026-06-20T19:00:00-06:00", "extendedProps": {"theater": "flaky"}},
+    ]}
+    out = pipeline._carried_events(prev, ["flaky"], date(2026, 6, 19))
+    assert [(e["title"], e["extendedProps"].get("poster")) for e in out] == [("A", "p.jpg"), ("B", None)]
+    assert "poster" not in prev["events"][1]["extendedProps"]   # the previous feed isn't changed
+
+
+def test_every_theater_within_15_miles_is_configured():
+    c = fresh_cfg()
+    added = {"amc_cherry_creek": "AAADR", "cinemark_belmar": "AARMQ", "regal_river_point": "AAVKZ",
+             "cinemark_aurora": "AAJNI", "regal_southglenn": "AAVRY", "regal_colorado_mills": "AAQQK",
+             "amc_bowles": "AABAT", "amc_highlands_ranch": "AAECM", "movie_tavern_aurora": "AAUFX",
+             "amc_arapahoe": "AAEWN"}
+    assert len(c.theaters) == 22
+    for key, tid in added.items():
+        t = c.theaters[key]
+        assert t.enabled and t.default_on is False and t.scraper == "fandango" and t.location == tid
+        assert 39.5 < t.lat < 39.9 and -105.2 < t.lon < -104.7
+    assert [k for k, t in c.theaters.items() if t.default_on] == ["sie", "landmark"]
 
 
 def test_build_feed_carries_default_on():
@@ -218,6 +268,7 @@ def test_title_variants_from_fandango_and_amc():
     for raw, want in [
         ("The Nightmare Before Christmas Re-release", "The Nightmare Before Christmas"),
         ("The Nightmare Before Christmas (RE26)", "The Nightmare Before Christmas"),
+        ("The Hunger Games: Sunrise on the Reaping - Super Ticket", "The Hunger Games: Sunrise on the Reaping"),
         ("The Hunger Games: Sunrise on the Reaping Early Access",
          "The Hunger Games: Sunrise on the Reaping"),
         ("Sinners Early Access Screening", "Sinners"),
@@ -412,3 +463,32 @@ def test_wiki_views_fall_back_to_last_run(monkeypatch):
     previous = {"Old name": {"tmdb_id": 2, "wiki_views": 77}}
     pipeline.add_wiki_views(meta, previous, date(2026, 11, 6))
     assert meta["A"]["wiki_views"] == 500 and meta["B"]["wiki_views"] == 77 and "wiki_views" not in meta["C"]
+
+
+def test_look_ahead_adds_far_showings(tmp_path, monkeypatch):
+    """Sources that can look months ahead (the Sie lists 35mm runs early) add those showings."""
+    today = date.today()
+    far = datetime.combine(today + timedelta(days=40), datetime.min.time()).replace(hour=19, tzinfo=DEN)
+    config = tmp_path / "config.toml"
+    config.write_text(f'output = "{(tmp_path / "data.json").as_posix()}"\n[theaters.sie]\nname = "Sie"\n',
+                      encoding="utf-8")
+
+    class Scraper:
+        def __init__(self, cfg, tc, key=None):
+            self.key = key
+
+        def fetch(self, start, end):
+            return [st("Fresh Film", 19, "sie")]
+
+        def fetch_ahead(self, start, end):
+            assert start > today + timedelta(days=14)
+            return [Showtime(theater="sie", theater_name="Sie", film_title="Cameron Winter at Carnegie Hall on 35mm", start=far),
+                    Showtime(theater="sie", theater_name="Sie", film_title="Some Digital Film", start=far)]
+
+    monkeypatch.setattr(pipeline, "SCRAPERS", {"sie": Scraper})
+    monkeypatch.chdir(tmp_path)
+    feed = run(str(config))
+    by_title = {e["title"]: e for e in feed["events"]}
+    assert "Some Digital Film" in by_title
+    winter = by_title["Cameron Winter at Carnegie Hall"]
+    assert winter["extendedProps"]["fmt"] == "35mm"            # moved off the title

@@ -417,8 +417,10 @@
     // Searching also finds a film beyond the chosen theaters/day ("Fjord" only at AMC Westminster):
     // those matches follow the normal results as compact two-week cards.
     var elsewhere = new Map();
-    // "On film" too: prints are rare, so show the ones at other theaters and days as well.
-    if (state.q || state.kind === "film") {
+    // Only search reaches past the chosen day and theaters. "On film" is a plain filter like the
+    // other Show choices (Nov 2026: its own "On film on other dates" sections read as clutter);
+    // All dates lists every print coming up, Now playing / Coming soon / Further out.
+    if (state.q) {
       shows.forEach(function (s) {
         var inRange = s.d >= days[0];   // any date we have (some theaters list months out)
         if (byFilm.has(s.f) || !inRange || isPast(s) || (state.q && !hitOf(s.f))) return;
@@ -447,8 +449,8 @@
     var extraIds = Array.from(elsewhere.keys());
 
     if (!ids.length && !extraIds.length) {
-      $("grid").innerHTML = '<p class="empty">' + (state.kind === "film" && !state.q
-        ? "Nothing is showing on film in the dates we have."
+      $("grid").innerHTML = '<p class="empty">' + (state.kind === "film" && !state.q && state.theaters.size
+        ? "Nothing on film at these theaters" + (all ? ". Try more theaters." : ' on this day. Try <button type="button" class="inline" data-d="' + ALL + '">All dates</button> or more theaters.')
         : state.theaters.size ? "Nothing matches" + (all ? "" : " on this day") + ". Try " + (all ? "" : "another day, ") + "more theaters, or clear the search."
         : "Pick at least one theater above to see films.") + "</p>";
       return;
@@ -523,8 +525,7 @@
       $("grid").innerHTML = ids.length ? '<div class="grid">' + ids.map(function (i) { return cardHTML(i); }).join("") + "</div>"
         : '<p class="empty">' + (state.kind === "film" ? "Nothing on film" : "No match") + ' at these theaters' + (all ? "" : " on this day") + ".</p>";
     }
-    var lead = state.kind === "film" && !state.q ? "On film" : "Playing";
-    [[otherDates, lead + " on other dates"], [otherTheaters, lead + " at other theaters"]].forEach(function (g) {
+    [[otherDates, "Playing on other dates"], [otherTheaters, "Playing at other theaters"]].forEach(function (g) {
       if (!g[0].size) return;
       $("grid").innerHTML += '<h3 class="group">' + g[1] + '</h3><div class="grid">' +
         order(g[0]).map(function (i) { return cardHTML(i, g[0]); }).join("") + "</div>";

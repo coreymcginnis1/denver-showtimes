@@ -146,12 +146,15 @@ Prefer **general** patterns over one-offs.
   (`(English 2026)`, `(Hindi Dubbed)`), `on 35mm` (gauge kept as the format), `(dir. X)`, Sensory
   Friendly, sponsor tags, Fan Event / Early Access / Promo / Preview screenings, `- Super Ticket`
   (ticket bundles), `w/ …`, CU's `- Part of <festival>`, `- FREE SHOW`, `- <guests> in person!`,
-  `- IFS Underground`; `(Director's Cut)` in parentheses too.
+  `- IFS Underground`; `(Director's Cut)` in parentheses too; restorations (`4K Restoration`,
+  `(Restored)`, `New 4K Remaster`). The suffix rules run again until nothing changes, so stacked tags
+  come off in any order ("The Host 4K Restoration (2026)" → "The Host").
 - `drop` — not films: mystery screenings (Screen Unseen, Mystery Movie, Harkins Secret Cinema,
   Cinemark Secret Movie Series, a bare "IFS Underground"),
   private rentals, members-only, memorials, watch parties, live sports and esports. Concerts, opera,
   NT Live and TV-episode screenings are **kept**.
-- `normalize_title()` also fixes ALL-CAPS/lowercase titles and dangling `:`/`-`;
+- `normalize_title()` also fixes ALL-CAPS/lowercase titles, all-caps connector words mid-title
+  ("Terror IN THE Aisles II" → "Terror in the Aisles II"; single letters and acronyms stay) and dangling `:`/`-`;
   `merge_case_variants()` merges titles differing only in case.
 - **TOML gotcha:** single-quoted TOML strings can't contain an apostrophe — use `\W?` or double quotes.
 
@@ -163,7 +166,10 @@ year appended.
 
 - **Strict matching** (a wrong match renames the film on the site): exact title or TMDB title +
   ": subtitle", possessive credits dropped, and a year hint — the year Sie/Landmark state beats
-  Fandango's `releaseDate` (a revival's may be the re-release). No fuzzy guessing.
+  Fandango's `releaseDate` (a revival's may be the re-release). When cleanup strips a revival tag
+  (restoration, re-release, reissue, anniversary), Fandango's date isn't used at all
+  (`revival_tagged()`): The Host 4K Restoration's Nov 2026 date matched an unrelated 2026 "The Host".
+  No fuzzy guessing.
 - Wrong or missing match → `[tmdb.overrides]` (local title → id from themoviedb.org/movie/<id>).
   Matches are remembered in `tmdb_ids`. `0` means "not on TMDB" (an event sharing a film's name:
   the Dairy's "Family Reunion" shorts night). `"Title @theater"` scopes an override to one theater

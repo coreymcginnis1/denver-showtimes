@@ -46,6 +46,8 @@ DEFAULT_STRIP_PREFIXES = [
 
 DEFAULT_STRIP_SUFFIXES = [
     r"\s+w/\s+.*$",                # "Rocky Horror ... w/ ... Shadowcast"
+    r"\s*[-–—:]?\s*\(?(?:New\s+)?[248]K\s+(?:Restoration|Restored|Remaster(?:ed)?)\)?$",   # "The Host 4K Restoration" / "(4K Restoration)"
+    r"\s*\((?:Newly\s+)?(?:Restored|Restoration|Remastered)\)$",   # "Suspiria (Restored)"
     r"\s+[-–—]\s+[^-–—]*\bin person!?$",     # guests: "Elevation - Anthony Mackie and George Nolfi in person!"
     r"\s+[-–—]\s+Part of\s.+$",              # festivals: "Breathless - Part of the Albertine ... Festival"
     r"\s+[-–—]\s+Free\s+(?:Show|Screening)$",   # "Whiplash - FREE SHOW"

@@ -63,3 +63,13 @@ def _no_live_omdb(monkeypatch):
 def _no_live_wikipedia(monkeypatch):
     """Tests run offline: the pipeline's Wikipedia lookup returns nothing."""
     monkeypatch.setattr("movie_scraper.pipeline.weekly_views", lambda *a, **k: {})
+
+
+@pytest.fixture
+def dairy_events():
+    return _load("dairy_events.json")
+
+
+@pytest.fixture
+def cu_ifs_events():
+    return _load("cu_ifs_events.json")

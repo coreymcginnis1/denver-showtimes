@@ -1,0 +1,247 @@
+{
+ "events": [
+  {
+   "id": 68403,
+   "title": "Cinema Classics with Jeffrey Kash: Modern Times",
+   "start_date": "2026-11-09 19:00:00",
+   "end_date": "2026-11-09 20:30:00",
+   "all_day": false,
+   "timezone": "America/Denver",
+   "url": "https://thedairy.org/event/cinema-classics-with-jeffrey-kash-modern-times/",
+   "website": "",
+   "cost": "$7 – $14",
+   "hide_from_listings": false,
+   "image": {
+    "url": "https://media.thedairy.org/wp-content/uploads/2026/07/27102739/Modern_Times_poster.jpg"
+   },
+   "venue": {
+    "venue": "Boedecker Theater"
+   },
+   "categories": [
+    {
+     "slug": "cinema",
+     "name": "Cinema"
+    },
+    {
+     "slug": "classics-with-jeffrey-kash",
+     "name": "Classics with Jeffrey Kash"
+    }
+   ],
+   "tags": []
+  },
+  {
+   "id": 69385,
+   "title": "LOUDER THAN GUNS A Music Film About Firearms and America",
+   "start_date": "2026-11-09 19:00:00",
+   "end_date": "2026-11-09 21:00:00",
+   "all_day": false,
+   "timezone": "America/Denver",
+   "url": "https://thedairy.org/event/louder-than-guns-a-music-film-about-firearms-and-america/",
+   "website": "",
+   "cost": "$11.50",
+   "hide_from_listings": false,
+   "image": {
+    "url": "https://media.thedairy.org/wp-content/uploads/2026/09/21111509/LTG_Boulder_4x5_JoinUs_Invited-scaled.jpg"
+   },
+   "venue": {
+    "venue": "Gordon Gamm Theater"
+   },
+   "categories": [
+    {
+     "slug": "cinema",
+     "name": "Cinema"
+    },
+    {
+     "slug": "cinema-rental",
+     "name": "Cinema Rental"
+    }
+   ],
+   "tags": []
+  },
+  {
+   "id": 10008808,
+   "title": "Queen at Sea | Nov. 11 &#8211; 14",
+   "start_date": "2026-11-11 14:00:00",
+   "end_date": "2026-11-11 15:30:00",
+   "all_day": false,
+   "timezone": "America/Denver",
+   "url": "https://thedairy.org/event/queen-at-sea-nov-11-14/2026-11-11/",
+   "website": "",
+   "cost": "$7 – $14",
+   "hide_from_listings": false,
+   "image": {
+    "url": "https://media.thedairy.org/wp-content/uploads/2026/10/12134453/queen_at_sea_for_digital-scaled.jpg"
+   },
+   "venue": {
+    "venue": "Boedecker Theater"
+   },
+   "categories": [
+    {
+     "slug": "cinema",
+     "name": "Cinema"
+    }
+   ],
+   "tags": [
+    {
+     "slug": "member-discount",
+     "name": "Member Discount"
+    }
+   ]
+  },
+  {
+   "id": 70245,
+   "title": "November Cinema Club: Queen at Sea (Following 4:30 PM Screening)",
+   "start_date": "2026-11-12 18:00:00",
+   "end_date": "2026-11-12 19:00:00",
+   "all_day": false,
+   "timezone": "America/Denver",
+   "url": "https://thedairy.org/event/november-cinema-club-queen-at-sea/",
+   "website": "",
+   "cost": "Free",
+   "hide_from_listings": false,
+   "image": {
+    "url": "https://media.thedairy.org/wp-content/uploads/2026/10/12134453/queen_at_sea_for_digital-scaled.jpg"
+   },
+   "venue": {
+    "venue": "Dairy Arts Center"
+   },
+   "categories": [
+    {
+     "slug": "cinema",
+     "name": "Cinema"
+    }
+   ],
+   "tags": [
+    {
+     "slug": "cinema-club",
+     "name": "Cinema Club"
+    }
+   ]
+  },
+  {
+   "id": 10008817,
+   "title": "The History of Concrete November 19 &#8211; 23",
+   "start_date": "2026-11-19 16:30:00",
+   "end_date": "2026-11-19 18:00:00",
+   "all_day": false,
+   "timezone": "America/Denver",
+   "url": "https://thedairy.org/event/the-history-of-concrete-november-19-23/2026-11-19/",
+   "website": "",
+   "cost": "$7 – $14",
+   "hide_from_listings": false,
+   "image": {
+    "url": "https://media.thedairy.org/wp-content/uploads/2026/10/12142144/HistoryofConcrete-scaled.jpg"
+   },
+   "venue": {
+    "venue": "Boedecker Theater"
+   },
+   "categories": [
+    {
+     "slug": "cinema",
+     "name": "Cinema"
+    }
+   ],
+   "tags": [
+    {
+     "slug": "no-member-discount",
+     "name": "No Member Discount"
+    }
+   ]
+  },
+  {
+   "id": 70473,
+   "title": "Friday Night Weird: Day of the Beast",
+   "start_date": "2026-12-04 20:30:00",
+   "end_date": "2026-12-04 22:00:00",
+   "all_day": false,
+   "timezone": "America/Denver",
+   "url": "https://thedairy.org/event/friday-night-weird-day-of-the-beast/",
+   "website": "",
+   "cost": "$7 – $14",
+   "hide_from_listings": false,
+   "image": {
+    "url": "https://media.thedairy.org/wp-content/uploads/2026/11/05144351/DayoftheBeast.jpg"
+   },
+   "venue": {
+    "venue": "Dairy Arts Center"
+   },
+   "categories": [
+    {
+     "slug": "cinema",
+     "name": "Cinema"
+    },
+    {
+     "slug": "friday-night-weird",
+     "name": "Friday Night Weird"
+    }
+   ],
+   "tags": [
+    {
+     "slug": "member-discount",
+     "name": "Member Discount"
+    }
+   ]
+  },
+  {
+   "id": 10008603,
+   "title": "Cinema Youth Advisory Board: Movie Monday &#038; Meeting",
+   "start_date": "2026-12-07 19:00:00",
+   "end_date": "2026-12-07 21:30:00",
+   "all_day": false,
+   "timezone": "America/Denver",
+   "url": "https://thedairy.org/event/cinema-youth-advisory-board-movie-monday/2026-12-07/",
+   "website": "",
+   "cost": "",
+   "hide_from_listings": false,
+   "image": {
+    "url": "https://media.thedairy.org/wp-content/uploads/2026/09/11133334/MOVIE-MONDAY.png"
+   },
+   "venue": {
+    "venue": "Boedecker Theater"
+   },
+   "categories": [
+    {
+     "slug": "cinema",
+     "name": "Cinema"
+    },
+    {
+     "slug": "youth-advisory-board",
+     "name": "Youth Advisory Board"
+    }
+   ],
+   "tags": []
+  },
+  {
+   "id": 10008921,
+   "title": "Nova &#8217;78 | Dec 29 &#8211; Jan 3",
+   "start_date": "2026-12-29 17:00:00",
+   "end_date": "2026-12-29 18:30:00",
+   "all_day": false,
+   "timezone": "America/Denver",
+   "url": "https://thedairy.org/event/nova-78-dec-29-jan-3/2026-12-29/",
+   "website": "",
+   "cost": "$7 – $14",
+   "hide_from_listings": false,
+   "image": {
+    "url": "https://media.thedairy.org/wp-content/uploads/2026/11/05142748/Nova78.jpg"
+   },
+   "venue": {
+    "venue": "Boedecker Theater"
+   },
+   "categories": [
+    {
+     "slug": "cinema",
+     "name": "Cinema"
+    }
+   ],
+   "tags": [
+    {
+     "slug": "member-discount",
+     "name": "Member Discount"
+    }
+   ]
+  }
+ ],
+ "total": 8,
+ "total_pages": 1
+}

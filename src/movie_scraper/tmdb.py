@@ -158,6 +158,8 @@ def lookup(hints: dict[str, int | None], previous: dict[str, dict], overrides: d
     are simply left out.
     """
     def one(title: str):
+        if title in overrides and not overrides[title]:   # 0: an event that shares a film's name
+            return title, None
         known = overrides.get(title) or (previous.get(title) or {}).get("tmdb_id")
         try:
             if not known:   # new title: search, then fetch the full record (it has the IMDb id)

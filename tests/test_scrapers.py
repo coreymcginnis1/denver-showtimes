@@ -1,6 +1,8 @@
 from datetime import date
 
 from movie_scraper.scrapers.alamo import AlamoScraper
+from movie_scraper.scrapers.cu_ifs import CuIfsScraper
+from movie_scraper.scrapers.dairy import DairyScraper, clean_title
 from movie_scraper.scrapers.fandango import FandangoScraper
 from movie_scraper.scrapers.landmark import LandmarkScraper
 from movie_scraper.scrapers.sie_eventive import SieScraper
@@ -129,3 +131,52 @@ def test_sie_subtitles_and_print_tags():
     assert lang({"language": "German, English", "subtitle_language": "English"}) == "Subtitled"
     assert lang({"language": "English", "subtitle_language": "English"}) is None    # captions, not a sub
     assert lang({"language": "Japanese"}) is None                                    # no subtitle track listed
+
+
+def test_dairy_build(cfg, dairy_events):
+    scraper = DairyScraper(cfg, cfg.theaters["dairy"], key="dairy")
+    out = scraper.build(dairy_events["events"], date(2026, 11, 1), date(2027, 2, 7))
+    titles = {s.film_title for s in out}
+    assert "Queen at Sea" in titles and "The History of Concrete" in titles   # run dates stripped
+    assert "Nova '78" in titles                                                # "| Dec 29 – Jan 3"
+    assert not any("Cinema Club" in t or "Youth Advisory" in t for t in titles)   # talks, meetings
+    assert all(s.theater == "dairy" and s.start.tzinfo is not None and not s.all_day for s in out)
+    assert all((s.ticket_url or "").startswith("https://thedairy.org/event/") for s in out)
+    queen = next(s for s in out if s.film_title == "Queen at Sea")
+    assert queen.screen == "Boedecker Theater" and queen.start.hour == 14 and queen.end > queen.start
+    assert queen.poster and queen.poster.startswith("https://")
+    assert next(s for s in out if s.film_title.startswith("Friday Night Weird")).screen is None   # just "Dairy Arts Center"
+    # outside the window: nothing
+    assert scraper.build(dairy_events["events"], date(2025, 1, 1), date(2025, 1, 2)) == []
+
+
+def test_dairy_clean_title():
+    assert clean_title("Queen at Sea | Nov. 11 &#8211; 14") == "Queen at Sea"
+    assert clean_title("Once Upon a Time in Harlem | Nov. 25-29") == "Once Upon a Time in Harlem"
+    assert clean_title("Nova ’78 | Dec 29 – Jan 3") == "Nova '78"
+    assert clean_title("The History of Concrete November 19 – 23") == "The History of Concrete"
+    assert clean_title("Fjord | Nov. 19") == "Fjord"
+    assert clean_title("Ocean's Eleven") == "Ocean's Eleven"   # nothing to strip
+    assert clean_title("Mountains on Stage – Winter Edition 2026") == "Mountains on Stage – Winter Edition 2026"
+
+
+def test_cu_ifs_build(cfg, cu_ifs_events):
+    scraper = CuIfsScraper(cfg, cfg.theaters["cu_ifs"], key="cu_ifs")
+    out = scraper.build([x["event"] for x in cu_ifs_events["events"]], date(2026, 8, 15), date(2027, 2, 7))
+    titles = {s.film_title for s in out}
+    assert "IFS Volunteer Orientation" not in titles          # not a film
+    assert {"Them! on 35mm", "King Kong (1933)", "The Big Lebowski"} <= titles   # pipeline rules clean them later
+    kong = next(s for s in out if s.film_title == "King Kong (1933)")
+    assert kong.year == 1933                                    # the stated year guides the TMDB match
+    them = next(s for s in out if s.film_title == "Them! on 35mm")
+    assert them.screen == "Muenzinger Auditorium" and them.start.hour == 19 and them.start.minute == 30
+    assert them.ticket_url.startswith("https://www.internationalfilmseries.com/")
+    assert all(s.theater == "cu_ifs" and str(s.start.tzinfo) == "America/Denver" for s in out)
+
+
+def test_thirty_mile_theaters_configured(cfg):
+    for key, scraper in [("dairy", "dairy"), ("cu_ifs", "cu_ifs"), ("amc_orchard", "fandango"), ("amc_flatiron", "fandango"),
+                         ("amc_southlands", "fandango"), ("emagine_parker", "fandango"), ("amc_brighton", "fandango"),
+                         ("amc_castle_rock", "fandango"), ("cinemark_boulder", "fandango"), ("regal_longmont", "fandango")]:
+        t = cfg.theaters[key]
+        assert t.enabled and t.default_on is False and t.scraper == scraper and t.lat and t.lon

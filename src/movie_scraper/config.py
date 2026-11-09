@@ -38,15 +38,22 @@ DEFAULT_STRIP_PREFIXES = [
     r"Crunchyroll(?:\s+Anime\s+Nights?)?",   # "Crunchyroll Anime Nights: Dive In Wonderland"
     r"(?:\w+\s+)?Dose of Reality(?:\s+Screening)?",  # Sie doc series: "Big Dose of Reality Screening: X"
     r"[^:]{2,40}?\s+Presents",    # presenter labels: "Sight & Sound Presents: Joshua Live!"
+    r"Friday Night Weird",        # Dairy series: "Friday Night Weird: These People" -> "These People"
+    r"Cinema Classics(?:\s+with\s+[^:]{2,40}?)?",   # Dairy: "Cinema Classics with Jeffrey Kash: Modern Times"
+    r"Film Screening",            # CU calendar: "Film Screening: Little Amélie or the Character of Rain"
 ]
 
 DEFAULT_STRIP_SUFFIXES = [
     r"\s+w/\s+.*$",                # "Rocky Horror ... w/ ... Shadowcast"
+    r"\s+[-–—]\s+[^-–—]*\bin person!?$",     # guests: "Elevation - Anthony Mackie and George Nolfi in person!"
+    r"\s+[-–—]\s+Part of\s.+$",              # festivals: "Breathless - Part of the Albertine ... Festival"
+    r"\s+[-–—]\s+Free\s+(?:Show|Screening)$",   # "Whiplash - FREE SHOW"
+    r"\s+[-–—]\s+IFS Underground$",          # CU IFS late-night series: "Café Flesh - IFS Underground"
     r":\s+.*\bExperience$",        # "Sleepaway Camp: The Midnight Mass Experience"
     r"\s+Fan First Screenings?$",  # "Supergirl Fan First Screenings"
     r"\s*\(\d{4}\)$",              # trailing release year: "Moana (2026)" -> "Moana"
     r"\s*[-–—:]?\s*\(?\d{1,3}(?:st|nd|rd|th)\s+Anniversary\)?$",  # "85th Anniversary" / ": 10th Anniversary"
-    r"\s*[-–—:]?\s*(?:Director\W?s|Extended|Theatrical|Final|Uncut)\s+Cut$",  # "- Directors Cut" -> base film
+    r"\s*[-–—:]?\s*\(?(?:Director\W?s|Extended|Theatrical|Final|Uncut)\s+Cut\)?$",  # "- Directors Cut" -> base film
     r"\s*[:–—-]\s*[^:]*\bEdition$",   # "Backrooms: Everything Must Go Edition" -> "Backrooms"
     r"\s*[-–—]\s*(?:Promo|Preview|Sneak(?:\s+Preview)?)\s+Screenings?$",   # "... - Promo Screening"
     r"\s*[-–—]\s*Studio Ghibli Fest(?:ival)?(?:\s+\d{4})?$",  # "... - Studio Ghibli Fest 2026"
@@ -74,6 +81,7 @@ DEFAULT_DROP = [
     r"Apple TV Live",             # live sports broadcasts: "F1 on Apple TV Live in IMAX: ..."
     r"Memorial Screening",        # tribute events with no film named: "Classic - ... Memorial Screening"
     r"Mystery Movie",
+    r"^IFS Underground$",         # CU IFS late-night series with no film named
     r"Secret (?:Cinema|Movie)",   # mystery screenings, no film named (Harkins Secret Cinema, Cinemark Secret Movie Series)
     r"\bUFC \d",                  # live UFC pay-per-view broadcasts ("UFC 329: ..."), not films
     r"Members?\s+Only",           # members-only screenings (public can't attend) — drop them

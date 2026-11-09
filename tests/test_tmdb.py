@@ -155,3 +155,32 @@ def test_meta_from_keeps_top_billed_cast_and_genres():
     out = tmdb.meta_from(m)
     assert out["cast"] == ["Actor 0", "Actor 1", "Actor 2", "Actor 3", "Actor 4"]   # billing order, top five
     assert out["genres"] == ["Science Fiction", "Horror"]
+
+
+def test_override_zero_means_not_on_tmdb():
+    client = FakeTmdb(search_results={"Family Reunion": [r(292112, "Family Reunion", "1981-10-11")]},
+                      movies={292112: r(292112, "Family Reunion", "1981-10-11")})
+    assert lookup({"Family Reunion": None}, {}, {"Family Reunion": 0}, client, workers=1) == {}
+    assert client.calls == []                                  # not even searched
+
+
+def test_scoped_override_keeps_two_films_with_one_title_apart(monkeypatch, cfg):
+    cfg = cfg.model_copy(deep=True)
+    cfg.tmdb.overrides = {"Little Women @dairy": 39938, "Little Women": 331482}
+    found = {"Little Women": {"title": "Little Women", "tmdb_id": 331482, "release": "2019-12-25"},
+             "Little Women @dairy": {"title": "Little Women", "tmdb_id": 39938, "release": "1933-11-16"}}
+    monkeypatch.setattr(pipeline, "enrich", lambda hints, previous, overrides, enabled=True:
+                        {t: m for t, m in found.items() if t in hints})
+    shows = [_show("Little Women", "alamo_sloans"), _show("Little Women", "dairy", hour=19), _show("Sans Souci", "dairy")]
+    meta, ids = pipeline.standardize_titles(shows, {}, cfg)
+    assert [s.film_title for s in shows] == ["Little Women (2019)", "Little Women (1933)", "Sans Souci"]
+    assert ids["Little Women @dairy"] == 39938
+
+
+def test_scoped_title_falls_back_to_plain_when_unmatched(monkeypatch, cfg):
+    cfg = cfg.model_copy(deep=True)
+    cfg.tmdb.overrides = {"Little Women @dairy": 39938}
+    monkeypatch.setattr(pipeline, "enrich", lambda *a, **k: {})   # TMDB unreachable, nothing kept
+    shows = [_show("Little Women", "dairy")]
+    pipeline.standardize_titles(shows, {}, cfg)
+    assert shows[0].film_title == "Little Women"

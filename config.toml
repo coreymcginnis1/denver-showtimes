@@ -232,6 +232,108 @@ location = "AAEWN"
 lat = 39.5943
 lon = -104.8008
 
+# --- Out to 30 mi (Nov 2026): Boulder's two film venues and every chain theater between 15 and
+# 30 mi, Longmont's Regal right on the line. All start unchecked. ---
+
+[theaters.dairy]
+enabled = true
+default_on = false
+name = "Dairy Arts Center"
+color = "#6B8F71"
+scraper = "dairy"                 # thedairy.org's public events API (Boedecker + Gordon Gamm Theaters)
+lat = 40.0200
+lon = -105.2608
+
+[theaters.cu_ifs]
+enabled = true
+default_on = false
+name = "International Film Series (CU Boulder)"
+color = "#CFB87C"
+scraper = "cu_ifs"                # CU's public events calendar (Localist), IFS group
+location = "13934"
+lat = 40.0083
+lon = -105.2684
+
+[theaters.amc_orchard]
+enabled = true
+default_on = false
+name = "AMC Orchard 12"
+color = "#5C6FA8"
+scraper = "fandango"
+location = "AAUUN"
+lat = 39.958
+lon = -104.9937
+
+[theaters.amc_flatiron]
+enabled = true
+default_on = false
+name = "AMC Flatiron Crossing 14"
+color = "#4E62A0"
+scraper = "fandango"
+location = "AAQBW"
+lat = 39.9296
+lon = -105.1371
+
+[theaters.amc_southlands]
+enabled = true
+default_on = false
+name = "AMC Southlands 16"
+color = "#6A7FBF"
+scraper = "fandango"
+location = "AATXU"
+lat = 39.6067
+lon = -104.709
+
+[theaters.emagine_parker]
+enabled = true
+default_on = false
+name = "Emagine Parker"
+color = "#A35D8F"
+scraper = "fandango"
+location = "AAQPS"
+lat = 39.5202
+lon = -104.7726
+
+[theaters.amc_brighton]
+enabled = true
+default_on = false
+name = "AMC Showplace Brighton 12"
+color = "#3E5390"
+scraper = "fandango"
+location = "AATIQ"
+lat = 39.9826
+lon = -104.8234
+
+[theaters.amc_castle_rock]
+enabled = true
+default_on = false
+name = "AMC Castle Rock 12"
+color = "#7286C4"
+scraper = "fandango"
+location = "AATTI"
+lat = 39.4031
+lon = -104.8797
+
+[theaters.cinemark_boulder]
+enabled = true
+default_on = false
+name = "Cinemark Century Boulder"
+color = "#C24C5C"
+scraper = "fandango"
+location = "AAUNI"
+lat = 40.0166
+lon = -105.2561
+
+[theaters.regal_longmont]
+enabled = true
+default_on = false
+name = "Regal Village at the Peaks"
+color = "#4F9A6D"
+scraper = "fandango"
+location = "AAHTU"
+lat = 40.1481
+lon = -105.1281
+
 # Title standardization: strip repertory/event series labels from the START of a
 # film title (the label plus its ":" / "–" / "-" separator), so e.g.
 # "Bleak Week: Gummo" -> "Gummo" and "Fan Faves: Michael" -> "Michael".
@@ -249,16 +351,23 @@ strip_prefixes = [
   'Crunchyroll(?:\s+Anime\s+Nights?)?',   # "Crunchyroll Anime Nights: Dive In Wonderland"
   '(?:\w+\s+)?Dose of Reality(?:\s+Screening)?',  # Sie doc series: "Big Dose of Reality Screening: X"
   '[^:]{2,40}?\s+Presents',   # presenter labels: "Sight & Sound Presents: Joshua Live!"
+  'Friday Night Weird',        # Dairy series: "Friday Night Weird: These People" -> "These People"
+  'Cinema Classics(?:\s+with\s+[^:]{2,40}?)?',   # Dairy: "Cinema Classics with Jeffrey Kash: Modern Times"
+  'Film Screening',            # CU calendar: "Film Screening: Little Amélie or the Character of Rain"
 ]
 # Event descriptors stripped from the END of a title (label + separator).
 # e.g. "Sleepaway Camp: The Midnight Mass Experience" -> "Sleepaway Camp".
 strip_suffixes = [
   '\s+w/\s+.*$',
+  '\s+[-–—]\s+[^-–—]*\bin person!?$',     # guests: "Elevation - Anthony Mackie and George Nolfi in person!"
+  '\s+[-–—]\s+Part of\s.+$',              # festivals: "Breathless - Part of the Albertine ... Festival"
+  '\s+[-–—]\s+Free\s+(?:Show|Screening)$',   # "Whiplash - FREE SHOW"
+  '\s+[-–—]\s+IFS Underground$',          # CU IFS late-night series: "Café Flesh - IFS Underground"
   ':\s+.*\bExperience$',
   '\s+Fan First Screenings?$',
   '\s*\(\d{4}\)$',                                       # release year: "Moana (2026)" -> "Moana"
   '\s*[-–—:]?\s*\(?\d{1,3}(?:st|nd|rd|th)\s+Anniversary\)?$',  # "85th Anniversary" / ": 10th Anniversary"
-  '\s*[-–—:]?\s*(?:Director\W?s|Extended|Theatrical|Final|Uncut)\s+Cut$',  # "- Directors Cut" -> base film
+  '\s*[-–—:]?\s*\(?(?:Director\W?s|Extended|Theatrical|Final|Uncut)\s+Cut\)?$',  # "- Directors Cut" / "(Director's Cut)" -> base film
   '\s*[:–—-]\s*[^:]*\bEdition$',   # "Backrooms: Everything Must Go Edition" -> "Backrooms"
   '\s*[-–—]\s*(?:Promo|Preview|Sneak(?:\s+Preview)?)\s+Screenings?$',   # "... - Promo Screening"
   '\s*[-–—]\s*Studio Ghibli Fest(?:ival)?(?:\s+\d{4})?$',  # "... - Studio Ghibli Fest 2026"
@@ -286,6 +395,7 @@ drop = [
   'Apple TV Live',            # live sports broadcasts: "F1 on Apple TV Live in IMAX: ..."
   'Memorial Screening',       # tribute events with no film named
   'Mystery Movie',            # surprise screenings, no film named ("REGAL: Monday Mystery Movie")
+  '^IFS Underground$',        # CU IFS late-night series with no film named
   'Secret (?:Cinema|Movie)',  # mystery screenings, no film named (Harkins Secret Cinema, Cinemark Secret Movie Series)
   '\bUFC \d',                 # live UFC pay-per-view broadcasts ("UFC 329: ..."), not films
   'Members?\s+Only',          # members-only screenings (public can't attend) — drop them
@@ -315,6 +425,12 @@ enabled = true
 "Ramayana" = 656908                 # 2026 release; a 1976 film has the exact title
 "Dune: Part One" = 438631           # TMDB lists it as just "Dune"
 "Friday The 13th Part 4" = 9730     # "Friday the 13th: The Final Chapter"
+"The Scout" = 1403519               # 2026 location-scout film (Alamo, Dairy); a 1990 TV film has the title
+"The Last Dive" = 1465979           # 2025 manta-ray documentary (Dairy); a 1992 film has the title
+"Day of the Beast" = 10722          # Álex de la Iglesia's "The Day of the Beast" (1995), Dairy
+"Little Women @dairy" = 39938       # the Dairy's is the 1933 Hepburn one; the Alamos show 2019's
+# 0 = not on TMDB: an event that shares a film's name ("Title @theater" scopes any of these).
+"Family Reunion" = 0                # Dairy: a night of Colorado filmmakers' short films
 
 # Ratings (Metacritic via OMDb, key OMDB_API_KEY) are switched off: OMDb leaves most current
 # releases unscored for weeks, so the site has no ratings or Top rated sort for now. Set

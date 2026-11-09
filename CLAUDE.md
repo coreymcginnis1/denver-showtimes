@@ -222,8 +222,10 @@ redesign directions" (A listings + C program won; B marquee rejected).
   with miles in one row that scrolls sideways: no scrollbar, the side with more fades and gets a ‹ / ›
   arrow (no counts, no theater colors). **Phones** fold theaters *and* Show/Sort into one line, "At Sie
   and Mayan, all films, newest first · Change", with search under it; opened, the checklist runs top
-  to bottom with the 5 nearest plus any checked (`TK_SHOWN`, picked on open / zip / distance, not per
-  tap) and "Show all 22 theaters" / "Show fewer theaters", so Show / Sort stay close. Hover colors
+  to bottom with the 5 nearest plus checked ones further out when there are at most 3 (`TK_SHOWN`,
+  `TK_CHECKED`; picked on open / zip / distance / collapse, not per tap) and "Show all 22 theaters" /
+  "Show fewer theaters", so Show / Sort stay close. Expanded, "Show fewer theaters" sticks to the
+  bottom of the screen until the list ends. Hover colors
   only apply under `(hover: hover)` (a tap leaves :hover stuck on phones). The masthead is one line and
   the date line is dropped (the brick day says it), so posters start in the first screen. Zip default
   **80218**, **never saved**; straight-line distance from Census zip centroids in `zips.json`. Theater

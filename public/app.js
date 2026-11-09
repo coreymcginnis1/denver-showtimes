@@ -151,6 +151,7 @@
   var RUN_GAP_DAYS = 3;     // a new release off today but back within this many days is still "Now playing"
   var SPAN_SHOWN = 3;       // All dates / search: theaters listed before "Show all N theaters"
   var TK_SHOWN = 5;         // phones: theaters in the opened checklist before "Show all 22 theaters"
+  var TK_CHECKED = 3;       // ... plus up to this many checked theaters further out
   var CLAMP_PX = 210;       // a card's times stop here (styles.css .venues.clamp) ...
   var CLAMP_SLACK = 90;     // ... but only when that hides this much more: never a button for a line or two
   var WINDOW_DAYS = 14;     // the day strip: today + 14 (Sie, Landmark and Alamo list up to ~90 days out)
@@ -279,12 +280,16 @@
     $("tPrev").hidden = !left; $("tNext").hidden = !right;
   }
 
-  // Phones list the theaters top to bottom: the nearest few and any that are checked, the rest
+  // Phones list the theaters top to bottom: the nearest few and a few checked ones, the rest
   // behind "Show all 22 theaters" so Show / Sort aren't a long scroll away. Picked when the list
   // opens or the zip / distance changes, not on each tap, so a row never vanishes as it's unchecked.
   function pickShownTheaters() {
     var near = theaters.slice().sort(function (a, b) { return (miles(a) || 0) - (miles(b) || 0); });
-    state.tShown = new Set(near.filter(function (t, n) { return n < TK_SHOWN || state.theaters.has(t.key); }).map(function (t) { return t.key; }));
+    // Checked theaters further out stay in the short list too, but only a few ("any distance" checks
+    // all 32, which kept the list from ever getting shorter).
+    var far = near.filter(function (t, n) { return n >= TK_SHOWN && state.theaters.has(t.key); });
+    var keep = near.slice(0, TK_SHOWN).concat(far.length <= TK_CHECKED ? far : []);
+    state.tShown = new Set(keep.map(function (t) { return t.key; }));
   }
 
   function renderTheaters() {
@@ -298,7 +303,7 @@
         (mi != null ? '<span class="mi">' + mi.toFixed(1) + " mi</span>" : "") + "</span></button>";
     }).join("");
     $("tpanel").classList.toggle("all-th", state.tAll);
-    var more = $("tMore"); more.hidden = !hidden;
+    var more = $("tMore"); more.hidden = !hidden && !state.tAll;
     more.textContent = state.tAll ? "Show fewer theaters" : "Show all " + near.length + " theaters"; more.setAttribute("aria-expanded", state.tAll);
     document.querySelectorAll("[data-r]").forEach(function (x) { x.setAttribute("aria-pressed", String(x.dataset.r === String(state.radius))); });
     var on = near.filter(function (t) { return state.theaters.has(t.key); }).map(function (t) { return TINY[t.key] || t.name; });

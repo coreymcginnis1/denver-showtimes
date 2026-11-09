@@ -263,6 +263,10 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   .tk .mi { margin: 0; }
   .tpanel:not(.all-th) .tk.extra { display: none; }
   .tmore { display: block; min-height: 44px; margin: 0; padding: 0; border-top: 1px solid var(--hair); width: 100%; text-align: left; }
+  /* Expanded, the list runs ~30 rows: "Show fewer theaters" rides the bottom of the screen until the
+     list ends, so it's never a long scroll away. */
+  .tpanel.all-th .tmore { position: sticky; bottom: 0; z-index: 2; background: var(--paper);
+    padding-bottom: env(safe-area-inset-bottom, 0px); }
   .searchbox { width: 100%; }
   .search { flex: 1; width: auto; }
   .sort + .sort { padding-left: 0; border-left: 0; }

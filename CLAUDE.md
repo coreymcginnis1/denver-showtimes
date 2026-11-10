@@ -241,8 +241,9 @@ redesign directions" (A listings + C program won; B marquee rejected).
 
 - **Controls:** masthead "Denver Movie Showtimes" with the chosen date under it · sticky day strip
   ("All dates", then the weekday, never "Today", "Nov" over a big "10" over "Tue", like a tear-off calendar, every day the same width; the selected day is a brick block) · **Theaters**:
-  "Theaters near [zip] within 1 mi / 3 mi / 5 mi / any distance" (no 10 mi on purpose: past
-  5 mi, readers pick a specific theater by name) and a checklist of all 32 nearest first
+  "Theaters near [zip] within 1 mi / 3 mi / 5 mi / any distance / clear" (no 10 mi on purpose: past
+  5 mi, readers pick a specific theater by name; "clear" unchecks them all so picking one far theater
+  isn't 31 untaps, and an empty pick isn't kept: a reload starts from the defaults) and a checklist of all 32 nearest first
   with miles in one row that scrolls sideways: no scrollbar, the side with more fades and gets a ‹ / ›
   arrow (no counts, no theater colors). **Phones** fold theaters *and* Show/Sort into one line, "At Sie
   and Mayan, all films, newest first · Change", with search under it; opened, the checklist runs top

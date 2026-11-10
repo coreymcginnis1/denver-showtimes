@@ -733,6 +733,11 @@
       if (b.dataset.r) {
         state.radius = b.dataset.r; applyRadius(); pickShownTheaters(); saveTheaters(); renderAll(); return;
       }
+      // "clear" unchecks every theater so a reader can pick one or two without unchecking the rest.
+      // An empty pick isn't kept: a reload starts from the default theaters again.
+      if (b.id === "tClear") {
+        state.theaters = new Set(); state.radius = null; pickShownTheaters(); saveTheaters(); renderAll(); return;
+      }
       if (b.dataset.kind) {
         state.kind = b.dataset.kind;
         document.querySelectorAll("[data-kind]").forEach(function (x) { x.setAttribute("aria-pressed", x === b); });

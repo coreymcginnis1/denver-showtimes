@@ -71,6 +71,7 @@ DEFAULT_STRIP_SUFFIXES = [
     r"\s*[-–—:]?\s+Encore$",      # rebroadcasts: "The Metropolitan Opera: Carmen Encore" -> "... Carmen"
     r"\s*\((?:\d{4}\s+)?Encore\)$",  # "... Carmen (2026 Encore)" -> "... Carmen"
     r"\s*\((?:English|Spanish|Hindi|Telugu|Tamil|Malayalam|Kannada|Punjabi|Japanese|Korean)(?:\s+(?:\d{4}|Dub(?:bed)?|Sub(?:titled)?|Version))?\)$",  # language versions: "Ramayana (English 2026)"
+    r"\s*\((?:Subtitled|Dubbed)\)$",  # "Tokyo Godfathers (Subtitled)": the tag becomes the showing's language
 ]
 
 # Titles matching these are dropped entirely (not a specific movie).
@@ -127,7 +128,6 @@ class Config(BaseModel):
     # everything up to this many days out; the chains (Fandango, one request a day) stop at days_ahead.
     ahead_days: int = 90
     output: str = "public/data.json"
-    default_runtime_minutes: int = 120
     theaters: dict[str, TheaterCfg]
     filters: Filters = Field(default_factory=Filters)
     titles: TitlesCfg = Field(default_factory=TitlesCfg)

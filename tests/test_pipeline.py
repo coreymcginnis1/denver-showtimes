@@ -12,7 +12,7 @@ from movie_scraper.config import (
 from movie_scraper.models import Showtime
 from movie_scraper.pipeline import (
     _build_feed, _passes, diff_new_titles, is_non_film, normalize_title, render_summary, run,
-    title_format,
+    title_format, title_lang,
 )
 
 DEN = ZoneInfo("America/Denver")
@@ -161,6 +161,20 @@ def test_title_format_extraction():
     assert title_format("Interstellar on 35mm") == "35mm"
     assert title_format("Oppenheimer on 70mm") == "70mm"
     assert title_format("Interstellar") is None
+
+
+def test_title_lang_and_bare_language_tags():
+    assert title_lang("Tokyo Godfathers (Subtitled)") == "Subtitled"
+    assert title_lang("Tokyo Godfathers (Dubbed)") == "Dubbed"
+    assert title_lang("Pushpa 2 (Hindi Dubbed)") == "Hindi dub"
+    assert title_lang("Ramayana (English 2026)") is None
+    assert title_lang("Tokyo Godfathers") is None
+    for t in ("Tokyo Godfathers (Subtitled)", "Tokyo Godfathers (Dubbed)"):
+        assert normalize_title(t, DEFAULT_STRIP_PREFIXES, DEFAULT_STRIP_SUFFIXES) == "Tokyo Godfathers"
+
+
+def test_rocky_horror_override():
+    assert fresh_cfg().tmdb.overrides["Rocky Horror Picture Show"] == 36685
 
 
 def test_normalize_title_recases_allcaps_words():
@@ -373,6 +387,18 @@ def test_healthy_run_replaces_everything(flaky_site):
     feed = run(str(config))
     assert feed["stale_theaters"] == []
     assert {e["title"] for e in feed["events"]} == {"Fresh Film", "New Flaky Film"}
+
+
+def test_end_only_from_a_runtime_and_language_from_the_title(flaky_site):
+    """No runtime, no end: the page shows only the start rather than a guessed end time."""
+    config, state = flaky_site
+    timed = st("Timed", 18, "flaky"); timed.runtime_minutes = 95
+    state["fetch"] = lambda: [timed, st("Tokyo Godfathers (Subtitled)", 20, "flaky")]
+    feed = run(str(config))
+    ev = {e["title"]: e for e in feed["events"]}
+    assert "end" not in ev["Fresh Film"] and "end" not in ev["Tokyo Godfathers"]
+    assert ev["Timed"]["end"].startswith("2026-06-19T19:35")
+    assert ev["Tokyo Godfathers"]["extendedProps"]["lang"] == "Subtitled"
 
 
 def test_cli_publishes_but_exits_nonzero_when_a_theater_fails(flaky_site, tmp_path):

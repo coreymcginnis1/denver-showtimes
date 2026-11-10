@@ -143,7 +143,9 @@ Prefer **general** patterns over one-offs.
   (with Jeffrey Kash), CU's "Film Screening:".
 - `strip_suffixes` — release year `(2026)`, `Nth Anniversary` (paren/colon forms), `… Cut`,
   `… Edition`, `Re-release`/`Reissue`/`(RE26)`, `Encore`/`(2026 Encore)`, language versions
-  (`(English 2026)`, `(Hindi Dubbed)`), `on 35mm` (gauge kept as the format), `(dir. X)`, Sensory
+  (`(English 2026)`, `(Hindi Dubbed)`, a bare `(Subtitled)` / `(Dubbed)`; `title_lang()` first moves
+  the tag to the showing's language, so "Tokyo Godfathers (Subtitled)" and "(Dubbed)" merge into one
+  film with Sub / Dub marks), `on 35mm` (gauge kept as the format), `(dir. X)`, Sensory
   Friendly, sponsor tags, Fan Event / Early Access / Promo / Preview screenings, `- Super Ticket`
   (ticket bundles), `w/ …`, CU's `- Part of <festival>`, `- FREE SHOW`, `- <guests> in person!`,
   `- IFS Underground`; `(Director's Cut)` in parentheses too; restorations (`4K Restoration`,
@@ -316,8 +318,9 @@ redesign directions" (A listings + C program won; B marquee rejected).
   other theaters" (e.g. Fjord, only at AMC Westminster).
 - **Tap a time** → sheet with Get tickets and one "Add to calendar" button that opens Google, Outlook,
   Apple/.ics (ICS uses TZID America/Denver). The sheet's "3:20 to 5:12 pm" end time comes from the
-  theater's end or TMDB's runtime; with neither it shows only the start, and the calendar entry
-  alone assumes 2 hours (Corey, Nov 2026: no guessed end time on the page). Fandango showings read "Get tickets on Fandango" (straight to
+  theater's end or the listing's runtime (Fandango, Landmark, Sie); with neither, `data.json` has no
+  `end`, the sheet shows only the start, and the calendar entry alone assumes 2 hours (Corey, Nov
+  2026: no guessed end time on the page; the scraper used to fill in 2 hours itself). Fandango showings read "Get tickets on Fandango" (straight to
   the seats) with "Or buy from AMC directly" under it: the theater's own page (`site` in config.toml;
   skips Fandango's fee and earns the chain's rewards, but the reader picks the time again, as Fandango's
   data has no chain showtime ids). AMC and Regal block automated checks, so their pages came from search

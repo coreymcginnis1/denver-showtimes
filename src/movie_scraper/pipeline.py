@@ -10,6 +10,7 @@ from pathlib import Path
 from zoneinfo import ZoneInfo
 
 from .config import Config, load_config
+from . import formats
 from .models import Showtime
 from .scrapers.alamo import AlamoScraper
 from .scrapers.fandango import FandangoScraper
@@ -196,6 +197,19 @@ def title_format(title: str) -> str | None:
     return (f"{m.group(1)}mm" if m.group(1) else "VistaVision") if m else None
 
 
+_TITLE_LANG_RE = re.compile(r"\(((?:[A-Za-z]+\s+)?(?:Dub(?:bed)?|Sub(?:titled)?))\)\s*$", re.I)
+
+
+def title_lang(title: str) -> str | None:
+    """Language version in a title's closing tag: 'Tokyo Godfathers (Subtitled)' -> 'Subtitled',
+    '(Dubbed)' -> 'Dubbed', '(Hindi Dubbed)' -> 'Hindi dub'. Captured before cleanup strips the tag."""
+    m = _TITLE_LANG_RE.search(title or "")
+    if not m:
+        return None
+    tag = re.sub(r"(?i)\bdub$", "Dubbed", re.sub(r"(?i)\bsub$", "Subtitled", m.group(1)))
+    return formats.language([tag])
+
+
 def run(config_path: str = "config.toml", only: set[str] | None = None) -> dict:
     cfg = load_config(config_path)
     tz = ZoneInfo(cfg.timezone)
@@ -244,6 +258,9 @@ def run(config_path: str = "config.toml", only: set[str] | None = None) -> dict:
         gauge = title_format(s.film_title)   # capture "35mm"/"70mm" before normalize strips it
         if gauge and not s.fmt:
             s.fmt = gauge
+        lang = title_lang(s.film_title)      # likewise "(Subtitled)" / "(Dubbed)"
+        if lang and not s.lang:
+            s.lang = lang
         raw = s.film_title
         s.film_title = normalize_title(s.film_title, tcfg.strip_prefixes, tcfg.strip_suffixes)
         if revival_tagged(raw, s.film_title):
@@ -253,9 +270,11 @@ def run(config_path: str = "config.toml", only: set[str] | None = None) -> dict:
     merge_case_variants(normalized)
 
     shows = [s for s in normalized if _passes(s, cfg)]
-    for s in shows:  # give timed events an end so add-to-calendar has a duration
-        if not s.all_day and s.end is None:
-            s.end = s.start + timedelta(minutes=s.runtime_minutes or cfg.default_runtime_minutes)
+    # An end from the listing's runtime when the theater gave none. No runtime, no end: the page then
+    # shows only the start, and its calendar entry alone assumes 2 hours (no guessed end on the page).
+    for s in shows:
+        if not s.all_day and s.end is None and s.runtime_minutes:
+            s.end = s.start + timedelta(minutes=s.runtime_minutes)
 
     previous = load_feed(cfg.output)
     film_meta, tmdb_ids = standardize_titles(shows, previous, cfg)

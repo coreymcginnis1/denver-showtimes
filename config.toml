@@ -5,7 +5,6 @@ timezone = "America/Denver"
 days_ahead = 14                  # rolling window: today .. today + days_ahead
 ahead_days = 90                  # Sie, Landmark and Alamo: everything this far out (cheap for them)
 output = "public/data.json"      # where the frontend reads from
-default_runtime_minutes = 120    # fallback event length when a film's runtime is unknown
 
 [theaters.sie]
 enabled = true
@@ -411,6 +410,7 @@ strip_suffixes = [
   '\s*[-–—:]?\s+Encore$',       # rebroadcasts: "The Metropolitan Opera: Carmen Encore" -> "... Carmen"
   '\s*\((?:\d{4}\s+)?Encore\)$',
   '\s*\((?:English|Spanish|Hindi|Telugu|Tamil|Malayalam|Kannada|Punjabi|Japanese|Korean)(?:\s+(?:\d{4}|Dub(?:bed)?|Sub(?:titled)?|Version))?\)$',  # language versions: "Ramayana (English 2026)"  # "... Carmen (2026 Encore)" -> "... Carmen"
+  '\s*\((?:Subtitled|Dubbed)\)$',   # "Tokyo Godfathers (Subtitled)": the tag becomes the showing's language
 ]
 # Titles matching any of these are dropped entirely — events that aren't a specific
 # movie (mystery screenings, watch parties, etc.). Case-insensitive regex.
@@ -454,6 +454,7 @@ enabled = true
 "Ramayana" = 656908                 # 2026 release; a 1976 film has the exact title
 "Dune: Part One" = 438631           # TMDB lists it as just "Dune"
 "Friday The 13th Part 4" = 9730     # "Friday the 13th: The Final Chapter"
+"Rocky Horror Picture Show" = 36685  # the Sie leaves off TMDB's "The"
 "The Scout" = 1403519               # 2026 location-scout film (Alamo, Dairy); a 1990 TV film has the title
 "The Last Dive" = 1465979           # 2025 manta-ray documentary (Dairy); a 1992 film has the title
 "Day of the Beast" = 10722          # Álex de la Iglesia's "The Day of the Beast" (1995), Dairy

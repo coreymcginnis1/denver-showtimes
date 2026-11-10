@@ -48,7 +48,7 @@
   // premium screen is "PLF"; "Subtitled" / "Dubbed". A theater whose showings all share one goes on its
   // line; mixed ones get a short red mark per time (anything not listed uses its own name).
   var FMT_TAG = { "IMAX": "IMAX", "IMAX 3D": "IMAX 3D", "IMAX 70mm": "IMAX 70", "Dolby": "Dolby", "Dolby 3D": "Dolby 3D",
-    "3D": "3D", "16mm": "16mm", "35mm": "35mm", "70mm": "70mm", "VistaVision": "VV", "PLF": "PLF", "Premium Format": "PLF",
+    "3D": "3D", "16mm": "16mm", "35mm": "35mm", "70mm": "70mm", "PLF": "PLF", "Premium Format": "PLF",
     "Subtitled": "Sub", "Dubbed": "Dub" };
   function fmtName(f) { return f === "Premium Format" ? "PLF" : f; }   // older data said "Premium Format"
   function tagOf(s) { return [s.fmt ? fmtName(s.fmt) : "", s.lang || ""].filter(Boolean).join(", "); }   // "IMAX, Subtitled"
@@ -164,7 +164,7 @@
   var CLAMP_PX = 210;       // a card's times stop here (styles.css .venues.clamp) ...
   var CLAMP_SLACK = 90;     // ... but only when that hides this much more: never a button for a line or two
   var WINDOW_DAYS = 14;     // the day strip: today + 14 (Sie, Landmark and Alamo list up to ~90 days out)
-  var FURTHER_NOTE = "Sie, Landmark, Alamo, Dairy and CU Film Series only.";
+  var FURTHER_NOTE = "Select theaters only.";
   function isRepertory(f) {
     var orig = f.rel || (f.year ? f.year + "-07-01" : null);
     return !!(orig && f.opened && dayDiff(orig, f.opened) > REPERTORY_DAYS);
@@ -454,9 +454,11 @@
     var extraIds = Array.from(elsewhere.keys());
 
     if (!ids.length && !extraIds.length) {
-      $("grid").innerHTML = '<p class="empty">' + (state.kind === "film" && !state.q && state.theaters.size
-        ? "Nothing on film at these theaters" + (all ? ". Try more theaters." : ' on this day. Try <button type="button" class="inline" data-d="' + ALL + '">All dates</button> or more theaters.')
-        : state.theaters.size ? "Nothing matches" + (all ? "" : " on this day") + ". Try " + (all ? "" : "another day, ") + "more theaters, or clear the search."
+      // One message for every Show choice (On film included): "Nothing matches on this day. Try another
+      // day or more theaters." Clearing the search is only suggested when there is one.
+      var tries = (all ? [] : ["another day"]).concat("more theaters");
+      $("grid").innerHTML = '<p class="empty">' + (state.theaters.size
+        ? "Nothing matches" + (all ? "" : " on this day") + ". Try " + (state.q ? tries.join(", ") + ", or clear the search." : tries.join(" or ") + ".")
         : "Pick at least one theater above to see films.") + "</p>";
       return;
     }
@@ -525,10 +527,10 @@
         ["Special events", function (f) { return f.event; }]].map(function (g) {
         var part = ids.filter(function (i) { return g[1](films[i]); });
         return part.length ? '<h3 class="group">' + g[0] + '</h3><div class="grid">' + part.map(function (i) { return cardHTML(i); }).join("") + "</div>" : "";
-      }).join("") || '<p class="empty">No match at these theaters on this day.</p>';
+      }).join("") || '<p class="empty">Nothing matches at these theaters on this day.</p>';
     } else {
       $("grid").innerHTML = ids.length ? '<div class="grid">' + ids.map(function (i) { return cardHTML(i); }).join("") + "</div>"
-        : '<p class="empty">' + (state.kind === "film" ? "Nothing on film" : "No match") + ' at these theaters' + (all ? "" : " on this day") + ".</p>";
+        : '<p class="empty">Nothing matches at these theaters on this day.</p>';
     }
     [[otherDates, "Playing on other dates"], [otherTheaters, "Playing at other theaters"]].forEach(function (g) {
       if (!g[0].size) return;
@@ -607,7 +609,7 @@
   function stamp(d, hm) { return d.replace(/-/g, "") + "T" + hm.replace(":", "") + "00"; }
   function endOf(s) {
     if (s.end) return { d: s.end.slice(0, 10), hm: s.end.slice(11, 16) };
-    var o = new Date(s.d + "T" + s.hm + ":00"); o.setMinutes(o.getMinutes() + (films[s.f].runtime || 120));
+    var o = new Date(s.d + "T" + s.hm + ":00"); o.setMinutes(o.getMinutes() + (films[s.f].runtime || 120));   // 2 h when unknown (calendar only)
     return { d: o.getFullYear() + "-" + pad(o.getMonth() + 1) + "-" + pad(o.getDate()), hm: pad(o.getHours()) + ":" + pad(o.getMinutes()) };
   }
   function slug(t) { return t.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "") || "showtime"; }
@@ -650,12 +652,15 @@
     var s = shows[i], f = films[s.f], t = theaterOf(s.th) || { name: s.th };
     var where = [t.name, s.scr, tagOf(s)].filter(Boolean).join(", "), links = s.hm ? calendarLinks(s) : null;
     icsUrl = links && links.ics;
+    // No runtime from the theater or TMDB: the calendar entry still assumes 2 hours (it needs an
+    // end), but the sheet shows only the start rather than a guessed end time.
+    var guessed = !s.end && !f.runtime;
     var when = dateObj(s.d).toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" }) +
-      (s.hm ? ", " + timeHTML(s.hm) + " to " + timeHTML(links.end.hm) : ", times vary");
+      (s.hm ? ", " + timeHTML(s.hm) + (guessed ? "" : " to " + timeHTML(links.end.hm)) : ", times vary");
     $("backdrop").innerHTML = '<div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetT">' +
       (f.posters.length ? posterHTML(s.f, "sheet-poster") : '<div class="ph"></div>') +
       '<div><h3 id="sheetT">' + esc(f.t) + '</h3><div class="when">' + when + "</div>" +
-      '<div class="where">' + esc(where) + (s.hm && !s.end && !f.runtime ? ", runtime unknown, 2h assumed" : "") + "</div></div>" +
+      '<div class="where">' + esc(where) + "</div></div>" +
       '<div class="actions">' + (s.url ? '<a class="btn primary" href="' + esc(s.url) + '" target="_blank" rel="noopener">Get tickets' + (isFandango(s.url) ? " on Fandango" : "") + "</a>" : "") +
       (s.url && isFandango(s.url) && t.site ? '<a class="alt" href="' + esc(t.site) + '" target="_blank" rel="noopener">Or buy from ' + esc(chainOf(t.site)) + " directly</a>" : "") +
       // One "Add to calendar" button; its three choices open under it, so tickets stay the big button.
@@ -727,6 +732,11 @@
       }
       if (b.dataset.r) {
         state.radius = b.dataset.r; applyRadius(); pickShownTheaters(); saveTheaters(); renderAll(); return;
+      }
+      // "clear" unchecks every theater so a reader can pick one or two without unchecking the rest.
+      // An empty pick isn't kept: a reload starts from the default theaters again.
+      if (b.id === "tClear") {
+        state.theaters = new Set(); state.radius = null; pickShownTheaters(); saveTheaters(); renderAll(); return;
       }
       if (b.dataset.kind) {
         state.kind = b.dataset.kind;

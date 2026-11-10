@@ -609,7 +609,7 @@
   function stamp(d, hm) { return d.replace(/-/g, "") + "T" + hm.replace(":", "") + "00"; }
   function endOf(s) {
     if (s.end) return { d: s.end.slice(0, 10), hm: s.end.slice(11, 16) };
-    var o = new Date(s.d + "T" + s.hm + ":00"); o.setMinutes(o.getMinutes() + (films[s.f].runtime || 120));
+    var o = new Date(s.d + "T" + s.hm + ":00"); o.setMinutes(o.getMinutes() + (films[s.f].runtime || 120));   // 2 h when unknown (calendar only)
     return { d: o.getFullYear() + "-" + pad(o.getMonth() + 1) + "-" + pad(o.getDate()), hm: pad(o.getHours()) + ":" + pad(o.getMinutes()) };
   }
   function slug(t) { return t.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "") || "showtime"; }
@@ -652,12 +652,15 @@
     var s = shows[i], f = films[s.f], t = theaterOf(s.th) || { name: s.th };
     var where = [t.name, s.scr, tagOf(s)].filter(Boolean).join(", "), links = s.hm ? calendarLinks(s) : null;
     icsUrl = links && links.ics;
+    // No runtime from the theater or TMDB: the calendar entry still assumes 2 hours (it needs an
+    // end), but the sheet shows only the start rather than a guessed end time.
+    var guessed = !s.end && !f.runtime;
     var when = dateObj(s.d).toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" }) +
-      (s.hm ? ", " + timeHTML(s.hm) + " to " + timeHTML(links.end.hm) : ", times vary");
+      (s.hm ? ", " + timeHTML(s.hm) + (guessed ? "" : " to " + timeHTML(links.end.hm)) : ", times vary");
     $("backdrop").innerHTML = '<div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetT">' +
       (f.posters.length ? posterHTML(s.f, "sheet-poster") : '<div class="ph"></div>') +
       '<div><h3 id="sheetT">' + esc(f.t) + '</h3><div class="when">' + when + "</div>" +
-      '<div class="where">' + esc(where) + (s.hm && !s.end && !f.runtime ? ", runtime unknown, 2h assumed" : "") + "</div></div>" +
+      '<div class="where">' + esc(where) + "</div></div>" +
       '<div class="actions">' + (s.url ? '<a class="btn primary" href="' + esc(s.url) + '" target="_blank" rel="noopener">Get tickets' + (isFandango(s.url) ? " on Fandango" : "") + "</a>" : "") +
       (s.url && isFandango(s.url) && t.site ? '<a class="alt" href="' + esc(t.site) + '" target="_blank" rel="noopener">Or buy from ' + esc(chainOf(t.site)) + " directly</a>" : "") +
       // One "Add to calendar" button; its three choices open under it, so tickets stay the big button.

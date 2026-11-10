@@ -314,7 +314,9 @@ redesign directions" (A listings + C program won; B marquee rejected).
   selected day and theaters, split into "Playing on other dates" (your theaters) and "Playing at
   other theaters" (e.g. Fjord, only at AMC Westminster).
 - **Tap a time** → sheet with Get tickets and one "Add to calendar" button that opens Google, Outlook,
-  Apple/.ics (ICS uses TZID America/Denver). Fandango showings read "Get tickets on Fandango" (straight to
+  Apple/.ics (ICS uses TZID America/Denver). The sheet's "3:20 to 5:12 pm" end time comes from the
+  theater's end or TMDB's runtime; with neither it shows only the start, and the calendar entry
+  alone assumes 2 hours (Corey, Nov 2026: no guessed end time on the page). Fandango showings read "Get tickets on Fandango" (straight to
   the seats) with "Or buy from AMC directly" under it: the theater's own page (`site` in config.toml;
   skips Fandango's fee and earns the chain's rewards, but the reader picks the time again, as Fandango's
   data has no chain showtime ids). AMC and Regal block automated checks, so their pages came from search

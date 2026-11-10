@@ -48,7 +48,7 @@
   // premium screen is "PLF"; "Subtitled" / "Dubbed". A theater whose showings all share one goes on its
   // line; mixed ones get a short red mark per time (anything not listed uses its own name).
   var FMT_TAG = { "IMAX": "IMAX", "IMAX 3D": "IMAX 3D", "IMAX 70mm": "IMAX 70", "Dolby": "Dolby", "Dolby 3D": "Dolby 3D",
-    "3D": "3D", "16mm": "16mm", "35mm": "35mm", "70mm": "70mm", "VistaVision": "VV", "PLF": "PLF", "Premium Format": "PLF",
+    "3D": "3D", "16mm": "16mm", "35mm": "35mm", "70mm": "70mm", "PLF": "PLF", "Premium Format": "PLF",
     "Subtitled": "Sub", "Dubbed": "Dub" };
   function fmtName(f) { return f === "Premium Format" ? "PLF" : f; }   // older data said "Premium Format"
   function tagOf(s) { return [s.fmt ? fmtName(s.fmt) : "", s.lang || ""].filter(Boolean).join(", "); }   // "IMAX, Subtitled"
@@ -164,7 +164,7 @@
   var CLAMP_PX = 210;       // a card's times stop here (styles.css .venues.clamp) ...
   var CLAMP_SLACK = 90;     // ... but only when that hides this much more: never a button for a line or two
   var WINDOW_DAYS = 14;     // the day strip: today + 14 (Sie, Landmark and Alamo list up to ~90 days out)
-  var FURTHER_NOTE = "Sie, Landmark, Alamo, Dairy and CU Film Series only.";
+  var FURTHER_NOTE = "Select theaters only.";
   function isRepertory(f) {
     var orig = f.rel || (f.year ? f.year + "-07-01" : null);
     return !!(orig && f.opened && dayDiff(orig, f.opened) > REPERTORY_DAYS);
@@ -454,9 +454,11 @@
     var extraIds = Array.from(elsewhere.keys());
 
     if (!ids.length && !extraIds.length) {
-      $("grid").innerHTML = '<p class="empty">' + (state.kind === "film" && !state.q && state.theaters.size
-        ? "Nothing on film at these theaters" + (all ? ". Try more theaters." : ' on this day. Try <button type="button" class="inline" data-d="' + ALL + '">All dates</button> or more theaters.')
-        : state.theaters.size ? "Nothing matches" + (all ? "" : " on this day") + ". Try " + (all ? "" : "another day, ") + "more theaters, or clear the search."
+      // One message for every Show choice (On film included): "Nothing matches on this day. Try another
+      // day or more theaters." Clearing the search is only suggested when there is one.
+      var tries = (all ? [] : ["another day"]).concat("more theaters");
+      $("grid").innerHTML = '<p class="empty">' + (state.theaters.size
+        ? "Nothing matches" + (all ? "" : " on this day") + ". Try " + (state.q ? tries.join(", ") + ", or clear the search." : tries.join(" or ") + ".")
         : "Pick at least one theater above to see films.") + "</p>";
       return;
     }
@@ -525,10 +527,10 @@
         ["Special events", function (f) { return f.event; }]].map(function (g) {
         var part = ids.filter(function (i) { return g[1](films[i]); });
         return part.length ? '<h3 class="group">' + g[0] + '</h3><div class="grid">' + part.map(function (i) { return cardHTML(i); }).join("") + "</div>" : "";
-      }).join("") || '<p class="empty">No match at these theaters on this day.</p>';
+      }).join("") || '<p class="empty">Nothing matches at these theaters on this day.</p>';
     } else {
       $("grid").innerHTML = ids.length ? '<div class="grid">' + ids.map(function (i) { return cardHTML(i); }).join("") + "</div>"
-        : '<p class="empty">' + (state.kind === "film" ? "Nothing on film" : "No match") + ' at these theaters' + (all ? "" : " on this day") + ".</p>";
+        : '<p class="empty">Nothing matches at these theaters on this day.</p>';
     }
     [[otherDates, "Playing on other dates"], [otherTheaters, "Playing at other theaters"]].forEach(function (g) {
       if (!g[0].size) return;

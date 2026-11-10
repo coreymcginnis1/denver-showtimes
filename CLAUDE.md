@@ -258,9 +258,10 @@ redesign directions" (A listings + C program won; B marquee rejected).
   **Show** All / New releases / Repertory / **On film** and **Sort** Newest / Trending / A–Z. On film (Corey's
   interest) keeps only showings projected from a print (16/35/70mm, IMAX 70mm, VistaVision). It's a
   plain filter like the other Show choices: the chosen day and theaters only; **All dates** lists every
-  print coming up (Now playing / Coming soon / Further out), and a day with none says "Nothing on film
-  at these theaters on this day. Try All dates or more theaters." (Its own "On film on other dates /
-  at other theaters" sections were dropped Nov 2026 as clutter.)
+  print coming up (Now playing / Coming soon / Further out). An empty result reads the same for every
+  Show choice, On film included: "Nothing matches on this day. Try another day or more theaters."
+  (", or clear the search" only when there is one). Its own "On film on other dates / at other
+  theaters" sections and its "Nothing on film…" messages were dropped Nov 2026.
   **Look-ahead** (`ahead_days = 90`, `fetch_ahead()`): sources that can look months out cheaply (Sie,
   one request a week; Landmark, one ranged request; the three Alamos, their full feeds; the Dairy and
   CU's calendar, one ranged request each) report **everything** up to 90
@@ -286,7 +287,7 @@ redesign directions" (A listings + C program won; B marquee rejected).
   button). Desktop: sticky right column that scrolls on its own with **no scrollbar**, like the
   theater row: the end with more fades out (`schedEdges()`). Phone: Films / Schedule tabs.
 - **All dates:** **Now playing** (a showing today at the selected theaters, or a new release already open in Denver whose next showing is within `RUN_GAP_DAYS` = 3 days; repertory and events need today; by the chosen sort) then **Coming soon** (everything else, repertory included, by its next showing); each
-  theater gets one line with its next showing ("Alamo Sat Nov 7, 5:00 pm through Nov 11"), soonest first; three show, the rest behind "Show all N theaters" (`SPAN_SHOWN`). Then **Further out**: films whose first showing is past the two weeks, soonest first, with the note "Sie, Landmark, Alamo, Dairy and CU Film Series only." Search's extra matches ("Playing on other dates" / "Playing at other theaters") work the same way. No schedule column.
+  theater gets one line with its next showing ("Alamo Sat Nov 7, 5:00 pm through Nov 11"), soonest first; three show, the rest behind "Show all N theaters" (`SPAN_SHOWN`). Then **Further out**: films whose first showing is past the two weeks, soonest first, with the note "Select theaters only." (Corey's wording) Search's extra matches ("Playing on other dates" / "Playing at other theaters") work the same way. No schedule column.
 - **Formats and languages** (`formats.py`, shared by every scraper; Corey's rule, Nov 2026): only
   formats people pick a showing for are named — **IMAX, IMAX 3D, IMAX 70mm, Dolby (Cinema), Dolby 3D,
   3D, 16mm, 35mm, 70mm, VistaVision**. Every other premium screen (AMC Prime, RPX, 4DX, ScreenX, Harkins
@@ -301,7 +302,7 @@ redesign directions" (A listings + C program won; B marquee rejected).
   exceptions (Alamo flags nothing), so an untagged showing of a foreign film can be either. Sie's prints come from the title ("… on 35mm",
   "… in VistaVision") or a "35mm" Eventive tag (Eventive has no projection field). On the site, a format/language all of a theater's showings share goes on the
   theater line ("Regal Pavilions, Subtitled"); mixed ones get a short red mark per time (`FMT_TAG`:
-  IMAX, Dolby, 3D, PLF, Sub, Dub…, else the label itself). Format and language are judged
+  IMAX, Dolby, 3D, PLF, Sub, Dub…, else the label itself; VistaVision is written out). Format and language are judged
   **separately** (`shared()` / `ownTag()`): all-subtitled showings with a few PLF ones read "Regal
   Pavilions, Subtitled" with "PLF" only on those times.
 - **Search** ("Title, director, actor or genre"; `hitOf()`): a title matches anywhere; from three

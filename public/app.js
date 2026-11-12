@@ -96,7 +96,7 @@
   // Distances are from the centre of a zip code to each theater, as the crow flies. The zip is
   // never saved: it resets to DEFAULT_ZIP on every visit, so nothing about a reader is kept.
   var DEFAULT_ZIP = "80218", ZIPS = {};   // distance buttons (1 / 3 / 5 mi / All) are in index.html
-  var state = { day: null, q: "", sort: "new", kind: "all", showEarlier: false, theaters: null, zip: DEFAULT_ZIP, radius: null, open: null,
+  var state = { day: null, q: "", sort: "new", kind: "all", showEarlier: false, theaters: null, zip: DEFAULT_ZIP, radius: null,
     film: null, fpDay: null, fpAll: false, fpScroll: 0, fpFromList: false,   // the film page (see "Film page")
     tShown: null, tAll: false };
 
@@ -376,20 +376,14 @@
     img.outerHTML = fallbackHTML(f);
   }, true);
 
-  // The poster is a button: tapping it lays the director, facts and synopsis over the art.
-  // Special events (no TMDB match) have none of that, so their poster is just a picture.
+  // The poster, like the title, opens the film's page. One link per card for keyboards and screen
+  // readers: the title's; the poster's is skipped (tabindex -1, aria-hidden).
   function posterBlock(i) {
-    var f = films[i], img = f.posters.length ? posterHTML(i) : fallbackHTML(f);
-    if (f.event) return '<span class="still">' + img + "</span>";
-    var facts = factsOf(f), open = state.open === i;
-    return '<button type="button" data-p="' + i + '" aria-expanded="' + open + '" aria-label="' + esc(f.t) + (open ? ", hide details" : ", show details") + '">' + img + "</button>" +
-      (open ? '<div class="info" data-p="' + i + '">' + (f.dirs.length ? '<p class="dir">' + esc(f.dirs.join(", ")) + "</p>" : "") +
-        (facts ? '<p class="facts">' + esc(facts) + "</p>" : "") + (f.about ? "<p>" + esc(f.about) + "</p>" : "") +
-        '<a class="all-st" href="' + filmHref(i) + '" data-film="' + i + '">All showtimes</a>' +
-        (f.id ? '<a href="https://letterboxd.com/tmdb/' + f.id + '/" target="_blank" rel="noopener">View on Letterboxd</a>' : "") + "</div>" : "");
+    var f = films[i], img = f.posters.length ? posterHTML(i, "art") : fallbackHTML(f);
+    return '<a class="plink" href="' + filmHref(i) + '" data-film="' + i + '" tabindex="-1" aria-hidden="true">' + img + "</a>";
   }
-  // "United Kingdom, 2026, 1h 58m, R, Metacritic 77": country only when not the US; Metacritic as
-  // the film's Wikipedia article reports it (details only; nothing sorts by it).
+  // "United Kingdom, 2026, 1h 58m, R, Metacritic 77" on the film page: country only when not the US;
+  // Metacritic as the film's Wikipedia article reports it (nothing sorts by it).
   function factsOf(f) {
     var where = f.countries.filter(function (c) { return c !== "US"; }).slice(0, 1).map(function (c) { return COUNTRY ? COUNTRY.of(c) : c; });
     return where.concat([f.year, f.runtime ? runtime(f.runtime) : "", f.rating, f.mc != null ? "Metacritic " + f.mc : ""])
@@ -515,8 +509,7 @@
       }).join("");
       return '<article class="card"><div class="poster">' + posterBlock(i) + "</div>" +
         (flag ? '<p class="flag">' + esc(flag) + "</p>" : "") +
-        // The title opens the film's own page (every date and theater), as on a ticketing site;
-        // the poster opens the quick details.
+        // The title (and the poster) open the film's own page: every date and theater, as on a ticketing site.
         '<h3 class="title"><a href="' + filmHref(i) + '" data-film="' + i + '">' + esc(f.t) + "</a></h3>" +
         // Found by someone in it or its genre, not its title: say so, or the match looks like a mistake.
         (state.q && hitOf(i) && hitOf(i).why ? '<p class="why">' + esc(hitOf(i).why) + "</p>" : "") +
@@ -817,8 +810,6 @@
     var top = $("layout").getBoundingClientRect().top + window.scrollY - $("days").offsetHeight - 12;
     if (window.scrollY > top) window.scrollTo({ top: top });
   }
-  // After a re-render, keep keyboard focus on the poster that was just opened or closed.
-  function focusPoster(i) { var el = document.querySelector('#grid button[data-p="' + i + '"]'); if (el) el.focus({ preventScroll: true }); }
   function measure() { document.documentElement.style.setProperty("--days-h", $("days").offsetHeight + "px"); }
 
   function wire() {
@@ -827,13 +818,9 @@
       var fl = e.target.closest("a[data-film]");
       if (fl) {   // a film's page: remember where the reader was so "back" returns there
         if (!document.body.classList.contains("fp-open")) { state.fpScroll = window.scrollY; state.fpFromList = true; }
-        if (state.open != null) { state.open = null; renderFilms(); }
         return;   // the link itself changes the address; route() opens the page
       }
-      var info = e.target.closest(".info");
-      if (info && !e.target.closest("a")) { state.open = null; renderFilms(); focusPoster(+info.dataset.p); return; }
       var b = e.target.closest("button"); if (!b) return;
-      if (b.dataset.p) { var p = +b.dataset.p; state.open = state.open === p ? null : p; renderFilms(); focusPoster(p); return; }
       if (b.id === "tToggle") {
         var open = !$("controls").classList.contains("open");
         $("controls").classList.toggle("open", open); b.setAttribute("aria-expanded", open); b.textContent = open ? "Done" : "Change";
@@ -863,7 +850,7 @@
         var opts = $("calOpts"), show = opts.hidden; opts.hidden = !show; b.setAttribute("aria-expanded", show);
         if (show) opts.querySelector("a").focus(); return;
       }
-      if (b.dataset.d) { state.day = b.dataset.d; state.showEarlier = false; state.open = null; setMode(); renderDays(); renderAll(); toFilms(); return; }
+      if (b.dataset.d) { state.day = b.dataset.d; state.showEarlier = false; setMode(); renderDays(); renderAll(); toFilms(); return; }
       if (b.dataset.k) {
         var k = b.dataset.k; state.theaters.has(k) ? state.theaters.delete(k) : state.theaters.add(k); state.radius = null;
         saveTheaters(); renderAll(); return;
@@ -899,7 +886,6 @@
       if (e.key !== "Escape") return;
       if (!$("backdrop").hidden) return closeSheet();
       if (document.body.classList.contains("fp-open")) return leaveFilm();
-      if (state.open != null) { var p = state.open; state.open = null; renderFilms(); focusPoster(p); }
     });
     var q = $("q"), clear = $("qClear");
     var setQ = function () { state.q = q.value.trim(); clear.hidden = !q.value; renderAll(); };

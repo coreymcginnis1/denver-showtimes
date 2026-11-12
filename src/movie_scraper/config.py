@@ -123,7 +123,7 @@ class TrendingCfg(BaseModel):
 
 class CriticsCfg(BaseModel):
     # Each film's Metacritic score as its English Wikipedia article reports it, shown in the
-    # details panel only (no sort). Metacritic itself has no free API and forbids scraping.
+    # film page only (no sort). Metacritic itself has no free API and forbids scraping.
     metacritic: bool = True
 
 

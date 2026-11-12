@@ -1,5 +1,5 @@
 """English Wikipedia: page views over the last 7 days (half of "Trending") and each film's
-Metacritic score as its article reports it (the details panel).
+Metacritic score as its article reports it (the film page).
 
 Each film's article is found through Wikidata by its TMDB id (property P4947), so there's no
 title matching. Views come from the Wikimedia pageviews API; article text from the MediaWiki

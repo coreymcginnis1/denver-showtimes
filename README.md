@@ -13,9 +13,9 @@ times, tickets and add-to-calendar. A companion to Corey McGinnis's newsletter
   prints). **Sort** by newest, trending or A–Z. **All dates** looks up to 90 days ahead where the
   theater publishes that far.
 - **Find a film** by title, director, actor or genre.
-- Tap a title for its own page: every date it plays and every theater showing it, nearest first
-  (linkable: `#film/wild-horse-nine`). Tap a poster for the director, Metacritic score, synopsis
-  and a Letterboxd link. Tap a time for tickets and
+- Tap a film (title or poster) for its own page: the director, Metacritic score, synopsis and a
+  Letterboxd link, then every date it plays and every theater showing it, nearest first (linkable:
+  `#film/wild-horse-nine`). Tap a time for tickets and
   add-to-calendar (Google, Outlook, Apple).
 
 [CLAUDE.md](CLAUDE.md) is the detailed guide: every design decision, data rule and what's on hold.
@@ -55,7 +55,7 @@ coordinates and sources live in [`config.toml`](config.toml).
 Each film is matched to [TMDB](https://www.themoviedb.org/) for its poster, director, cast,
 genres and synopsis, and renamed to TMDB's title so every theater's version of it merges into one
 listing. "Trending" blends TMDB popularity with a week of English Wikipedia page views; the Metacritic
-score in a film's details is the one its Wikipedia article reports (Metacritic has no free API).
+score on a film's page is the one its Wikipedia article reports (Metacritic has no free API).
 
 ## Running and troubleshooting
 

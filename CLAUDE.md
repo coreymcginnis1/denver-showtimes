@@ -212,7 +212,7 @@ Each run lists titles new since the last (tracked in `known_titles.txt`; dry run
 
 ## Decisions and what's on hold (don't redo without new information)
 
-- **Ratings: Metacritic only, in the details panel, from Wikipedia (Nov 2026).** The card details
+- **Ratings: Metacritic only, on the film page, from Wikipedia (Nov 2026).** The film page's facts
   read "…, R, Metacritic 77"; nothing sorts by it (Corey: "I don't know about sorting yet").
   `wikipedia.metascores()` reads each film's English Wikipedia article (found by TMDB id through
   Wikidata, 20 articles a request, paced, 429s wait as asked) and takes the number from the
@@ -291,12 +291,11 @@ redesign directions" (A listings + C program won; B marquee rejected).
 - **Cards:** poster, "Opening week" (first 7 days in Denver) / "Opens Nov 19", the title (bold condensed, its own capitalization),
   then times by theater (nearest first, like the checklist) as plain text ("11:50 am 1:45 pm 4:30 pm", every time with its am/pm;
   a format all of a theater's showings share goes on the theater line, "Alamo, 35mm"). **Tap the
-  title** for the film's page (below). **Tap the poster** for the details over it (no "i" mark: a
-  pointer, and on hover the poster dims): director(s), country (non-US), year, runtime, rating, Metacritic
-  (as Wikipedia reports it, `film_meta.metacritic`), TMDB synopsis,
-  Letterboxd link (`film_meta.directors` / `.countries` / `.overview`, from the same TMDB request with
-  `append_to_response=credits`), then "All showtimes" (the film's page) and Letterboxd. Special events
-  have no details, so their poster isn't a button (their title still opens their page).
+  title or the poster** for the film's page (below); hovering either dims the poster and underlines
+  the title, so they read as one link (keyboards and screen readers get just the title's). The
+  details that used to sit over the poster (director, facts, Metacritic, synopsis, Letterboxd) live
+  on the film page now: Corey, Nov 2026, found poster-for-details / title-for-page confusing, and
+  one rule ("tap a movie, get its page") beat the quick peek.
   **Posters:** TMDB `w500` first, other theaters' art next, Fandango (600 px renderer) last, then the
   title set white on black. Long lists clamp at 210px behind "Show all times" / "Show all N theaters"
   (`clampVenues()`), only when that hides 90px or more (`CLAMP_SLACK`): hiding a line or two made
@@ -304,7 +303,9 @@ redesign directions" (A listings + C program won; B marquee rejected).
   "Show fewer …", and collapsing keeps the button where it was on screen (`toggleMore()`).
 - **Film page** (`#film/<title-slug>`, e.g. `#film/wild-horse-nine`; Nov 2026, Corey: "a way to click
   on a movie and see all upcoming showtimes… to plan ahead around a specific movie", like a ticketing
-  site's film page): "← All films", the poster and details, a strip of **every date it plays** (up to
+  site's film page): "← All films", the poster and details (director(s), country if not the US, year,
+  runtime, rating, Metacritic as Wikipedia reports it (`film_meta.metacritic`), TMDB synopsis
+  (three lines and "More" on phones), Letterboxd link), a strip of **every date it plays** (up to
   90 days where the theater lists that far, styled like the day strip and sticky on scroll), and for
   the chosen date **every theater showing it**, nearest first with miles and its times (tap one for
   the usual ticket sheet): the 6 nearest (`FP_SHOWN`), the rest behind "Show all N theaters". It

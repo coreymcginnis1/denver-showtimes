@@ -462,8 +462,8 @@ enabled = true
 # 0 = not on TMDB: an event that shares a film's name ("Title @theater" scopes any of these).
 "Family Reunion" = 0                # Dairy: a night of Colorado filmmakers' short films
 
-# Metacritic scores as each film's English Wikipedia article reports them, shown in the details
-# panel only (no sort). Wikipedia carries them much sooner than OMDb (see CLAUDE.md "Ratings").
+# Metacritic scores as each film's English Wikipedia article reports them, shown on the film
+# page only (no sort). Wikipedia carries them much sooner than OMDb (see CLAUDE.md "Ratings").
 [critics]
 metacritic = true
 

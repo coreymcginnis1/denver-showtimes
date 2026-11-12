@@ -73,7 +73,7 @@ def main(argv: list[str] | None = None) -> int:
             m = meta.get(t)
             if m:
                 print(f"  MATCH | {t} | {m.get('tmdb_id')} | {m.get('release') or ''} | {m.get('imdb_id') or ''} | "
-                      f"{m.get('imdb_rating') or ''}/{m.get('imdb_votes') or ''} | {m.get('metascore') or ''}")
+                      f"{m.get('imdb_rating') or ''}/{m.get('imdb_votes') or ''} | {m.get('metascore') or ''} | RT {m.get('rt') or ''}")
             else:
                 print(f"  MATCH | {t} | (not on TMDB)")
         for e in events[:12]:

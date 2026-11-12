@@ -466,4 +466,4 @@ enabled = true
 # releases unscored for weeks, so the site has no ratings or Top rated sort for now. Set
 # enabled = true to collect Metascores again (the site would also need its display put back).
 [omdb]
-enabled = false
+enabled = true    # TEST ONLY (draft PR): measure OMDb coverage in the PR check; do not merge

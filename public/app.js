@@ -638,6 +638,7 @@
   // link straight to it. It leaves the reader's theater picks, day and search alone.
 
   var FP_SHOWN = 6;   // theaters listed before "Show all N theaters"
+  var FP_OTHERS = 3;  // other theaters listed under the reader's own before "Show all N other theaters"
   var FP_DATES = 5;   // All dates: a theater's dates listed before "Show all N dates"
   var FP_FEW = 4;     // a film on this many dates or fewer opens on All dates
   // How far ahead the scraper reads (config.toml): the chains (Fandango, the theaters with a `site`)
@@ -666,8 +667,12 @@
     // A film on only a few dates opens on All dates (everything at once); otherwise on its first date.
     // On a single date there's no All dates: it would only repeat that day (Corey, Nov 2026).
     var oneDate = dates.length === 1;
+    // Dates it plays at the reader's theaters; the others show grey in the strip (still tappable).
+    var mineDates = new Set(shows.filter(function (s) { return s.f === i && state.theaters.has(s.th) && upcoming(s); }).map(function (s) { return s.d; }));
+    var firstMine = dates.filter(function (d) { return mineDates.has(d); })[0];
     if (oneDate ? state.fpDay !== dates[0] : state.fpDay !== ALL && dates.indexOf(state.fpDay) < 0) {
-      state.fpDay = oneDate ? dates[0] : dates.length && dates.length <= FP_FEW ? ALL : dates[0] || null; state.fpAll = false; state.fpOpen = {};
+      state.fpDay = oneDate ? dates[0] : dates.length && dates.length <= FP_FEW ? ALL : firstMine || dates[0] || null;
+      state.fpAll = false; state.fpOpen = {};
     }
     var allDates = state.fpDay === ALL;
     var html = back + '<div class="fp-head"><div class="fp-poster">' + (f.posters.length ? posterHTML(i, "fp-img") : fallbackHTML(f)) + "</div>" +
@@ -687,36 +692,53 @@
     html += '<nav class="days fp-days" aria-label="Dates for ' + esc(f.t) + '">' + (oneDate ? "" :
       '<button type="button" class="day" data-fd="' + ALL + '" aria-pressed="' + allDates + '">' +
       '<span class="dm">&nbsp;</span><span class="dn">All</span><span class="dw">dates</span></button>') + dates.map(function (d) {
-      return '<button type="button" class="day" data-fd="' + d + '" aria-pressed="' + (d === state.fpDay) + '" aria-label="' + longDate(d) + '">' +
-        dayFace(d) + "</button>";
+      var elsewhere = state.theaters.size && !mineDates.has(d);
+      return '<button type="button" class="day' + (elsewhere ? " elsewhere" : "") + '" data-fd="' + d + '" aria-pressed="' + (d === state.fpDay) +
+        '" aria-label="' + longDate(d) + (elsewhere ? ", not at your theaters" : "") + '">' + dayFace(d) + "</button>";
     }).join("") + "</nav>";
-    // Every theater showing it, nearest first (as in the checklist): on the chosen date its times; on
-    // All dates a line per date ("Thu Nov 12  3:00 pm 6:15 pm"), the first FP_DATES, then "Show all".
+    // Every theater showing it, nearest first (as in the checklist): the reader's theaters, then
+    // "Playing at other theaters" (Corey, Nov 2026, like search's split). On the chosen date each
+    // has its times; on All dates a line per date ("Thu Nov 12  3:00 pm 6:15 pm"), the first
+    // FP_DATES, then "Show all". With no theaters picked there's just the one list.
     var by = new Map();
     shows.filter(function (s) { return s.f === i && (allDates ? s.d >= NOW.day : s.d === state.fpDay); })
       .sort(function (a, b) { return (a.d + (a.hm || "")).localeCompare(b.d + (b.hm || "")); })
       .forEach(function (s) { if (!by.has(s.th)) by.set(s.th, []); by.get(s.th).push(s); });
     var dist = function (k) { var m = miles(theaterOf(k) || {}); return m == null ? 1e9 : m; };
     var keys = Array.from(by.keys()).sort(function (a, b) { return dist(a) - dist(b); });
+    var picked = state.theaters.size > 0;
+    var mine = keys.filter(function (k) { return picked && state.theaters.has(k); });
+    var others = keys.filter(function (k) { return !picked || !state.theaters.has(k); });
     var wd = function (d) { return dateObj(d).toLocaleDateString("en-US", { weekday: "short" }) + " " + shortDate(d); };
-    html += '<h3 class="fp-date">' + esc(allDates ? "All dates" : longDate(state.fpDay)) + '<span> at ' + keys.length + " theater" + (keys.length > 1 ? "s" : "") + "</span></h3>" +
-      '<div class="fp-venues' + (allDates ? " span" : "") + (state.fpAll ? " all-th" : "") + '">' + keys.map(function (k, n) {
-        var t = theaterOf(k) || { name: k }, list = by.get(k), sh = shared(list), lbl = sharedLabel(sh), mi = miles(t);
-        var head = '<p class="vn"><span>' + esc(tName(k)) + (lbl ? '<span class="lbl">, ' + esc(lbl) + "</span>" : "") + "</span>" +
-          (mi != null ? '<span class="mi">' + mi.toFixed(1) + " mi</span>" : "") + "</p>";
-        if (!allDates) return '<div class="venue' + (n >= FP_SHOWN ? " extra" : "") + '">' + head + '<div class="times">' + timesHTML(list, f, t, sh) + "</div></div>";
-        var byDay = new Map();
-        list.forEach(function (s) { if (!byDay.has(s.d)) byDay.set(s.d, []); byDay.get(s.d).push(s); });
-        var open = !!state.fpOpen[k], lines = Array.from(byDay.entries()).map(function (e, j) {
-          return '<div class="fp-day' + (j >= FP_DATES ? " extra-d" : "") + '"><span class="fd">' + esc(wd(e[0])) + '</span><div class="times">' +
-            timesHTML(e[1], f, t, sh) + "</div></div>";
-        }).join("");
-        return '<div class="venue' + (n >= FP_SHOWN ? " extra" : "") + (open ? " all-d" : "") + '">' + head + lines +
-          (byDay.size > FP_DATES ? '<button type="button" class="more" data-fth="' + k + '" aria-expanded="' + open + '">' +
-            (open ? "Show fewer dates" : "Show all " + byDay.size + " dates") + "</button>" : "") + "</div>";
-      }).join("") + "</div>" +
-      (keys.length > FP_SHOWN ? '<button type="button" class="more" id="fpMore" aria-expanded="' + state.fpAll + '">' +
-        (state.fpAll ? "Show fewer theaters" : "Show all " + keys.length + " theaters") + "</button>" : "");
+    var venue = function (k, extra) {
+      var t = theaterOf(k) || { name: k }, list = by.get(k), sh = shared(list), lbl = sharedLabel(sh), mi = miles(t);
+      var head = '<p class="vn"><span>' + esc(tName(k)) + (lbl ? '<span class="lbl">, ' + esc(lbl) + "</span>" : "") + "</span>" +
+        (mi != null ? '<span class="mi">' + mi.toFixed(1) + " mi</span>" : "") + "</p>";
+      if (!allDates) return '<div class="venue' + (extra ? " extra" : "") + '">' + head + '<div class="times">' + timesHTML(list, f, t, sh) + "</div></div>";
+      var byDay = new Map();
+      list.forEach(function (s) { if (!byDay.has(s.d)) byDay.set(s.d, []); byDay.get(s.d).push(s); });
+      var open = !!state.fpOpen[k], lines = Array.from(byDay.entries()).map(function (e, j) {
+        return '<div class="fp-day' + (j >= FP_DATES ? " extra-d" : "") + '"><span class="fd">' + esc(wd(e[0])) + '</span><div class="times">' +
+          timesHTML(e[1], f, t, sh) + "</div></div>";
+      }).join("");
+      return '<div class="venue' + (extra ? " extra" : "") + (open ? " all-d" : "") + '">' + head + lines +
+        (byDay.size > FP_DATES ? '<button type="button" class="more" data-fth="' + k + '" aria-expanded="' + open + '">' +
+          (open ? "Show fewer dates" : "Show all " + byDay.size + " dates") + "</button>" : "") + "</div>";
+    };
+    var when = allDates ? "All dates" : longDate(state.fpDay), cls = "fp-venues" + (allDates ? " span" : "");
+    var plural = function (n, w) { return n + " " + w + (n === 1 ? "" : "s"); };
+    if (!picked) html += '<h3 class="fp-date">' + esc(when) + "<span> at " + plural(keys.length, "theater") + "</span></h3>";
+    else {
+      html += '<h3 class="fp-date">' + esc(when) + "<span>" + (mine.length ? " at " + mine.length + " of your theaters" : "") + "</span></h3>" +
+        (mine.length ? '<div class="' + cls + '">' + mine.map(function (k) { return venue(k, false); }).join("") + "</div>"
+          : '<p class="fp-none">Not at your theaters ' + (allDates ? "on any date we list" : "on " + esc(wd(state.fpDay))) + ".</p>");
+      if (others.length) html += '<h3 class="fp-date fp-other">Playing at ' + plural(others.length, "other theater") + "</h3>";
+    }
+    // Other theaters: a few, then "Show all N theaters" (more of them when the reader's have none).
+    var cap = picked && mine.length ? FP_OTHERS : FP_SHOWN;
+    if (others.length) html += '<div class="' + cls + (state.fpAll ? " all-th" : "") + '">' + others.map(function (k, n) { return venue(k, n >= cap); }).join("") + "</div>" +
+      (others.length > cap ? '<button type="button" class="more" id="fpMore" aria-expanded="' + state.fpAll + '">' +
+        (state.fpAll ? "Show fewer theaters" : "Show all " + plural(others.length, picked ? "other theater" : "theater")) + "</button>" : "");
     page.innerHTML = html;
     fpAboutFits();
     var sel = page.querySelector('.fp-days [aria-pressed="true"]'); if (sel) sel.scrollIntoView({ block: "nearest", inline: "nearest" });

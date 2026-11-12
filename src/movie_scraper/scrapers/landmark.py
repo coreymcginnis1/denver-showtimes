@@ -18,7 +18,7 @@ import re
 from datetime import date, datetime, timedelta
 
 from .base import BaseScraper, http_client, to_int
-from ..formats import canon
+from ..formats import canon, language
 from ..models import Showtime
 
 log = logging.getLogger(__name__)
@@ -120,6 +120,7 @@ class LandmarkScraper(BaseScraper):
                     start=start_dt,
                     screen=self._screen(sh, tags),
                     fmt=self._fmt(tags),
+                    lang=self._lang(tags),
                     ticket_url=self._ticket_url(sh) or url,
                     film_url=url,
                     poster=movie.get("poster"),
@@ -129,6 +130,12 @@ class LandmarkScraper(BaseScraper):
                     year=self._year(movie),
                 ))
         return results
+
+    @staticmethod
+    def _lang(tags: list[str]) -> str | None:
+        """"Subtitled" from a showing's "Showtime.Accessibility.Subtitled" tag (La Bola Negra at
+        Greenwood Village, Nov 2026); closed captions aren't a language version."""
+        return language([t.rsplit(".", 1)[-1] for t in tags])
 
     def _parse_start(self, value: str | None) -> datetime | None:
         if not value:

@@ -146,7 +146,7 @@ Prefer **general** patterns over one-offs.
   `… Edition`, `Re-release`/`Reissue`/`(RE26)`, `Encore`/`(2026 Encore)`, language versions
   (`(English 2026)`, `(Hindi Dubbed)`, a bare `(Subtitled)` / `(Dubbed)`; `title_lang()` first moves
   the tag to the showing's language, so "Tokyo Godfathers (Subtitled)" and "(Dubbed)" merge into one
-  film with Sub / Dub marks), `on 35mm` (gauge kept as the format), `(dir. X)`, Sensory
+  film, the dubbed showings marked "Dub"), `on 35mm` (gauge kept as the format), `(dir. X)`, Sensory
   Friendly, sponsor tags, Fan Event / Early Access / Promo / Preview screenings, `- Super Ticket`
   (ticket bundles), `w/ …`, CU's `- Part of <festival>`, `- FREE SHOW`, `- <guests> in person!`,
   `- IFS Underground`; `(Director's Cut)` in parentheses too; restorations (`4K Restoration`,
@@ -289,6 +289,7 @@ redesign directions" (A listings + C program won; B marquee rejected).
     a week**; then repertory by original release; special events last. With Show **All** (any sort),
     a day always splits into **New releases / Repertory / Special events**, each in the chosen sort. Films without the data sort last.
 - **Cards:** poster, "Opening week" (first 7 days in Denver) / "Opens Nov 19", the title (bold condensed, its own capitalization),
+  "In Spanish" under it for a non-English film (see Formats and languages),
   then times by theater (nearest first, like the checklist) as plain text ("11:50 am 1:45 pm 4:30 pm", every time with its am/pm;
   a format all of a theater's showings share goes on the theater line, "Alamo, 35mm"). **Tap the
   title or the poster** for the film's page (below); hovering either dims the poster and underlines
@@ -310,14 +311,24 @@ redesign directions" (A listings + C program won; B marquee rejected).
   the chosen date **every theater showing it**, nearest first with miles and its times (tap one for
   the usual ticket sheet): the 6 nearest (`FP_SHOWN`), the rest behind "Show all N theaters". It
   ignores the reader's theater picks, day and search and doesn't change them. Its own address, so the
-  newsletter can link a film; the page title reads "<Film> showtimes · …". Back (the button, the
+  newsletter can link a film (`#film/<slug>/<date>` opens on that date); the page title reads "<Film> showtimes · …". Back (the button, the
   browser's, or Escape) returns to the same scroll spot. A link to a film that's gone: "That film
   isn't playing at any theater we list right now." A slug shared by two films gets the TMDB id.
 - **Schedule:** the day in time order under big brick hour numerals, each with its am/pm (earlier-today rows behind a
   button). Desktop: sticky right column that scrolls on its own with **no scrollbar**, like the
   theater row: the end with more fades out (`schedEdges()`). Phone: Films / Schedule tabs.
 - **All dates:** **Now playing** (a showing today at the selected theaters, or a new release already open in Denver whose next showing is within `RUN_GAP_DAYS` = 3 days; repertory and events need today; by the chosen sort) then **Coming soon** (everything else, repertory included, by its next showing); each
-  theater gets one line with its next showing ("Alamo Sat Nov 7, 5:00 pm through Nov 11"), soonest first; three show, the rest behind "Show all N theaters" (`SPAN_SHOWN`). Then **Further out**: films whose first showing is past the two weeks, soonest first, with the note "Select theaters only." (Corey's wording) Search's extra matches ("Playing on other dates" / "Playing at other theaters") work the same way. No schedule column.
+  theater gets one line saying **where and when, not which time** (Corey, Nov 2026: the film page has
+  the times), soonest first, the whole line a link to the film page on that theater's first date
+  (`#film/<slug>/<date>`); three show, the rest behind "Show all N theaters" (`SPAN_SHOWN`).
+  `whenHTML()`: one day "Thu Dec 3, 7:00 pm" (its times, up to three); a run "Nov 19 – 22" (up to
+  two dark days inside, `RUN_GAP`); separate runs or dates "Nov 14 – 15, 21 – 22" / "Nov 24, Dec 29,
+  Jan 26" (up to three, then "and N more dates"); and **"from Nov 12"** for a run that reaches the
+  end of what its theater has posted. Theaters post current films a week at a time (Nov 12, 2026:
+  nearly every theater, the Sie too, through Wed Nov 18 or Thu Nov 19), so a run that reaches that
+  edge hasn't ended: `POSTED` (per theater, the most common last date after today among the films
+  it's showing now; a run ending within a week past it counts) or `THEATER_END` (the last date it
+  posted at all). Only a run that stops short gets an end date. Then **Further out**: films whose first showing is past the two weeks, soonest first, with the note "Select theaters only." (Corey's wording) Search's extra matches ("Playing on other dates" / "Playing at other theaters") work the same way. No schedule column.
 - **Formats and languages** (`formats.py`, shared by every scraper; Corey's rule, Nov 2026): only
   formats people pick a showing for are named — **IMAX, IMAX 3D, IMAX 70mm, Dolby (Cinema), Dolby 3D,
   3D, 16mm, 35mm, 70mm, VistaVision**. Every other premium screen (AMC Prime, RPX, 4DX, ScreenX, Harkins
@@ -325,16 +336,25 @@ redesign directions" (A listings + C program won; B marquee rejected).
   plain "3D". Laser projection, Atmos sound, seating and aspect ratios (Landmark's Scope / Flat) aren't
   formats. Fandango's header says only Standard / Premium Format / 3D, so the screen comes from the
   showtime group's amenities. **Language** (`lang`): "Subtitled", "Dubbed", or "<Language> dub"
-  ("Spanish dub"), from Fandango amenities, Alamo attributes and the Sie's `subtitle_language` (non-English
-  film + English subtitle track = Subtitled). Harkins says only "Japanese Language": the scraper passes
+  ("Spanish dub"), from Fandango amenities, Alamo attributes, Landmark's `Showtime.Accessibility.Subtitled`
+  tag (read since Nov 2026) and the Sie's `subtitle_language` (non-English film + English subtitle
+  track = Subtitled). Harkins says only "Japanese Language": the scraper passes
   "Japanese language" and the page (`resolveLang()`) compares it with TMDB's original language:
-  same = Subtitled, an English film = "<X> dub", anything else = "In <X>". Sources only flag the
-  exceptions (Alamo flags nothing), so an untagged showing of a foreign film can be either. Sie's prints come from the title ("… on 35mm",
-  "… in VistaVision") or a "35mm" Eventive tag (Eventive has no projection field). On the site, a format/language all of a theater's showings share goes on the
-  theater line ("Regal Pavilions, Subtitled"); mixed ones get a short red mark per time (`FMT_TAG`:
-  IMAX, Dolby, 3D, PLF, Sub, Dub…, else the label itself; VistaVision is written out). Format and language are judged
-  **separately** (`shared()` / `ownTag()`): all-subtitled showings with a few PLF ones read "Regal
-  Pavilions, Subtitled" with "PLF" only on those times.
+  same = nothing to mark, an English film = "<X> dub", anything else = "In <X>". Sources only flag the
+  exceptions, and some never do: Alamo's data has no language field at all, and the Dairy tags it only
+  now and then (Nov 12, 2026, non-English showings flagged: Sie 31/32, Fandango 1,153/1,231, Alamo
+  4/124 (titles only), Dairy 0/17), so the same print read "Subtitled" at one theater and not at the
+  next. **So the page never shows "Subtitled"** (Corey, Nov 2026; he also found the bold ", Subtitled"
+  by the theater name distracting): a non-English film says its language **once**, "In Spanish" under
+  its title on the card and the film page (`langLine()`, from TMDB's original language; not for
+  English or silent "xx"; TMDB's "cn" = Cantonese), and per showing **only dubs** are marked. The
+  scrapers still record "Subtitled" in `data.json`; the page drops it (`resolveLang()`). Sie's prints come from the title ("… on 35mm",
+  "… in VistaVision") or a "35mm" Eventive tag (Eventive has no projection field). On the site, a format or dub all of a theater's showings share goes on the
+  theater line ("Alamo, 35mm"; on the film page in plain grey after the bold theater name); mixed ones
+  get a short red mark per time (`FMT_TAG`: IMAX, Dolby, 3D, PLF, Dub…, else the label itself, e.g.
+  "Spanish dub"; VistaVision is written out). Format and language are judged **separately**
+  (`shared()` / `ownTag()`): all-dubbed showings with a few PLF ones read "AMC, Spanish dub" with
+  "PLF" only on those times.
 - **Search** ("Title, director, actor or genre"; `hitOf()`): a title matches anywhere; from three
   letters on, so does the start of a word in a director's or top-five-billed actor's name or a TMDB
   genre (`film_meta.directors` / `.cast` / `.genres`, all from the one TMDB request; "sci-fi" finds

@@ -45,17 +45,16 @@
     amc_southlands: "AMC Southlands", emagine_parker: "Emagine Parker", amc_brighton: "AMC Brighton", amc_castle_rock: "AMC Castle Rock",
     cinemark_boulder: "Cinemark Boulder", regal_longmont: "Regal Longmont" };
   // Formats and languages (scraper's formats.py): IMAX, Dolby, film prints and 3D by name; every other
-  // premium screen is "PLF"; "Subtitled" / "Dubbed". A theater whose showings all share one goes on its
-  // line; mixed ones get a short red mark per time (anything not listed uses its own name).
+  // premium screen is "PLF"; a dub ("Dubbed", "Spanish dub"). A theater whose showings all share one goes
+  // on its line; mixed ones get a short red mark per time (anything not listed uses its own name).
   var FMT_TAG = { "IMAX": "IMAX", "IMAX 3D": "IMAX 3D", "IMAX 70mm": "IMAX 70", "Dolby": "Dolby", "Dolby 3D": "Dolby 3D",
-    "3D": "3D", "16mm": "16mm", "35mm": "35mm", "70mm": "70mm", "PLF": "PLF", "Premium Format": "PLF",
-    "Subtitled": "Sub", "Dubbed": "Dub" };
+    "3D": "3D", "16mm": "16mm", "35mm": "35mm", "70mm": "70mm", "PLF": "PLF", "Premium Format": "PLF", "Dubbed": "Dub" };
   function fmtName(f) { return f === "Premium Format" ? "PLF" : f; }   // older data said "Premium Format"
-  function tagOf(s) { return [s.fmt ? fmtName(s.fmt) : "", s.lang || ""].filter(Boolean).join(", "); }   // "IMAX, Subtitled"
+  function tagOf(s) { return [s.fmt ? fmtName(s.fmt) : "", s.lang || ""].filter(Boolean).join(", "); }   // "IMAX, Spanish dub"
   function shortTag(t) { return t.split(", ").map(function (x) { return FMT_TAG[x] || x; }).join(" "); }
   // Format and language are judged separately for a theater's showings: whatever all of them share
-  // goes on the theater line ("Regal Pavilions, Subtitled"); only what differs is marked on a time
-  // ("2:00 pm PLF"). Judged together, one PLF showing used to push "Sub" onto every time.
+  // goes on the theater line ("AMC, Spanish dub"); only what differs is marked on a time ("2:00 pm PLF").
+  // Judged together, one PLF showing used to push a language mark onto every time.
   function shared(list) {
     var same = function (get) { var v = get(list[0]); return list.every(function (s) { return get(s) === v; }) ? v : null; };
     return { fmt: same(function (s) { return s.fmt ? fmtName(s.fmt) : ""; }), lang: same(function (s) { return s.lang || ""; }) };
@@ -68,13 +67,25 @@
   var LANGUAGE = (function () { try { return new Intl.DisplayNames(["en"], { type: "language" }); } catch (e) { return null; } })();
   // A showing "in Japanese" (Harkins says only that) is the subtitled original when the film is
   // Japanese (TMDB's original language), or a dub when it isn't ("Spanish language" on an English film).
+  // Per showing, only a dub is marked. The film's own language is said once, "In Spanish", under its
+  // title (card and film page), from TMDB's original language. Sources report "Subtitled" unevenly
+  // (Alamo's data has no language field at all), so it read "Subtitled" at one theater and not the
+  // next for the same print: it's dropped here (Corey, Nov 2026). "Japanese language" (Harkins) in the
+  // film's own language says nothing either; on an English film it's a dub.
+  function origLang(f) {
+    if (!f.olang || f.olang === "xx") return null;   // "xx": no spoken language (silent films)
+    if (f.olang === "cn") return "Cantonese";         // TMDB's code for Cantonese
+    try { return LANGUAGE ? LANGUAGE.of(f.olang) : null; } catch (e) { return null; }
+  }
+  function langLine(f) { return f.olang && f.olang !== "en" && origLang(f) ? "In " + origLang(f) : ""; }
   function resolveLang(raw, f) {
-    var m = /^(\w+) language$/.exec(raw || "");
-    if (!m) return raw || null;
-    var orig = f.olang === "cn" ? "Cantonese" : f.olang && LANGUAGE ? LANGUAGE.of(f.olang) : null;
+    if (!raw || raw === "Subtitled") return null;
+    var m = /^(\w+) language$/.exec(raw);
+    if (!m) return raw;   // "Dubbed", "Spanish dub"
+    var orig = origLang(f);
     var same = orig === m[1] || (orig === "Chinese" && /^(Mandarin|Cantonese)$/.test(m[1]));
     // Only an English film in another language is surely a dub; any other mismatch just says the language.
-    return same ? "Subtitled" : f.olang === "en" ? m[1] + " dub" : "In " + m[1];
+    return same ? null : f.olang === "en" ? m[1] + " dub" : "In " + m[1];
   }
 
   var $ = function (id) { return document.getElementById(id); };
@@ -145,6 +156,21 @@
       var k = slug(f.t);
       if (keyFilm[k] != null) k += "-" + (f.id || i);
       filmKey[i] = k; keyFilm[k] = i;
+    });
+    shows.forEach(function (s) { if (!THEATER_END[s.th] || s.d > THEATER_END[s.th]) THEATER_END[s.th] = s.d; });
+    // Each theater's posting edge: the most common last date, after today, among the films it's showing
+    // now (most theaters post a week at a time, so most of their current films stop on the same day).
+    var runs = {}, ends = {};
+    shows.forEach(function (s) {
+      var r = runs[s.th + "|" + s.f] || (runs[s.th + "|" + s.f] = { th: s.th, a: s.d, z: s.d });
+      if (s.d < r.a) r.a = s.d; if (s.d > r.z) r.z = s.d;
+    });
+    Object.keys(runs).forEach(function (k) {
+      var r = runs[k]; if (r.a > NOW.day || r.z <= NOW.day) return;
+      var e = ends[r.th] || (ends[r.th] = {}); e[r.z] = (e[r.z] || 0) + 1;
+    });
+    Object.keys(ends).forEach(function (th) {
+      POSTED[th] = Object.keys(ends[th]).sort(function (a, b) { return ends[th][b] - ends[th][a] || a.localeCompare(b); })[0];
     });
     days = Array.from(new Set(shows.map(function (s) { return s.d; }))).sort()
       .filter(function (d) { return d >= NOW.day && dayDiff(NOW.day, d) <= WINDOW_DAYS; });   // later dates: All dates only
@@ -403,6 +429,45 @@
     }).join("");
   }
 
+  // All dates and search extras: when a film plays at one theater, at a glance (Corey, Nov 2026: with
+  // the film page for exact times, this line only needs where and when).
+  //   one showing          "Thu Dec 3, 7:00 pm"
+  //   one day              "Thu Nov 19, 4:15 pm 7:00 pm"
+  //   a run                "Nov 19 – 22" (up to two dark days in between still count as one run)
+  //   to the posted end    "from Nov 12": theaters post their current films a week at a time (Nov 12,
+  //                        2026: nearly every theater, the Sie too, through Wed Nov 18 or Thu Nov 19),
+  //                        so a run that reaches that edge (POSTED) or the last date the theater has
+  //                        posted at all (THEATER_END) hasn't ended; only one that stops short has
+  //   separate runs/dates  "Nov 14 – 15, 21 – 22", "Nov 19, Dec 3, 10" (repertory, prints, weekend
+  //                        events): up to three, then "and N more dates"
+  var RUN_GAP = 3;   // days between two showings that still make one run (Fatherland at the Sie skips Mon–Tue)
+  function whenHTML(list, th) {
+    var dates = Array.from(new Set(list.map(function (s) { return s.d; }))).sort();
+    var wd = function (d) { return dateObj(d).toLocaleDateString("en-US", { weekday: "short" }) + " " + shortDate(d); };
+    if (dates.length === 1) {
+      var timed = list.filter(function (s) { return s.hm; }).slice(0, 3);
+      return esc(wd(dates[0])) + (timed.length ? ", " + timed.map(function (s) { return '<span class="nw">' + timeHTML(s.hm) + "</span>"; }).join(" ") : "") +
+        (list.length > 3 ? " and more" : "");
+    }
+    var segs = [];   // runs of dates no more than RUN_GAP days apart
+    dates.forEach(function (d, n) {
+      if (n && dayDiff(dates[n - 1], d) <= RUN_GAP) segs[segs.length - 1][1] = d; else segs.push([d, d]);
+    });
+    var first = dates[0], last = dates[dates.length - 1];
+    if (segs.length === 1) {
+      var edge = POSTED[th];
+      if ((edge && last >= edge && dayDiff(edge, last) <= 7) || (THEATER_END[th] && last >= THEATER_END[th])) return "from " + esc(shortDate(first));
+    }
+    var prevMonth = null, out = segs.slice(0, 3).map(function (g) {   // "Nov 14 – 15, 21 – 22": the month only when it changes
+      var a = g[0].slice(0, 7) === prevMonth ? String(+g[0].slice(8)) : shortDate(g[0]);
+      var z = g[1] === g[0] ? "" : " – " + (g[1].slice(0, 7) === g[0].slice(0, 7) ? String(+g[1].slice(8)) : shortDate(g[1]));
+      prevMonth = g[1].slice(0, 7);
+      return esc(a + z);
+    }).join(", ");
+    var rest = segs.slice(3).reduce(function (n, g) { return n + dates.filter(function (d) { return d >= g[0] && d <= g[1]; }).length; }, 0);
+    return out + (rest ? " and " + rest + " more date" + (rest > 1 ? "s" : "") : "");
+  }
+
   function sortFilms(ids) {
     var key = {
       // Newest: new releases by Denver release week (latest first, upcoming on top) and, within a
@@ -492,15 +557,11 @@
         : function (a, b) { return order.indexOf(a[0]) - order.indexOf(b[0]); });
       var vhtml = vlist.map(function (e, k) {
         var t = theaterOf(e[0]) || {};
-        if (asSpan) {   // one line per theater, "Alamo  Sat Nov 7, 5:00 pm  through Nov 11"; the first 3, then "Show all"
-          var first = e[1][0], last = e[1][e[1].length - 1], o = dateObj(first.d), shs = shared(e[1]), lbl = sharedLabel(shs), own = ownTag(first, shs);
+        if (asSpan) {   // one line per theater: where and when ("Mayan Nov 19 – 22"); the times are on the film page
+          var shs = shared(e[1]), lbl = sharedLabel(shs);
           var name = esc((TINY[e[0]] || tName(e[0])) + (lbl ? ", " + lbl : ""));   // "Alamo, 35mm"
-          var day = o.toLocaleDateString("en-US", { weekday: "short" }) + " " + shortDate(first.d);
-          return '<div class="venue line' + (k >= SPAN_SHOWN ? " extra" : "") + '"><span class="vn">' + name + '</span><button type="button" class="time next" data-i="' +
-            shows.indexOf(first) + '" aria-label="' + esc(f.t) + ", next showing " + longDate(first.d) + " " + (first.hm ? longTime(first.hm) : "") + ", " + esc(t.name || "") + '">' +
-            day + (first.hm ? ', <span class="nw">' + timeHTML(first.hm) + "</span>" : "") + (own ? "<sup>" + esc(shortTag(own)) + "</sup>" : "") + "</button>" +
-            // How long it runs here, quietly after the next showing: "through Nov 11".
-            (last.d !== first.d ? '<span class="thru">through ' + shortDate(last.d) + "</span>" : "") + "</div>";
+          return '<a class="venue line' + (k >= SPAN_SHOWN ? " extra" : "") + '" href="' + filmHref(i, e[1][0].d) + '" data-film="' + i + '">' +
+            '<span class="vn">' + name + '</span><span class="when">' + whenHTML(e[1], e[0]) + "</span></a>";
         }
         // A format / language every showing here shares ("Regal Colorado, IMAX") goes with the theater, not on each time.
         var sh = shared(e[1]), lbl = sharedLabel(sh);
@@ -511,6 +572,7 @@
         (flag ? '<p class="flag">' + esc(flag) + "</p>" : "") +
         // The title (and the poster) open the film's own page: every date and theater, as on a ticketing site.
         '<h3 class="title"><a href="' + filmHref(i) + '" data-film="' + i + '">' + esc(f.t) + "</a></h3>" +
+        (langLine(f) ? '<p class="lang">' + esc(langLine(f)) + "</p>" : "") +
         // Found by someone in it or its genre, not its title: say so, or the match looks like a mistake.
         (state.q && hitOf(i) && hitOf(i).why ? '<p class="why">' + esc(hitOf(i).why) + "</p>" : "") +
         '<div class="venues">' + vhtml + "</div>" +
@@ -591,8 +653,10 @@
   // link straight to it. It leaves the reader's theater picks, day and search alone.
 
   var FP_SHOWN = 6;   // theaters listed before "Show all N theaters"
+  var THEATER_END = {};   // theater -> the last date it has posted (set in load)
+  var POSTED = {};        // theater -> how far it has posted its current films: the usual last date (set in load)
   var filmKey = [], keyFilm = {}, BASE_TITLE = document.title;
-  function filmHref(i) { return "#film/" + filmKey[i]; }
+  function filmHref(i, d) { return "#film/" + filmKey[i] + (d ? "/" + d : ""); }
   function upcoming(s) { return s.d > NOW.day || (s.d === NOW.day && !isPast(s)); }
   function filmDates(i) {
     return Array.from(new Set(shows.filter(function (s) { return s.f === i && upcoming(s); }).map(function (s) { return s.d; }))).sort();
@@ -614,7 +678,7 @@
     if (dates.indexOf(state.fpDay) < 0) { state.fpDay = dates[0] || null; state.fpAll = false; }
     var html = back + '<div class="fp-head"><div class="fp-poster">' + (f.posters.length ? posterHTML(i, "fp-img") : fallbackHTML(f)) + "</div>" +
       '<div class="fp-main">' + (flag ? '<p class="flag">' + esc(flag) + "</p>" : "") +
-      '<h2 id="fpTitle" tabindex="-1">' + esc(f.t) + "</h2>" +
+      '<h2 id="fpTitle" tabindex="-1">' + esc(f.t) + "</h2>" + (langLine(f) ? '<p class="lang">' + esc(langLine(f)) + "</p>" : "") +
       (f.dirs.length ? '<p class="dir">' + esc(f.dirs.join(", ")) + "</p>" : "") +
       (facts ? '<p class="facts">' + esc(facts) + "</p>" : "") +
       // Phones show three lines of the synopsis (so the dates and times start on the first screen) and "More".
@@ -640,7 +704,8 @@
     html += '<h3 class="fp-date">' + esc(longDate(state.fpDay)) + '<span> at ' + keys.length + " theater" + (keys.length > 1 ? "s" : "") + "</span></h3>" +
       '<div class="fp-venues' + (state.fpAll ? " all-th" : "") + '">' + keys.map(function (k, n) {
         var t = theaterOf(k) || { name: k }, list = by.get(k), sh = shared(list), lbl = sharedLabel(sh), mi = miles(t);
-        return '<div class="venue' + (n >= FP_SHOWN ? " extra" : "") + '"><p class="vn"><span>' + esc(tName(k) + (lbl ? ", " + lbl : "")) + "</span>" +
+        return '<div class="venue' + (n >= FP_SHOWN ? " extra" : "") + '"><p class="vn"><span>' + esc(tName(k)) +
+          (lbl ? '<span class="lbl">, ' + esc(lbl) + "</span>" : "") + "</span>" +
           (mi != null ? '<span class="mi">' + mi.toFixed(1) + " mi</span>" : "") + '</p><div class="times">' + timesHTML(list, f, t, sh) + "</div></div>";
       }).join("") + "</div>" +
       (keys.length > FP_SHOWN ? '<button type="button" class="more" id="fpMore" aria-expanded="' + state.fpAll + '">' +
@@ -653,9 +718,10 @@
     var a = $("fpAbout"), m = $("fpAboutMore");
     if (a && m) m.hidden = !a.classList.contains("open") && a.scrollHeight <= a.clientHeight + 1;
   }
-  function openFilm(i) {
+  function openFilm(i, day) {   // day: open on that date (a theater line in All dates links its first one)
     var was = state.film;
     state.film = i; if (was !== i) { state.fpDay = null; state.fpAll = false; }
+    if (day) { state.fpDay = day; state.fpAll = false; }
     document.body.classList.add("fp-open"); $("filmpage").hidden = false;
     renderFilmPage();
     document.title = (i == null ? "Not playing" : films[i].t + " showtimes") + " · " + BASE_TITLE;
@@ -670,14 +736,14 @@
     document.title = BASE_TITLE;
     clampVenues(); edges();
     window.scrollTo(0, state.fpScroll);
-    var a = i != null && document.querySelector('#grid a[data-film="' + i + '"]'); if (a) a.focus({ preventScroll: true });
+    var a = i != null && document.querySelector('#grid .title a[data-film="' + i + '"]'); if (a) a.focus({ preventScroll: true });
   }
   // "#film/<key>" opens a film's page; anything else shows the listings.
   function route() {
-    var m = /^#film\/(.+)$/.exec(location.hash);
+    var m = /^#film\/([^/]+)(?:\/(\d{4}-\d{2}-\d{2}))?$/.exec(location.hash);
     if (!m) return closeFilm();
     var k = decodeURIComponent(m[1]);
-    openFilm(keyFilm[k] != null ? keyFilm[k] : null);
+    openFilm(keyFilm[k] != null ? keyFilm[k] : null, m[2]);
   }
   function leaveFilm() {   // back to the listings: the browser's back when we came from them
     if (state.fpFromList) { state.fpFromList = false; history.back(); return; }

@@ -329,16 +329,15 @@ redesign directions" (A listings + C program won; B marquee rejected).
   soonest first; three show, the rest behind "Show all N theaters" (`SPAN_SHOWN`).
   One day reads "Thu Nov 12, 4:15 pm 7:00 pm" with each time a button for its tickets (Corey: times
   you can see should go to tickets; the title still opens the film page). `whenHTML()`, for two or
-  more dates, the line a link to the film page: a run "Nov 19 – 22" (up to
-  two dark days inside, `RUN_GAP`); separate runs or dates "Nov 14 – 15, 21 – 22" / "Nov 24, Dec 29,
-  Jan 26" (up to three, then "and N more dates"); and **"from Nov 12"** for a run that reaches the
-  end of what its theater has posted. Theaters post current films a week at a time (Nov 12, 2026:
-  nearly every theater, the Sie too, through Wed Nov 18 or Thu Nov 19), so a run that reaches that
-  edge hasn't ended: `POSTED` (per chain, `chainKey()`: the most common last date after today among
-  the films it's showing now, once at least `POSTED_MIN` = 3 stop on it; a run ending within a week
-  past it counts) or `THEATER_END` (the last date it posted at all). Only a run that stops short gets
-  an end date. The Dairy and CU list whole runs (`WHOLE_RUNS`): with two current films the Dairy's
-  "edge" was Queen at Sea's real last day, so it read "from Nov 12" for an Nov 11–14 run. Then **Further out**: films whose first showing is past the two weeks, soonest first, with the note "Select theaters only." (Corey's wording) Search's extra matches ("Playing on other dates" / "Playing at other theaters") work the same way. No schedule column.
+  more dates, the line a link to the film page: a run "Nov 12 – 18" (up to two dark days inside,
+  `RUN_GAP`); separate runs or dates "Nov 14 – 15, 21 – 22" / "Nov 24, Dec 29, Jan 26" (up to
+  three, then "and N more dates"). **A range is the dates the theater has posted, as they stand**
+  (Corey, Nov 2026: "It's what we know right now… I always encourage people to go early"; it
+  updates as theaters do), even though most theaters post a week at a time, so most chain runs read
+  "… – 18" or "… – 19". The one exception is our own limit: a run reaching the last day the scraper
+  reads for that theater (chains, i.e. theaters with a `site`: 14 days, `READ_DAYS`; everyone else 90,
+  `READ_DAYS_AHEAD`) ends in "+", "Nov 20 – 26+" (Nov 12, 2026: 123 lines, mostly advance tickets).
+  (A "from Nov 12" for runs reaching a guessed posting edge was tried and dropped the same day.) Then **Further out**: films whose first showing is past the two weeks, soonest first, with the note "Select theaters only." (Corey's wording) Search's extra matches ("Playing on other dates" / "Playing at other theaters") work the same way. No schedule column.
 - **Formats and languages** (`formats.py`, shared by every scraper; Corey's rule, Nov 2026): only
   formats people pick a showing for are named — **IMAX, IMAX 3D, IMAX 70mm, Dolby (Cinema), Dolby 3D,
   3D, 16mm, 35mm, 70mm, VistaVision**. Every other premium screen (AMC Prime, RPX, 4DX, ScreenX, Harkins

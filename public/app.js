@@ -157,25 +157,6 @@
       if (keyFilm[k] != null) k += "-" + (f.id || i);
       filmKey[i] = k; keyFilm[k] = i;
     });
-    shows.forEach(function (s) { if (!THEATER_END[s.th] || s.d > THEATER_END[s.th]) THEATER_END[s.th] = s.d; });
-    // Each theater's posting edge: the most common last date, after today, among the films it's showing
-    // now (most theaters post a week at a time, so most of their current films stop on the same day).
-    var runs = {}, ends = {};
-    shows.forEach(function (s) {
-      var r = runs[s.th + "|" + s.f] || (runs[s.th + "|" + s.f] = { th: s.th, a: s.d, z: s.d });
-      if (s.d < r.a) r.a = s.d; if (s.d > r.z) r.z = s.d;
-    });
-    // Judged per chain (one AMC posts like the next; the Mayan alone has two films), and only where at
-    // least POSTED_MIN current films stop on that date: with two films the Dairy's "most common last
-    // date" was just Queen at Sea's real last day. The Dairy and CU list each film's whole run up front.
-    Object.keys(runs).forEach(function (k) {
-      var r = runs[k], g = chainKey(r.th); if (r.a > NOW.day || r.z <= NOW.day || WHOLE_RUNS[g]) return;
-      var e = ends[g] || (ends[g] = {}); e[r.z] = (e[r.z] || 0) + 1;
-    });
-    Object.keys(ends).forEach(function (g) {
-      var top = Object.keys(ends[g]).sort(function (a, b) { return ends[g][b] - ends[g][a] || a.localeCompare(b); })[0];
-      if (ends[g][top] >= POSTED_MIN) POSTED[g] = top;
-    });
     days = Array.from(new Set(shows.map(function (s) { return s.d; }))).sort()
       .filter(function (d) { return d >= NOW.day && dayDiff(NOW.day, d) <= WINDOW_DAYS; });   // later dates: All dates only
     if (!days.length) days = Array.from(new Set(shows.map(function (s) { return s.d; }))).sort();
@@ -436,12 +417,12 @@
   // All dates and search extras: when a film plays at one theater, at a glance (Corey, Nov 2026: with
   // the film page for exact times, this line only needs where and when).
   //   one day              "Thu Nov 19, 4:15 pm 7:00 pm": the times are buttons for tickets (cardHTML)
-  //   a run                "Nov 19 – 22" (up to two dark days in between still count as one run)
-  //   to the posted end    "from Nov 12": theaters post their current films a week at a time (Nov 12,
-  //                        2026: nearly every theater, the Sie too, through Wed Nov 18 or Thu Nov 19),
-  //                        so a run that reaches that edge (POSTED, per chain) or the last date the
-  //                        theater has posted at all (THEATER_END) hasn't ended; only one that stops
-  //                        short has. The Dairy and CU post whole runs: "Queen at Sea Nov 12 – 14".
+  //   a run                "Nov 12 – 18" (up to two dark days in between still count as one run): the
+  //                        dates the theater has posted, as they stand. Theaters post a week at a
+  //                        time and may extend a run; Corey: "It's what we know right now… I always
+  //                        encourage people to go early", and it updates as theaters do.
+  //   past what we read    "Nov 20 – 26+": the run reaches the last day the scraper reads for that
+  //                        theater (the chains: two weeks), so the end is ours, not the theater's
   //   separate runs/dates  "Nov 14 – 15, 21 – 22", "Nov 19, Dec 3, 10" (repertory, prints, weekend
   //                        events): up to three, then "and N more dates"
   var RUN_GAP = 3;   // days between two showings that still make one run (Fatherland at the Sie skips Mon–Tue)
@@ -452,11 +433,8 @@
     dates.forEach(function (d, n) {
       if (n && dayDiff(dates[n - 1], d) <= RUN_GAP) segs[segs.length - 1][1] = d; else segs.push([d, d]);
     });
-    var first = dates[0], last = dates[dates.length - 1];
-    if (segs.length === 1) {
-      var edge = POSTED[chainKey(th)];
-      if ((edge && last >= edge && dayDiff(edge, last) <= 7) || (THEATER_END[th] && last >= THEATER_END[th])) return "from " + esc(shortDate(first));
-    }
+    var made = (D.generated_at || NOW.day).slice(0, 10), t = theaterOf(th) || {};
+    var more = dayDiff(made, dates[dates.length - 1]) >= (t.site ? READ_DAYS : READ_DAYS_AHEAD) ? "+" : "";
     var prevMonth = null, out = segs.slice(0, 3).map(function (g) {   // "Nov 14 – 15, 21 – 22": the month only when it changes
       var a = g[0].slice(0, 7) === prevMonth ? String(+g[0].slice(8)) : shortDate(g[0]);
       var z = g[1] === g[0] ? "" : " – " + (g[1].slice(0, 7) === g[0].slice(0, 7) ? String(+g[1].slice(8)) : shortDate(g[1]));
@@ -464,7 +442,7 @@
       return esc(a + z);
     }).join(", ");
     var rest = segs.slice(3).reduce(function (n, g) { return n + dates.filter(function (d) { return d >= g[0] && d <= g[1]; }).length; }, 0);
-    return out + (rest ? " and " + rest + " more date" + (rest > 1 ? "s" : "") : "");
+    return out + (rest ? " and " + rest + " more date" + (rest > 1 ? "s" : "") : more);
   }
 
   function sortFilms(ids) {
@@ -662,11 +640,9 @@
   var FP_SHOWN = 6;   // theaters listed before "Show all N theaters"
   var FP_DATES = 5;   // All dates: a theater's dates listed before "Show all N dates"
   var FP_FEW = 4;     // a film on this many dates or fewer opens on All dates
-  var THEATER_END = {};   // theater -> the last date it has posted (set in load)
-  var POSTED = {};        // chain -> how far it has posted its current films: the usual last date (set in load)
-  var POSTED_MIN = 3;     // current films that must stop on one date before it counts as the posting edge
-  var WHOLE_RUNS = { dairy: true, cu: true };   // sources that list a film's whole run, so its last date is the end
-  function chainKey(th) { return th.split("_")[0]; }   // "amc_westminster" -> "amc", "landmark_greenwood" -> "landmark"
+  // How far ahead the scraper reads (config.toml): the chains (Fandango, the theaters with a `site`)
+  // days_ahead, everyone else ahead_days. A run that reaches that day may go on past it.
+  var READ_DAYS = 14, READ_DAYS_AHEAD = 90;
   var filmKey = [], keyFilm = {}, BASE_TITLE = document.title;
   function filmHref(i, d) { return "#film/" + filmKey[i] + (d ? "/" + d : ""); }
   function upcoming(s) { return s.d > NOW.day || (s.d === NOW.day && !isPast(s)); }

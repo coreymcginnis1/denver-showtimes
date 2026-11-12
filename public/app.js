@@ -435,8 +435,7 @@
 
   // All dates and search extras: when a film plays at one theater, at a glance (Corey, Nov 2026: with
   // the film page for exact times, this line only needs where and when).
-  //   one showing          "Thu Dec 3, 7:00 pm"
-  //   one day              "Thu Nov 19, 4:15 pm 7:00 pm"
+  //   one day              "Thu Nov 19, 4:15 pm 7:00 pm": the times are buttons for tickets (cardHTML)
   //   a run                "Nov 19 – 22" (up to two dark days in between still count as one run)
   //   to the posted end    "from Nov 12": theaters post their current films a week at a time (Nov 12,
   //                        2026: nearly every theater, the Sie too, through Wed Nov 18 or Thu Nov 19),
@@ -446,14 +445,9 @@
   //   separate runs/dates  "Nov 14 – 15, 21 – 22", "Nov 19, Dec 3, 10" (repertory, prints, weekend
   //                        events): up to three, then "and N more dates"
   var RUN_GAP = 3;   // days between two showings that still make one run (Fatherland at the Sie skips Mon–Tue)
-  function whenHTML(list, th) {
+  function weekdayDate(d) { return dateObj(d).toLocaleDateString("en-US", { weekday: "short" }) + " " + shortDate(d); }   // "Thu Nov 12"
+  function whenHTML(list, th) {   // two or more dates (one day is drawn with its times in cardHTML)
     var dates = Array.from(new Set(list.map(function (s) { return s.d; }))).sort();
-    var wd = function (d) { return dateObj(d).toLocaleDateString("en-US", { weekday: "short" }) + " " + shortDate(d); };
-    if (dates.length === 1) {
-      var timed = list.filter(function (s) { return s.hm; }).slice(0, 3);
-      return esc(wd(dates[0])) + (timed.length ? ", " + timed.map(function (s) { return '<span class="nw">' + timeHTML(s.hm) + "</span>"; }).join(" ") : "") +
-        (list.length > 3 ? " and more" : "");
-    }
     var segs = [];   // runs of dates no more than RUN_GAP days apart
     dates.forEach(function (d, n) {
       if (n && dayDiff(dates[n - 1], d) <= RUN_GAP) segs[segs.length - 1][1] = d; else segs.push([d, d]);
@@ -562,10 +556,15 @@
         : function (a, b) { return order.indexOf(a[0]) - order.indexOf(b[0]); });
       var vhtml = vlist.map(function (e, k) {
         var t = theaterOf(e[0]) || {};
-        if (asSpan) {   // one line per theater: where and when ("Mayan Nov 19 – 22"); the times are on the film page
-          var shs = shared(e[1]), lbl = sharedLabel(shs);
+        if (asSpan) {   // one line per theater: where and when ("Mayan Nov 19 – 22")
+          var shs = shared(e[1]), lbl = sharedLabel(shs), extra = k >= SPAN_SHOWN ? " extra" : "";
           var name = esc((TINY[e[0]] || tName(e[0])) + (lbl ? ", " + lbl : ""));   // "Alamo, 35mm"
-          return '<a class="venue line' + (k >= SPAN_SHOWN ? " extra" : "") + '" href="' + filmHref(i, e[1][0].d) + '" data-film="' + i + '">' +
+          // One day: its times, each opening its tickets like any other time on the site.
+          if (e[1].every(function (s) { return s.d === e[1][0].d; }))
+            return '<div class="venue line' + extra + '"><span class="vn">' + name + '</span><span class="when">' + esc(weekdayDate(e[1][0].d)) +
+              (e[1][0].hm ? "," : "") + '</span><span class="times">' + timesHTML(e[1], f, t, shs) + "</span></div>";
+          // Dates only ("Nov 19 – 22", "from Nov 12"): the line opens the film page on its first date.
+          return '<a class="venue line' + extra + '" href="' + filmHref(i, e[1][0].d) + '" data-film="' + i + '">' +
             '<span class="vn">' + name + '</span><span class="when">' + whenHTML(e[1], e[0]) + "</span></a>";
         }
         // A format / language every showing here shares ("Regal Colorado, IMAX") goes with the theater, not on each time.
@@ -686,8 +685,10 @@
     }
     var f = films[i], dates = filmDates(i), facts = factsOf(f), flag = fpFlag(f);
     // A film on only a few dates opens on All dates (everything at once); otherwise on its first date.
-    if (state.fpDay !== ALL && dates.indexOf(state.fpDay) < 0) {
-      state.fpDay = dates.length && dates.length <= FP_FEW ? ALL : dates[0] || null; state.fpAll = false; state.fpOpen = {};
+    // On a single date there's no All dates: it would only repeat that day (Corey, Nov 2026).
+    var oneDate = dates.length === 1;
+    if (oneDate ? state.fpDay !== dates[0] : state.fpDay !== ALL && dates.indexOf(state.fpDay) < 0) {
+      state.fpDay = oneDate ? dates[0] : dates.length && dates.length <= FP_FEW ? ALL : dates[0] || null; state.fpAll = false; state.fpOpen = {};
     }
     var allDates = state.fpDay === ALL;
     var html = back + '<div class="fp-head"><div class="fp-poster">' + (f.posters.length ? posterHTML(i, "fp-img") : fallbackHTML(f)) + "</div>" +
@@ -704,9 +705,9 @@
       fpAboutFits();
       return;
     }
-    html += '<nav class="days fp-days" aria-label="Dates for ' + esc(f.t) + '">' +
+    html += '<nav class="days fp-days" aria-label="Dates for ' + esc(f.t) + '">' + (oneDate ? "" :
       '<button type="button" class="day" data-fd="' + ALL + '" aria-pressed="' + allDates + '">' +
-      '<span class="dm">&nbsp;</span><span class="dn">All</span><span class="dw">dates</span></button>' + dates.map(function (d) {
+      '<span class="dm">&nbsp;</span><span class="dn">All</span><span class="dw">dates</span></button>') + dates.map(function (d) {
       return '<button type="button" class="day" data-fd="' + d + '" aria-pressed="' + (d === state.fpDay) + '" aria-label="' + longDate(d) + '">' +
         dayFace(d) + "</button>";
     }).join("") + "</nav>";

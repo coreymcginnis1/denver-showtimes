@@ -70,7 +70,7 @@ Tests never touch the network (`tests/conftest.py` unsets tokens and stubs Wikip
   - `scrapers/` — `sie_eventive.py`, `landmark.py`, `alamo.py`, `fandango.py` (AMC/Regal/Harkins/
     Cinemark/Emagine/Movie Tavern), `dairy.py` (Dairy Arts Center), `cu_ifs.py` (CU Film Series).
   - `pipeline.py` — cleanup, TMDB standardization, openings, trending, feed, run summary.
-  - `tmdb.py` · `wikipedia.py` · `omdb.py` (off) · `formats.py` · `config.py` · `cli.py` · `models.py`.
+  - `tmdb.py` · `wikipedia.py` (page views, Metacritic) · `omdb.py` (off) · `formats.py` · `config.py` · `cli.py` · `models.py`.
 - `public/` — `index.html`, `styles.css`, `app.js` (vanilla, no build), `zips.json`,
   `tmdb-logo.svg`, `favicon.svg` (brick square, white D), `preview.png` (Substack card, 1200×630, the
   redesign's look; regenerate if the masthead or theaters change), `data.json` (written by the workflow).
@@ -82,7 +82,8 @@ Tests never touch the network (`tests/conftest.py` unsets tokens and stubs Wikip
 `theaters` (key, name, color, default_on, lat, lon, optional `site`) · `films` · `events` (`id`, `title`, `start`,
 optional `end`/`allDay`, `extendedProps`: `theater`, `screen`, `fmt`, `ticketUrl`, `poster`,
 `lang`, `rating`, `runtime`, `year`, `release`) · `film_meta` (displayed title → TMDB data:
-`directors`, `cast` (top five billed), `genres`, `countries`, `overview`, `trend`, `wiki_views`, …) · `tmdb_ids` (local title → TMDB id) · `openings` (title → Denver opening date) ·
+`directors`, `cast` (top five billed), `genres`, `countries`, `overview`, `trend`, `wiki_views`,
+`metacritic` (as Wikipedia reports it), …) · `tmdb_ids` (local title → TMDB id) · `openings` (title → Denver opening date) ·
 `stale_theaters` · `generated_at` · `timezone`.
 
 ## Theaters (`config.toml` `[theaters.*]`)
@@ -199,7 +200,9 @@ Each run lists titles new since the last (tracked in `known_titles.txt`; dry run
 - **Trending** (`film_meta.trend`, `pipeline.add_trend()`, `[trending]`): the average of a film's
   rank by TMDB popularity and by English Wikipedia page views over the last 7 days (TMDB rank alone
   without an article). Views: Wikidata finds the article by TMDB id (P4947), the Wikimedia pageviews
-  API gives daily counts; free, needs only a descriptive User-Agent. **Why 50/50 (Nov 2026):**
+  API gives daily counts; free, needs only a descriptive User-Agent. One request at a time, 0.25 s
+  apart, and a 429 waits as asked: two at once got 62 of ~170 lookups rate-limited on GitHub's shared
+  runners (Nov 12, 2026); a film whose count can't be read keeps last run's. **Why 50/50 (Nov 2026):**
   against Letterboxd's popular-this-week list (10 overlapping films) rank correlation was TMDB
   0.59, Wikipedia 0.77, blend 0.90 (40–60% all ~0.88). TMDB alone is worldwide and counts streaming
   (The Mongoose #3); Wikipedia alone over-weights big international releases (Ramayana #1). There
@@ -209,11 +212,22 @@ Each run lists titles new since the last (tracked in `known_titles.txt`; dry run
 
 ## Decisions and what's on hold (don't redo without new information)
 
-- **No ratings.** TMDB ratings come from a few hundred voters; IMDb's data is personal-use only;
-  Metacritic / Rotten Tomatoes have no API and forbid scraping; OMDb leaves most current releases
-  unscored for weeks (Wild Horse Nine blank while Metacritic showed 78) and lags on IMDb ratings
-  (You Can See Everything 7.9 from 165 votes vs 9.1 from 27K). `omdb.py` is kept with
-  `[omdb] enabled = false`; turning it back on also needs the site display rebuilt.
+- **Ratings: Metacritic only, on the film page, from Wikipedia (Nov 2026).** The film page's facts
+  read "…, R, Metacritic 77"; nothing sorts by it (Corey: "I don't know about sorting yet").
+  `wikipedia.metascores()` reads each film's English Wikipedia article (found by TMDB id through
+  Wikidata, 20 articles a request, paced, 429s wait as asked) and takes the number from the
+  `{{Metacritic film prose}}` template or the usual sentence, preferring the Reception / Critical
+  response section (a game's or soundtrack's score elsewhere stays out). An article that can't be
+  read keeps last run's score; one read without a score drops it. `[critics] metacritic` switches it.
+  Why Wikipedia: Metacritic and Rotten Tomatoes have no free API (licensed through Fabric /
+  Fandango, by application) and their terms forbid scraping (RT's, Jan 2026, even bar deep
+  links). Measured Nov 12, 2026 on the same new releases: in their first two weeks Wikipedia had a
+  Metacritic number for 19 of 30, OMDb 7, Wikidata 4; at 15–60 days 12 / 7 / 7 of 14. Where both
+  had one, Wikipedia and OMDb agreed within 1–4 points. Rotten Tomatoes is in Wikipedia too (13
+  of 30) but isn't shown. Other ratings stay off: TMDB's come from a few hundred voters; IMDb's
+  data is personal-use only; OMDb lags (Wild Horse Nine blank on OMDb after 12 days, 77 on
+  Wikipedia; You Can See Everything IMDb 7.9 from 165 votes vs 9.1 from 27K). `omdb.py` is kept
+  with `[omdb] enabled = false`.
 - **Letterboxd:** its terms forbid robots/scrapers (RSS feeds included — not explicitly
   authorized) and its API is by application (api@letterboxd.com); Corey chose not to apply for
   now. The site only **links** to `letterboxd.com/tmdb/<id>/`. A member's own data export (CSV) is
@@ -277,15 +291,28 @@ redesign directions" (A listings + C program won; B marquee rejected).
 - **Cards:** poster, "Opening week" (first 7 days in Denver) / "Opens Nov 19", the title (bold condensed, its own capitalization),
   then times by theater (nearest first, like the checklist) as plain text ("11:50 am 1:45 pm 4:30 pm", every time with its am/pm;
   a format all of a theater's showings share goes on the theater line, "Alamo, 35mm"). **Tap the
-  poster or the title** for the details over the poster (no "i" mark: a pointer, and on hover the poster
-  dims and the title underlines): director(s), country (non-US), year, runtime, rating, TMDB synopsis,
-  Letterboxd link (`film_meta.directors` / `.countries` / `.overview`, from the same TMDB request with
-  `append_to_response=credits`). Special events have no details, so their poster isn't a button.
+  title or the poster** for the film's page (below); hovering either dims the poster and underlines
+  the title, so they read as one link (keyboards and screen readers get just the title's). The
+  details that used to sit over the poster (director, facts, Metacritic, synopsis, Letterboxd) live
+  on the film page now: Corey, Nov 2026, found poster-for-details / title-for-page confusing, and
+  one rule ("tap a movie, get its page") beat the quick peek.
   **Posters:** TMDB `w500` first, other theaters' art next, Fandango (600 px renderer) last, then the
   title set white on black. Long lists clamp at 210px behind "Show all times" / "Show all N theaters"
   (`clampVenues()`), only when that hides 90px or more (`CLAMP_SLACK`): hiding a line or two made
   the card *shrink* on expand (the button went, a few px came in). Every "Show all" toggles to
   "Show fewer …", and collapsing keeps the button where it was on screen (`toggleMore()`).
+- **Film page** (`#film/<title-slug>`, e.g. `#film/wild-horse-nine`; Nov 2026, Corey: "a way to click
+  on a movie and see all upcoming showtimes… to plan ahead around a specific movie", like a ticketing
+  site's film page): "← All films", the poster and details (director(s), country if not the US, year,
+  runtime, rating, Metacritic as Wikipedia reports it (`film_meta.metacritic`), TMDB synopsis
+  (three lines and "More" on phones), Letterboxd link), a strip of **every date it plays** (up to
+  90 days where the theater lists that far, styled like the day strip and sticky on scroll), and for
+  the chosen date **every theater showing it**, nearest first with miles and its times (tap one for
+  the usual ticket sheet): the 6 nearest (`FP_SHOWN`), the rest behind "Show all N theaters". It
+  ignores the reader's theater picks, day and search and doesn't change them. Its own address, so the
+  newsletter can link a film; the page title reads "<Film> showtimes · …". Back (the button, the
+  browser's, or Escape) returns to the same scroll spot. A link to a film that's gone: "That film
+  isn't playing at any theater we list right now." A slug shared by two films gets the TMDB id.
 - **Schedule:** the day in time order under big brick hour numerals, each with its am/pm (earlier-today rows behind a
   button). Desktop: sticky right column that scrolls on its own with **no scrollbar**, like the
   theater row: the end with more fades out (`schedEdges()`). Phone: Films / Schedule tabs.
@@ -338,7 +365,8 @@ redesign directions" (A listings + C program won; B marquee rejected).
 - **Privacy:** no cookies, no analytics. The only browser storage is the theater pick
   (`dst-theaters` in `localStorage`, never sent anywhere); the zip is never saved. Third-party
   requests are poster images only (TMDB, Fandango, theaters). Keep it that way.
-- **Footer** credits TMDB (logo + required notice; posters, directors and synopses) and Wikipedia, and links each theater company's site (one link per company; Movie Tavern goes to marcustheatres.com, as movietavern.com's certificate had lapsed in Nov 2026).
+- **Footer** credits TMDB (logo + required notice; posters, directors and synopses) and Wikipedia
+  (page views and Metacritic scores), and links each theater company's site (one link per company; Movie Tavern goes to marcustheatres.com, as movietavern.com's certificate had lapsed in Nov 2026).
 - **Cache-busting:** `index.html` loads `styles.css`/`app.js` with `?v=__ASSET_VERSION__`, replaced
   with the commit SHA on deploy; `data.json` is fetched `no-store`. OG tags use `__SITE_URL__`.
 

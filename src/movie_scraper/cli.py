@@ -68,12 +68,12 @@ def main(argv: list[str] | None = None) -> int:
         if args.compare_trending:
             print_trending_comparison(feed)
         # Every film's match, so a PR reviewer can spot a wrong TMDB match (fix: [tmdb.overrides]).
-        print("\nFilm matches (title | TMDB id | release | IMDb id | IMDb rating/votes (not shown) | Metascore):")
+        print("\nFilm matches (title | TMDB id | release | IMDb id | Metacritic, as Wikipedia reports it):")
         for t in feed["films"]:
             m = meta.get(t)
             if m:
                 print(f"  MATCH | {t} | {m.get('tmdb_id')} | {m.get('release') or ''} | {m.get('imdb_id') or ''} | "
-                      f"{m.get('imdb_rating') or ''}/{m.get('imdb_votes') or ''} | {m.get('metascore') or ''}")
+                      f"{m.get('metacritic') if m.get('metacritic') is not None else ''}")
             else:
                 print(f"  MATCH | {t} | (not on TMDB)")
         for e in events[:12]:

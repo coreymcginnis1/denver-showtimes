@@ -1,25 +1,30 @@
-"""English Wikipedia page views over the last 7 days, as a possible weekly "Trending" signal.
-
-Experimental (Nov 2026): only `--compare-trending` uses this, to print a side-by-side ranking
-against TMDB popularity in a dry run (the PR check). The site doesn't use it yet.
+"""English Wikipedia: page views over the last 7 days (half of "Trending") and each film's
+Metacritic score as its article reports it (the film page).
 
 Each film's article is found through Wikidata by its TMDB id (property P4947), so there's no
-title matching; views come from the Wikimedia pageviews API. Both are free and allowed with a
-descriptive User-Agent. Nothing here raises: a film without an article, or a failed request,
-just has no count.
+title matching. Views come from the Wikimedia pageviews API; article text from the MediaWiki
+API, 20 articles a request. Both are free and allowed with a descriptive User-Agent, and both
+rate-limit GitHub's shared runners, so reads are paced and a 429 waits as asked. Nothing here
+raises: a film without an article, or a failed request, just has no value.
+
+Metacritic and Rotten Tomatoes have no free API and forbid scraping (CLAUDE.md "Ratings"); the
+score here is the fact as Wikipedia's editors record it, usually within days of release
+(Nov 2026: 19 of 30 films in their first two weeks, vs 7 on OMDb).
 """
 from __future__ import annotations
 
 import logging
-from concurrent.futures import ThreadPoolExecutor
+import re
+import time
 from datetime import date, timedelta
-from urllib.parse import quote
+from urllib.parse import quote, unquote
 
 import httpx
 
 log = logging.getLogger(__name__)
 
 SPARQL = "https://query.wikidata.org/sparql"
+API = "https://en.wikipedia.org/w/api.php"
 VIEWS = ("https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/"
          "all-access/user/{article}/daily/{start}00/{end}00")
 HEADERS = {"User-Agent": "DenverShowtimes/1.0 (https://coreymcginnis1.github.io/denver-showtimes/)"}
@@ -34,31 +39,104 @@ def articles(tmdb_ids: list[int], client: httpx.Client) -> dict[int, str]:
              "?article schema:about ?item ; schema:isPartOf <https://en.wikipedia.org/> . }" % values)
     r = client.post(SPARQL, data={"query": query, "format": "json"})
     r.raise_for_status()
-    return {int(b["tmdb"]["value"]): b["article"]["value"].rsplit("/", 1)[1]
+    # Wikidata gives the article's address, percent-encoded ("Am%C3%A9lie"): decode it to the name.
+    return {int(b["tmdb"]["value"]): unquote(b["article"]["value"].rsplit("/", 1)[1])
             for b in r.json()["results"]["bindings"]}
 
 
-def weekly_views(tmdb_ids: list[int], today: date, workers: int = 2) -> dict[int, int]:
-    """Page views of each film's article over the 7 days ending yesterday (today isn't complete)."""
+def weekly_views(tmdb_ids: list[int], today: date, pause: float = 0.25) -> dict[int, int]:
+    """Page views of each film's article over the 7 days ending yesterday (today isn't complete).
+
+    One request at a time with a short pause: Wikimedia rate-limits GitHub's shared runners
+    (Nov 12, 2026: 62 of ~170 lookups got 429 with two at once and no pause), and a 429 waits as asked.
+    """
     end = today - timedelta(days=1)
     start = end - timedelta(days=6)
+    out: dict[int, int] = {}
     try:
         with httpx.Client(headers=HEADERS, timeout=30) as c:
-            found = articles(tmdb_ids, c)
-
-            def one(item):
-                tid, article = item
+            for tid, article in articles(tmdb_ids, c).items():
                 url = VIEWS.format(article=quote(article, safe=""), start=f"{start:%Y%m%d}", end=f"{end:%Y%m%d}")
-                try:
-                    r = c.get(url)
-                    r.raise_for_status()
-                    return tid, sum(x["views"] for x in r.json().get("items", []))
-                except Exception as e:
-                    log.warning("wikipedia views %s: %s", article, str(e)[:80])
-                    return tid, None
-
-            with ThreadPoolExecutor(workers) as pool:
-                return {t: v for t, v in pool.map(one, found.items()) if v is not None}
+                data = _get(c, url, what=f"views {article}")
+                if data is not None:
+                    out[tid] = sum(x["views"] for x in data.get("items", []))
+                time.sleep(pause)
     except Exception:
         log.exception("Wikipedia lookup failed")
-        return {}
+    return out
+
+
+# "{{Metacritic film prose|77|45|...}}" or the usual sentence: "Metacritic, which uses a weighted
+# average, assigned the film a score of 77 out of 100 based on 45 critics".
+_MC = [re.compile(r"\{\{\s*Metacritic (?:film )?prose\s*\|\s*(?:1\s*=\s*)?(\d{1,3})\b", re.I),
+       re.compile(r"\bMetacritic\b[^.]{0,250}?\b(\d{1,3})\s*(?:out of 100|/\s*100)\b", re.I)]
+# The film's reviews are under a heading like "Critical response" or "Reception"; looking there
+# first keeps a video game's or soundtrack's Metacritic score elsewhere in the article out of it.
+_RECEPTION = re.compile(r"^==+\s*(?:Critical (?:response|reception)|Reception|Critical reaction|Response)\s*==+\s*$",
+                        re.I | re.M)
+
+
+def metacritic_in(wikitext: str) -> int | None:
+    """The film's Metacritic score (0-100) as its article states it, else None."""
+    if not wikitext:
+        return None
+    h = _RECEPTION.search(wikitext)
+    for text in ([wikitext[h.start():]] if h else []) + [wikitext]:
+        for pat in _MC:
+            m = pat.search(text)
+            if m and 0 <= int(m.group(1)) <= 100:
+                return int(m.group(1))
+    return None
+
+
+def _get(c: httpx.Client, url: str, params: dict | None = None, what: str = "article read") -> dict | None:
+    """One Wikimedia read. A 429 waits as asked (at most a minute) and a dropped connection waits
+    5 s, then it tries again, three tries in all; any other error (a 404: no views yet) gives up."""
+    for _ in range(3):
+        try:
+            r = c.get(url, params=params) if params else c.get(url)
+            if r.status_code == 429:
+                time.sleep(min(int(r.headers.get("Retry-After") or 30), 60))
+                continue
+            r.raise_for_status()
+            return r.json()
+        except httpx.TransportError as e:
+            log.warning("wikipedia %s: %s", what, str(e)[:80])
+            time.sleep(5)
+        except Exception as e:
+            log.warning("wikipedia %s: %s", what, str(e)[:80])
+            return None
+    log.warning("wikipedia %s: still rate-limited, giving up", what)
+    return None
+
+
+def metascores(tmdb_ids: list[int], pause: float = 2.0, batch: int = 20) -> dict[int, int | None]:
+    """Metacritic score per TMDB id, from each film's article.
+
+    A film whose article was read maps to its score, or None when the article gives none; a film
+    with no article, or whose read failed, is left out (the caller keeps last run's score).
+    """
+    out: dict[int, int | None] = {}
+    try:
+        with httpx.Client(headers=HEADERS, timeout=30) as c:
+            found = list(articles(tmdb_ids, c).items())
+            for i in range(0, len(found), batch):
+                chunk = found[i:i + batch]
+                data = _get(c, API, {"action": "query", "format": "json", "formatversion": "2", "redirects": "1",
+                                "prop": "revisions", "rvprop": "content", "rvslots": "main",
+                                "titles": "|".join(a.replace("_", " ") for _, a in chunk)})
+                if data is not None:
+                    q = data.get("query") or {}
+                    to = {x["from"]: x["to"] for x in (q.get("normalized") or []) + (q.get("redirects") or [])}
+                    text = {p["title"]: ((p.get("revisions") or [{}])[0].get("slots") or {}).get("main", {}).get("content", "")
+                            for p in q.get("pages") or [] if not p.get("missing")}
+                    for tid, a in chunk:
+                        name = a.replace("_", " ")
+                        name = to.get(to.get(name, name), to.get(name, name))
+                        if name in text:
+                            out[tid] = metacritic_in(text[name])
+                if i + batch < len(found):
+                    time.sleep(pause)
+    except Exception:
+        log.exception("Wikipedia Metacritic lookup failed")
+    return out

@@ -624,11 +624,13 @@
       '<h2 id="fpTitle" tabindex="-1">' + esc(f.t) + "</h2>" +
       (f.dirs.length ? '<p class="dir">' + esc(f.dirs.join(", ")) + "</p>" : "") +
       (facts ? '<p class="facts">' + esc(facts) + "</p>" : "") +
-      (f.about ? '<p class="about">' + esc(f.about) + "</p>" : "") +
+      // Phones show three lines of the synopsis (so the dates and times start on the first screen) and "More".
+      (f.about ? '<p class="about" id="fpAbout">' + esc(f.about) + '</p><button type="button" class="fp-more-about" id="fpAboutMore" aria-controls="fpAbout" aria-expanded="false" hidden>More</button>' : "") +
       (f.id ? '<p class="links"><a href="https://letterboxd.com/tmdb/' + f.id + '/" target="_blank" rel="noopener">View on Letterboxd</a></p>' : "") +
       "</div></div>";
     if (!dates.length) {
       page.innerHTML = html + '<p class="empty">No more showtimes at the theaters we list.</p>';
+      fpAboutFits();
       return;
     }
     html += '<nav class="days fp-days" aria-label="Dates for ' + esc(f.t) + '">' + dates.map(function (d) {
@@ -651,7 +653,12 @@
       (keys.length > FP_SHOWN ? '<button type="button" class="more" id="fpMore" aria-expanded="' + state.fpAll + '">' +
         (state.fpAll ? "Show fewer theaters" : "Show all " + keys.length + " theaters") + "</button>" : "");
     page.innerHTML = html;
+    fpAboutFits();
     var sel = page.querySelector('.fp-days [aria-pressed="true"]'); if (sel) sel.scrollIntoView({ block: "nearest", inline: "nearest" });
+  }
+  function fpAboutFits() {   // "More" only when the three lines hide something
+    var a = $("fpAbout"), m = $("fpAboutMore");
+    if (a && m) m.hidden = !a.classList.contains("open") && a.scrollHeight <= a.clientHeight + 1;
   }
   function openFilm(i) {
     var was = state.film;
@@ -842,6 +849,10 @@
       }
       if (b.id === "closeSheet") return closeSheet();
       if (b.id === "fpBack") return leaveFilm();
+      if (b.id === "fpAboutMore") {
+        var ab = $("fpAbout"), more = !ab.classList.contains("open");
+        ab.classList.toggle("open", more); b.textContent = more ? "Less" : "More"; b.setAttribute("aria-expanded", more); return;
+      }
       if (b.dataset.fd) { state.fpDay = b.dataset.fd; state.fpAll = false; renderFilmPage(); return; }
       if (b.id === "fpMore") {   // collapsing keeps the button where it was on screen
         var fy = b.getBoundingClientRect().top; state.fpAll = !state.fpAll; renderFilmPage();
@@ -902,7 +913,7 @@
       $("zipNote").hidden = !(z.length === 5 && !ok);
       if (ok) { state.zip = z; applyRadius(); pickShownTheaters(); renderAll(); }
     });
-    window.addEventListener("resize", function () { measure(); clampVenues(); edges(); schedEdges(); });
+    window.addEventListener("resize", function () { measure(); clampVenues(); edges(); schedEdges(); fpAboutFits(); });
     if (document.fonts) document.fonts.ready.then(function () { clampVenues(); edges(); schedEdges(); });   // re-measure in Archivo
     // A tab left open overnight would keep yesterday as "today": reload when the Denver date changes.
     document.addEventListener("visibilitychange", function () {

@@ -233,6 +233,7 @@ body.fp-open #days, body.fp-open #controls, body.fp-open #layout { display: none
 .fp .facts { color: var(--muted); }
 .fp .about { font-size: 16px; line-height: 1.5; }
 .fp .links { margin-top: 12px; }
+.fp-more-about { display: none; }
 .fp-days { border-top: 1px solid var(--ink); }
 .fp-date { margin: 22px 0 14px; font-weight: 900; font-stretch: 70%; font-size: 28px; line-height: 1; text-transform: uppercase; }
 .fp-date span { font-weight: 500; font-stretch: 100%; font-size: 15px; text-transform: none; color: var(--muted); }
@@ -309,7 +310,10 @@ body.fp-open #days, body.fp-open #controls, body.fp-open #layout { display: none
   .fp-poster { float: left; width: 112px; margin: 4px 14px 6px 0; }
   .fp-head::after { content: ""; display: block; clear: both; }
   .fp h2 { font-size: 32px; }
-  .fp .about { font-size: 15px; }
+  .fp .about { font-size: 15px; margin-bottom: 2px; }
+  .fp .about:not(.open) { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+  .fp-more-about { display: block; min-height: 36px; text-decoration: underline; text-underline-offset: 3px; }
+  .fp .links { margin-top: 4px; }
   .fp-date { font-size: 24px; margin-top: 18px; }
   .fp-venues { grid-template-columns: minmax(0, 1fr); gap: 12px; }
   .info { padding: 12px; font-size: 13px; gap: 6px; }

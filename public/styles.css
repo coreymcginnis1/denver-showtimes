@@ -166,7 +166,9 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .venue.line .vn { display: inline; }
 .venue.line .when { font-weight: 700; font-size: 15px; font-variant-numeric: tabular-nums; }
 .venue.line .when .ap { font-weight: 500; font-size: 14px; }
-@media (hover: hover) { .venue.line:hover .when { color: var(--brick); text-decoration: underline; } }
+@media (hover: hover) { a.venue.line:hover .when { color: var(--brick); text-decoration: underline; } }
+.venue.line .times { column-gap: 10px; }
+.venue.line .time { font-size: 15px; min-height: 26px; }
 .card:not(.all-th) .venue.extra { display: none; }
 .venues.clamp { max-height: 210px; overflow: hidden; -webkit-mask: linear-gradient(#000 70%, #0000); mask: linear-gradient(#000 70%, #0000); }
 .more { margin-top: 6px; text-decoration: underline; font-size: 14px; }

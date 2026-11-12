@@ -108,7 +108,7 @@
   // never saved: it resets to DEFAULT_ZIP on every visit, so nothing about a reader is kept.
   var DEFAULT_ZIP = "80218", ZIPS = {};   // distance buttons (1 / 3 / 5 mi / All) are in index.html
   var state = { day: null, q: "", sort: "new", kind: "all", showEarlier: false, theaters: null, zip: DEFAULT_ZIP, radius: null,
-    film: null, fpDay: null, fpAll: false, fpScroll: 0, fpFromList: false,   // the film page (see "Film page")
+    film: null, fpDay: null, fpAll: false, fpOpen: {}, fpScroll: 0, fpFromList: false,   // the film page (see "Film page")
     tShown: null, tAll: false };
 
   // ---- Data ------------------------------------------------------------------
@@ -165,12 +165,16 @@
       var r = runs[s.th + "|" + s.f] || (runs[s.th + "|" + s.f] = { th: s.th, a: s.d, z: s.d });
       if (s.d < r.a) r.a = s.d; if (s.d > r.z) r.z = s.d;
     });
+    // Judged per chain (one AMC posts like the next; the Mayan alone has two films), and only where at
+    // least POSTED_MIN current films stop on that date: with two films the Dairy's "most common last
+    // date" was just Queen at Sea's real last day. The Dairy and CU list each film's whole run up front.
     Object.keys(runs).forEach(function (k) {
-      var r = runs[k]; if (r.a > NOW.day || r.z <= NOW.day) return;
-      var e = ends[r.th] || (ends[r.th] = {}); e[r.z] = (e[r.z] || 0) + 1;
+      var r = runs[k], g = chainKey(r.th); if (r.a > NOW.day || r.z <= NOW.day || WHOLE_RUNS[g]) return;
+      var e = ends[g] || (ends[g] = {}); e[r.z] = (e[r.z] || 0) + 1;
     });
-    Object.keys(ends).forEach(function (th) {
-      POSTED[th] = Object.keys(ends[th]).sort(function (a, b) { return ends[th][b] - ends[th][a] || a.localeCompare(b); })[0];
+    Object.keys(ends).forEach(function (g) {
+      var top = Object.keys(ends[g]).sort(function (a, b) { return ends[g][b] - ends[g][a] || a.localeCompare(b); })[0];
+      if (ends[g][top] >= POSTED_MIN) POSTED[g] = top;
     });
     days = Array.from(new Set(shows.map(function (s) { return s.d; }))).sort()
       .filter(function (d) { return d >= NOW.day && dayDiff(NOW.day, d) <= WINDOW_DAYS; });   // later dates: All dates only
@@ -436,8 +440,9 @@
   //   a run                "Nov 19 – 22" (up to two dark days in between still count as one run)
   //   to the posted end    "from Nov 12": theaters post their current films a week at a time (Nov 12,
   //                        2026: nearly every theater, the Sie too, through Wed Nov 18 or Thu Nov 19),
-  //                        so a run that reaches that edge (POSTED) or the last date the theater has
-  //                        posted at all (THEATER_END) hasn't ended; only one that stops short has
+  //                        so a run that reaches that edge (POSTED, per chain) or the last date the
+  //                        theater has posted at all (THEATER_END) hasn't ended; only one that stops
+  //                        short has. The Dairy and CU post whole runs: "Queen at Sea Nov 12 – 14".
   //   separate runs/dates  "Nov 14 – 15, 21 – 22", "Nov 19, Dec 3, 10" (repertory, prints, weekend
   //                        events): up to three, then "and N more dates"
   var RUN_GAP = 3;   // days between two showings that still make one run (Fatherland at the Sie skips Mon–Tue)
@@ -455,7 +460,7 @@
     });
     var first = dates[0], last = dates[dates.length - 1];
     if (segs.length === 1) {
-      var edge = POSTED[th];
+      var edge = POSTED[chainKey(th)];
       if ((edge && last >= edge && dayDiff(edge, last) <= 7) || (THEATER_END[th] && last >= THEATER_END[th])) return "from " + esc(shortDate(first));
     }
     var prevMonth = null, out = segs.slice(0, 3).map(function (g) {   // "Nov 14 – 15, 21 – 22": the month only when it changes
@@ -653,8 +658,13 @@
   // link straight to it. It leaves the reader's theater picks, day and search alone.
 
   var FP_SHOWN = 6;   // theaters listed before "Show all N theaters"
+  var FP_DATES = 5;   // All dates: a theater's dates listed before "Show all N dates"
+  var FP_FEW = 4;     // a film on this many dates or fewer opens on All dates
   var THEATER_END = {};   // theater -> the last date it has posted (set in load)
-  var POSTED = {};        // theater -> how far it has posted its current films: the usual last date (set in load)
+  var POSTED = {};        // chain -> how far it has posted its current films: the usual last date (set in load)
+  var POSTED_MIN = 3;     // current films that must stop on one date before it counts as the posting edge
+  var WHOLE_RUNS = { dairy: true, cu: true };   // sources that list a film's whole run, so its last date is the end
+  function chainKey(th) { return th.split("_")[0]; }   // "amc_westminster" -> "amc", "landmark_greenwood" -> "landmark"
   var filmKey = [], keyFilm = {}, BASE_TITLE = document.title;
   function filmHref(i, d) { return "#film/" + filmKey[i] + (d ? "/" + d : ""); }
   function upcoming(s) { return s.d > NOW.day || (s.d === NOW.day && !isPast(s)); }
@@ -675,7 +685,11 @@
       return;
     }
     var f = films[i], dates = filmDates(i), facts = factsOf(f), flag = fpFlag(f);
-    if (dates.indexOf(state.fpDay) < 0) { state.fpDay = dates[0] || null; state.fpAll = false; }
+    // A film on only a few dates opens on All dates (everything at once); otherwise on its first date.
+    if (state.fpDay !== ALL && dates.indexOf(state.fpDay) < 0) {
+      state.fpDay = dates.length && dates.length <= FP_FEW ? ALL : dates[0] || null; state.fpAll = false; state.fpOpen = {};
+    }
+    var allDates = state.fpDay === ALL;
     var html = back + '<div class="fp-head"><div class="fp-poster">' + (f.posters.length ? posterHTML(i, "fp-img") : fallbackHTML(f)) + "</div>" +
       '<div class="fp-main">' + (flag ? '<p class="flag">' + esc(flag) + "</p>" : "") +
       '<h2 id="fpTitle" tabindex="-1">' + esc(f.t) + "</h2>" + (langLine(f) ? '<p class="lang">' + esc(langLine(f)) + "</p>" : "") +
@@ -690,23 +704,36 @@
       fpAboutFits();
       return;
     }
-    html += '<nav class="days fp-days" aria-label="Dates for ' + esc(f.t) + '">' + dates.map(function (d) {
+    html += '<nav class="days fp-days" aria-label="Dates for ' + esc(f.t) + '">' +
+      '<button type="button" class="day" data-fd="' + ALL + '" aria-pressed="' + allDates + '">' +
+      '<span class="dm">&nbsp;</span><span class="dn">All</span><span class="dw">dates</span></button>' + dates.map(function (d) {
       return '<button type="button" class="day" data-fd="' + d + '" aria-pressed="' + (d === state.fpDay) + '" aria-label="' + longDate(d) + '">' +
         dayFace(d) + "</button>";
     }).join("") + "</nav>";
-    // The chosen date: every theater showing it, nearest first (as in the checklist), times in order.
+    // Every theater showing it, nearest first (as in the checklist): on the chosen date its times; on
+    // All dates a line per date ("Thu Nov 12  3:00 pm 6:15 pm"), the first FP_DATES, then "Show all".
     var by = new Map();
-    shows.filter(function (s) { return s.f === i && s.d === state.fpDay; })
-      .sort(function (a, b) { return (a.hm || "").localeCompare(b.hm || ""); })
+    shows.filter(function (s) { return s.f === i && (allDates ? s.d >= NOW.day : s.d === state.fpDay); })
+      .sort(function (a, b) { return (a.d + (a.hm || "")).localeCompare(b.d + (b.hm || "")); })
       .forEach(function (s) { if (!by.has(s.th)) by.set(s.th, []); by.get(s.th).push(s); });
     var dist = function (k) { var m = miles(theaterOf(k) || {}); return m == null ? 1e9 : m; };
     var keys = Array.from(by.keys()).sort(function (a, b) { return dist(a) - dist(b); });
-    html += '<h3 class="fp-date">' + esc(longDate(state.fpDay)) + '<span> at ' + keys.length + " theater" + (keys.length > 1 ? "s" : "") + "</span></h3>" +
-      '<div class="fp-venues' + (state.fpAll ? " all-th" : "") + '">' + keys.map(function (k, n) {
+    var wd = function (d) { return dateObj(d).toLocaleDateString("en-US", { weekday: "short" }) + " " + shortDate(d); };
+    html += '<h3 class="fp-date">' + esc(allDates ? "All dates" : longDate(state.fpDay)) + '<span> at ' + keys.length + " theater" + (keys.length > 1 ? "s" : "") + "</span></h3>" +
+      '<div class="fp-venues' + (allDates ? " span" : "") + (state.fpAll ? " all-th" : "") + '">' + keys.map(function (k, n) {
         var t = theaterOf(k) || { name: k }, list = by.get(k), sh = shared(list), lbl = sharedLabel(sh), mi = miles(t);
-        return '<div class="venue' + (n >= FP_SHOWN ? " extra" : "") + '"><p class="vn"><span>' + esc(tName(k)) +
-          (lbl ? '<span class="lbl">, ' + esc(lbl) + "</span>" : "") + "</span>" +
-          (mi != null ? '<span class="mi">' + mi.toFixed(1) + " mi</span>" : "") + '</p><div class="times">' + timesHTML(list, f, t, sh) + "</div></div>";
+        var head = '<p class="vn"><span>' + esc(tName(k)) + (lbl ? '<span class="lbl">, ' + esc(lbl) + "</span>" : "") + "</span>" +
+          (mi != null ? '<span class="mi">' + mi.toFixed(1) + " mi</span>" : "") + "</p>";
+        if (!allDates) return '<div class="venue' + (n >= FP_SHOWN ? " extra" : "") + '">' + head + '<div class="times">' + timesHTML(list, f, t, sh) + "</div></div>";
+        var byDay = new Map();
+        list.forEach(function (s) { if (!byDay.has(s.d)) byDay.set(s.d, []); byDay.get(s.d).push(s); });
+        var open = !!state.fpOpen[k], lines = Array.from(byDay.entries()).map(function (e, j) {
+          return '<div class="fp-day' + (j >= FP_DATES ? " extra-d" : "") + '"><span class="fd">' + esc(wd(e[0])) + '</span><div class="times">' +
+            timesHTML(e[1], f, t, sh) + "</div></div>";
+        }).join("");
+        return '<div class="venue' + (n >= FP_SHOWN ? " extra" : "") + (open ? " all-d" : "") + '">' + head + lines +
+          (byDay.size > FP_DATES ? '<button type="button" class="more" data-fth="' + k + '" aria-expanded="' + open + '">' +
+            (open ? "Show fewer dates" : "Show all " + byDay.size + " dates") + "</button>" : "") + "</div>";
       }).join("") + "</div>" +
       (keys.length > FP_SHOWN ? '<button type="button" class="more" id="fpMore" aria-expanded="' + state.fpAll + '">' +
         (state.fpAll ? "Show fewer theaters" : "Show all " + keys.length + " theaters") + "</button>" : "");
@@ -720,8 +747,8 @@
   }
   function openFilm(i, day) {   // day: open on that date (a theater line in All dates links its first one)
     var was = state.film;
-    state.film = i; if (was !== i) { state.fpDay = null; state.fpAll = false; }
-    if (day) { state.fpDay = day; state.fpAll = false; }
+    state.film = i; if (was !== i) { state.fpDay = null; state.fpAll = false; state.fpOpen = {}; }
+    if (day) { state.fpDay = day; state.fpAll = false; state.fpOpen = {}; }
     document.body.classList.add("fp-open"); $("filmpage").hidden = false;
     renderFilmPage();
     document.title = (i == null ? "Not playing" : films[i].t + " showtimes") + " · " + BASE_TITLE;
@@ -740,7 +767,7 @@
   }
   // "#film/<key>" opens a film's page; anything else shows the listings.
   function route() {
-    var m = /^#film\/([^/]+)(?:\/(\d{4}-\d{2}-\d{2}))?$/.exec(location.hash);
+    var m = /^#film\/([^/]+)(?:\/(\d{4}-\d{2}-\d{2}|all))?$/.exec(location.hash);
     if (!m) return closeFilm();
     var k = decodeURIComponent(m[1]);
     openFilm(keyFilm[k] != null ? keyFilm[k] : null, m[2]);
@@ -906,7 +933,12 @@
         var ab = $("fpAbout"), more = !ab.classList.contains("open");
         ab.classList.toggle("open", more); b.textContent = more ? "Less" : "More"; b.setAttribute("aria-expanded", more); return;
       }
-      if (b.dataset.fd) { state.fpDay = b.dataset.fd; state.fpAll = false; renderFilmPage(); return; }
+      if (b.dataset.fd) { state.fpDay = b.dataset.fd; state.fpAll = false; state.fpOpen = {}; renderFilmPage(); return; }
+      if (b.dataset.fth) {   // All dates: one theater's every date; collapsing keeps the button where it was
+        var ty = b.getBoundingClientRect().top, th = b.dataset.fth; state.fpOpen[th] = !state.fpOpen[th]; renderFilmPage();
+        if (!state.fpOpen[th]) { var nb = document.querySelector('[data-fth="' + th + '"]'); if (nb) window.scrollBy(0, nb.getBoundingClientRect().top - ty); }
+        return;
+      }
       if (b.id === "fpMore") {   // collapsing keeps the button where it was on screen
         var fy = b.getBoundingClientRect().top; state.fpAll = !state.fpAll; renderFilmPage();
         if (!state.fpAll) window.scrollBy(0, $("fpMore").getBoundingClientRect().top - fy);

@@ -307,11 +307,14 @@ redesign directions" (A listings + C program won; B marquee rejected).
   site's film page): "← All films", the poster and details (director(s), country if not the US, year,
   runtime, rating, Metacritic as Wikipedia reports it (`film_meta.metacritic`), TMDB synopsis
   (three lines and "More" on phones), Letterboxd link), a strip of **every date it plays** (up to
-  90 days where the theater lists that far, styled like the day strip and sticky on scroll), and for
-  the chosen date **every theater showing it**, nearest first with miles and its times (tap one for
-  the usual ticket sheet): the 6 nearest (`FP_SHOWN`), the rest behind "Show all N theaters". It
+  90 days where the theater lists that far, styled like the day strip and sticky on scroll) led by an
+  **All dates** box, and for the chosen date **every theater showing it**, nearest first with miles
+  and its times (tap one for the usual ticket sheet): the 6 nearest (`FP_SHOWN`), the rest behind
+  "Show all N theaters". **All dates** gives each theater a line per date ("Thu Nov 12  3:00 pm
+  6:15 pm"), its first 5 (`FP_DATES`), then "Show all N dates"; a film on 4 dates or fewer
+  (`FP_FEW`) opens on it, any other on its first date. It
   ignores the reader's theater picks, day and search and doesn't change them. Its own address, so the
-  newsletter can link a film (`#film/<slug>/<date>` opens on that date); the page title reads "<Film> showtimes · …". Back (the button, the
+  newsletter can link a film (`#film/<slug>/<date>` opens on that date, `/all` on All dates); the page title reads "<Film> showtimes · …". Back (the button, the
   browser's, or Escape) returns to the same scroll spot. A link to a film that's gone: "That film
   isn't playing at any theater we list right now." A slug shared by two films gets the TMDB id.
 - **Schedule:** the day in time order under big brick hour numerals, each with its am/pm (earlier-today rows behind a
@@ -326,9 +329,11 @@ redesign directions" (A listings + C program won; B marquee rejected).
   Jan 26" (up to three, then "and N more dates"); and **"from Nov 12"** for a run that reaches the
   end of what its theater has posted. Theaters post current films a week at a time (Nov 12, 2026:
   nearly every theater, the Sie too, through Wed Nov 18 or Thu Nov 19), so a run that reaches that
-  edge hasn't ended: `POSTED` (per theater, the most common last date after today among the films
-  it's showing now; a run ending within a week past it counts) or `THEATER_END` (the last date it
-  posted at all). Only a run that stops short gets an end date. Then **Further out**: films whose first showing is past the two weeks, soonest first, with the note "Select theaters only." (Corey's wording) Search's extra matches ("Playing on other dates" / "Playing at other theaters") work the same way. No schedule column.
+  edge hasn't ended: `POSTED` (per chain, `chainKey()`: the most common last date after today among
+  the films it's showing now, once at least `POSTED_MIN` = 3 stop on it; a run ending within a week
+  past it counts) or `THEATER_END` (the last date it posted at all). Only a run that stops short gets
+  an end date. The Dairy and CU list whole runs (`WHOLE_RUNS`): with two current films the Dairy's
+  "edge" was Queen at Sea's real last day, so it read "from Nov 12" for an Nov 11–14 run. Then **Further out**: films whose first showing is past the two weeks, soonest first, with the note "Select theaters only." (Corey's wording) Search's extra matches ("Playing on other dates" / "Playing at other theaters") work the same way. No schedule column.
 - **Formats and languages** (`formats.py`, shared by every scraper; Corey's rule, Nov 2026): only
   formats people pick a showing for are named — **IMAX, IMAX 3D, IMAX 70mm, Dolby (Cinema), Dolby 3D,
   3D, 16mm, 35mm, 70mm, VistaVision**. Every other premium screen (AMC Prime, RPX, 4DX, ScreenX, Harkins

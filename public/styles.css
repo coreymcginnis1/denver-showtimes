@@ -240,6 +240,14 @@ body.fp-open #days, body.fp-open #controls, body.fp-open #layout { display: none
 .fp-venues .vn .mi { color: var(--muted); font-weight: 500; white-space: nowrap; }
 .fp-venues .vn .lbl { color: var(--muted); font-weight: 500; }   /* ", 35mm": quieter than the theater */
 .fp-venues:not(.all-th) .venue.extra { display: none; }
+/* All dates on a film page: a line per date under each theater, "Thu Nov 12  3:00 pm 6:15 pm" */
+.fp-day { display: grid; grid-template-columns: 92px minmax(0, 1fr); column-gap: 10px; align-items: baseline; }
+.fp-day .fd { font-size: 14px; color: var(--muted); white-space: nowrap; }
+.fp-venues .venue:not(.all-d) .fp-day.extra-d { display: none; }
+.fp-venues .venue .more { margin-top: 2px; }
+.day[data-fd="all"] { width: 64px; }
+.fp-venues.span { grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); }   /* wider, so a date's times fit one line */
+body.fp-open .mast #when, body.fp-open .mast .from br { display: none; }   /* the listings' date isn't this page's */
 .fp .more { margin-top: 14px; }
 
 /* ---- Footer ------------------------------------------------------------ */

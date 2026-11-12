@@ -325,11 +325,15 @@ redesign directions" (A listings + C program won; B marquee rejected).
   plain "3D". Laser projection, Atmos sound, seating and aspect ratios (Landmark's Scope / Flat) aren't
   formats. Fandango's header says only Standard / Premium Format / 3D, so the screen comes from the
   showtime group's amenities. **Language** (`lang`): "Subtitled", "Dubbed", or "<Language> dub"
-  ("Spanish dub"), from Fandango amenities, Alamo attributes and the Sie's `subtitle_language` (non-English
-  film + English subtitle track = Subtitled). Harkins says only "Japanese Language": the scraper passes
+  ("Spanish dub"), from Fandango amenities, Alamo attributes, Landmark's `Showtime.Accessibility.Subtitled`
+  tag (read since Nov 2026) and the Sie's `subtitle_language` (non-English film + English subtitle
+  track = Subtitled). Harkins says only "Japanese Language": the scraper passes
   "Japanese language" and the page (`resolveLang()`) compares it with TMDB's original language:
   same = Subtitled, an English film = "<X> dub", anything else = "In <X>". Sources only flag the
-  exceptions (Alamo flags nothing), so an untagged showing of a foreign film can be either. Sie's prints come from the title ("… on 35mm",
+  exceptions, and some never do: Alamo's data has no language field at all, and the Dairy tags it only
+  now and then (Nov 12, 2026, non-English showings flagged: Sie 31/32, Fandango 1,153/1,231, Alamo
+  4/124 (titles only), Dairy 0/17), so an untagged showing of a foreign film can be either, and the
+  same film reads "Subtitled" at one theater and not at the next. Sie's prints come from the title ("… on 35mm",
   "… in VistaVision") or a "35mm" Eventive tag (Eventive has no projection field). On the site, a format/language all of a theater's showings share goes on the
   theater line ("Regal Pavilions, Subtitled"); mixed ones get a short red mark per time (`FMT_TAG`:
   IMAX, Dolby, 3D, PLF, Sub, Dub…, else the label itself; VistaVision is written out). Format and language are judged

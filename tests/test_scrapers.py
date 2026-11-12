@@ -124,6 +124,12 @@ def test_landmark_hides_aspect_ratio_formats():
     assert LandmarkScraper._fmt(["Format.Projection.70mm"]) == "70mm"
 
 
+def test_landmark_reads_its_subtitled_tag():
+    lang = LandmarkScraper._lang
+    assert lang(["Screen.Accessibility.HearingImpaired", "Showtime.Accessibility.Subtitled"]) == "Subtitled"
+    assert lang(["Showtime.Accessibility.ClosedCaption", "Format.Projection.Digital"]) is None
+
+
 def test_sie_subtitles_and_print_tags():
     from movie_scraper.scrapers.sie_eventive import SieScraper
     lang = SieScraper._lang

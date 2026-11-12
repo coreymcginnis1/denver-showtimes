@@ -160,12 +160,13 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .time sup { font-size: 10px; color: var(--brick); margin-left: 2px; font-weight: 700; }
 .time.past { color: #a39b8c; }
 .nw { white-space: nowrap; }
-.time.next { white-space: normal; text-align: left; line-height: 1.25; padding: 4px 0; }   /* long "Next Thu Nov 12, 7:00 pm" wraps */
 /* Two weeks / search: "Alamo  Sat 7, 5:00 pm", one line per theater, three before "Show all". */
-.venue.line { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 8px; }
+/* All dates: "Mayan  Nov 19 – 22", the whole line a link to the film page on that theater's first date */
+.venue.line { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 8px; min-height: 30px; padding: 2px 0; text-decoration: none; }
 .venue.line .vn { display: inline; }
-.venue.line .time.next { font-size: 15px; min-height: 26px; }
-.thru { color: var(--muted); font-size: 14px; }
+.venue.line .when { font-weight: 700; font-size: 15px; font-variant-numeric: tabular-nums; }
+.venue.line .when .ap { font-weight: 500; font-size: 14px; }
+@media (hover: hover) { .venue.line:hover .when { color: var(--brick); text-decoration: underline; } }
 .card:not(.all-th) .venue.extra { display: none; }
 .venues.clamp { max-height: 210px; overflow: hidden; -webkit-mask: linear-gradient(#000 70%, #0000); mask: linear-gradient(#000 70%, #0000); }
 .more { margin-top: 6px; text-decoration: underline; font-size: 14px; }

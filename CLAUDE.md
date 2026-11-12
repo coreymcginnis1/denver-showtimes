@@ -311,14 +311,24 @@ redesign directions" (A listings + C program won; B marquee rejected).
   the chosen date **every theater showing it**, nearest first with miles and its times (tap one for
   the usual ticket sheet): the 6 nearest (`FP_SHOWN`), the rest behind "Show all N theaters". It
   ignores the reader's theater picks, day and search and doesn't change them. Its own address, so the
-  newsletter can link a film; the page title reads "<Film> showtimes · …". Back (the button, the
+  newsletter can link a film (`#film/<slug>/<date>` opens on that date); the page title reads "<Film> showtimes · …". Back (the button, the
   browser's, or Escape) returns to the same scroll spot. A link to a film that's gone: "That film
   isn't playing at any theater we list right now." A slug shared by two films gets the TMDB id.
 - **Schedule:** the day in time order under big brick hour numerals, each with its am/pm (earlier-today rows behind a
   button). Desktop: sticky right column that scrolls on its own with **no scrollbar**, like the
   theater row: the end with more fades out (`schedEdges()`). Phone: Films / Schedule tabs.
 - **All dates:** **Now playing** (a showing today at the selected theaters, or a new release already open in Denver whose next showing is within `RUN_GAP_DAYS` = 3 days; repertory and events need today; by the chosen sort) then **Coming soon** (everything else, repertory included, by its next showing); each
-  theater gets one line with its next showing ("Alamo Sat Nov 7, 5:00 pm through Nov 11"), soonest first; three show, the rest behind "Show all N theaters" (`SPAN_SHOWN`). Then **Further out**: films whose first showing is past the two weeks, soonest first, with the note "Select theaters only." (Corey's wording) Search's extra matches ("Playing on other dates" / "Playing at other theaters") work the same way. No schedule column.
+  theater gets one line saying **where and when, not which time** (Corey, Nov 2026: the film page has
+  the times), soonest first, the whole line a link to the film page on that theater's first date
+  (`#film/<slug>/<date>`); three show, the rest behind "Show all N theaters" (`SPAN_SHOWN`).
+  `whenHTML()`: one day "Thu Dec 3, 7:00 pm" (its times, up to three); a run "Nov 19 – 22" (up to
+  two dark days inside, `RUN_GAP`); separate runs or dates "Nov 14 – 15, 21 – 22" / "Nov 24, Dec 29,
+  Jan 26" (up to three, then "and N more dates"); and **"from Nov 12"** for a run that reaches the
+  end of what its theater has posted. Theaters post current films a week at a time (Nov 12, 2026:
+  nearly every theater, the Sie too, through Wed Nov 18 or Thu Nov 19), so a run that reaches that
+  edge hasn't ended: `POSTED` (per theater, the most common last date after today among the films
+  it's showing now; a run ending within a week past it counts) or `THEATER_END` (the last date it
+  posted at all). Only a run that stops short gets an end date. Then **Further out**: films whose first showing is past the two weeks, soonest first, with the note "Select theaters only." (Corey's wording) Search's extra matches ("Playing on other dates" / "Playing at other theaters") work the same way. No schedule column.
 - **Formats and languages** (`formats.py`, shared by every scraper; Corey's rule, Nov 2026): only
   formats people pick a showing for are named — **IMAX, IMAX 3D, IMAX 70mm, Dolby (Cinema), Dolby 3D,
   3D, 16mm, 35mm, 70mm, VistaVision**. Every other premium screen (AMC Prime, RPX, 4DX, ScreenX, Harkins

@@ -341,7 +341,7 @@ def _event(title, theater, day):
 @pytest.fixture
 def flaky_site(tmp_path, monkeypatch):
     """Two theaters with a previous feed on disk; returns (config path, set the flaky fetch)."""
-    today = date.today()
+    today = datetime.now(DEN).date()   # Denver's date, as the pipeline uses (the runner is on UTC)
     out = tmp_path / "data.json"
     out.write_text(json.dumps({"events": [
         _event("Old Good Film", "good", today + timedelta(days=30)),
@@ -533,7 +533,7 @@ def test_wiki_views_fall_back_to_last_run(monkeypatch):
 
 def test_look_ahead_adds_far_showings(tmp_path, monkeypatch):
     """Sources that can look months ahead (the Sie lists 35mm runs early) add those showings."""
-    today = date.today()
+    today = datetime.now(DEN).date()   # Denver's date, as the pipeline uses (the runner is on UTC)
     far = datetime.combine(today + timedelta(days=40), datetime.min.time()).replace(hour=19, tzinfo=DEN)
     config = tmp_path / "config.toml"
     config.write_text(f'output = "{(tmp_path / "data.json").as_posix()}"\n[theaters.sie]\nname = "Sie"\n',

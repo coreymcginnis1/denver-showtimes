@@ -45,17 +45,16 @@
     amc_southlands: "AMC Southlands", emagine_parker: "Emagine Parker", amc_brighton: "AMC Brighton", amc_castle_rock: "AMC Castle Rock",
     cinemark_boulder: "Cinemark Boulder", regal_longmont: "Regal Longmont" };
   // Formats and languages (scraper's formats.py): IMAX, Dolby, film prints and 3D by name; every other
-  // premium screen is "PLF"; "Subtitled" / "Dubbed". A theater whose showings all share one goes on its
-  // line; mixed ones get a short red mark per time (anything not listed uses its own name).
+  // premium screen is "PLF"; a dub ("Dubbed", "Spanish dub"). A theater whose showings all share one goes
+  // on its line; mixed ones get a short red mark per time (anything not listed uses its own name).
   var FMT_TAG = { "IMAX": "IMAX", "IMAX 3D": "IMAX 3D", "IMAX 70mm": "IMAX 70", "Dolby": "Dolby", "Dolby 3D": "Dolby 3D",
-    "3D": "3D", "16mm": "16mm", "35mm": "35mm", "70mm": "70mm", "PLF": "PLF", "Premium Format": "PLF",
-    "Subtitled": "Sub", "Dubbed": "Dub" };
+    "3D": "3D", "16mm": "16mm", "35mm": "35mm", "70mm": "70mm", "PLF": "PLF", "Premium Format": "PLF", "Dubbed": "Dub" };
   function fmtName(f) { return f === "Premium Format" ? "PLF" : f; }   // older data said "Premium Format"
-  function tagOf(s) { return [s.fmt ? fmtName(s.fmt) : "", s.lang || ""].filter(Boolean).join(", "); }   // "IMAX, Subtitled"
+  function tagOf(s) { return [s.fmt ? fmtName(s.fmt) : "", s.lang || ""].filter(Boolean).join(", "); }   // "IMAX, Spanish dub"
   function shortTag(t) { return t.split(", ").map(function (x) { return FMT_TAG[x] || x; }).join(" "); }
   // Format and language are judged separately for a theater's showings: whatever all of them share
-  // goes on the theater line ("Regal Pavilions, Subtitled"); only what differs is marked on a time
-  // ("2:00 pm PLF"). Judged together, one PLF showing used to push "Sub" onto every time.
+  // goes on the theater line ("AMC, Spanish dub"); only what differs is marked on a time ("2:00 pm PLF").
+  // Judged together, one PLF showing used to push a language mark onto every time.
   function shared(list) {
     var same = function (get) { var v = get(list[0]); return list.every(function (s) { return get(s) === v; }) ? v : null; };
     return { fmt: same(function (s) { return s.fmt ? fmtName(s.fmt) : ""; }), lang: same(function (s) { return s.lang || ""; }) };
@@ -68,13 +67,25 @@
   var LANGUAGE = (function () { try { return new Intl.DisplayNames(["en"], { type: "language" }); } catch (e) { return null; } })();
   // A showing "in Japanese" (Harkins says only that) is the subtitled original when the film is
   // Japanese (TMDB's original language), or a dub when it isn't ("Spanish language" on an English film).
+  // Per showing, only a dub is marked. The film's own language is said once, "In Spanish", under its
+  // title (card and film page), from TMDB's original language. Sources report "Subtitled" unevenly
+  // (Alamo's data has no language field at all), so it read "Subtitled" at one theater and not the
+  // next for the same print: it's dropped here (Corey, Nov 2026). "Japanese language" (Harkins) in the
+  // film's own language says nothing either; on an English film it's a dub.
+  function origLang(f) {
+    if (!f.olang || f.olang === "xx") return null;   // "xx": no spoken language (silent films)
+    if (f.olang === "cn") return "Cantonese";         // TMDB's code for Cantonese
+    try { return LANGUAGE ? LANGUAGE.of(f.olang) : null; } catch (e) { return null; }
+  }
+  function langLine(f) { return f.olang && f.olang !== "en" && origLang(f) ? "In " + origLang(f) : ""; }
   function resolveLang(raw, f) {
-    var m = /^(\w+) language$/.exec(raw || "");
-    if (!m) return raw || null;
-    var orig = f.olang === "cn" ? "Cantonese" : f.olang && LANGUAGE ? LANGUAGE.of(f.olang) : null;
+    if (!raw || raw === "Subtitled") return null;
+    var m = /^(\w+) language$/.exec(raw);
+    if (!m) return raw;   // "Dubbed", "Spanish dub"
+    var orig = origLang(f);
     var same = orig === m[1] || (orig === "Chinese" && /^(Mandarin|Cantonese)$/.test(m[1]));
     // Only an English film in another language is surely a dub; any other mismatch just says the language.
-    return same ? "Subtitled" : f.olang === "en" ? m[1] + " dub" : "In " + m[1];
+    return same ? null : f.olang === "en" ? m[1] + " dub" : "In " + m[1];
   }
 
   var $ = function (id) { return document.getElementById(id); };
@@ -511,6 +522,7 @@
         (flag ? '<p class="flag">' + esc(flag) + "</p>" : "") +
         // The title (and the poster) open the film's own page: every date and theater, as on a ticketing site.
         '<h3 class="title"><a href="' + filmHref(i) + '" data-film="' + i + '">' + esc(f.t) + "</a></h3>" +
+        (langLine(f) ? '<p class="lang">' + esc(langLine(f)) + "</p>" : "") +
         // Found by someone in it or its genre, not its title: say so, or the match looks like a mistake.
         (state.q && hitOf(i) && hitOf(i).why ? '<p class="why">' + esc(hitOf(i).why) + "</p>" : "") +
         '<div class="venues">' + vhtml + "</div>" +
@@ -614,7 +626,7 @@
     if (dates.indexOf(state.fpDay) < 0) { state.fpDay = dates[0] || null; state.fpAll = false; }
     var html = back + '<div class="fp-head"><div class="fp-poster">' + (f.posters.length ? posterHTML(i, "fp-img") : fallbackHTML(f)) + "</div>" +
       '<div class="fp-main">' + (flag ? '<p class="flag">' + esc(flag) + "</p>" : "") +
-      '<h2 id="fpTitle" tabindex="-1">' + esc(f.t) + "</h2>" +
+      '<h2 id="fpTitle" tabindex="-1">' + esc(f.t) + "</h2>" + (langLine(f) ? '<p class="lang">' + esc(langLine(f)) + "</p>" : "") +
       (f.dirs.length ? '<p class="dir">' + esc(f.dirs.join(", ")) + "</p>" : "") +
       (facts ? '<p class="facts">' + esc(facts) + "</p>" : "") +
       // Phones show three lines of the synopsis (so the dates and times start on the first screen) and "More".
@@ -640,7 +652,8 @@
     html += '<h3 class="fp-date">' + esc(longDate(state.fpDay)) + '<span> at ' + keys.length + " theater" + (keys.length > 1 ? "s" : "") + "</span></h3>" +
       '<div class="fp-venues' + (state.fpAll ? " all-th" : "") + '">' + keys.map(function (k, n) {
         var t = theaterOf(k) || { name: k }, list = by.get(k), sh = shared(list), lbl = sharedLabel(sh), mi = miles(t);
-        return '<div class="venue' + (n >= FP_SHOWN ? " extra" : "") + '"><p class="vn"><span>' + esc(tName(k) + (lbl ? ", " + lbl : "")) + "</span>" +
+        return '<div class="venue' + (n >= FP_SHOWN ? " extra" : "") + '"><p class="vn"><span>' + esc(tName(k)) +
+          (lbl ? '<span class="lbl">, ' + esc(lbl) + "</span>" : "") + "</span>" +
           (mi != null ? '<span class="mi">' + mi.toFixed(1) + " mi</span>" : "") + '</p><div class="times">' + timesHTML(list, f, t, sh) + "</div></div>";
       }).join("") + "</div>" +
       (keys.length > FP_SHOWN ? '<button type="button" class="more" id="fpMore" aria-expanded="' + state.fpAll + '">' +

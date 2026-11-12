@@ -143,6 +143,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   overflow-wrap: anywhere; text-wrap: balance; }
 .title a { text-decoration: none; }
 .why { margin: -4px 0 8px; font-size: 14px; font-weight: 500; color: var(--ink); }   /* "Directed by ...": why search found it */
+.card .lang { margin: -4px 0 8px; font-size: 14px; color: var(--muted); }   /* "In Spanish": the film's language, once */
 /* The title and the poster both go to the film's page (every date and theater). Hovering either
    dims the poster a touch and underlines the title, so they read as one link. */
 .poster > .plink img { transition: filter .15s ease; }
@@ -223,6 +224,7 @@ body.fp-open #days, body.fp-open #controls, body.fp-open #layout { display: none
 .fp h2 { margin: 0 0 12px; font-weight: 800; font-stretch: 75%; font-size: clamp(34px, 4.6vw, 54px); line-height: 1;
   letter-spacing: -0.01em; overflow-wrap: anywhere; text-wrap: balance; }
 .fp h2:focus { outline: none; }
+.fp .lang { color: var(--muted); margin-top: -6px; }
 .fp .dir { font-weight: 700; }
 .fp .facts { color: var(--muted); }
 .fp .about { font-size: 16px; line-height: 1.5; }
@@ -235,6 +237,7 @@ body.fp-open #days, body.fp-open #controls, body.fp-open #layout { display: none
 .fp-venues .venue { border-top: 1px solid var(--hair); padding-top: 8px; }
 .fp-venues .vn { display: flex; justify-content: space-between; gap: 12px; margin: 0 0 2px; color: var(--ink); font-weight: 700; font-size: 15px; }
 .fp-venues .vn .mi { color: var(--muted); font-weight: 500; white-space: nowrap; }
+.fp-venues .vn .lbl { color: var(--muted); font-weight: 500; }   /* ", 35mm": quieter than the theater */
 .fp-venues:not(.all-th) .venue.extra { display: none; }
 .fp .more { margin-top: 14px; }
 

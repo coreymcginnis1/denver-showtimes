@@ -408,9 +408,9 @@
 
   // The poster, like the title, opens the film's page. One link per card for keyboards and screen
   // readers: the title's; the poster's is skipped (tabindex -1, aria-hidden).
-  function posterBlock(i) {
+  function posterBlock(i, href) {
     var f = films[i], img = f.posters.length ? posterHTML(i, "art") : fallbackHTML(f);
-    return '<a class="plink" href="' + filmHref(i) + '" data-film="' + i + '" tabindex="-1" aria-hidden="true">' + img + "</a>";
+    return '<a class="plink" href="' + href + '" data-film="' + i + '" tabindex="-1" aria-hidden="true">' + img + "</a>";
   }
   // "United Kingdom, 2026, 1h 58m, R, Metacritic 77" on the film page: country only when not the US;
   // Metacritic as the film's Wikipedia article reports it (nothing sorts by it).
@@ -572,10 +572,13 @@
         var label = (TINY[e[0]] || tName(e[0])) + (lbl ? ", " + lbl : "");
         return '<div class="venue"><span class="vn">' + esc(label) + '</span><div class="times">' + timesHTML(e[1], f, t, sh) + "</div></div>";
       }).join("");
-      return '<article class="card"><div class="poster">' + posterBlock(i) + "</div>" +
+      // The film page picks up where the reader was: the day they're browsing, or All dates from All
+      // dates. Search's extra matches (other dates / theaters) open on the film's usual first view.
+      var href = filmHref(i, other ? null : all ? ALL : state.day);
+      return '<article class="card"><div class="poster">' + posterBlock(i, href) + "</div>" +
         (flag ? '<p class="flag">' + esc(flag) + "</p>" : "") +
         // The title (and the poster) open the film's own page: every date and theater, as on a ticketing site.
-        '<h3 class="title"><a href="' + filmHref(i) + '" data-film="' + i + '">' + esc(f.t) + "</a></h3>" +
+        '<h3 class="title"><a href="' + href + '" data-film="' + i + '">' + esc(f.t) + "</a></h3>" +
         (langLine(f) ? '<p class="lang">' + esc(langLine(f)) + "</p>" : "") +
         // Found by someone in it or its genre, not its title: say so, or the match looks like a mistake.
         (state.q && hitOf(i) && hitOf(i).why ? '<p class="why">' + esc(hitOf(i).why) + "</p>" : "") +

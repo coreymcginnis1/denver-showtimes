@@ -311,8 +311,12 @@ redesign directions" (A listings + C program won; B marquee rejected).
   **All dates** box, and for the chosen date **every theater showing it**, nearest first with miles
   and its times (tap one for the usual ticket sheet): the 6 nearest (`FP_SHOWN`), the rest behind
   "Show all N theaters". **All dates** gives each theater a line per date ("Thu Nov 12  3:00 pm
-  6:15 pm"), its first 5 (`FP_DATES`), then "Show all N dates"; a film on 2–4 dates (`FP_FEW`)
-  opens on it, any other on its first date, and a film on one date has no All dates box at all. It
+  6:15 pm"), its first 5 (`FP_DATES`), then "Show all N dates". **Which view opens:** a card's title
+  or poster opens on where the reader was, the day they're browsing (`#film/<slug>/<date>`) or All
+  dates from All dates (`/all`); a date-only All dates line on that theater's first date. A link with
+  no view (or a date the film no longer plays, or search's extra matches) falls back: a film on 2–4
+  dates (`FP_FEW`) opens on All dates, any other on its first date. A film on one date has no All
+  dates box at all. It
   ignores the reader's theater picks, day and search and doesn't change them. Its own address, so the
   newsletter can link a film (`#film/<slug>/<date>` opens on that date, `/all` on All dates); the page title reads "<Film> showtimes · …". Back (the button, the
   browser's, or Escape) returns to the same scroll spot. A link to a film that's gone: "That film

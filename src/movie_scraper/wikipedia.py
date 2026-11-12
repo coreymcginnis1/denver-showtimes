@@ -16,7 +16,6 @@ from __future__ import annotations
 import logging
 import re
 import time
-from concurrent.futures import ThreadPoolExecutor
 from datetime import date, timedelta
 from urllib.parse import quote, unquote
 
@@ -45,30 +44,26 @@ def articles(tmdb_ids: list[int], client: httpx.Client) -> dict[int, str]:
             for b in r.json()["results"]["bindings"]}
 
 
-def weekly_views(tmdb_ids: list[int], today: date, workers: int = 2) -> dict[int, int]:
-    """Page views of each film's article over the 7 days ending yesterday (today isn't complete)."""
+def weekly_views(tmdb_ids: list[int], today: date, pause: float = 0.25) -> dict[int, int]:
+    """Page views of each film's article over the 7 days ending yesterday (today isn't complete).
+
+    One request at a time with a short pause: Wikimedia rate-limits GitHub's shared runners
+    (Nov 12, 2026: 62 of ~170 lookups got 429 with two at once and no pause), and a 429 waits as asked.
+    """
     end = today - timedelta(days=1)
     start = end - timedelta(days=6)
+    out: dict[int, int] = {}
     try:
         with httpx.Client(headers=HEADERS, timeout=30) as c:
-            found = articles(tmdb_ids, c)
-
-            def one(item):
-                tid, article = item
+            for tid, article in articles(tmdb_ids, c).items():
                 url = VIEWS.format(article=quote(article, safe=""), start=f"{start:%Y%m%d}", end=f"{end:%Y%m%d}")
-                try:
-                    r = c.get(url)
-                    r.raise_for_status()
-                    return tid, sum(x["views"] for x in r.json().get("items", []))
-                except Exception as e:
-                    log.warning("wikipedia views %s: %s", article, str(e)[:80])
-                    return tid, None
-
-            with ThreadPoolExecutor(workers) as pool:
-                return {t: v for t, v in pool.map(one, found.items()) if v is not None}
+                data = _get(c, url, what=f"views {article}")
+                if data is not None:
+                    out[tid] = sum(x["views"] for x in data.get("items", []))
+                time.sleep(pause)
     except Exception:
         log.exception("Wikipedia lookup failed")
-        return {}
+    return out
 
 
 # "{{Metacritic film prose|77|45|...}}" or the usual sentence: "Metacritic, which uses a weighted
@@ -94,19 +89,24 @@ def metacritic_in(wikitext: str) -> int | None:
     return None
 
 
-def _get(c: httpx.Client, params: dict) -> dict | None:
-    """One API read; on 429 wait as asked (at most a minute) and try again, three tries in all."""
+def _get(c: httpx.Client, url: str, params: dict | None = None, what: str = "article read") -> dict | None:
+    """One Wikimedia read. A 429 waits as asked (at most a minute) and a dropped connection waits
+    5 s, then it tries again, three tries in all; any other error (a 404: no views yet) gives up."""
     for _ in range(3):
         try:
-            r = c.get(API, params=params)
+            r = c.get(url, params=params) if params else c.get(url)
             if r.status_code == 429:
                 time.sleep(min(int(r.headers.get("Retry-After") or 30), 60))
                 continue
             r.raise_for_status()
             return r.json()
-        except Exception as e:
-            log.warning("wikipedia article read: %s", str(e)[:80])
+        except httpx.TransportError as e:
+            log.warning("wikipedia %s: %s", what, str(e)[:80])
             time.sleep(5)
+        except Exception as e:
+            log.warning("wikipedia %s: %s", what, str(e)[:80])
+            return None
+    log.warning("wikipedia %s: still rate-limited, giving up", what)
     return None
 
 
@@ -122,7 +122,7 @@ def metascores(tmdb_ids: list[int], pause: float = 2.0, batch: int = 20) -> dict
             found = list(articles(tmdb_ids, c).items())
             for i in range(0, len(found), batch):
                 chunk = found[i:i + batch]
-                data = _get(c, {"action": "query", "format": "json", "formatversion": "2", "redirects": "1",
+                data = _get(c, API, {"action": "query", "format": "json", "formatversion": "2", "redirects": "1",
                                 "prop": "revisions", "rvprop": "content", "rvslots": "main",
                                 "titles": "|".join(a.replace("_", " ") for _, a in chunk)})
                 if data is not None:

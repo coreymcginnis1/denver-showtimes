@@ -28,7 +28,7 @@ class Resp:
 
 def test_weekly_views_sums_the_last_seven_full_days(monkeypatch):
     monkeypatch.setattr(wikipedia.httpx, "Client", FakeClient)
-    out = wikipedia.weekly_views([10, 11, 12], date(2026, 11, 6), workers=1)
+    out = wikipedia.weekly_views([10, 11, 12], date(2026, 11, 6), pause=0)
     assert out == {10: 350}                                   # failed and missing articles are left out
 
 
@@ -98,4 +98,4 @@ def test_a_429_waits_as_asked_then_reads(monkeypatch):
                 return r
             return Resp({"query": {}})
 
-    assert wikipedia._get(Busy(), {}) == {"query": {}} and waits == [7]
+    assert wikipedia._get(Busy(), wikipedia.API, {"a": 1}) == {"query": {}} and waits == [7]

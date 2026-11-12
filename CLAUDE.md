@@ -200,7 +200,9 @@ Each run lists titles new since the last (tracked in `known_titles.txt`; dry run
 - **Trending** (`film_meta.trend`, `pipeline.add_trend()`, `[trending]`): the average of a film's
   rank by TMDB popularity and by English Wikipedia page views over the last 7 days (TMDB rank alone
   without an article). Views: Wikidata finds the article by TMDB id (P4947), the Wikimedia pageviews
-  API gives daily counts; free, needs only a descriptive User-Agent. **Why 50/50 (Nov 2026):**
+  API gives daily counts; free, needs only a descriptive User-Agent. One request at a time, 0.25 s
+  apart, and a 429 waits as asked: two at once got 62 of ~170 lookups rate-limited on GitHub's shared
+  runners (Nov 12, 2026); a film whose count can't be read keeps last run's. **Why 50/50 (Nov 2026):**
   against Letterboxd's popular-this-week list (10 overlapping films) rank correlation was TMDB
   0.59, Wikipedia 0.77, blend 0.90 (40–60% all ~0.88). TMDB alone is worldwide and counts streaming
   (The Mongoose #3); Wikipedia alone over-weights big international releases (Ramayana #1). There

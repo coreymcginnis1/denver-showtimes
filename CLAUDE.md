@@ -291,16 +291,27 @@ redesign directions" (A listings + C program won; B marquee rejected).
 - **Cards:** poster, "Opening week" (first 7 days in Denver) / "Opens Nov 19", the title (bold condensed, its own capitalization),
   then times by theater (nearest first, like the checklist) as plain text ("11:50 am 1:45 pm 4:30 pm", every time with its am/pm;
   a format all of a theater's showings share goes on the theater line, "Alamo, 35mm"). **Tap the
-  poster or the title** for the details over the poster (no "i" mark: a pointer, and on hover the poster
-  dims and the title underlines): director(s), country (non-US), year, runtime, rating, Metacritic
+  title** for the film's page (below). **Tap the poster** for the details over it (no "i" mark: a
+  pointer, and on hover the poster dims): director(s), country (non-US), year, runtime, rating, Metacritic
   (as Wikipedia reports it, `film_meta.metacritic`), TMDB synopsis,
   Letterboxd link (`film_meta.directors` / `.countries` / `.overview`, from the same TMDB request with
-  `append_to_response=credits`). Special events have no details, so their poster isn't a button.
+  `append_to_response=credits`), then "All showtimes" (the film's page) and Letterboxd. Special events
+  have no details, so their poster isn't a button (their title still opens their page).
   **Posters:** TMDB `w500` first, other theaters' art next, Fandango (600 px renderer) last, then the
   title set white on black. Long lists clamp at 210px behind "Show all times" / "Show all N theaters"
   (`clampVenues()`), only when that hides 90px or more (`CLAMP_SLACK`): hiding a line or two made
   the card *shrink* on expand (the button went, a few px came in). Every "Show all" toggles to
   "Show fewer …", and collapsing keeps the button where it was on screen (`toggleMore()`).
+- **Film page** (`#film/<title-slug>`, e.g. `#film/wild-horse-nine`; Nov 2026, Corey: "a way to click
+  on a movie and see all upcoming showtimes… to plan ahead around a specific movie", like a ticketing
+  site's film page): "← All films", the poster and details, a strip of **every date it plays** (up to
+  90 days where the theater lists that far, styled like the day strip and sticky on scroll), and for
+  the chosen date **every theater showing it**, nearest first with miles and its times (tap one for
+  the usual ticket sheet): the 6 nearest (`FP_SHOWN`), the rest behind "Show all N theaters". It
+  ignores the reader's theater picks, day and search and doesn't change them. Its own address, so the
+  newsletter can link a film; the page title reads "<Film> showtimes · …". Back (the button, the
+  browser's, or Escape) returns to the same scroll spot. A link to a film that's gone: "That film
+  isn't playing at any theater we list right now." A slug shared by two films gets the TMDB id.
 - **Schedule:** the day in time order under big brick hour numerals, each with its am/pm (earlier-today rows behind a
   button). Desktop: sticky right column that scrolls on its own with **no scrollbar**, like the
   theater row: the end with more fades out (`schedEdges()`). Phone: Films / Schedule tabs.

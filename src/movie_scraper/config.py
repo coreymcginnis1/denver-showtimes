@@ -121,6 +121,12 @@ class TrendingCfg(BaseModel):
     wikipedia: bool = True
 
 
+class CriticsCfg(BaseModel):
+    # Each film's Metacritic score as its English Wikipedia article reports it, shown in the
+    # details panel only (no sort). Metacritic itself has no free API and forbids scraping.
+    metacritic: bool = True
+
+
 class Config(BaseModel):
     timezone: str = "America/Denver"
     days_ahead: int = 14
@@ -133,6 +139,7 @@ class Config(BaseModel):
     titles: TitlesCfg = Field(default_factory=TitlesCfg)
     tmdb: TmdbCfg = Field(default_factory=TmdbCfg)
     omdb: OmdbCfg = Field(default_factory=OmdbCfg)
+    critics: CriticsCfg = Field(default_factory=CriticsCfg)
     trending: TrendingCfg = Field(default_factory=TrendingCfg)
 
 

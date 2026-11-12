@@ -20,7 +20,7 @@ from .scrapers.landmark import LandmarkScraper
 from .scrapers.sie_eventive import SieScraper
 from .omdb import add_scores
 from .tmdb import enrich
-from .wikipedia import weekly_views
+from .wikipedia import metascores, weekly_views
 
 log = logging.getLogger(__name__)
 
@@ -286,6 +286,8 @@ def run(config_path: str = "config.toml", only: set[str] | None = None) -> dict:
     feed["film_meta"] = {t: m for t, m in film_meta.items() if t in set(feed["films"])}
     if cfg.omdb.enabled:   # off: ratings dropped from the site (see CLAUDE.md "Ratings")
         add_scores(feed["film_meta"], (previous or {}).get("film_meta"))
+    if cfg.critics.metacritic:   # before the page views: the article reads are fewer, and paced
+        add_metacritic(feed["film_meta"], (previous or {}).get("film_meta"))
     if cfg.trending.wikipedia:
         add_wiki_views(feed["film_meta"], (previous or {}).get("film_meta"), today)
     add_trend(feed["film_meta"])
@@ -370,6 +372,21 @@ def add_wiki_views(film_meta: dict[str, dict], previous: dict | None, today: dat
         v = views.get(m.get("tmdb_id")) or old.get(m.get("tmdb_id"))
         if v:
             m["wiki_views"] = v
+
+
+def add_metacritic(film_meta: dict[str, dict], previous: dict | None) -> None:
+    """Attach each film's Metacritic score (`metacritic`, 0-100) as its Wikipedia article states it.
+
+    A film whose article was read gets that article's score, or none when it gives none. A film
+    whose article couldn't be read this run keeps last run's score (matched by TMDB id).
+    """
+    old = {m.get("tmdb_id"): m["metacritic"] for m in (previous or {}).values() if m.get("metacritic") is not None}
+    read = metascores(sorted({m["tmdb_id"] for m in film_meta.values() if m.get("tmdb_id")}))
+    for m in film_meta.values():
+        tid = m.get("tmdb_id")
+        v = read[tid] if tid in read else old.get(tid)
+        if v is not None:
+            m["metacritic"] = v
 
 
 def add_trend(film_meta: dict[str, dict]) -> None:
@@ -510,7 +527,9 @@ def render_summary(feed: dict, previous: dict | None, new_titles: list[str] | No
     if meta is not None and feed.get("films"):
         missing = [f for f in feed["films"] if f not in meta]
         lines += ["", f"TMDB: matched {len(feed['films']) - len(missing)} of {len(feed['films'])} titles "
-                  "(release dates, popularity)."]
+                  "(release dates, popularity).",
+                  f"Metacritic (as Wikipedia reports it): {sum(1 for m in meta.values() if m.get('metacritic') is not None)} "
+                  f"of {len(meta)} matched films."]
         if missing:
             lines += ["Not on TMDB (fine for events and programs; for a real film, add "
                       "`[tmdb.overrides]` in config.toml): " + "; ".join(missing)]

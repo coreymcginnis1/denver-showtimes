@@ -110,7 +110,7 @@
       var m = meta[t] || {};
       return { t: t, id: m.tmdb_id || null, rel: m.release || null, pop: m.popularity, trend: m.trend != null ? m.trend : null, va: m.vote_average, vc: m.vote_count || 0,
         indie: !!m.indie, intl: !!m.intl, olang: m.lang || null, dirs: m.directors || [], countries: m.countries || [], about: m.overview || "",
-        cast: m.cast || [], genres: m.genres || [], qt: fold(t),
+        cast: m.cast || [], genres: m.genres || [], qt: fold(t), mc: m.metacritic != null ? m.metacritic : null,
         posters: [], tmdbPoster: m.tmdb_poster || null, rating: null, runtime: null, year: m.release ? +m.release.slice(0, 4) : null };
     });
     data.events.forEach(function (e) {
@@ -369,7 +369,9 @@
     var f = films[i], img = f.posters.length ? posterHTML(i) : fallbackHTML(f);
     if (f.event) return '<span class="still">' + img + "</span>";
     var where = f.countries.filter(function (c) { return c !== "US"; }).slice(0, 1).map(function (c) { return COUNTRY ? COUNTRY.of(c) : c; });
-    var facts = where.concat([f.year, f.runtime ? runtime(f.runtime) : "", f.rating]).filter(Boolean).join(", ");
+    // Metacritic as the film's Wikipedia article reports it (details only; nothing sorts by it).
+    var facts = where.concat([f.year, f.runtime ? runtime(f.runtime) : "", f.rating, f.mc != null ? "Metacritic " + f.mc : ""])
+      .filter(Boolean).join(", ");
     var open = state.open === i;
     return '<button type="button" data-p="' + i + '" aria-expanded="' + open + '" aria-label="' + esc(f.t) + (open ? ", hide details" : ", show details") + '">' + img + "</button>" +
       (open ? '<div class="info" data-p="' + i + '">' + (f.dirs.length ? '<p class="dir">' + esc(f.dirs.join(", ")) + "</p>" : "") +

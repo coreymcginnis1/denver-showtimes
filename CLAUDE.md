@@ -70,7 +70,7 @@ Tests never touch the network (`tests/conftest.py` unsets tokens and stubs Wikip
   - `scrapers/` — `sie_eventive.py`, `landmark.py`, `alamo.py`, `fandango.py` (AMC/Regal/Harkins/
     Cinemark/Emagine/Movie Tavern), `dairy.py` (Dairy Arts Center), `cu_ifs.py` (CU Film Series).
   - `pipeline.py` — cleanup, TMDB standardization, openings, trending, feed, run summary.
-  - `tmdb.py` · `wikipedia.py` · `omdb.py` (off) · `formats.py` · `config.py` · `cli.py` · `models.py`.
+  - `tmdb.py` · `wikipedia.py` (page views, Metacritic) · `omdb.py` (off) · `formats.py` · `config.py` · `cli.py` · `models.py`.
 - `public/` — `index.html`, `styles.css`, `app.js` (vanilla, no build), `zips.json`,
   `tmdb-logo.svg`, `favicon.svg` (brick square, white D), `preview.png` (Substack card, 1200×630, the
   redesign's look; regenerate if the masthead or theaters change), `data.json` (written by the workflow).
@@ -82,7 +82,8 @@ Tests never touch the network (`tests/conftest.py` unsets tokens and stubs Wikip
 `theaters` (key, name, color, default_on, lat, lon, optional `site`) · `films` · `events` (`id`, `title`, `start`,
 optional `end`/`allDay`, `extendedProps`: `theater`, `screen`, `fmt`, `ticketUrl`, `poster`,
 `lang`, `rating`, `runtime`, `year`, `release`) · `film_meta` (displayed title → TMDB data:
-`directors`, `cast` (top five billed), `genres`, `countries`, `overview`, `trend`, `wiki_views`, …) · `tmdb_ids` (local title → TMDB id) · `openings` (title → Denver opening date) ·
+`directors`, `cast` (top five billed), `genres`, `countries`, `overview`, `trend`, `wiki_views`,
+`metacritic` (as Wikipedia reports it), …) · `tmdb_ids` (local title → TMDB id) · `openings` (title → Denver opening date) ·
 `stale_theaters` · `generated_at` · `timezone`.
 
 ## Theaters (`config.toml` `[theaters.*]`)
@@ -209,11 +210,22 @@ Each run lists titles new since the last (tracked in `known_titles.txt`; dry run
 
 ## Decisions and what's on hold (don't redo without new information)
 
-- **No ratings.** TMDB ratings come from a few hundred voters; IMDb's data is personal-use only;
-  Metacritic / Rotten Tomatoes have no API and forbid scraping; OMDb leaves most current releases
-  unscored for weeks (Wild Horse Nine blank while Metacritic showed 78) and lags on IMDb ratings
-  (You Can See Everything 7.9 from 165 votes vs 9.1 from 27K). `omdb.py` is kept with
-  `[omdb] enabled = false`; turning it back on also needs the site display rebuilt.
+- **Ratings: Metacritic only, in the details panel, from Wikipedia (Nov 2026).** The card details
+  read "…, R, Metacritic 77"; nothing sorts by it (Corey: "I don't know about sorting yet").
+  `wikipedia.metascores()` reads each film's English Wikipedia article (found by TMDB id through
+  Wikidata, 20 articles a request, paced, 429s wait as asked) and takes the number from the
+  `{{Metacritic film prose}}` template or the usual sentence, preferring the Reception / Critical
+  response section (a game's or soundtrack's score elsewhere stays out). An article that can't be
+  read keeps last run's score; one read without a score drops it. `[critics] metacritic` switches it.
+  Why Wikipedia: Metacritic and Rotten Tomatoes have no free API (licensed through Fabric /
+  Fandango, by application) and their terms forbid scraping (RT's, Jan 2026, even bar deep
+  links). Measured Nov 12, 2026 on the same new releases: in their first two weeks Wikipedia had a
+  Metacritic number for 19 of 30, OMDb 7, Wikidata 4; at 15–60 days 12 / 7 / 7 of 14. Where both
+  had one, Wikipedia and OMDb agreed within 1–4 points. Rotten Tomatoes is in Wikipedia too (13
+  of 30) but isn't shown. Other ratings stay off: TMDB's come from a few hundred voters; IMDb's
+  data is personal-use only; OMDb lags (Wild Horse Nine blank on OMDb after 12 days, 77 on
+  Wikipedia; You Can See Everything IMDb 7.9 from 165 votes vs 9.1 from 27K). `omdb.py` is kept
+  with `[omdb] enabled = false`.
 - **Letterboxd:** its terms forbid robots/scrapers (RSS feeds included — not explicitly
   authorized) and its API is by application (api@letterboxd.com); Corey chose not to apply for
   now. The site only **links** to `letterboxd.com/tmdb/<id>/`. A member's own data export (CSV) is
@@ -278,7 +290,8 @@ redesign directions" (A listings + C program won; B marquee rejected).
   then times by theater (nearest first, like the checklist) as plain text ("11:50 am 1:45 pm 4:30 pm", every time with its am/pm;
   a format all of a theater's showings share goes on the theater line, "Alamo, 35mm"). **Tap the
   poster or the title** for the details over the poster (no "i" mark: a pointer, and on hover the poster
-  dims and the title underlines): director(s), country (non-US), year, runtime, rating, TMDB synopsis,
+  dims and the title underlines): director(s), country (non-US), year, runtime, rating, Metacritic
+  (as Wikipedia reports it, `film_meta.metacritic`), TMDB synopsis,
   Letterboxd link (`film_meta.directors` / `.countries` / `.overview`, from the same TMDB request with
   `append_to_response=credits`). Special events have no details, so their poster isn't a button.
   **Posters:** TMDB `w500` first, other theaters' art next, Fandango (600 px renderer) last, then the
@@ -338,7 +351,8 @@ redesign directions" (A listings + C program won; B marquee rejected).
 - **Privacy:** no cookies, no analytics. The only browser storage is the theater pick
   (`dst-theaters` in `localStorage`, never sent anywhere); the zip is never saved. Third-party
   requests are poster images only (TMDB, Fandango, theaters). Keep it that way.
-- **Footer** credits TMDB (logo + required notice; posters, directors and synopses) and Wikipedia, and links each theater company's site (one link per company; Movie Tavern goes to marcustheatres.com, as movietavern.com's certificate had lapsed in Nov 2026).
+- **Footer** credits TMDB (logo + required notice; posters, directors and synopses) and Wikipedia
+  (page views and Metacritic scores), and links each theater company's site (one link per company; Movie Tavern goes to marcustheatres.com, as movietavern.com's certificate had lapsed in Nov 2026).
 - **Cache-busting:** `index.html` loads `styles.css`/`app.js` with `?v=__ASSET_VERSION__`, replaced
   with the commit SHA on deploy; `data.json` is fetched `no-store`. OG tags use `__SITE_URL__`.
 

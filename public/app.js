@@ -602,14 +602,27 @@
         return d === days[0] || (!f.rep && !f.event && !!f.opened && f.opened <= days[0] && dayDiff(days[0], d) <= RUN_GAP_DAYS);
       };
       var bySoonest = function (a, b) { return firstDay(a).localeCompare(firstDay(b)) || films[a].t.localeCompare(films[b].t); };
+      // Coming soon and Further out follow Trending, Metacritic and A–Z like Now playing (Corey, Nov 13,
+      // 2026: sorted by Metacritic, the best-reviewed screening coming up should lead). Newest keeps
+      // them soonest first: for films not out yet, its release-week order would put the furthest first.
+      // Under Metacritic, the films without a score come up soonest first.
+      var rank = new Map(ids.map(function (i, k) { return [i, k]; }));
+      var ahead = function (list) {
+        if (state.sort === "new") return list.sort(bySoonest);
+        if (state.sort === "mc") return list.sort(function (a, b) {
+          var na = films[a].mc == null, nb = films[b].mc == null;
+          return na - nb || (na ? bySoonest(a, b) : rank.get(a) - rank.get(b));
+        });
+        return list;   // ids are already in the chosen sort
+      };
       var now = ids.filter(isNow);
-      var soon = ids.filter(function (i) { return !isNow(i) && firstDay(i) <= lastDay; }).sort(bySoonest);
-      var later = ids.filter(function (i) { return !isNow(i) && firstDay(i) > lastDay; }).sort(bySoonest);
+      var soon = ahead(ids.filter(function (i) { return !isNow(i) && firstDay(i) <= lastDay; }));
+      var later = ahead(ids.filter(function (i) { return !isNow(i) && firstDay(i) > lastDay; }));
       var card = function (i) { return cardHTML(i); };
       $("grid").innerHTML = (now.length ? '<h3 class="group">Now playing</h3>' + gridHTML(now, card) : "") +
-        (soon.length ? '<h3 class="group">Coming soon</h3>' + gridHTML(soon, card, false) : "") +
+        (soon.length ? '<h3 class="group">Coming soon</h3>' + gridHTML(soon, card) : "") +
         // Only the Sie, Landmark and Alamo list this far ahead (the chains' feeds go two weeks out).
-        (later.length ? '<h3 class="group">Further out</h3><p class="group-note">' + FURTHER_NOTE + "</p>" + gridHTML(later, card, false) : "");
+        (later.length ? '<h3 class="group">Further out</h3><p class="group-note">' + FURTHER_NOTE + "</p>" + gridHTML(later, card) : "");
     } else if (state.kind === "all") {   // everything: new releases, then repertory, then one-offs, each in the chosen sort
       $("grid").innerHTML = [["New releases", function (f) { return !f.rep && !f.event; }], ["Repertory", function (f) { return f.rep && !f.event; }],
         ["Special events", function (f) { return f.event; }]].map(function (g) {

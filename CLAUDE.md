@@ -295,7 +295,7 @@ redesign directions" (A listings + C program won; B marquee rejected).
     Metacritic never reviewed doesn't read as rating below the lowest score; a list that's all
     scored or all unscored (Special events) gets no head. Nov 13: 42 of 84 new releases scored (the
     rest mostly Indian releases, concerts and films not out yet), 75 of 102 repertory, no events.
-    All dates: Now playing follows the sort; Coming soon / Further out stay by next showing.
+    All dates: every group follows it (unscored films there come soonest first).
 - **Cards:** poster, "Opening week" (first 7 days in Denver) / "Opens Nov 19", the title (bold condensed, its own capitalization),
   "In Spanish" under it for a non-English film (see Formats and languages),
   then times by theater (nearest first, like the checklist) as plain text ("11:50 am 1:45 pm 4:30 pm", every time with its am/pm;
@@ -338,7 +338,10 @@ redesign directions" (A listings + C program won; B marquee rejected).
 - **Schedule:** the day in time order under big brick hour numerals, each with its am/pm (earlier-today rows behind a
   button). Desktop: sticky right column that scrolls on its own with **no scrollbar**, like the
   theater row: the end with more fades out (`schedEdges()`). Phone: Films / Schedule tabs.
-- **All dates:** **Now playing** (a showing today at the selected theaters, or a new release already open in Denver whose next showing is within `RUN_GAP_DAYS` = 3 days; repertory and events need today; by the chosen sort) then **Coming soon** (everything else, repertory included, by its next showing); each
+- **All dates:** **Now playing** (a showing today at the selected theaters, or a new release already open in Denver whose next showing is within `RUN_GAP_DAYS` = 3 days; repertory and events need today; by the chosen sort) then **Coming soon** (everything else, repertory included); each group in the chosen sort,
+  except that under **Newest** Coming soon and Further out go by next showing (release-week order
+  would put the furthest-out first). Corey, Nov 13, 2026: sorted by Metacritic, the best-reviewed
+  screening coming up should lead (Touch of Evil 99 ahead of what's on Saturday). Each
   theater gets one line saying **where and when** (Corey, Nov 2026: the film page has the times),
   soonest first; three show, the rest behind "Show all N theaters" (`SPAN_SHOWN`).
   One day reads "Thu Nov 12, 4:15 pm 7:00 pm" with each time a button for its tickets (Corey: times
@@ -351,7 +354,7 @@ redesign directions" (A listings + C program won; B marquee rejected).
   "… – 18" or "… – 19". The one exception is our own limit: a run reaching the last day the scraper
   reads for that theater (chains, i.e. theaters with a `site`: 14 days, `READ_DAYS`; everyone else 90,
   `READ_DAYS_AHEAD`) ends in "+", "Nov 20 – 26+" (Nov 12, 2026: 123 lines, mostly advance tickets).
-  (A "from Nov 12" for runs reaching a guessed posting edge was tried and dropped the same day.) Then **Further out**: films whose first showing is past the two weeks, soonest first, with the note "Select theaters only." (Corey's wording) Search's extra matches ("Playing on other dates" / "Playing at other theaters") work the same way. No schedule column.
+  (A "from Nov 12" for runs reaching a guessed posting edge was tried and dropped the same day.) Then **Further out**: films whose first showing is past the two weeks (soonest first under Newest), with the note "Select theaters only." (Corey's wording) Search's extra matches ("Playing on other dates" / "Playing at other theaters") work the same way. No schedule column.
 - **Formats and languages** (`formats.py`, shared by every scraper; Corey's rule, Nov 2026): only
   formats people pick a showing for are named — **IMAX, IMAX 3D, IMAX 70mm, Dolby (Cinema), Dolby 3D,
   3D, 16mm, 35mm, 70mm, VistaVision**. Every other premium screen (AMC Prime, RPX, 4DX, ScreenX, Harkins

@@ -248,6 +248,10 @@ body.fp-open #days, body.fp-open #controls, body.fp-open #layout { display: none
 .fp-venues .venue:not(.all-d) .fp-day.extra-d { display: none; }
 .fp-venues .venue .more { margin-top: 2px; }
 .day[data-fd="all"] { width: 64px; }
+.fp-days .day.elsewhere:not([aria-pressed="true"]) { color: var(--muted); }   /* plays only at other theaters that day */
+.fp-days .day.elsewhere:not([aria-pressed="true"]) .dn { color: #a39b8c; }
+.fp-none { color: var(--muted); margin: 0 0 6px; }
+.fp-date.fp-other { margin-top: 30px; font-size: 22px; }   /* "Playing at 25 other theaters": quieter than the date */
 .fp-venues.span { grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); }   /* wider, so a date's times fit one line */
 body.fp-open .mast #when, body.fp-open .mast .from br { display: none; }   /* the listings' date isn't this page's */
 .fp .more { margin-top: 14px; }

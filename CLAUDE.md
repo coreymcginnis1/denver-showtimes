@@ -316,8 +316,14 @@ redesign directions" (A listings + C program won; B marquee rejected).
   dates from All dates (`/all`); a date-only All dates line on that theater's first date. A link with
   no view (or a date the film no longer plays, or search's extra matches) falls back: a film on 2–4
   dates (`FP_FEW`) opens on All dates, any other on its first date. A film on one date has no All
-  dates box at all. It
-  ignores the reader's theater picks, day and search and doesn't change them. Its own address, so the
+  dates box at all. **Your theaters first** (Corey, Nov 2026, like search's split): the chosen date's
+  heading reads "Thursday, November 12 at 2 of your theaters" over the reader's picked theaters, then
+  "Playing at 25 other theaters" lists the rest, nearest first, 3 of them (`FP_OTHERS`; 6 when the
+  reader's have none that day, which reads "Not at your theaters on Thu Nov 12.") behind "Show all 25
+  other theaters". All dates splits the same way. In the date strip, dates it plays only at other
+  theaters are grey, still tappable; a link with no view opens on the first date at the reader's
+  theaters. With no theaters picked there's one list ("at 27 theaters"). It reads the reader's
+  theater picks but never changes them, nor the day or search. Its own address, so the
   newsletter can link a film (`#film/<slug>/<date>` opens on that date, `/all` on All dates); the page title reads "<Film> showtimes · …". Back (the button, the
   browser's, or Escape) returns to the same scroll spot. A link to a film that's gone: "That film
   isn't playing at any theater we list right now." A slug shared by two films gets the TMDB id.

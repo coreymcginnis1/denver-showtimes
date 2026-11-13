@@ -144,6 +144,9 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .title a { text-decoration: none; }
 .why { margin: -4px 0 8px; font-size: 14px; font-weight: 500; color: var(--ink); }   /* "Directed by ...": why search found it */
 .card .lang { margin: -4px 0 8px; font-size: 14px; color: var(--muted); }   /* "In Spanish": the film's language, once */
+.card .mc { margin: -4px 0 8px; font-size: 14px; font-weight: 500; }   /* "Metacritic 86", only when sorted by it */
+.card .mc + .lang { margin-top: -6px; }
+.subgroup { margin: 36px 0 18px; font-size: 15px; font-weight: 700; color: var(--muted); }   /* "No Metacritic score" */
 /* The title and the poster both go to the film's page (every date and theater). Hovering either
    dims the poster a touch and underlines the title, so they read as one link. */
 .poster > .plink img { transition: filter .15s ease; }

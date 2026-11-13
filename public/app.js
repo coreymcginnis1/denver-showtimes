@@ -372,7 +372,7 @@
 
   // Phones fold the controls to one line: "At Sie and Mayan, all films, newest first · Change".
   var KIND_SUM = { all: "all films", "new": "new releases", rep: "repertory", film: "on film" };
-  var SORT_SUM = { "new": "newest first", pop: "trending first", az: "A to Z" };
+  var SORT_SUM = { "new": "newest first", pop: "trending first", mc: "by Metacritic score", az: "A to Z" };
   function renderSummary() { $("ssum").textContent = KIND_SUM[state.kind] + ", " + SORT_SUM[state.sort]; }
 
   // ---- Film cards ----------------------------------------------------------------
@@ -454,7 +454,7 @@
   }
 
   function sortFilms(ids) {
-    var key = {
+    var keys = {
       // Newest: new releases by Denver release week (latest first, upcoming on top) and, within a
       // week, by Trending; then repertory by original release; special events last.
       new: function (f) {
@@ -465,15 +465,29 @@
         var r = f.rel || (f.year ? f.year + "-07-01" : null); return r ? Date.parse(r) : null;
       },
       // Trending: the scraper's 50/50 blend of TMDB popularity and 7-day Wikipedia views (by rank).
-      pop: function (f) { return f.trend != null ? -f.trend : f.id && f.pop != null ? -1e6 + f.pop : null; }
-    }[state.sort];
+      pop: function (f) { return f.trend != null ? -f.trend : f.id && f.pop != null ? -1e6 + f.pop : null; },
+      // Metacritic (as Wikipedia reports it), highest first; a tie goes to the more trending film
+      // (the trend bonus stays under one point). Films without a score follow, in Newest order.
+      mc: function (f) { return f.mc != null ? f.mc * 1e7 + (f.trend != null ? 1e6 - f.trend : 0) : null; }
+    };
+    var key = keys[state.sort], then = state.sort === "mc" ? keys.new : null;
     return ids.sort(function (a, b) {
       var fa = films[a], fb = films[b], byTitle = fa.t.localeCompare(fb.t);
       if (!key) return byTitle;
       var ka = key(fa), kb = key(fb);
+      if (ka == null && kb == null && then) { ka = then(fa); kb = then(fb); }
       if (ka == null || kb == null) return (ka == null) - (kb == null) || byTitle;   // no data: last
       return kb - ka || byTitle;
     });
+  }
+  // Sorted by Metacritic, a list splits where the scores run out: "No Metacritic score" heads the
+  // rest, so a film Metacritic never reviewed (most Indian releases, concerts) doesn't read as
+  // rating below the lowest score. A list with no scores at all, or all scored, stays whole.
+  function gridHTML(ids, card, sorted) {
+    var grid = function (list) { return '<div class="grid">' + list.map(card).join("") + "</div>"; };
+    var scored = ids.filter(function (i) { return films[i].mc != null; });
+    if (state.sort !== "mc" || sorted === false || !scored.length || scored.length === ids.length) return grid(ids);
+    return grid(scored) + '<h4 class="subgroup">No Metacritic score</h4>' + grid(ids.filter(function (i) { return films[i].mc == null; }));
   }
 
   function renderFilms() {
@@ -565,6 +579,8 @@
         (flag ? '<p class="flag">' + esc(flag) + "</p>" : "") +
         // The title (and the poster) open the film's own page: every date and theater, as on a ticketing site.
         '<h3 class="title"><a href="' + href + '" data-film="' + i + '">' + esc(f.t) + "</a></h3>" +
+        // Sorted by it, the score shows on the card (else the order looks arbitrary); otherwise it's on the film page.
+        (state.sort === "mc" && f.mc != null ? '<p class="mc">Metacritic ' + f.mc + "</p>" : "") +
         (langLine(f) ? '<p class="lang">' + esc(langLine(f)) + "</p>" : "") +
         // Found by someone in it or its genre, not its title: say so, or the match looks like a mistake.
         (state.q && hitOf(i) && hitOf(i).why ? '<p class="why">' + esc(hitOf(i).why) + "</p>" : "") +
@@ -585,25 +601,25 @@
       var now = ids.filter(isNow);
       var soon = ids.filter(function (i) { return !isNow(i) && firstDay(i) <= lastDay; }).sort(bySoonest);
       var later = ids.filter(function (i) { return !isNow(i) && firstDay(i) > lastDay; }).sort(bySoonest);
-      var grid = function (list) { return '<div class="grid">' + list.map(function (i) { return cardHTML(i); }).join("") + "</div>"; };
-      $("grid").innerHTML = (now.length ? '<h3 class="group">Now playing</h3>' + grid(now) : "") +
-        (soon.length ? '<h3 class="group">Coming soon</h3>' + grid(soon) : "") +
+      var card = function (i) { return cardHTML(i); };
+      $("grid").innerHTML = (now.length ? '<h3 class="group">Now playing</h3>' + gridHTML(now, card) : "") +
+        (soon.length ? '<h3 class="group">Coming soon</h3>' + gridHTML(soon, card, false) : "") +
         // Only the Sie, Landmark and Alamo list this far ahead (the chains' feeds go two weeks out).
-        (later.length ? '<h3 class="group">Further out</h3><p class="group-note">' + FURTHER_NOTE + "</p>" + grid(later) : "");
+        (later.length ? '<h3 class="group">Further out</h3><p class="group-note">' + FURTHER_NOTE + "</p>" + gridHTML(later, card, false) : "");
     } else if (state.kind === "all") {   // everything: new releases, then repertory, then one-offs, each in the chosen sort
       $("grid").innerHTML = [["New releases", function (f) { return !f.rep && !f.event; }], ["Repertory", function (f) { return f.rep && !f.event; }],
         ["Special events", function (f) { return f.event; }]].map(function (g) {
         var part = ids.filter(function (i) { return g[1](films[i]); });
-        return part.length ? '<h3 class="group">' + g[0] + '</h3><div class="grid">' + part.map(function (i) { return cardHTML(i); }).join("") + "</div>" : "";
+        return part.length ? '<h3 class="group">' + g[0] + "</h3>" + gridHTML(part, function (i) { return cardHTML(i); }) : "";
       }).join("") || '<p class="empty">Nothing matches at these theaters on this day.</p>';
     } else {
-      $("grid").innerHTML = ids.length ? '<div class="grid">' + ids.map(function (i) { return cardHTML(i); }).join("") + "</div>"
+      $("grid").innerHTML = ids.length ? gridHTML(ids, function (i) { return cardHTML(i); })
         : '<p class="empty">Nothing matches at these theaters on this day.</p>';
     }
     [[otherDates, "Playing on other dates"], [otherTheaters, "Playing at other theaters"]].forEach(function (g) {
       if (!g[0].size) return;
-      $("grid").innerHTML += '<h3 class="group">' + g[1] + '</h3><div class="grid">' +
-        order(g[0]).map(function (i) { return cardHTML(i, g[0]); }).join("") + "</div>";
+      $("grid").innerHTML += '<h3 class="group">' + g[1] + "</h3>" +
+        gridHTML(order(g[0]), function (i) { return cardHTML(i, g[0]); }, state.kind !== "film");   // prints: soonest first, no split
     });
     clampVenues();
   }

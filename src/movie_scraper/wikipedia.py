@@ -1,5 +1,6 @@
 """English Wikipedia: page views over the last 7 days (half of "Trending") and each film's
-Metacritic score as its article reports it (the film page).
+Metacritic score as its article reports it (the film page). Also, from Wikidata, the language a
+film was made in, where TMDB's "original language" is the title's ("In German" on the page).
 
 Each film's article is found through Wikidata by its TMDB id (property P4947), so there's no
 title matching. Views come from the Wikimedia pageviews API; article text from the MediaWiki
@@ -42,6 +43,35 @@ def articles(tmdb_ids: list[int], client: httpx.Client) -> dict[int, str]:
     # Wikidata gives the article's address, percent-encoded ("Am%C3%A9lie"): decode it to the name.
     return {int(b["tmdb"]["value"]): unquote(b["article"]["value"].rsplit("/", 1)[1])
             for b in r.json()["results"]["bindings"]}
+
+
+def original_languages(tmdb_ids: list[int]) -> dict[int, str] | None:
+    """The language each film was made in, as Wikidata records it ("original language", P364):
+    TMDB id -> ISO 639-1 code, for films Wikidata gives exactly one such language. None when
+    Wikidata can't be reached (the caller keeps last run's).
+
+    TMDB's original_language follows the original title, so a co-production can get its lead
+    producer's language instead of its dialogue's: Fatherland (Ojczyzna, a Polish production
+    shot in German) reads "pl", The Fifth Element (French, shot in English) "fr". Films with
+    several languages are left out: Wikidata lists them unordered and with minor ones (All About
+    My Mother: Catalan, English, Spanish), where TMDB's pick is the main one. So are languages
+    without a two-letter code (Cantonese, Mandarin), which TMDB writes its own way ("cn", "zh").
+    """
+    if not tmdb_ids:
+        return {}
+    values = " ".join(f'"{i}"' for i in tmdb_ids)
+    query = ("SELECT ?tmdb (COUNT(DISTINCT ?l) AS ?n) (SAMPLE(?code) AS ?lang) WHERE { VALUES ?tmdb { %s } "
+             "?item wdt:P4947 ?tmdb ; wdt:P364 ?l . OPTIONAL { ?l wdt:P218 ?code } } GROUP BY ?tmdb" % values)
+    try:
+        with httpx.Client(headers=HEADERS, timeout=30) as c:
+            r = c.post(SPARQL, data={"query": query, "format": "json"})
+            r.raise_for_status()
+            rows = r.json()["results"]["bindings"]
+    except Exception:
+        log.exception("Wikidata language lookup failed")
+        return None
+    return {int(b["tmdb"]["value"]): b["lang"]["value"] for b in rows
+            if int(b["n"]["value"]) == 1 and b.get("lang")}
 
 
 def weekly_views(tmdb_ids: list[int], today: date, pause: float = 0.25) -> dict[int, int]:

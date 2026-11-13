@@ -108,6 +108,9 @@ class TmdbCfg(BaseModel):
     enabled: bool = True
     # Normalized title -> TMDB movie id, for the few titles the automatic match gets wrong.
     overrides: dict[str, int] = Field(default_factory=dict)
+    # Film title as the site shows it -> its languages (ISO 639-1 codes) in the order the page lists
+    # them, where the automatic one is wrong or incomplete: Fjord = ["en", "ro", "no"].
+    languages: dict[str, list[str]] = Field(default_factory=dict)
 
 
 class OmdbCfg(BaseModel):

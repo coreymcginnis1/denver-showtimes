@@ -462,6 +462,14 @@ enabled = true
 # 0 = not on TMDB: an event that shares a film's name ("Title @theater" scopes any of these).
 "Family Reunion" = 0                # Dairy: a night of Colorado filmmakers' short films
 
+# A film's languages, where the automatic one is wrong or incomplete: the title as the site shows
+# it -> ISO 639-1 codes, in the order the page lists them ("In English, Romanian and Norwegian").
+# The automatic one is Wikidata's original language when it names one, else TMDB's; neither
+# says which of a multilingual film's languages matter (both pad All About My Mother with
+# Catalan and English), so a film in several gets them here.
+[tmdb.languages]
+"Fjord" = ["en", "ro", "no"]        # Mungiu, 2026: TMDB says Romanian only
+
 # Metacritic scores as each film's English Wikipedia article reports them, shown on the film
 # page only (no sort). Wikipedia carries them much sooner than OMDb (see CLAUDE.md "Ratings").
 [critics]

@@ -99,3 +99,60 @@ def test_a_429_waits_as_asked_then_reads(monkeypatch):
             return Resp({"query": {}})
 
     assert wikipedia._get(Busy(), wikipedia.API, {"a": 1}) == {"query": {}} and waits == [7]
+
+
+# ---- The language a film was made in, from Wikidata ----
+
+class LangClient(FakeClient):
+    def post(self, url, data):
+        assert "P364" in data["query"]
+        return Resp({"results": {"bindings": [
+            {"tmdb": {"value": "1"}, "n": {"value": "1"}, "lang": {"value": "de"}},   # one language
+            {"tmdb": {"value": "2"}, "n": {"value": "3"}, "lang": {"value": "ca"}},   # several: unordered
+            {"tmdb": {"value": "3"}, "n": {"value": "1"}}]}})                       # no two-letter code
+
+
+def test_original_languages_keeps_films_with_one_coded_language(monkeypatch):
+    monkeypatch.setattr(wikipedia.httpx, "Client", LangClient)
+    assert wikipedia.original_languages([1, 2, 3]) == {1: "de"}
+
+
+def test_original_languages_is_none_when_wikidata_fails(monkeypatch):
+    class Down(FakeClient):
+        def post(self, url, data): raise RuntimeError("503")
+    monkeypatch.setattr(wikipedia.httpx, "Client", Down)
+    assert wikipedia.original_languages([1]) is None
+
+
+def test_add_languages_prefers_wikidata_and_keeps_last_run_when_unreachable(monkeypatch):
+    from movie_scraper import pipeline
+    meta = lambda: {"Fatherland": {"tmdb_id": 1, "lang": "pl", "intl": True},
+                    "The Fifth Element": {"tmdb_id": 18, "lang": "fr", "intl": True},
+                    "Fjord": {"tmdb_id": 4, "lang": "ro", "intl": True}}
+    monkeypatch.setattr(pipeline, "original_languages", lambda ids: {1: "de", 18: "en"})
+    m = meta()
+    pipeline.add_languages(m, None)
+    assert m["Fatherland"]["lang"] == "de"                                       # TMDB's is the title's
+    assert m["The Fifth Element"]["lang"] == "en" and not m["The Fifth Element"]["intl"]
+    assert m["Fjord"]["lang"] == "ro"                                            # nothing from Wikidata: TMDB's
+
+    monkeypatch.setattr(pipeline, "original_languages", lambda ids: None)        # Wikidata down this run
+    again = meta()
+    pipeline.add_languages(again, m)
+    assert again["Fatherland"]["lang"] == "de" and again["The Fifth Element"]["lang"] == "en"
+
+
+def test_configured_languages_beat_both_and_list_every_one(monkeypatch):
+    from movie_scraper import pipeline
+    monkeypatch.setattr(pipeline, "original_languages", lambda ids: {4: "no"})
+    meta = {"Fjord": {"tmdb_id": 4, "lang": "ro", "intl": True},
+            "Volver": {"tmdb_id": 5, "lang": "es", "intl": True, "langs": ["es", "en"]}}   # stale from an old run
+    pipeline.add_languages(meta, None, {"Fjord": ["en", "ro", "no"]})
+    assert meta["Fjord"]["lang"] == "en" and meta["Fjord"]["langs"] == ["en", "ro", "no"] and meta["Fjord"]["intl"]
+    assert "langs" not in meta["Volver"]                                         # no longer configured
+
+
+def test_config_toml_languages_are_two_letter_codes():
+    from movie_scraper.config import load_config
+    for title, codes in load_config().tmdb.languages.items():
+        assert codes and all(len(c) == 2 and c.islower() for c in codes), title

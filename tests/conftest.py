@@ -64,6 +64,7 @@ def _no_live_wikipedia(monkeypatch):
     """Tests run offline: the pipeline's Wikipedia lookup returns nothing."""
     monkeypatch.setattr("movie_scraper.pipeline.weekly_views", lambda *a, **k: {})
     monkeypatch.setattr("movie_scraper.pipeline.metascores", lambda *a, **k: {})
+    monkeypatch.setattr("movie_scraper.pipeline.original_languages", lambda *a, **k: {})
 
 
 @pytest.fixture

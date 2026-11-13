@@ -70,7 +70,7 @@ Tests never touch the network (`tests/conftest.py` unsets tokens and stubs Wikip
   - `scrapers/` — `sie_eventive.py`, `landmark.py`, `alamo.py`, `fandango.py` (AMC/Regal/Harkins/
     Cinemark/Emagine/Movie Tavern), `dairy.py` (Dairy Arts Center), `cu_ifs.py` (CU Film Series).
   - `pipeline.py` — cleanup, TMDB standardization, openings, trending, feed, run summary.
-  - `tmdb.py` · `wikipedia.py` (page views, Metacritic) · `omdb.py` (off) · `formats.py` · `config.py` · `cli.py` · `models.py`.
+  - `tmdb.py` · `wikipedia.py` (page views, Metacritic, Wikidata's original language) · `omdb.py` (off) · `formats.py` · `config.py` · `cli.py` · `models.py`.
 - `public/` — `index.html`, `styles.css`, `app.js` (vanilla, no build), `zips.json`,
   `tmdb-logo.svg`, `favicon.svg` (brick square, white D), `preview.png` (Substack card, 1200×630, the
   redesign's look; regenerate if the masthead or theaters change), `data.json` (written by the workflow).
@@ -354,15 +354,24 @@ redesign directions" (A listings + C program won; B marquee rejected).
   ("Spanish dub"), from Fandango amenities, Alamo attributes, Landmark's `Showtime.Accessibility.Subtitled`
   tag (read since Nov 2026) and the Sie's `subtitle_language` (non-English film + English subtitle
   track = Subtitled). Harkins says only "Japanese Language": the scraper passes
-  "Japanese language" and the page (`resolveLang()`) compares it with TMDB's original language:
+  "Japanese language" and the page (`resolveLang()`) compares it with the film's language (below):
   same = nothing to mark, an English film = "<X> dub", anything else = "In <X>". Sources only flag the
   exceptions, and some never do: Alamo's data has no language field at all, and the Dairy tags it only
   now and then (Nov 12, 2026, non-English showings flagged: Sie 31/32, Fandango 1,153/1,231, Alamo
   4/124 (titles only), Dairy 0/17), so the same print read "Subtitled" at one theater and not at the
   next. **So the page never shows "Subtitled"** (Corey, Nov 2026; he also found the bold ", Subtitled"
   by the theater name distracting): a non-English film says its language **once**, "In Spanish" under
-  its title on the card and the film page (`langLine()`, from TMDB's original language; not for
-  English or silent "xx"; TMDB's "cn" = Cantonese), and per showing **only dubs** are marked. The
+  its title on the card and the film page (`langLine()`; not for English or silent "xx"; TMDB's
+  "cn" = Cantonese), and per showing **only dubs** are marked. That language (`film_meta.lang`) is
+  the one the film was made in: Wikidata's "original language" (P364) where it names exactly one,
+  else TMDB's (`pipeline.add_languages()`; one Wikidata request a run, last run's kept if it fails).
+  TMDB's follows the original title, so co-productions got the lead producer's: Fatherland (Polish
+  production, in German) read "In Polish", The Fifth Element "In French" (Nov 13, 2026: the only two
+  of 197). For a film in several languages no source says which matter: Wikidata's lists are
+  unordered and Wikipedia's infobox pads too (both give All About My Mother Catalan and English
+  beside Spanish), so those keep TMDB's pick unless `[tmdb.languages]` in config.toml lists them
+  (displayed title → codes in order; Fjord = en, ro, no reads "In English, Romanian and
+  Norwegian", English included, in `film_meta.langs`). The
   scrapers still record "Subtitled" in `data.json`; the page drops it (`resolveLang()`). Sie's prints come from the title ("… on 35mm",
   "… in VistaVision") or a "35mm" Eventive tag (Eventive has no projection field). On the site, a format or dub all of a theater's showings share goes on the
   theater line ("Alamo, 35mm"; on the film page in plain grey after the bold theater name); mixed ones

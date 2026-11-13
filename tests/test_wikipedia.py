@@ -140,3 +140,19 @@ def test_add_languages_prefers_wikidata_and_keeps_last_run_when_unreachable(monk
     again = meta()
     pipeline.add_languages(again, m)
     assert again["Fatherland"]["lang"] == "de" and again["The Fifth Element"]["lang"] == "en"
+
+
+def test_configured_languages_beat_both_and_list_every_one(monkeypatch):
+    from movie_scraper import pipeline
+    monkeypatch.setattr(pipeline, "original_languages", lambda ids: {4: "no"})
+    meta = {"Fjord": {"tmdb_id": 4, "lang": "ro", "intl": True},
+            "Volver": {"tmdb_id": 5, "lang": "es", "intl": True, "langs": ["es", "en"]}}   # stale from an old run
+    pipeline.add_languages(meta, None, {"Fjord": ["en", "ro", "no"]})
+    assert meta["Fjord"]["lang"] == "en" and meta["Fjord"]["langs"] == ["en", "ro", "no"] and meta["Fjord"]["intl"]
+    assert "langs" not in meta["Volver"]                                         # no longer configured
+
+
+def test_config_toml_languages_are_two_letter_codes():
+    from movie_scraper.config import load_config
+    for title, codes in load_config().tmdb.languages.items():
+        assert codes and all(len(c) == 2 and c.islower() for c in codes), title

@@ -367,8 +367,11 @@ redesign directions" (A listings + C program won; B marquee rejected).
   else TMDB's (`pipeline.add_languages()`; one Wikidata request a run, last run's kept if it fails).
   TMDB's follows the original title, so co-productions got the lead producer's: Fatherland (Polish
   production, in German) read "In Polish", The Fifth Element "In French" (Nov 13, 2026: the only two
-  of 197). Wikidata's lists for multi-language films are unordered and padded (All About My Mother:
-  Catalan, English, Spanish), so those keep TMDB's pick (Fjord stays "In Romanian"). The
+  of 197). For a film in several languages no source says which matter: Wikidata's lists are
+  unordered and Wikipedia's infobox pads too (both give All About My Mother Catalan and English
+  beside Spanish), so those keep TMDB's pick unless `[tmdb.languages]` in config.toml lists them
+  (displayed title → codes in order; Fjord = en, ro, no reads "In English, Romanian and
+  Norwegian", English included, in `film_meta.langs`). The
   scrapers still record "Subtitled" in `data.json`; the page drops it (`resolveLang()`). Sie's prints come from the title ("… on 35mm",
   "… in VistaVision") or a "35mm" Eventive tag (Eventive has no projection field). On the site, a format or dub all of a theater's showings share goes on the
   theater line ("Alamo, 35mm"; on the film page in plain grey after the bold theater name); mixed ones

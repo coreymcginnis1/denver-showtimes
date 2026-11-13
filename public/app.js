@@ -68,22 +68,30 @@
   // A showing "in Japanese" (Harkins says only that) is the subtitled original when the film is
   // Japanese (TMDB's original language), or a dub when it isn't ("Spanish language" on an English film).
   // Per showing, only a dub is marked. The film's own language is said once, "In Spanish", under its
-  // title (card and film page), from TMDB's original language. Sources report "Subtitled" unevenly
+  // title (card and film page): the one it was made in (Wikidata's where it names one, else TMDB's,
+  // or every language config.toml gives it: "In English, Romanian and Norwegian"). Sources report "Subtitled" unevenly
   // (Alamo's data has no language field at all), so it read "Subtitled" at one theater and not the
   // next for the same print: it's dropped here (Corey, Nov 2026). "Japanese language" (Harkins) in the
   // film's own language says nothing either; on an English film it's a dub.
-  function origLang(f) {
-    if (!f.olang || f.olang === "xx") return null;   // "xx": no spoken language (silent films)
-    if (f.olang === "cn") return "Cantonese";         // TMDB's code for Cantonese
-    try { return LANGUAGE ? LANGUAGE.of(f.olang) : null; } catch (e) { return null; }
+  function langName(code) {
+    if (!code || code === "xx") return null;   // "xx": no spoken language (silent films)
+    if (code === "cn") return "Cantonese";      // TMDB's code for Cantonese
+    try { return LANGUAGE ? LANGUAGE.of(code) : null; } catch (e) { return null; }
   }
-  function langLine(f) { return f.olang && f.olang !== "en" && origLang(f) ? "In " + origLang(f) : ""; }
+  function origLang(f) { return langName(f.olang); }
+  function langLine(f) {
+    if (f.langs) {   // several, as config.toml lists them; English among them is said too
+      var names = f.langs.map(langName).filter(Boolean);
+      return names.length ? "In " + listOf(names) : "";
+    }
+    return f.olang && f.olang !== "en" && origLang(f) ? "In " + origLang(f) : "";
+  }
   function resolveLang(raw, f) {
     if (!raw || raw === "Subtitled") return null;
     var m = /^(\w+) language$/.exec(raw);
     if (!m) return raw;   // "Dubbed", "Spanish dub"
-    var orig = origLang(f);
-    var same = orig === m[1] || (orig === "Chinese" && /^(Mandarin|Cantonese)$/.test(m[1]));
+    var langs = (f.langs || [f.olang]).map(langName);
+    var same = langs.indexOf(m[1]) >= 0 || (langs.indexOf("Chinese") >= 0 && /^(Mandarin|Cantonese)$/.test(m[1]));
     // Only an English film in another language is surely a dub; any other mismatch just says the language.
     return same ? null : f.olang === "en" ? m[1] + " dub" : "In " + m[1];
   }
@@ -121,7 +129,7 @@
       index[t] = i;
       var m = meta[t] || {};
       return { t: t, id: m.tmdb_id || null, rel: m.release || null, pop: m.popularity, trend: m.trend != null ? m.trend : null, va: m.vote_average, vc: m.vote_count || 0,
-        indie: !!m.indie, intl: !!m.intl, olang: m.lang || null, dirs: m.directors || [], countries: m.countries || [], about: m.overview || "",
+        indie: !!m.indie, intl: !!m.intl, olang: m.lang || null, langs: m.langs || null, dirs: m.directors || [], countries: m.countries || [], about: m.overview || "",
         cast: m.cast || [], genres: m.genres || [], qt: fold(t), mc: m.metacritic != null ? m.metacritic : null,
         posters: [], tmdbPoster: m.tmdb_poster || null, rating: null, runtime: null, year: m.release ? +m.release.slice(0, 4) : null };
     });

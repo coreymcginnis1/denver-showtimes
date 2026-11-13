@@ -280,7 +280,11 @@
     return i === t ? "Today" : i === t + 1 && dayDiff(NOW.day, d) === 1 ? "Tomorrow" : null;
   }
   function dayDiff(a, b) { return Math.round((dateObj(b) - dateObj(a)) / 864e5); }
-  function runtime(m) { if (!m) return ""; var h = Math.floor(m / 60), r = m % 60; return (h ? h + "h " : "") + (r ? r + "m" : ""); }
+  function runtime(m) {   // "1h 40m", "2h", "45m"
+    if (!m) return "";
+    var h = Math.floor(m / 60), r = m % 60;
+    return [h ? h + "h" : "", r ? r + "m" : ""].filter(Boolean).join(" ");
+  }
 
 
   // ---- Controls ----------------------------------------------------------------

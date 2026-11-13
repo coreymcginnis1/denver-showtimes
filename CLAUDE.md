@@ -213,7 +213,7 @@ Each run lists titles new since the last (tracked in `known_titles.txt`; dry run
 ## Decisions and what's on hold (don't redo without new information)
 
 - **Ratings: Metacritic only, on the film page, from Wikipedia (Nov 2026).** The film page's facts
-  read "…, R, Metacritic 77"; nothing sorts by it (Corey: "I don't know about sorting yet").
+  read "…, R, Metacritic 77", and Sort **Metacritic** orders by it (Nov 13, 2026; see Frontend).
   `wikipedia.metascores()` reads each film's English Wikipedia article (found by TMDB id through
   Wikidata, 20 articles a request, paced, 429s wait as asked) and takes the number from the
   `{{Metacritic film prose}}` template or the usual sentence, preferring the Reception / Critical
@@ -272,7 +272,7 @@ redesign directions" (A listings + C program won; B marquee rejected).
   **80218**, **never saved**; straight-line distance from Census zip centroids in `zips.json`. Theater
   choices are saved in `localStorage` with the default set they were made against (changing `default_on`
   resets everyone) · "Find a film" search first (× clears it; Enter closes the phone keyboard), then
-  **Show** All / New releases / Repertory / **On film** and **Sort** Newest / Trending / A–Z. On film (Corey's
+  **Show** All / New releases / Repertory / **On film** and **Sort** Newest / Trending / Metacritic / A–Z. On film (Corey's
   interest) keeps only showings projected from a print (16/35/70mm, IMAX 70mm, VistaVision). It's a
   plain filter like the other Show choices: the chosen day and theaters only; **All dates** lists every
   print coming up (Now playing / Coming soon / Further out). An empty result reads the same for every
@@ -288,6 +288,14 @@ redesign directions" (A listings + C program won; B marquee rejected).
     toward the Friday they lead into, `releaseWeek()`), latest and upcoming first, **Trending within
     a week**; then repertory by original release; special events last. With Show **All** (any sort),
     a day always splits into **New releases / Repertory / Special events**, each in the chosen sort. Films without the data sort last.
+  - **Metacritic** (Nov 13, 2026): highest score first (`film_meta.metacritic`, as Wikipedia reports
+    it), ties by Trending, and only under this sort each card shows "Metacritic 86" under its title
+    (else the order looks arbitrary; otherwise the score is on the film page only). Films without a
+    score follow in Newest order under a small "No Metacritic score" head (`gridHTML()`), so a film
+    Metacritic never reviewed doesn't read as rating below the lowest score; a list that's all
+    scored or all unscored (Special events) gets no head. Nov 13: 42 of 84 new releases scored (the
+    rest mostly Indian releases, concerts and films not out yet), 75 of 102 repertory, no events.
+    All dates: Now playing follows the sort; Coming soon / Further out stay by next showing.
 - **Cards:** poster, "Opening week" (first 7 days in Denver) / "Opens Nov 19", the title (bold condensed, its own capitalization),
   "In Spanish" under it for a non-English film (see Formats and languages),
   then times by theater (nearest first, like the checklist) as plain text ("11:50 am 1:45 pm 4:30 pm", every time with its am/pm;

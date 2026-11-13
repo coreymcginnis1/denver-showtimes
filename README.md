@@ -10,7 +10,7 @@ times, tickets and add-to-calendar. A companion to Corey McGinnis's newsletter
   Boulder's Dairy Arts Center and CU film series. Readers pick theaters by name or by distance from
   their zip; the Sie and the Mayan start checked.
 - **Show** all films, new releases, repertory, or only those **on film** (35mm, 70mm and other
-  prints). **Sort** by newest, trending or A–Z. **All dates** looks up to 90 days ahead where the
+  prints). **Sort** by newest, trending, Metacritic score or A–Z. **All dates** looks up to 90 days ahead where the
   theater publishes that far.
 - **Find a film** by title, director, actor or genre.
 - Tap a film (title or poster) for its own page: the director, Metacritic score, synopsis and a

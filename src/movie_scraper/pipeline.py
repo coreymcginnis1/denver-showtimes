@@ -20,7 +20,7 @@ from .scrapers.landmark import LandmarkScraper
 from .scrapers.sie_eventive import SieScraper
 from .omdb import add_scores
 from .tmdb import enrich
-from .wikipedia import metascores, weekly_views
+from .wikipedia import metascores, original_languages, weekly_views
 
 log = logging.getLogger(__name__)
 
@@ -284,6 +284,8 @@ def run(config_path: str = "config.toml", only: set[str] | None = None) -> dict:
     carried = _carried_events(previous, failed, today)
     feed = _build_feed(cfg, ordered, tz, carried=carried, stale=failed)
     feed["film_meta"] = {t: m for t, m in film_meta.items() if t in set(feed["films"])}
+    if cfg.tmdb.enabled:
+        add_languages(feed["film_meta"], (previous or {}).get("film_meta"))
     if cfg.omdb.enabled:   # off: ratings dropped from the site (see CLAUDE.md "Ratings")
         add_scores(feed["film_meta"], (previous or {}).get("film_meta"))
     if cfg.critics.metacritic:   # before the page views: the article reads are fewer, and paced
@@ -372,6 +374,23 @@ def add_wiki_views(film_meta: dict[str, dict], previous: dict | None, today: dat
         v = views.get(m.get("tmdb_id")) or old.get(m.get("tmdb_id"))
         if v:
             m["wiki_views"] = v
+
+
+def add_languages(film_meta: dict[str, dict], previous: dict | None) -> None:
+    """Set each film's language (`lang`, the page's "In German") to the one it was made in, in place.
+
+    TMDB's original_language is the original title's, which for a co-production can be the lead
+    producer's: Fatherland is "pl" on TMDB, in German on screen. Where Wikidata names exactly one
+    original language, that one wins (`wikipedia.original_languages()`); otherwise TMDB's stays.
+    If Wikidata can't be reached this run, a film keeps last run's language (matched by TMDB id).
+    """
+    read = original_languages(sorted({m["tmdb_id"] for m in film_meta.values() if m.get("tmdb_id")}))
+    if read is None:
+        read = {m["tmdb_id"]: m["lang"] for m in (previous or {}).values() if m.get("tmdb_id") and m.get("lang")}
+    for m in film_meta.values():
+        lang = read.get(m.get("tmdb_id"))
+        if lang and lang != m.get("lang"):
+            m["lang"], m["intl"] = lang, lang != "en"
 
 
 def add_metacritic(film_meta: dict[str, dict], previous: dict | None) -> None:

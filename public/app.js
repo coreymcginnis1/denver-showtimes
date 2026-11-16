@@ -555,9 +555,11 @@
       // (film_meta.indie / .intl) is still in data.json.
       // Day view: theaters nearest first (same order as the checklist, so it follows the zip).
       var order = theaters.slice().sort(function (a, b) { return (miles(a) || 0) - (miles(b) || 0); }).map(function (t) { return t.key; });
-      // Two weeks / search: theaters by their next showing, soonest first; otherwise in the usual order.
-      var vlist = Array.from(venues.entries()).sort(asSpan ? function (a, b) { return (a[1][0].d + a[1][0].hm).localeCompare(b[1][0].d + b[1][0].hm); }
-        : function (a, b) { return order.indexOf(a[0]) - order.indexOf(b[0]); });
+      // All dates / search: theaters by the day of their next showing, soonest first, and on the same day
+      // nearest first (Corey, Nov 2026: by first showtime, eight "Nov 24 – 29+" lines read in a random order);
+      // the day view: nearest first.
+      var near = function (a, b) { return order.indexOf(a[0]) - order.indexOf(b[0]); };
+      var vlist = Array.from(venues.entries()).sort(asSpan ? function (a, b) { return a[1][0].d.localeCompare(b[1][0].d) || near(a, b); } : near);
       var vhtml = vlist.map(function (e, k) {
         var t = theaterOf(e[0]) || {};
         if (asSpan) {   // one line per theater: where and when ("Mayan Nov 19 – 22")
@@ -590,7 +592,10 @@
         (state.q && hitOf(i) && hitOf(i).why ? '<p class="why">' + esc(hitOf(i).why) + "</p>" : "") +
         '<div class="venues">' + vhtml + "</div>" +
         (asSpan && vlist.length > SPAN_SHOWN ? '<button type="button" class="more all" aria-expanded="false" data-label="Show all ' + vlist.length + ' theaters">Show all ' + vlist.length + " theaters</button>" : "") +
-        '<button type="button" class="more" hidden>Show all times</button></article>';
+        // The day view's height clamp (clampVenues()). One-line-per-theater cards already show three lines and
+        // "Show all N theaters"; a clamp there added a second "Show fewer theaters" once the list was open
+        // (a phone's address bar showing or hiding re-measures every card).
+        (asSpan ? "" : '<button type="button" class="more" hidden>Show all times</button>') + "</article>";
     };
     if (all) {   // now playing (by the chosen sort); coming soon in the two weeks; further out (some theaters only)
       var firstDay = function (i) { return byFilm.get(i).reduce(function (m, s) { return s.d < m ? s.d : m; }, "9999"); };

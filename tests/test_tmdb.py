@@ -143,6 +143,10 @@ def test_meta_from_keeps_director_countries_and_synopsis():
     assert out["directors"] == ["Paweł Pawlikowski"]
     assert out["countries"] == ["PL", "DE"]
     assert out["overview"] == "In 1949, Thomas Mann and his daughter Erika take a road trip."
+    # Origin beats production countries: Paper Tiger is American, co-produced from Brazil and Italy.
+    paper = tmdb.meta_from(dict(r(7, "Paper Tiger", "2026-11-10"), origin_country=["US"],
+                                production_countries=[{"iso_3166_1": "US"}, {"iso_3166_1": "BR"}, {"iso_3166_1": "IT"}]))
+    assert paper["countries"] == ["US"]
     bare = tmdb.meta_from(r(6, "Gozu", "2003-07-11"))                 # a search result: none of these
     assert bare["directors"] == [] and bare["countries"] == [] and bare["overview"] is None
     assert bare["cast"] == [] and bare["genres"] == []

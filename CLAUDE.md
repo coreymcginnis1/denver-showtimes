@@ -312,7 +312,9 @@ redesign directions" (A listings + C program won; B marquee rejected).
   "Show fewer …", and collapsing keeps the button where it was on screen (`toggleMore()`).
 - **Film page** (`#film/<title-slug>`, e.g. `#film/wild-horse-nine`; Nov 2026, Corey: "a way to click
   on a movie and see all upcoming showtimes… to plan ahead around a specific movie", like a ticketing
-  site's film page): "← All films", the poster and details (director(s), country if not the US, year,
+  site's film page): "← All films", the poster and details (director(s), country if not the US (TMDB's
+  `origin_country`, else its production countries, and none when the US is among them: by production
+  countries alone Paper Tiger read "Brazil" and The Departed "Hong Kong", 35 of 167 films off), year,
   runtime, rating, Metacritic as Wikipedia reports it (`film_meta.metacritic`), TMDB synopsis
   (three lines and "More" on phones), Letterboxd link), a strip of **every date it plays** (up to
   90 days where the theater lists that far, styled like the day strip and sticky on scroll) led by an
@@ -343,7 +345,10 @@ redesign directions" (A listings + C program won; B marquee rejected).
   would put the furthest-out first). Corey, Nov 13, 2026: sorted by Metacritic, the best-reviewed
   screening coming up should lead (Touch of Evil 99 ahead of what's on Saturday). Each
   theater gets one line saying **where and when** (Corey, Nov 2026: the film page has the times),
-  soonest first; three show, the rest behind "Show all N theaters" (`SPAN_SHOWN`).
+  soonest first by day and, on the same day, nearest first (by first showtime, eight "Nov 24 – 29+"
+  lines read in a random order); three show, the rest behind "Show all N theaters" (`SPAN_SHOWN`).
+  These cards never get the day view's height clamp: re-measured on a phone (its address bar
+  showing or hiding fires a resize), an opened list got a second "Show fewer theaters".
   One day reads "Thu Nov 12, 4:15 pm 7:00 pm" with each time a button for its tickets (Corey: times
   you can see should go to tickets; the title still opens the film page). `whenHTML()`, for two or
   more dates, the line a link to the film page: a run "Nov 12 – 18" (up to two dark days inside,

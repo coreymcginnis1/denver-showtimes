@@ -249,10 +249,12 @@ Each run lists titles new since the last (tracked in `known_titles.txt`; dry run
   If it comes back: his headings read "Title | Directed by … | N minutes", Rep Scene posts use bold
   titles in lists, titles differ from TMDB's ("Sirat", "Withnail & I"), and the feed holds only the
   latest ~16 posts.
-- **Showtimes as ticket links (idea, not built):** times only underline on mouse hover, so on a
-  phone nothing says they're tappable. Proposed Nov 15: an always-on thin underline (brick on
-  hover/tap), a tap flash, and one "Tap a time for tickets" line; boxed time buttons are the
-  fallback but break the no-pills look.
+- **Showtimes read as ticket links (Nov 18, 2026, Corey):** times used to underline only on mouse
+  hover, so on a phone nothing said they were tappable. Now every upcoming time (cards, film page,
+  schedule) has a thin grey underline (`--box`), brick on hover or while tapped (`:active`; iOS
+  needs the empty `touchstart` listener in `wire()`), past times none; and one line above the
+  listings reads "Tap a time for tickets." ("Click" with a mouse, `.hint`). Boxed time buttons were
+  the stronger option, held back because they break the no-pills look.
 
 ## Frontend (`public/`)
 
@@ -418,7 +420,7 @@ redesign directions" (A listings + C program won; B marquee rejected).
   Pedro Pascal", "Horror"), or the match looks like a mistake. Search also shows matches beyond the
   selected day and theaters, split into "Playing on other dates" (your theaters) and "Playing at
   other theaters" (e.g. Fjord, only at AMC Westminster).
-- **Tap a time** → sheet with Get tickets and one "Add to calendar" button that opens Google, Outlook,
+- **Tap a time** (underlined, see Decisions; "Tap a time for tickets." above the listings) → sheet with Get tickets and one "Add to calendar" button that opens Google, Outlook,
   Apple/.ics (ICS uses TZID America/Denver). The sheet's "3:20 to 5:12 pm" end time comes from the
   theater's end or the listing's runtime (Fandango, Landmark, Sie); with neither, `data.json` has no
   `end`, the sheet shows only the start, and the calendar entry alone assumes 2 hours (Corey, Nov

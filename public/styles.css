@@ -157,11 +157,15 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .venues { display: grid; gap: 6px; }
 .venue .vn { display: block; color: var(--muted); font-size: 14px; }
 .times { display: flex; flex-wrap: wrap; column-gap: 12px; }
-.time { min-height: 30px; font-weight: 700; font-size: 16px; white-space: nowrap; }
-@media (hover: hover) { .time:hover { color: var(--brick); text-decoration: underline; } }
+/* Times are ticket links: always underlined (thin, grey) so a phone reader sees they can be tapped;
+   brick on hover or while tapped. Past times stay grey with no line. */
+.time { min-height: 30px; font-weight: 700; font-size: 16px; white-space: nowrap;
+  text-decoration: underline; text-decoration-color: var(--box); text-decoration-thickness: 1px; text-underline-offset: 4px; }
+@media (hover: hover) { .time:hover { color: var(--brick); text-decoration-color: var(--brick); } }
+.time:active { color: var(--brick); text-decoration-color: var(--brick); }
 .time .ap { font-weight: 500; font-size: 14px; }
 .time sup { font-size: 10px; color: var(--brick); margin-left: 2px; font-weight: 700; }
-.time.past { color: #a39b8c; }
+.time.past { color: #a39b8c; text-decoration: none; }
 .nw { white-space: nowrap; }
 /* Two weeks / search: "Alamo  Sat 7, 5:00 pm", one line per theater, three before "Show all". */
 /* All dates: "Mayan  Nov 19 – 22", the whole line a link to the film page on that theater's first date */
@@ -191,7 +195,9 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .hour .h small { font-size: 14px; font-stretch: 85%; margin-left: 2px; }
 .hour .rows { flex: 1; min-width: 0; }
 .row { display: block; width: 100%; padding: 2px 0; font-size: 14px; line-height: 1.3; }
-.row b { margin-right: 4px; }
+.row b { margin-right: 4px; text-decoration: underline; text-decoration-color: var(--box); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+.row:active b, .row:active .ft { color: var(--brick); }
+.row.past b { text-decoration: none; }
 .row .th { color: var(--muted); }
 @media (hover: hover) { .row:hover .ft { color: var(--brick); text-decoration: underline; } }
 .row.past { color: #a39b8c; }
@@ -218,7 +224,11 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .btn-row[hidden] { display: none; }
 
 /* ---- Film page: one film's every date and theater (#film/<title>) ------- */
-body.fp-open #days, body.fp-open #controls, body.fp-open #layout { display: none; }
+body.fp-open #days, body.fp-open #controls, body.fp-open #layout, body.fp-open .hint { display: none; }
+/* "Tap a time for tickets." once, above the listings ("Click" where there's a mouse). */
+.hint { margin: 0 0 16px; color: var(--muted); font-size: 14px; }
+.hint .click { display: none; }
+@media (hover: hover) and (pointer: fine) { .hint .click { display: inline; } .hint .tap { display: none; } }
 .fp { padding-bottom: 48px; }
 .fp-nav { margin: 10px 0 14px; }
 .fp-nav button { min-height: 44px; font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }

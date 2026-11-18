@@ -956,6 +956,8 @@
   function measure() { document.documentElement.style.setProperty("--days-h", $("days").offsetHeight + "px"); }
 
   function wire() {
+    // iOS Safari only shows :active (a time flashing brick as it's tapped) once a touch listener exists.
+    document.addEventListener("touchstart", function () {}, { passive: true });
     document.addEventListener("click", function (e) {
       if (e.target.id === "backdrop") return closeSheet();
       var fl = e.target.closest("a[data-film]");

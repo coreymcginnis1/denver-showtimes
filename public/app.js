@@ -376,7 +376,7 @@
 
   // Phones fold the controls to one line: "At Sie and Mayan, all films, newest first · Change".
   var KIND_SUM = { all: "all films", "new": "new releases", rep: "repertory", film: "on film" };
-  var SORT_SUM = { "new": "newest first", pop: "trending first", mc: "by Metacritic score", az: "A to Z" };
+  var SORT_SUM = { "new": "newest first", pop: "trending first", mc: "best reviewed first", az: "A to Z" };
   function renderSummary() { $("ssum").textContent = KIND_SUM[state.kind] + ", " + SORT_SUM[state.sort]; }
 
   // ---- Film cards ----------------------------------------------------------------
@@ -485,14 +485,14 @@
       return kb - ka || byTitle;
     });
   }
-  // Sorted by Metacritic, a list splits where the scores run out: "No Metacritic score" heads the
+  // Sorted Best reviewed (by Metacritic score), a list splits where the scores run out: "No critics' score" heads the
   // rest, so a film Metacritic never reviewed (most Indian releases, concerts) doesn't read as
   // rating below the lowest score. A list with no scores at all, or all scored, stays whole.
   function gridHTML(ids, card, sorted) {
     var grid = function (list) { return '<div class="grid">' + list.map(card).join("") + "</div>"; };
     var scored = ids.filter(function (i) { return films[i].mc != null; });
     if (state.sort !== "mc" || sorted === false || !scored.length || scored.length === ids.length) return grid(ids);
-    return grid(scored) + '<h4 class="subgroup">No Metacritic score</h4>' + grid(ids.filter(function (i) { return films[i].mc == null; }));
+    return grid(scored) + '<h4 class="subgroup">No critics\' score</h4>' + grid(ids.filter(function (i) { return films[i].mc == null; }));
   }
 
   function renderFilms() {
@@ -587,7 +587,8 @@
         // The title (and the poster) open the film's own page: every date and theater, as on a ticketing site.
         '<h3 class="title"><a href="' + href + '" data-film="' + i + '">' + esc(f.t) + "</a></h3>" +
         // Sorted by it, the score shows on the card (else the order looks arbitrary); otherwise it's on the film page.
-        (state.sort === "mc" && f.mc != null ? '<p class="mc">Metacritic ' + f.mc + "</p>" : "") +
+        // "86 on Metacritic": plain English for readers who don't know the site, still naming the source.
+        (state.sort === "mc" && f.mc != null ? '<p class="mc">' + f.mc + " on Metacritic</p>" : "") +
         (langLine(f) ? '<p class="lang">' + esc(langLine(f)) + "</p>" : "") +
         // Found by someone in it or its genre, not its title: say so, or the match looks like a mistake.
         (state.q && hitOf(i) && hitOf(i).why ? '<p class="why">' + esc(hitOf(i).why) + "</p>" : "") +

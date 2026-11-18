@@ -312,7 +312,9 @@ redesign directions" (A listings + C program won; B marquee rejected).
   "Show fewer …", and collapsing keeps the button where it was on screen (`toggleMore()`).
 - **Film page** (`#film/<title-slug>`, e.g. `#film/wild-horse-nine`; Nov 2026, Corey: "a way to click
   on a movie and see all upcoming showtimes… to plan ahead around a specific movie", like a ticketing
-  site's film page): "← All films", the poster and details (director(s), country if not the US, year,
+  site's film page): "← All films", the poster and details (director(s), country if not the US (TMDB's
+  `origin_country`, else its production countries, and none when the US is among them: by production
+  countries alone Paper Tiger read "Brazil" and The Departed "Hong Kong", 35 of 167 films off), year,
   runtime, rating, Metacritic as Wikipedia reports it (`film_meta.metacritic`), TMDB synopsis
   (three lines and "More" on phones), Letterboxd link), a strip of **every date it plays** (up to
   90 days where the theater lists that far, styled like the day strip and sticky on scroll) led by an

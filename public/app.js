@@ -405,10 +405,11 @@
     var f = films[i], img = f.posters.length ? posterHTML(i, "art") : fallbackHTML(f);
     return '<a class="plink" href="' + href + '" data-film="' + i + '" tabindex="-1" aria-hidden="true">' + img + "</a>";
   }
-  // "United Kingdom, 2026, 1h 58m, R, Metacritic 77" on the film page: country only when not the US;
-  // Metacritic as the film's Wikipedia article reports it (nothing sorts by it).
+  // "Poland, 2026, 1h 22m, R, Metacritic 86" on the film page: the country of origin, only when the US
+  // isn't one of them (an American film made with foreign money stays unlabeled: Paper Tiger read
+  // "Brazil" from a Brazilian co-producer); Metacritic as the film's Wikipedia article reports it.
   function factsOf(f) {
-    var where = f.countries.filter(function (c) { return c !== "US"; }).slice(0, 1).map(function (c) { return COUNTRY ? COUNTRY.of(c) : c; });
+    var where = f.countries.indexOf("US") >= 0 ? [] : f.countries.slice(0, 1).map(function (c) { return COUNTRY ? COUNTRY.of(c) : c; });
     return where.concat([f.year, f.runtime ? runtime(f.runtime) : "", f.rating, f.mc != null ? "Metacritic " + f.mc : ""])
       .filter(Boolean).join(", ");
   }

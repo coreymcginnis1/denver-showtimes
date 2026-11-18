@@ -111,7 +111,11 @@ def meta_from(m: dict) -> dict:
         # Shown when a reader taps a poster: who made it, where, and what it's about.
         "directors": [c["name"] for c in (m.get("credits") or {}).get("crew") or []
                       if c.get("job") == "Director" and c.get("name")][:3],
-        "countries": [c.get("iso_3166_1") for c in m.get("production_countries") or [] if c.get("iso_3166_1")][:3],
+        # The country of origin, else where the producers are from: production countries alone made
+        # an American film with foreign co-producers read as foreign (Paper Tiger, US/Brazil/Italy, as
+        # "Brazil"; The Departed as "Hong Kong").
+        "countries": ([c for c in m.get("origin_country") or [] if c] or
+                      [c.get("iso_3166_1") for c in m.get("production_countries") or [] if c.get("iso_3166_1")])[:3],
         # For "Find a film": the top-billed cast and TMDB's genres ride along on the same request.
         "cast": [c["name"] for c in sorted((m.get("credits") or {}).get("cast") or [], key=lambda c: c.get("order", 99))
                  if c.get("name")][:5],

@@ -213,7 +213,7 @@ Each run lists titles new since the last (tracked in `known_titles.txt`; dry run
 ## Decisions and what's on hold (don't redo without new information)
 
 - **Ratings: Metacritic only, on the film page, from Wikipedia (Nov 2026).** The film page's facts
-  read "…, R, Metacritic 77", and Sort **Metacritic** orders by it (Nov 13, 2026; see Frontend).
+  read "…, R, Metacritic 77", and Sort **Best reviewed** orders by it (Nov 13, 2026; see Frontend).
   `wikipedia.metascores()` reads each film's English Wikipedia article (found by TMDB id through
   Wikidata, 20 articles a request, paced, 429s wait as asked) and takes the number from the
   `{{Metacritic film prose}}` template or the usual sentence, preferring the Reception / Critical
@@ -238,9 +238,23 @@ Each run lists titles new since the last (tracked in `known_titles.txt`; dry run
 - **Other trending sources checked:** TMDB weekly trending list (58% coverage), Trakt (streaming),
   IMDb popularity / box office / Google Trends (no license or API).
 - **Removed:** "Corey's picks" pre-selection (went stale) and "My list" (little use, no sync).
-- **Hosting:** GitHub Pages (~100 GB/month soft limit ≈ 300K visits). A nicer address: a free
-  `denvershowtimes` GitHub organization (denvershowtimes.github.io) or a ~$12/yr domain pointed at
-  Pages, with a redirect from the old link. Not done yet.
+- **Hosting:** GitHub Pages (~100 GB/month soft limit ≈ 300K visits). A nicer address (a free
+  GitHub organization or a ~$12/yr domain, with a redirect from the old link) and a private code
+  repo were considered; **Corey skipped the organization move, Nov 18, 2026.**
+- **Newsletter on the site: skipped (Nov 18, 2026).** Explored Nov 13: the daily update would read
+  the Substack feed (public RSS, full text, 16 posts) and show posts on the site, with a live
+  showtimes box under each film heading, italic titles linked to film pages, and film pages quoting
+  his newest take; a two-part post format ("This week" / "Recently seen") was mocked up (claude.ai
+  canvas "Denver Showtimes newsletter mockup"). Corey: think it over carefully first; then skipped.
+  If it comes back: his headings read "Title | Directed by … | N minutes", Rep Scene posts use bold
+  titles in lists, titles differ from TMDB's ("Sirat", "Withnail & I"), and the feed holds only the
+  latest ~16 posts.
+- **Showtimes read as ticket links (Nov 18, 2026, Corey):** times used to underline only on mouse
+  hover, so on a phone nothing said they were tappable. Now every upcoming time (cards, film page,
+  schedule) has a thin grey underline (`--box`), brick on hover or while tapped (`:active`; iOS
+  needs the empty `touchstart` listener in `wire()`), past times none; and one line above the
+  listings reads "Tap a time for tickets." ("Click" with a mouse, `.hint`). Boxed time buttons were
+  the stronger option, held back because they break the no-pills look.
 
 ## Frontend (`public/`)
 
@@ -272,7 +286,7 @@ redesign directions" (A listings + C program won; B marquee rejected).
   **80218**, **never saved**; straight-line distance from Census zip centroids in `zips.json`. Theater
   choices are saved in `localStorage` with the default set they were made against (changing `default_on`
   resets everyone) · "Find a film" search first (× clears it; Enter closes the phone keyboard), then
-  **Show** All / New releases / Repertory / **On film** and **Sort** Newest / Trending / Metacritic / A–Z. On film (Corey's
+  **Show** All / New releases / Repertory / **On film** and **Sort** Newest / Trending / Best reviewed / A–Z. On film (Corey's
   interest) keeps only showings projected from a print (16/35/70mm, IMAX 70mm, VistaVision). It's a
   plain filter like the other Show choices: the chosen day and theaters only; **All dates** lists every
   print coming up (Now playing / Coming soon / Further out). An empty result reads the same for every
@@ -288,10 +302,13 @@ redesign directions" (A listings + C program won; B marquee rejected).
     toward the Friday they lead into, `releaseWeek()`), latest and upcoming first, **Trending within
     a week**; then repertory by original release; special events last. With Show **All** (any sort),
     a day always splits into **New releases / Repertory / Special events**, each in the chosen sort. Films without the data sort last.
-  - **Metacritic** (Nov 13, 2026): highest score first (`film_meta.metacritic`, as Wikipedia reports
-    it), ties by Trending, and only under this sort each card shows "Metacritic 86" under its title
-    (else the order looks arbitrary; otherwise the score is on the film page only). Films without a
-    score follow in Newest order under a small "No Metacritic score" head (`gridHTML()`), so a film
+  - **Best reviewed** (Nov 13, 2026; named "Metacritic" until Nov 18, Corey: not everyone knows
+    Metacritic; "Critics' Choice" is an awards show and "Critics' picks" the NYT's label and too close
+    to his own picks): highest Metacritic score first (`film_meta.metacritic`, as Wikipedia reports
+    it; state key `mc`), ties by Trending, and only under this sort each card shows "86 on
+    Metacritic" under its title (else the order looks arbitrary; otherwise the score is on the film
+    page only, "Metacritic 86"). Films without a score follow in Newest order under a small "No
+    critics' score" head (`gridHTML()`), so a film
     Metacritic never reviewed doesn't read as rating below the lowest score; a list that's all
     scored or all unscored (Special events) gets no head. Nov 13: 42 of 84 new releases scored (the
     rest mostly Indian releases, concerts and films not out yet), 75 of 102 repertory, no events.
@@ -342,7 +359,7 @@ redesign directions" (A listings + C program won; B marquee rejected).
   theater row: the end with more fades out (`schedEdges()`). Phone: Films / Schedule tabs.
 - **All dates:** **Now playing** (a showing today at the selected theaters, or a new release already open in Denver whose next showing is within `RUN_GAP_DAYS` = 3 days; repertory and events need today; by the chosen sort) then **Coming soon** (everything else, repertory included); each group in the chosen sort,
   except that under **Newest** Coming soon and Further out go by next showing (release-week order
-  would put the furthest-out first). Corey, Nov 13, 2026: sorted by Metacritic, the best-reviewed
+  would put the furthest-out first). Corey, Nov 13, 2026: sorted Best reviewed, the best-reviewed
   screening coming up should lead (Touch of Evil 99 ahead of what's on Saturday). Each
   theater gets one line saying **where and when** (Corey, Nov 2026: the film page has the times),
   soonest first by day and, on the same day, nearest first (by first showtime, eight "Nov 24 – 29+"
@@ -403,7 +420,7 @@ redesign directions" (A listings + C program won; B marquee rejected).
   Pedro Pascal", "Horror"), or the match looks like a mistake. Search also shows matches beyond the
   selected day and theaters, split into "Playing on other dates" (your theaters) and "Playing at
   other theaters" (e.g. Fjord, only at AMC Westminster).
-- **Tap a time** → sheet with Get tickets and one "Add to calendar" button that opens Google, Outlook,
+- **Tap a time** (underlined, see Decisions; "Tap a time for tickets." above the listings) → sheet with Get tickets and one "Add to calendar" button that opens Google, Outlook,
   Apple/.ics (ICS uses TZID America/Denver). The sheet's "3:20 to 5:12 pm" end time comes from the
   theater's end or the listing's runtime (Fandango, Landmark, Sie); with neither, `data.json` has no
   `end`, the sheet shows only the start, and the calendar entry alone assumes 2 hours (Corey, Nov
@@ -437,10 +454,7 @@ for a preview card (OG title/description + `public/preview.png`).
 
 ## Next up (Corey's list, Nov 6 2026)
 
-Bigger questions:
-- **Cleaner address**: a free `denvershowtimes` GitHub organization (denvershowtimes.github.io),
-  with a redirect from the old link so newsletter links keep working.
-- **Private code, public site**: Pages from a private repo needs GitHub Pro (~$4/mo). Free route:
-  private source repo; the workflow pushes only the built `public/` to a public repo (e.g. the
-  org's `denvershowtimes.github.io`) with a deploy token secret. `data.json` stays public either
-  way. Also trim the README to a few lines.
+Skipped Nov 18, 2026 (see Decisions): the cleaner address / GitHub organization and the private
+code repo. If they come back: Pages from a private repo needs GitHub Pro (~$4/mo); the free route is
+a private source repo whose workflow pushes only the built `public/` to a public repo with a deploy
+token, and a page left at the old address that forwards `#film/…` links.

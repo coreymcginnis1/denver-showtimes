@@ -64,6 +64,14 @@
     return [sh.fmt == null && s.fmt ? fmtName(s.fmt) : "", sh.lang == null && s.lang ? s.lang : ""].filter(Boolean).join(", ");
   }
   var COUNTRY = (function () { try { return new Intl.DisplayNames(["en"], { type: "region" }); } catch (e) { return null; } })();
+  // Browsers name some countries the way their locale data does: Apple's reads "China mainland",
+  // Chrome's "Hong Kong SAR China" and "Congo - Kinshasa". Plain names here, and "and" for "&".
+  var COUNTRY_NAME = { CN: "China", HK: "Hong Kong", MO: "Macao", TW: "Taiwan", PS: "Palestine", MM: "Myanmar",
+    CD: "DR Congo", CG: "Republic of the Congo", KR: "South Korea", KP: "North Korea", GB: "United Kingdom" };
+  function countryName(c) {
+    if (COUNTRY_NAME[c]) return COUNTRY_NAME[c];
+    try { return COUNTRY ? COUNTRY.of(c).replace(/ & /g, " and ") : c; } catch (e) { return c; }
+  }
   var LANGUAGE = (function () { try { return new Intl.DisplayNames(["en"], { type: "language" }); } catch (e) { return null; } })();
   // A showing "in Japanese" (Harkins says only that) is the subtitled original when the film is
   // Japanese (TMDB's original language), or a dub when it isn't ("Spanish language" on an English film).
@@ -409,7 +417,7 @@
   // isn't one of them (an American film made with foreign money stays unlabeled: Paper Tiger read
   // "Brazil" from a Brazilian co-producer); Metacritic as the film's Wikipedia article reports it.
   function factsOf(f) {
-    var where = f.countries.indexOf("US") >= 0 ? [] : f.countries.slice(0, 1).map(function (c) { return COUNTRY ? COUNTRY.of(c) : c; });
+    var where = f.countries.indexOf("US") >= 0 ? [] : f.countries.slice(0, 1).map(countryName);
     return where.concat([f.year, f.runtime ? runtime(f.runtime) : "", f.rating, f.mc != null ? "Metacritic " + f.mc : ""])
       .filter(Boolean).join(", ");
   }

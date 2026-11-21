@@ -110,6 +110,7 @@ Bound
 Boyhood
 Bram Stoker's Dracula
 Braveheart
+Brazil
 Breaking Bad Day
 Breeder
 Breeders
@@ -252,9 +253,10 @@ Dune: Part One Reissue
 Dune: Part Three
 Dune: Part Two
 Dune: Part Two Reissue
-E.T. the Extra-Terrestrial
 E.T. The Extra-Terrestrial
+E.T. the Extra-Terrestrial
 Ebenezer
+Eight Crazy Nights
 Election
 Elf
 Elijah Peel
@@ -285,6 +287,7 @@ First Blood
 Fjord
 Flavia: Girl Detective
 Flow
+Focker In-Law
 Focker-in-Law
 Foodie Film: Ratatouille
 Forging Our Own Way in the Industry
@@ -304,8 +307,8 @@ Ghost Dog: The Way of the Samurai
 Ghost in the Cell
 Ghost in the Shell
 Ghost in the Shell (Dubbed)
-Ghost in the Shell (SUBTITLED)
 Ghost in the Shell (Subtitled)
+Ghost in the Shell (SUBTITLED)
 Ghost in the Shell 30th Anniversary - 4K
 Ghost Soldier
 Ghost: 2 Big To Rig
@@ -330,8 +333,8 @@ GoodFellas
 Goodfellas
 Goosebumps
 Gozu
-Grateful Dead Meet-Up at the Movies 2026
 Grateful Dead Meet-Up At The Movies 2026
+Grateful Dead Meet-Up at the Movies 2026
 Green Room
 Gremlins 2: The New Batch
 Guts Student Film Festival
@@ -346,12 +349,12 @@ Halloween III: Season of the Witch
 Hanuman Ansh
 Harry Potter & Deathly Hallows: Part 1 (HPD26)
 Harry Potter & Deathly Hallows: Part 2 (HPD26)
-Harry Potter and the Chamber of Secrets
 Harry Potter And The Chamber of Secrets
+Harry Potter and the Chamber of Secrets
 Harry Potter and the Deathly Hallows: Part 1
 Harry Potter and the Deathly Hallows: Part 2
-Harry Potter And The Goblet Of Fire
 Harry Potter and the Goblet of Fire
+Harry Potter And The Goblet Of Fire
 Harry Potter And The Half Blood Prince
 Harry Potter and the Half-Blood Prince
 Harry Potter and the Order of the Phoenix
@@ -426,6 +429,7 @@ Jeonghan X Joshua Journey Into [DREAMING]
 Jeopardy! Interactive
 Jesus Christ Superstar
 Jet Lag: The Game Japanorama Finale
+Jet Lag: The Game – Hide + Seek Italy
 Jimmy
 Jimmy Buffett: Occupational Hazard
 Jinsei
@@ -436,15 +440,16 @@ Joshua Live!
 Julieta
 Jurassic Park
 Katseye: Wild Hearts
-Katy Perry: The Lifetimes Tour - Live from Paris
 Katy Perry: The Lifetimes Tour - Live From Paris
+Katy Perry: The Lifetimes Tour - Live from Paris
 Ken Russell's The Devils
 Ken Russell’s The Devils
 Kika
 Killer of Sheep
 Kiss the Girls
-Klara and The Sun
 Klara and the Sun
+Klara and The Sun
+Klaus
 Kung Fu Soccer
 Kwaidan - New 4K Restoration
 La Bamba
@@ -461,6 +466,7 @@ Legend of the White Dragon
 Lenin
 Let the Right One In (Lat den ratte komma in)
 Let's Scare Jessica to Death
+Lethal Weapon
 Leviticus
 Linkin Park: Unshatter
 Littermates
@@ -480,13 +486,13 @@ Maddie's Secret
 Manos: The Hands of Fate
 Marcel the Shell with Shoes On
 Marie Antoinette
-Married to the Mob
 Married To The Mob
+Married to the Mob
 Mars Attacks!
 Mary Oliver: Saved by the Beauty of the World
 Masters of the Universe
-Maya Lady
 Maya lady
+Maya Lady
 Mean Girls
 Mean Streets
 Megalopolis
@@ -689,6 +695,7 @@ Spider-Man: "Brand New" Brand New Day
 Spider-Man: Brand New Day
 Spider-Man: Brand New Day Amazon Prime
 Spider-Man: Brand New Day Dolby
+Spirited Away
 Spirited Away 25th Anniversary
 Spirited Away: Live on Stage
 Splash City
@@ -728,8 +735,8 @@ Swingers
 Tales from Earthsea 20th Anniversary
 Tales From the Hood
 Tally Brown, New York
-Teenage Sex And Death At Camp Miasma
 Teenage Sex and Death at Camp Miasma
+Teenage Sex And Death At Camp Miasma
 Tenebre
 Tenzing
 Terminator 2: Judgment Day
@@ -787,8 +794,8 @@ The End of Evangelion (Evangelion 30th Movie Fest)
 The End of Oak Street
 The Faculty
 The Fast and the Furious
-The Fast And The Furious:
 The Fast and the Furious:
+The Fast And The Furious:
 The Fast and the Furious: Tokyo Drift
 The Fifth Element
 The Fifth Element (2026 Event)
@@ -851,13 +858,14 @@ The Mosquito Bowl: Fan Event Livestream Q&A with Director Peter Berg
 The Musical
 The Neon Demon
 The Neverending Story
+The Nice Guys
 The Nightmare Before Christmas (RE26)
 The Nightmare Before Christmas Re-Release
 The Nutty Professor:
 The Odyssey
 The Odyssey on Digital 4K
-The Only Living Pickpocket In New York
 The Only Living Pickpocket in New York
+The Only Living Pickpocket In New York
 The Outsiders: The Complete Novel
 The Passion of the Christ
 The Passion of the Christ (2026 Event)
@@ -878,8 +886,8 @@ The Shining
 The Sixty-Year Mission: How Star Trek Changed Television and the World
 The Skin I Live In
 The Social Reckoning
-The SpongeBob Movie: Search for SquarePants
 The Spongebob Movie: Search for Squarepants
+The SpongeBob Movie: Search for SquarePants
 The Stepford Wives
 The Stunt Driver
 The Substance
@@ -957,8 +965,8 @@ Welcome Space Brothers
 Wet Hot American Summer
 Wet Hot American Summer:
 Whalefall
-Wham! 10 Days In China
 Wham! 10 Days in China
+Wham! 10 Days In China
 What Have I Done to Deserve This?
 When Harry Met Sally...
 Where is the Friend's House?
@@ -968,8 +976,8 @@ Wild at Heart
 Wild At Heart - Unrated
 Wild Horse Nine
 Wildwood
-Willy Wonka & the Chocolate Factory
 Willy Wonka & The Chocolate Factory
+Willy Wonka & the Chocolate Factory
 Winchester '73
 Women on the Verge of a Nervous Breakdown
 Wto/99

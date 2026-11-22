@@ -253,8 +253,8 @@ Dune: Part One Reissue
 Dune: Part Three
 Dune: Part Two
 Dune: Part Two Reissue
-E.T. The Extra-Terrestrial
 E.T. the Extra-Terrestrial
+E.T. The Extra-Terrestrial
 Ebenezer
 Eight Crazy Nights
 Election
@@ -329,8 +329,8 @@ Godzilla vs. Megalon
 Goldfinger
 Gone With The Wind
 Good Will Hunting
-GoodFellas
 Goodfellas
+GoodFellas
 Goosebumps
 Gozu
 Grateful Dead Meet-Up At The Movies 2026
@@ -349,12 +349,12 @@ Halloween III: Season of the Witch
 Hanuman Ansh
 Harry Potter & Deathly Hallows: Part 1 (HPD26)
 Harry Potter & Deathly Hallows: Part 2 (HPD26)
-Harry Potter And The Chamber of Secrets
 Harry Potter and the Chamber of Secrets
+Harry Potter And The Chamber of Secrets
 Harry Potter and the Deathly Hallows: Part 1
 Harry Potter and the Deathly Hallows: Part 2
-Harry Potter and the Goblet of Fire
 Harry Potter And The Goblet Of Fire
+Harry Potter and the Goblet of Fire
 Harry Potter And The Half Blood Prince
 Harry Potter and the Half-Blood Prince
 Harry Potter and the Order of the Phoenix
@@ -440,8 +440,8 @@ Joshua Live!
 Julieta
 Jurassic Park
 Katseye: Wild Hearts
-Katy Perry: The Lifetimes Tour - Live From Paris
 Katy Perry: The Lifetimes Tour - Live from Paris
+Katy Perry: The Lifetimes Tour - Live From Paris
 Ken Russell's The Devils
 Ken Russell’s The Devils
 Kika
@@ -486,13 +486,13 @@ Maddie's Secret
 Manos: The Hands of Fate
 Marcel the Shell with Shoes On
 Marie Antoinette
-Married To The Mob
 Married to the Mob
+Married To The Mob
 Mars Attacks!
 Mary Oliver: Saved by the Beauty of the World
 Masters of the Universe
-Maya lady
 Maya Lady
+Maya lady
 Mean Girls
 Mean Streets
 Megalopolis
@@ -575,8 +575,8 @@ Other Mommy
 Other Mommy Fan Event Screenings
 Out of Sight
 Over the Hedge
-Ozzy & Black Sabbath: Back To The Beginning
 Ozzy & Black Sabbath: Back to the Beginning
+Ozzy & Black Sabbath: Back To The Beginning
 Paddington 2
 Paddington in Peru
 Paging Hezbollah
@@ -614,8 +614,8 @@ Project Hail Mary
 Prom Night
 Psycho II
 Pulp Fiction
-Pulp: What Do You Do for an Encore?
 Pulp: What Do You Do For An Encore?
+Pulp: What Do You Do for an Encore?
 Punisher: War Zone
 Pure Scum
 Queen at Sea
@@ -684,8 +684,8 @@ Sleepy Hollow
 Smokin' Aces
 Snake Eyes
 Sonic the Hedgehog 2
-Sonic the Hedgehog 3
 Sonic The Hedgehog 3
+Sonic the Hedgehog 3
 Soul Patrol
 Southland Tales
 Spa Weekend
@@ -735,8 +735,8 @@ Swingers
 Tales from Earthsea 20th Anniversary
 Tales From the Hood
 Tally Brown, New York
-Teenage Sex and Death at Camp Miasma
 Teenage Sex And Death At Camp Miasma
+Teenage Sex and Death at Camp Miasma
 Tenebre
 Tenzing
 Terminator 2: Judgment Day
@@ -789,8 +789,8 @@ The Devil Queen
 The Devils
 The Dog Stars
 The Doors
-The End Of Evangelion (Evangelion 30th Movie Fest)
 The End of Evangelion (Evangelion 30th Movie Fest)
+The End Of Evangelion (Evangelion 30th Movie Fest)
 The End of Oak Street
 The Faculty
 The Fast and the Furious
@@ -832,6 +832,7 @@ The Invite
 The Iron Giant
 The Killers
 The King of Cannabis
+The King of Kings
 The Last Anniversary
 The Last Blossom
 The Last Critic
@@ -845,6 +846,7 @@ The Lego Ninjago Movie
 The Lost Boys
 The Magic Faraway Tree
 The Magnificent Ambersons
+The Maltese Falcon
 The Merry Widow: Met Summer Encore 2026
 The Metropolitan Opera: Carmen
 The Metropolitan Opera: Carmen Encore
@@ -864,8 +866,8 @@ The Nightmare Before Christmas Re-Release
 The Nutty Professor:
 The Odyssey
 The Odyssey on Digital 4K
-The Only Living Pickpocket in New York
 The Only Living Pickpocket In New York
+The Only Living Pickpocket in New York
 The Outsiders: The Complete Novel
 The Passion of the Christ
 The Passion of the Christ (2026 Event)
@@ -886,8 +888,8 @@ The Shining
 The Sixty-Year Mission: How Star Trek Changed Television and the World
 The Skin I Live In
 The Social Reckoning
-The Spongebob Movie: Search for Squarepants
 The SpongeBob Movie: Search for SquarePants
+The Spongebob Movie: Search for Squarepants
 The Stepford Wives
 The Stunt Driver
 The Substance
@@ -896,6 +898,7 @@ The Tenant
 The Terminal List Season 2 Premiere
 The Texas Chain Saw Massacre
 The Texas Chainsaw Massacre
+The Thin Man
 The Thing
 The Thing Called Love
 The Toxic Avenger
@@ -933,8 +936,8 @@ Tom and Jerry: The Forbidden Compass
 Tomorrow X Together World Tour 'ACT : Tomorrow'
 Tony
 Touch of Evil
-Toxic: A Fairy Tale for Grown-Ups
 Toxic: A Fairy Tale For Grown-ups
+Toxic: A Fairy Tale for Grown-Ups
 Toy Story 5
 Traces of Justice
 Train to Busan - 10th Anniversary Remastered & Revived
@@ -976,8 +979,8 @@ Wild at Heart
 Wild At Heart - Unrated
 Wild Horse Nine
 Wildwood
-Willy Wonka & The Chocolate Factory
 Willy Wonka & the Chocolate Factory
+Willy Wonka & The Chocolate Factory
 Winchester '73
 Women on the Verge of a Nervous Breakdown
 Wto/99
